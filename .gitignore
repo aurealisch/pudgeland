@@ -7,3 +7,11 @@
 
 **/.vscode
 **/.idea
+
+# Configurations
+
+config.json
+
+# Cache
+
+**/__pycache__
