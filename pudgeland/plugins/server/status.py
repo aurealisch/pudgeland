@@ -26,11 +26,11 @@ plugin = crescent.Plugin()
 )
 class Status:
     async def callback(self, context: crescent.Context) -> None:
-        lookup = mcstatus.JavaServer.lookup(
-            # Address
-            config.address
+        java_server = mcstatus.JavaServer(
+            config.java_server_host,
+            port=config.java_server_port,
         )
-        status = lookup.status()
+        status = java_server.status()
 
         # Players
         players = status.players
@@ -49,7 +49,6 @@ class Status:
         embed = (
             hikari.Embed()
             .add_field(
-                # Name
                 "Игроки",
                 value=f"""\
                     Онлайн: `{online}` (||{
@@ -63,7 +62,6 @@ class Status:
                 """,
             )
             .add_field(
-                # Name
                 "Версия",
                 value=f"""\
                     Имя: `{name}`
