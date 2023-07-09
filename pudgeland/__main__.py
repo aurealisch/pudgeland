@@ -1,15 +1,13 @@
 import crescent
 import hikari
 
-from .modules import config
+from .common import config
 
 gateway_bot = hikari.GatewayBot(config.token)
 
 client = crescent.Client(gateway_bot)
 
-plugins = {
-    "pudgeland.plugins.server.status"
-}
+plugins = {"pudgeland.plugins.server.status"}
 
 for plugin in plugins:
     client.plugins.load(plugin)
