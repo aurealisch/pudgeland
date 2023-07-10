@@ -2,6 +2,7 @@ import crescent
 import hikari
 
 from pudgeland.plugins import voice
+from pudgeland.common import config
 
 from ..modules import locales
 
@@ -53,7 +54,7 @@ class Create:
     user_limit = crescent.option(
         int,
         name=locales.LocaleBuilder(
-            "user_limit",
+            "user-limit",
             russian="пользовательский-лимит",
             ukrainian="користувальницкий-лiмiт",
         ),
@@ -85,7 +86,7 @@ class Create:
     video_quality_mode = crescent.option(
         int,
         name=locales.LocaleBuilder(
-            "video_quality_mode",
+            "video-quality-mode",
             russian="режим-качества-видео",
             ukrainian="режим-якості-відео",
         ),
@@ -118,23 +119,22 @@ class Create:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         name = self.name
-
         position = self.position
         user_limit = self.user_limit
         bitrate = self.bitrate
         video_quality_mode = self.video_quality_mode
 
-        GUILD_ID = 1010816890513395803
-        CATEGORY_ID = 1127922726674370580
+        guild_id = config.private_voice_channel_guild_id
+        category_id = config.private_voice_channel_category_id
 
         guild_voice_channel = await plugin.app.rest.create_guild_voice_channel(
-            GUILD_ID,
+            guild_id,
             name=name,
             position=position,
             user_limit=user_limit,
             bitrate=bitrate,
             video_quality_mode=video_quality_mode,
-            category=CATEGORY_ID,
+            category=category_id,
         )
 
         guild_voice_channel_id = guild_voice_channel.id
