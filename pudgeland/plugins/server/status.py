@@ -32,42 +32,31 @@ class Status:
         )
         status = java_server.status()
 
-        # Players
+        latency = status.latency
+
         players = status.players
 
         online = players.online
         max = players.max
         sample = players.sample
 
-        # Version
         version = status.version
 
         name = version.name
         protocol = version.protocol
 
         # fmt: off
-        embed = (
-            hikari.Embed()
-            .add_field(
-                "Игроки",
-                value=f"""\
-                    Онлайн: `{online}` (||{
-                        ', '.join([
-                            f"`{player.name}`"
+        embed = hikari.Embed(
+            title="Статус",
+            description=f"""\
+                Задержка: *{latency}*
 
-                            for player in sample
-                        ])
-                    }||)
-                    Максимум: `{max}`
-                """,
-            )
-            .add_field(
-                "Версия",
-                value=f"""\
-                    Имя: `{name}`
-                    Протокол: `{protocol}`
-                """,
-            )
+                Игроки: *{online}*/*{max}* (||Образец: {
+                    ", ".join([f"`{player.name}`" for player in sample])
+                }||)
+
+                Версия: *{name}* (||Протокол: `{protocol}`||)
+            """
         )
         # fmt: on
 
