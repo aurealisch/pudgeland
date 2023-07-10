@@ -22,5 +22,6 @@ plugin = crescent.Plugin()
     ),
 )
 class Delete:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         await context.respond("Hello, world!")

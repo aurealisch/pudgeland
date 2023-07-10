@@ -25,6 +25,7 @@ plugin = crescent.Plugin()
     ),
 )
 class Status:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         java_server = mcstatus.JavaServer(
             config.java_server_host,
