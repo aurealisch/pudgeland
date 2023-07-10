@@ -1,9 +1,9 @@
 import crescent
 import hikari
 
-from .common import environ
+from .common import env
 
-gateway_bot = hikari.GatewayBot(environ.GATEWAY_BOT_TOKEN)
+gateway_bot = hikari.GatewayBot(env.gateway_bot_token)
 
 client = crescent.Client(gateway_bot)
 

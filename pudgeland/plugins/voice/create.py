@@ -2,7 +2,7 @@ import crescent
 import hikari
 
 from pudgeland.plugins import voice
-from pudgeland.common import environ
+from pudgeland.common import env
 
 from ..modules import locales
 
@@ -124,8 +124,8 @@ class Create:
         bitrate = self.bitrate
         video_quality_mode = self.video_quality_mode
 
-        guild_id = environ.PRIVATE_VOICE_CHANNEL_GUILD_ID
-        category_id = environ.PRIVATE_VOICE_CHANNEL_CATEGORY_ID
+        guild_id = env.private_voice_channel_guild_id
+        category_id = env.private_voice_channel_category_id
 
         guild_voice_channel = await plugin.app.rest.create_guild_voice_channel(
             guild_id,
