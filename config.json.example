@@ -1,5 +1,5 @@
 {
-  "discordGatewayBotToken": "",
-  "javaServerHost": "",
-  "javaServerPort": ""
+  "gatewayBotToken": "",
+  "javaServerHost": "galaxy.minecraft.rent",
+  "javaServerPort": 25615
 }

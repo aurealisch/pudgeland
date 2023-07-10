@@ -3,7 +3,7 @@ import hikari
 
 from .common import config
 
-gateway_bot = hikari.GatewayBot(config.discord_gateway_bot_token)
+gateway_bot = hikari.GatewayBot(config.gateway_bot_token)
 
 client = crescent.Client(gateway_bot)
 
