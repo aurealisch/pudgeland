@@ -8,9 +8,9 @@
 **/.vscode
 **/.idea
 
-# Configurations
+# Environments
 
-config.json
+.env
 
 # Cache
 

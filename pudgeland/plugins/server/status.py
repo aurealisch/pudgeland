@@ -2,7 +2,7 @@ import crescent
 import hikari
 import mcstatus
 
-from pudgeland.common import config
+from pudgeland.common import environ
 from pudgeland.plugins import server
 
 from ..modules import locales
@@ -28,8 +28,8 @@ class Status:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         java_server = mcstatus.JavaServer(
-            config.java_server_host,
-            port=config.java_server_port,
+            environ.JAVA_SERVER_HOST,
+            port=environ.JAVA_SERVER_PORT,
         )
         status = java_server.status()
 
