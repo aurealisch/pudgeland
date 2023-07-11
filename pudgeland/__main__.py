@@ -3,7 +3,7 @@ import hikari
 import collei
 
 from .env import envs
-from .database import databases
+from .db import databases
 from .model import models
 
 client = collei.Client()

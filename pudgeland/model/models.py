@@ -2,7 +2,7 @@ import attrs
 import hikari
 import collei
 
-from ..database import databases
+from ..db import databases
 
 
 @attrs.define
