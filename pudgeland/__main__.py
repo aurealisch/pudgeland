@@ -1,17 +1,11 @@
 import crescent
 import hikari
-import collei
 
 from .env import envs
-from .model import models
-
-client = collei.Client()
-
-model = models.Model(client)
 
 gateway_bot = hikari.GatewayBot(envs.gateway_bot_token)
 
-client = crescent.Client(gateway_bot, model=model)
+client = crescent.Client(gateway_bot)
 
 plugins = {
     "pudgeland.plugin.action.bite",
