@@ -273,13 +273,13 @@ files = [
 
 [[package]]
 name = "collei"
-version = "1.0.0"
+version = "1.0.1"
 description = "🍂 An unofficial Waifu.pics API wrapper for Python"
 optional = false
-python-versions = ">=3.11,<4.0"
+python-versions = ">=3.8.0,<3.12"
 files = [
-    {file = "collei-1.0.0-py3-none-any.whl", hash = "sha256:bfcfa099b64541b7ca7a6f3723b5262a2a85428cfde652d6cdaf7bc830534103"},
-    {file = "collei-1.0.0.tar.gz", hash = "sha256:3b236263d0fe0f3aa24d2046bc87bbd095d784ea99480a9d29ce08f9ac5358d9"},
+    {file = "collei-1.0.1-py3-none-any.whl", hash = "sha256:12c6cb322154a4783c04d04858ecad66942040b155e0dd4373b23acf9dd657c0"},
+    {file = "collei-1.0.1.tar.gz", hash = "sha256:8f54e75713168d7180ce7cc451aa8e1794a0bfa8e80491ea06738bd66d5c6174"},
 ]
 
 [package.dependencies]
@@ -359,6 +359,16 @@ files = [
 [package.extras]
 docs = ["furo (>=2023.5.20)", "sphinx (>=7.0.1)", "sphinx-autodoc-typehints (>=1.23,!=1.23.4)"]
 testing = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "diff-cover (>=7.5)", "pytest (>=7.3.1)", "pytest-cov (>=4.1)", "pytest-mock (>=3.10)", "pytest-timeout (>=2.1)"]
+
+[[package]]
+name = "forbiddenfruit"
+version = "0.1.4"
+description = "Patch python built-in objects"
+optional = false
+python-versions = "*"
+files = [
+    {file = "forbiddenfruit-0.1.4.tar.gz", hash = "sha256:e3f7e66561a29ae129aac139a85d610dbf3dd896128187ed5454b6421f624253"},
+]
 
 [[package]]
 name = "frozenlist"
@@ -791,6 +801,9 @@ files = [
     {file = "sigparse-3.0.0.tar.gz", hash = "sha256:608d14fd5ead44d84482f2a1139803a0416157a0bac2fffa12382caac9566680"},
 ]
 
+[package.dependencies]
+forbiddenfruit = {version = ">=0.1.4,<0.2.0", markers = "python_version < \"3.10\""}
+
 [[package]]
 name = "urllib3"
 version = "2.0.3"
@@ -917,5 +930,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.11,<3.12"
-content-hash = "8a4f0816fec62b4ef29d0aa41543bd4e8f8a9de5bc7bdda104f85b63eb500939"
+python-versions = ">=3.8.1,<3.12"
+content-hash = "6b1e7f95f3698ff80ac7312d5338f4a91ee4854102647f6d660beec788ca3f57"
