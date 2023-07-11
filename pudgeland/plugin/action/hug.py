@@ -2,12 +2,15 @@ import collei
 import crescent
 import hikari
 
+from pudgeland.plugin import action
+
 from ..module import locales
 from ..utility import plugins
 
 plugin = plugins.Plugin()
 
 
+@action.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
