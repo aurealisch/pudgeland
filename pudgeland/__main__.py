@@ -3,18 +3,13 @@ import hikari
 import collei
 
 from .env import envs
-from .db import databases
 from .model import models
 
 client = collei.Client()
-database = databases.Database()
 
-model = models.Model(client, database=database)
+model = models.Model(client)
 
 gateway_bot = hikari.GatewayBot(envs.gateway_bot_token)
-
-gateway_bot.subscribe(hikari.StartedEvent, model.on_started_event)
-gateway_bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
 
 client = crescent.Client(gateway_bot, model=model)
 
