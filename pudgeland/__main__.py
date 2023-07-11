@@ -1,11 +1,16 @@
 import crescent
 import hikari
+import replit
 
-from .env import envs
+from .database import databases
+from .environment import environments
+from .model import models
 
-gateway_bot = hikari.GatewayBot(envs.gateway_bot_token)
+model = models.Model(databases.Database(replit.db))
 
-client = crescent.Client(gateway_bot)
+gateway_bot = hikari.GatewayBot(environments.gateway_bot_token)
+
+client = crescent.Client(gateway_bot, model=model)
 
 plugins = {
     "pudgeland.plugin.action.bite",
