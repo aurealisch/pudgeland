@@ -1,6 +1,6 @@
 import crescent
 
-from ..modules import locales
+from ..module import locales
 
 
 group = crescent.Group(

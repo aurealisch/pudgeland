@@ -3,10 +3,10 @@ import hikari
 import mcstatus
 
 from pudgeland.common import env
-from pudgeland.plugins import server
+from pudgeland.plugin import server
 
-from ..modules import locales
-from ..utilities import plugins
+from ..module import locales
+from ..utility import plugins
 
 plugin = plugins.Plugin()
 

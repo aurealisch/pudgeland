@@ -3,7 +3,7 @@ import hikari
 
 from .common import env
 from .database import databases
-from .modules import models
+from .module import models
 
 model = models.Model(databases.Database())
 
