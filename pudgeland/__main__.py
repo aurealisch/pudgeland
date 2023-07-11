@@ -4,7 +4,7 @@ import collei
 
 from .common import env
 from .database import databases
-from .module import models
+from .model import models
 
 client = collei.Client()
 database = databases.Database()
