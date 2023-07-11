@@ -6,8 +6,9 @@ from pudgeland.common import env
 from pudgeland.plugins import server
 
 from ..modules import locales
+from ..utilities import plugins
 
-plugin = crescent.Plugin()
+plugin = plugins.Plugin()
 
 
 @server.group.child
@@ -20,8 +21,8 @@ plugin = crescent.Plugin()
     ),
     description=locales.LocaleBuilder(
         "Checks the status of a Minecraft Java Edition server via the query protocol.",
-        russian="Проверяет статус сервера Minecraft Java Edition с помощью протокола запроса.", # noqa: E501
-        ukrainian="Перевіряє статус сервера Minecraft Java Edition за допомогою протоколу запиту.", # noqa: E501
+        russian="Проверяет статус сервера Minecraft Java Edition с помощью протокола запроса.",  # noqa: E501
+        ukrainian="Перевіряє статус сервера Minecraft Java Edition за допомогою протоколу запиту.",  # noqa: E501
     ),
 )
 class Query:
