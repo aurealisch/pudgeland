@@ -2,7 +2,7 @@ import crescent
 import hikari
 import mcstatus
 
-from pudgeland.common import env
+from pudgeland.env import envs
 from pudgeland.plugin import server
 
 from ..module import locales
@@ -29,8 +29,8 @@ class Query:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         java_server = mcstatus.JavaServer(
-            env.java_server_host,
-            port=env.java_server_port,
+            envs.java_server_host,
+            port=envs.java_server_port,
         )
         query_response = java_server.query()
 

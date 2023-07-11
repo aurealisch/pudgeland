@@ -2,7 +2,7 @@ import crescent
 import hikari
 import collei
 
-from .common import env
+from .env import envs
 from .database import databases
 from .model import models
 
@@ -11,7 +11,7 @@ database = databases.Database()
 
 model = models.Model(client, database=database)
 
-gateway_bot = hikari.GatewayBot(env.gateway_bot_token)
+gateway_bot = hikari.GatewayBot(envs.gateway_bot_token)
 
 gateway_bot.subscribe(hikari.StartedEvent, model.on_started_event)
 gateway_bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
