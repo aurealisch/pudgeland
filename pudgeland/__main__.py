@@ -19,7 +19,10 @@ gateway_bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
 client = crescent.Client(gateway_bot, model=model)
 
 plugins = {
+    "pudgeland.plugin.action.bite",
     "pudgeland.plugin.action.hug",
+    "pudgeland.plugin.action.kiss",
+    "pudgeland.plugin.action.lick",
     "pudgeland.plugin.server.query",
 }
 
