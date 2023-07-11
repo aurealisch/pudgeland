@@ -1,11 +1,15 @@
 import crescent
 import hikari
+import collei
 
 from .common import env
 from .database import databases
 from .module import models
 
-model = models.Model(databases.Database())
+client = collei.Client()
+database = databases.Database()
+
+model = models.Model(client, database=database)
 
 gateway_bot = hikari.GatewayBot(env.gateway_bot_token)
 
@@ -15,7 +19,8 @@ gateway_bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
 client = crescent.Client(gateway_bot, model=model)
 
 plugins = {
-    "pudgeland.plugins.server.query",
+    "pudgeland.plugin.action.hug",
+    "pudgeland.plugin.server.query",
 }
 
 for plugin in plugins:
