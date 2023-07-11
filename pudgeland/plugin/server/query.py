@@ -50,9 +50,7 @@ class Query:
 
         # fmt: off
         embed = (
-            hikari.Embed(
-                title="Запрос",
-            )
+            hikari.Embed(title="Запрос")
             .add_field(
                 "Игроки",
                 value=f"""\
