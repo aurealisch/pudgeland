@@ -27,8 +27,6 @@ attrs = "^23.1.0"
 mcstatus = "^11.0.0"
 python-dotenv = "^1.0.0"
 collei = "^1.0.1"
-fastapi = "^0.100.0"
-uvicorn = "^0.22.0"
 
 
 [build-system]
