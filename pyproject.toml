@@ -28,7 +28,9 @@ mcstatus = "^11.0.0"
 python-dotenv = "^1.0.0"
 collei = "^1.0.1"
 replit = "^3.3.0"
-msgspec = "^0.17.0"
+msgspec = "^0.16.0"
+meowy = "^1.0.0"
+woofy = "^1.0.0"
 
 
 [build-system]
