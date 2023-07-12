@@ -31,6 +31,7 @@ replit = "^3.3.0"
 msgspec = "^0.16.0"
 meowy = "^1.0.0"
 woofy = "^1.0.0"
+black = "^23.7.0"
 
 
 [build-system]
