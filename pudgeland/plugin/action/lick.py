@@ -41,19 +41,15 @@ class Lick:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        model = plugin.model
-        client = model.client
+        image = collei.Client().sfw.get(collei.SfwCategory.LICK)
 
-        image = client.sfw.get(collei.SfwCategory.LICK)
-
-        url = image.url
-
-        title = "Лизнуть"
-        description = f"<@{context.user.id}> лизнул(а) <@{self.user.id}>"
-
-        embed = hikari.Embed(title=title, description=description)
-
-        embed.set_author(name=context.user.username, icon=context.user.avatar_url)
-        embed.set_image(url)
-
-        await context.respond(embed=embed)
+        await context.respond(
+            embed=(
+                hikari.Embed(
+                    title="Лизнуть",
+                    description=f"<@{context.user.id}> лизнул(а) <@{self.user.id}>",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(image.url)
+            )
+        )

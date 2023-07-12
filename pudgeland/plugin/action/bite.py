@@ -41,21 +41,15 @@ class Bite:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        model = plugin.model
-        client = model.client
+        image = collei.Client().sfw.get(collei.SfwCategory.BITE)
 
-        image = client.sfw.get(collei.SfwCategory.BITE)
-
-        url = image.url
-
-        title = "Укусить"
-        description = f"""\
-            <@{context.user.id}> укусил(а) <@{self.user.id}>
-        """
-
-        embed = hikari.Embed(title=title, description=description)
-
-        embed.set_author(name=context.user.username, icon=context.user.avatar_url)
-        embed.set_image(url)
-
-        await context.respond(embed=embed)
+        await context.respond(
+            embed=(
+                hikari.Embed(
+                    title="Укусить",
+                    description=f"<@{context.user.id}> укусил(а) <@{self.user.id}>",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(image.url)
+            )
+        )
