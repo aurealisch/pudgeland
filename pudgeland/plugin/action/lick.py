@@ -7,11 +7,9 @@ from pudgeland.plugin import action
 from ..module import locales
 from ..utility import plugins
 
-plugin = plugins.Plugin()
-
 
 @action.group.child
-@plugin.include
+@plugins.Plugin().include
 @crescent.command(
     name=locales.LocaleBuilder(
         "lick",
@@ -41,8 +39,6 @@ class Lick:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        image = collei.Client().sfw.get(collei.SfwCategory.LICK)
-
         await context.respond(
             embed=(
                 hikari.Embed(
@@ -50,6 +46,6 @@ class Lick:
                     description=f"<@{context.user.id}> лизнул(а) <@{self.user.id}>",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(image.url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.LICK).url)
             )
         )

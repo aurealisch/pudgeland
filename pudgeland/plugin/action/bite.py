@@ -7,11 +7,9 @@ from pudgeland.plugin import action
 from ..module import locales
 from ..utility import plugins
 
-plugin = plugins.Plugin()
-
 
 @action.group.child
-@plugin.include
+@plugins.Plugin().include
 @crescent.command(
     name=locales.LocaleBuilder(
         "bite",
@@ -41,8 +39,6 @@ class Bite:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        image = collei.Client().sfw.get(collei.SfwCategory.BITE)
-
         await context.respond(
             embed=(
                 hikari.Embed(
@@ -50,6 +46,6 @@ class Bite:
                     description=f"<@{context.user.id}> укусил(а) <@{self.user.id}>",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(image.url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
             )
         )
