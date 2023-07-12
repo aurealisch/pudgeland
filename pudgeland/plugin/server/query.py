@@ -28,58 +28,44 @@ plugin = plugins.Plugin()
 class Query:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        java_server = mcstatus.JavaServer(
-            environments.java_server_host,
+        query_response = mcstatus.JavaServer(
+            host=environments.java_server_host,
             port=environments.java_server_port,
-        )
-        query_response = java_server.query()
+        ).query()
 
-        # Players
         players = query_response.players
-
-        online = players.online
-        max = players.max
-        names = players.names
-
-        # Software
         software = query_response.software
 
-        brand = software.brand
-        plugins = software.plugins
-        version = software.version
+        await context.respond(
+            embed=(
+                hikari.Embed(title="Запрос")
+                .add_field(
+                    "Игроки",
+                    value=f"""\
+                        Онлайн: *{players.online}*
+                        Максимум: *{players.max}*
+                        Имена: ||{
+                            ", ".join([
+                                f"`{name}`"
 
-        # fmt: off
-        embed = (
-            hikari.Embed(title="Запрос")
-            .add_field(
-                "Игроки",
-                value=f"""\
-                    Онлайн: *{online}*
-                    Максимум: *{max}*
-                    Имена: ||{
-                        ", ".join([
-                            f"`{name}`"
+                                for name in players.names
+                            ])
+                        }||
+                    """,
+                )
+                .add_field(
+                    "Программное обеспечение",
+                    value=f"""\
+                        Марка: *{software.brand}*
+                        Плагины: ||{
+                            ", ".join([
+                                f"`{plugin}`"
 
-                            for name in names
-                        ])
-                    }||
-                """
-            )
-            .add_field(
-                "Программное обеспечение",
-                value=f"""\
-                    Марка: *{brand}*
-                    Плагины: ||{
-                        ", ".join([
-                            f"`{plugin}`"
-
-                            for plugin in plugins
-                        ])
-                    }||
-                    Версия: *{version}*
-                """
+                                for plugin in software.plugins
+                            ])
+                        }||
+                        Версия: *{software.version}*
+                    """,
+                )
             )
         )
-        # fmt: on
-
-        await context.respond(embed=embed)
