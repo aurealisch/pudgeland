@@ -13,71 +13,71 @@ from ..utility import plugins
 @plugins.Plugin().include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "query",
-        russian="запрос",
-        ukrainian="запит",
+        "status",
+        russian="статус",
+        ukrainian="статус",
     ),
     description=locales.LocaleBuilder(
         """\
             Checks the status of a Minecraft Java Edition server
-            via the query protocol.
+            via the status protocol.
         """,
         russian="""\
             Проверяет статус сервера Minecraft Java Edition
-            с помощью протокола запроса.
+            с помощью протокола статуса.
         """,
         ukrainian="""\
             Перевіряє статус сервера Minecraft Java Edition
-            за допомогою протоколу запиту.
+            за допомогою протоколу статуса.
         """,
     ),
 )
-class Query:
+class Status:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        query_response = mcstatus.JavaServer(
+        java_status_response = mcstatus.JavaServer(
             environments.java_server_host,
             port=environments.java_server_port,
-        ).query()
+        ).status()
 
-        players = query_response.players
-        software = query_response.software
+        java_status_players = java_status_response.players
+        java_status_version = java_status_response.version
 
         await context.respond(
             embed=(
                 hikari.Embed(
-                    title="Запрос",
+                    title="Статус",
                     description="""\
                         Проверяет статус сервера Minecraft Java Edition
-                        с помощью протокола запроса.
+                        с помощью протокола статуса.
                     """,
                 )
                 .add_field(
                     "Игроки",
                     value=f"""\
-                        Онлайн: *{players.online}*
-                        Максимум: *{players.max}*
-                        Имена: ||{
+                        Онлайн: *{java_status_players.online}*
+                        Максимум: *{java_status_players.max}*
+                        Образец: {
                             ", ".join([
-                                f"`{name}`"
+                                f"*{name}* (||{id}||)"
 
-                                for name in players.names
+                                for name, id in [
+                                    (
+                                        java_status_player.name,
+                                        java_status_player.id
+                                    )
+
+                                    for java_status_player in java_status_players.sample
+                                ]
                             ])
-                        }||
+                        }
                     """,
                 )
                 .add_field(
-                    "Программное обеспечение",
+                    "Версия",
                     value=f"""\
-                        Марка: *{software.brand}*
-                        Плагины: ||{
-                            ", ".join([
-                                f"`{plugin}`"
-
-                                for plugin in software.plugins
-                            ])
-                        }||
-                        Версия: *{software.version}*
+                        Имя: *{java_status_version.name}*
+                        Протокол: *{java_status_version.protocol}*
                     """,
                 )
             )
