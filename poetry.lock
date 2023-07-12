@@ -109,6 +109,20 @@ yarl = ">=1.0,<2.0"
 speedups = ["Brotli", "aiodns", "cchardet"]
 
 [[package]]
+name = "aiohttp-retry"
+version = "2.8.3"
+description = "Simple retry client for aiohttp"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "aiohttp_retry-2.8.3-py3-none-any.whl", hash = "sha256:3aeeead8f6afe48272db93ced9440cf4eda8b6fd7ee2abb25357b7eb28525b45"},
+    {file = "aiohttp_retry-2.8.3.tar.gz", hash = "sha256:9a8e637e31682ad36e1ff9f8bcba912fcfc7d7041722bc901a4b948da4d71ea9"},
+]
+
+[package.dependencies]
+aiohttp = "*"
+
+[[package]]
 name = "aiosignal"
 version = "1.3.1"
 description = "aiosignal: a list of registered asynchronous callbacks"
@@ -1325,17 +1339,18 @@ files = [
 
 [[package]]
 name = "replit"
-version = "3.3.0"
+version = "3.3.1"
 description = "A library for interacting with features of repl.it"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "replit-3.3.0-py3-none-any.whl", hash = "sha256:11aff40fe0fec0fa48ccff015ed72b39f3f53ea18c9c6a113ed1bbf12d123ccf"},
-    {file = "replit-3.3.0.tar.gz", hash = "sha256:1c5c12966c70cdcbdbcd1819178b0f10e8b864dcb1e872ea337ecc82caf8f560"},
+    {file = "replit-3.3.1-py3-none-any.whl", hash = "sha256:8a95b3fd2bc60aa2792e5796aae8ab25d61db7b253ce9f410e76ac33a5521a86"},
+    {file = "replit-3.3.1.tar.gz", hash = "sha256:e041223a26a0937ed32e40d73162032e29d60cee52242ceb366cd702f9b88b2a"},
 ]
 
 [package.dependencies]
 aiohttp = ">=3.6.2,<4.0.0"
+aiohttp-retry = ">=2.8.3,<3.0.0"
 Flask = ">=2.0.0,<3.0.0"
 protobuf = ">=4.21.8,<5.0.0"
 pyseto = ">=1.6.11,<2.0.0"
@@ -1618,4 +1633,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "92645eb25ad1c097628c05cf2ffadf9e8af0bba3b5525b3720b6c8e48b5d79d8"
+content-hash = "8edcda0c10346391903da7d133e5894b2aceff2525762878f616279311256a81"
