@@ -8,7 +8,10 @@ from .model import models
 
 gateway_bot = hikari.GatewayBot(environments.gateway_bot_token)
 
-client = crescent.Client(gateway_bot, model=models.Model(databases.Database(replit.db)))
+client = crescent.Client(
+    gateway_bot,
+    model=models.Model(databases.Database(replit.db)),
+)
 
 for plugin in {
     "pudgeland.plugin.action.bite",
