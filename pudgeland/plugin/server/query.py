@@ -58,11 +58,13 @@ class Query:
                         Онлайн: *{players.online}*
                         Максимум: *{players.max}*
                         Имена: ||{
-                            ", ".join([
-                                f"`{name}`"
+                            ", ".join(
+                                [
+                                    f"`{name}`"
 
-                                for name in players.names
-                            ])
+                                    for name in players.names
+                                ]
+                            )
                         }||
                     """,
                 )
@@ -71,11 +73,13 @@ class Query:
                     value=f"""\
                         Марка: *{software.brand}*
                         Плагины: ||{
-                            ", ".join([
-                                f"`{plugin}`"
+                            ", ".join(
+                                [
+                                    f"`{plugin}`"
 
-                                for plugin in software.plugins
-                            ])
+                                    for plugin in software.plugins
+                                ]
+                            )
                         }||
                         Версия: *{software.version}*
                     """,

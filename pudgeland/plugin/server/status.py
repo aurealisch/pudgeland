@@ -58,18 +58,26 @@ class Status:
                         Онлайн: *{java_status_players.online}*
                         Максимум: *{java_status_players.max}*
                         Образец: {
-                            ", ".join([
-                                f"*{name}* (||{id}||)"
+                            ", ".join(
+                                [
+                                    f"*{java_status_player_name}*"
+                                    f"(||{java_status_player_id}||)"
 
-                                for name, id in [
-                                    (
-                                        java_status_player.name,
-                                        java_status_player.id
-                                    )
+                                    for (
+                                        java_status_player_name,
+                                        java_status_player_id,
+                                    ) in [
+                                        (
+                                            java_status_player.name,
+                                            java_status_player.id,
+                                        )
 
-                                    for java_status_player in java_status_players.sample
+                                        for java_status_player in (
+                                            java_status_players.sample
+                                        )
+                                    ]
                                 ]
-                            ])
+                            )
                         }
                     """,
                 )
