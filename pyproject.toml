@@ -32,6 +32,8 @@ meowy = "^1.0.0"
 woofy = "^1.0.0"
 black = "^23.7.0"
 prisma = "^0.9.1"
+fastapi = "^0.100.0"
+uvicorn = "^0.22.0"
 
 
 [build-system]

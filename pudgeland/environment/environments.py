@@ -10,3 +10,6 @@ java_server_host = os.getenv("JAVA_SERVER_HOST")
 java_server_port = int(os.getenv("JAVA_SERVER_PORT"))
 
 database_url = os.getenv("DATABASE_URL")
+
+api_host = os.getenv("API_HOST")
+api_port = int(os.getenv("API_PORT"))
