@@ -2,7 +2,6 @@ import crescent
 
 from ..module import locales
 
-
 group = crescent.Group(
     name=locales.LocaleBuilder(
         "action",

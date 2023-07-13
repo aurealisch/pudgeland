@@ -7,9 +7,11 @@ from pudgeland.plugin import action
 from ..module import locales
 from ..utility import plugins
 
+plugin = plugins.Plugin()
+
 
 @action.group.child
-@plugins.Plugin().include
+@plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
         "hug",

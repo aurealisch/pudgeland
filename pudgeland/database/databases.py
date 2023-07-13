@@ -1,15 +1,16 @@
 import attrs
-import replit
 
-from .manager.user import UserManager
+import prisma
+
+from .manager import users
 
 
 @attrs.define
 class Database:
-    database: replit.Database = attrs.field(alias="db")
+    prisma: prisma.Prisma
 
-    _user_manager = UserManager(database)
+    _users_manager = users.UsersManager(prisma)
 
     @property
-    def users(self) -> UserManager:
-        return self._user_manager
+    def users(self) -> users.UsersManager:
+        return self._users_manager

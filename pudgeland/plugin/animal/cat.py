@@ -1,15 +1,17 @@
-import meowy
 import crescent
 import hikari
+import meowy
 
 from pudgeland.plugin import animal
 
 from ..module import locales
 from ..utility import plugins
 
+plugin = plugins.Plugin()
+
 
 @animal.group.child
-@plugins.Plugin().include
+@plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
         "cat",

@@ -8,9 +8,11 @@ from pudgeland.plugin import server
 from ..module import locales
 from ..utility import plugins
 
+plugin = plugins.Plugin()
+
 
 @server.group.child
-@plugins.Plugin().include
+@plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
         "query",

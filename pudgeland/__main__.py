@@ -1,6 +1,6 @@
 import crescent
 import hikari
-import replit
+import prisma
 
 from .database import databases
 from .environment import environments
@@ -8,18 +8,17 @@ from .model import models
 
 gateway_bot = hikari.GatewayBot(environments.gateway_bot_token)
 
-client = crescent.Client(
-    gateway_bot,
-    model=models.Model(databases.Database(replit.db)),
-)
+model = models.Model(databases.Database(prisma.Prisma()))
+prisma.register(model.database.prisma)
 
-for plugin in {
-    "pudgeland.plugin.action.bite",
-    "pudgeland.plugin.action.hug",
-    "pudgeland.plugin.action.kiss",
-    "pudgeland.plugin.action.lick",
-    "pudgeland.plugin.server.query",
-}:
-    client.plugins.load(plugin)
+gateway_bot.subscribe(hikari.StartedEvent, model.on_started_event)
+gateway_bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
+
+client = crescent.Client(gateway_bot, model=model)
+
+client.plugins.load_folder("pudgeland.plugin.action")
+client.plugins.load_folder("pudgeland.plugin.animal")
+client.plugins.load_folder("pudgeland.plugin.economics")
+client.plugins.load_folder("pudgeland.plugin.server")
 
 gateway_bot.run()
