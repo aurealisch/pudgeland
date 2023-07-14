@@ -1,9 +1,9 @@
 import crescent
-import hikari
 
 from pudgeland.plugin import economics
 from pudgeland.locale.plugin import locales
 from pudgeland.utility.plugin import plugins
+from pudgeland.component.plugin.economics import statistics
 
 plugin = plugins.Plugin()
 
@@ -25,16 +25,4 @@ plugin = plugins.Plugin()
 class Statistics:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        user = await plugin.model.database.users.find(id=str(context.user.id))
-
-        await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Статистика",
-                    description=f"""\
-                        :banana: Бананы: *{user.banana}*
-                        :monkey: Обезьяны: *{user.monkey}*
-                    """,
-                )
-            )
-        )
+        await statistics.Component(plugin).callback(context)
