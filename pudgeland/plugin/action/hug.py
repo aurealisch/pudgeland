@@ -3,8 +3,8 @@ import crescent
 import hikari
 
 from pudgeland.plugin import action
+from pudgeland.locale import locales
 
-from ..module import locales
 from ..utility import plugins
 
 plugin = plugins.Plugin()

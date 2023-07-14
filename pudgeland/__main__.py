@@ -14,6 +14,7 @@ from .model import models
 bot = hikari.GatewayBot(environments.gateway_bot_token)
 
 model = models.Model(databases.Database(prisma.Prisma()))
+
 prisma.register(model.database.prisma)
 
 bot.subscribe(hikari.StartedEvent, model.on_started_event)
