@@ -1,10 +1,9 @@
 import crescent
-import hikari
-import meowy
 
 from pudgeland.plugin import animal
 from pudgeland.locale.plugin import locales
 from pudgeland.utility.plugin import plugins
+from pudgeland.component.plugin.animal import cat
 
 plugin = plugins.Plugin()
 
@@ -26,13 +25,4 @@ plugin = plugins.Plugin()
 class Cat:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Кот",
-                    description="Изображение кота",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(meowy.Client().images.search()[0].url)
-            )
-        )
+        await cat.Component().callback(context)

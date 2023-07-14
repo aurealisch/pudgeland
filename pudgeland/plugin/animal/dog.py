@@ -1,10 +1,9 @@
 import crescent
-import hikari
-import woofy
 
 from pudgeland.plugin import animal
 from pudgeland.locale.plugin import locales
 from pudgeland.utility.plugin import plugins
+from pudgeland.component.plugin.animal import dog
 
 plugin = plugins.Plugin()
 
@@ -26,13 +25,4 @@ plugin = plugins.Plugin()
 class Dog:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Собака",
-                    description="Изображение собаки",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(woofy.Client().images.search()[0].url)
-            )
-        )
+        await dog.Component().callback(context)
