@@ -40,4 +40,4 @@ class Hug:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await hug.Component().callback(context)
+        await hug.Component(plugin).callback(context)

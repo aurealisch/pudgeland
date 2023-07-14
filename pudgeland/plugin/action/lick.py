@@ -40,4 +40,4 @@ class Lick:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await lick.Component().callback(context)
+        await lick.Component(plugin).callback(context)

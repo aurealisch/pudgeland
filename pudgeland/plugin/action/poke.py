@@ -40,4 +40,4 @@ class Poke:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await poke.Component().callback(context)
+        await poke.Component(plugin).callback(context)

@@ -40,4 +40,4 @@ class Kill:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await kill.Component().callback(context)
+        await kill.Component(plugin).callback(context)

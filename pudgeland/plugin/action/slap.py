@@ -40,4 +40,4 @@ class Slap:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await slap.Component().callback(context)
+        await slap.Component(plugin).callback(context)

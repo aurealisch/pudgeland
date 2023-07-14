@@ -40,4 +40,4 @@ class Kiss:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await kiss.Component().callback(context)
+        await kiss.Component(plugin).callback(context)

@@ -40,4 +40,4 @@ class Bite:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await bite.Component().callback(context)
+        await bite.Component(plugin).callback(context)

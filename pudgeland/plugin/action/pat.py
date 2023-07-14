@@ -40,4 +40,4 @@ class Pat:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await pat.Component().callback(context)
+        await pat.Component(plugin).callback(context)
