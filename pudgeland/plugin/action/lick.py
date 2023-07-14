@@ -1,10 +1,10 @@
-import collei
 import crescent
 import hikari
 
 from pudgeland.plugin import action
 from pudgeland.locale.plugin import locales
 from pudgeland.utility.plugin import plugins
+from pudgeland.component.plugin.action import lick
 
 plugin = plugins.Plugin()
 
@@ -40,13 +40,4 @@ class Lick:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Лизнуть",
-                    description=f"<@{context.user.id}> лизнул(а) <@{self.user.id}>",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.LICK).url)
-            )
-        )
+        await lick.Component().callback(context)
