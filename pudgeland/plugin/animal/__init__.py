@@ -1,6 +1,6 @@
 import crescent
 
-from ...locale import locales
+from ...locale.plugin import locales
 
 group = crescent.Group(
     name=locales.LocaleBuilder(

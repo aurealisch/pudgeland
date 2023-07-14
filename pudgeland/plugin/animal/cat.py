@@ -3,8 +3,8 @@ import hikari
 import meowy
 
 from pudgeland.plugin import animal
-from pudgeland.locale import locales
-from pudgeland.utility import plugins
+from pudgeland.locale.plugin import locales
+from pudgeland.utility.plugin import plugins
 
 plugin = plugins.Plugin()
 

@@ -3,9 +3,9 @@ import hikari
 import mcstatus
 
 from pudgeland.environment import environments
-from pudgeland.locale import locales
+from pudgeland.locale.plugin import locales
 from pudgeland.plugin import server
-from pudgeland.utility import plugins
+from pudgeland.utility.plugin import plugins
 
 plugin = plugins.Plugin()
 

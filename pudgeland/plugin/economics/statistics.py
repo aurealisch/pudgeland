@@ -2,8 +2,8 @@ import crescent
 import hikari
 
 from pudgeland.plugin import economics
-from pudgeland.locale import locales
-from pudgeland.utility import plugins
+from pudgeland.locale.plugin import locales
+from pudgeland.utility.plugin import plugins
 
 plugin = plugins.Plugin()
 
