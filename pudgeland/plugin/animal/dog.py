@@ -33,6 +33,6 @@ class Dog:
                     description="Изображение собаки",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(woofy.Client().images.search().url)
+                .set_image(woofy.Client().images.search()[0].url)
             )
         )

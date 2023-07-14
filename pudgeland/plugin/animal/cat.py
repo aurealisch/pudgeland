@@ -33,6 +33,6 @@ class Cat:
                     description="Изображение кота",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(meowy.Client().images.search().url)
+                .set_image(meowy.Client().images.search()[0].url)
             )
         )
