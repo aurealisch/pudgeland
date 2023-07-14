@@ -6,14 +6,14 @@ import uvicorn
 
 import prisma
 
-from .api.app import apps
-from .database import databases
-from .environment import environments
-from .model import models
+from .api.apps import app
+from .databases import database
+from .environments import environment
+from .models import model
 
-bot = hikari.GatewayBot(environments.gateway_bot_token)
+bot = hikari.GatewayBot(environment.gateway_bot_token)
 
-model = models.Model(databases.Database(prisma.Prisma()))
+model = model.Model(database.Database(prisma.Prisma()))
 
 prisma.register(model.database.prisma)
 
@@ -26,9 +26,9 @@ client.plugins.load_folder("pudgeland.plugin")
 
 threading.Thread(
     target=lambda: uvicorn.run(
-        apps.app,
-        host=environments.api_host,
-        port=environments.api_port,
+        app.app,
+        host=environment.api_host,
+        port=environment.api_port,
     )
 ).start()
 
