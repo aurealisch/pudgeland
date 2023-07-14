@@ -5,8 +5,7 @@ import mcstatus
 from pudgeland.environment import environments
 from pudgeland.locale import locales
 from pudgeland.plugin import server
-
-from ..utility import plugins
+from pudgeland.utility import plugins
 
 plugin = plugins.Plugin()
 

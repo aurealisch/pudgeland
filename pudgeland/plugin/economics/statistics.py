@@ -3,8 +3,7 @@ import hikari
 
 from pudgeland.plugin import economics
 from pudgeland.locale import locales
-
-from ..utility import plugins
+from pudgeland.utility import plugins
 
 plugin = plugins.Plugin()
 
