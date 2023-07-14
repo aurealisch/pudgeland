@@ -1,10 +1,10 @@
-import collei
 import crescent
 import hikari
 
 from pudgeland.plugin import action
 from pudgeland.locale.plugin import locales
 from pudgeland.utility.plugin import plugins
+from pudgeland.component.plugin.action import kill
 
 plugin = plugins.Plugin()
 
@@ -40,13 +40,4 @@ class Kill:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Убить",
-                    description=f"<@{context.user.id}> убил(а) <@{self.user.id}>",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.KILL).url)
-            )
-        )
+        await kill.Component().callback(context)
