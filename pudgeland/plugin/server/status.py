@@ -3,7 +3,7 @@ import crescent
 from pudgeland.locale.plugin import locales
 from pudgeland.plugin import server
 from pudgeland.utility.plugin import plugins
-from pudgeland.component.plugin.server import query
+from pudgeland.component.plugin.server import status
 
 plugin = plugins.Plugin()
 
@@ -34,4 +34,4 @@ plugin = plugins.Plugin()
 class Status:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        await query.Component(plugin).callback(context)
+        await status.Component(plugin).callback(context)
