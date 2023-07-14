@@ -22,7 +22,7 @@ bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
 
 client = crescent.Client(bot, model=model)
 
-client.plugins.load_folder("pudgeland.plugin")
+client.plugins.load_folder("pudgeland.plugins")
 
 threading.Thread(
     target=lambda: uvicorn.run(
