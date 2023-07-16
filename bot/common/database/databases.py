@@ -2,7 +2,7 @@ import attrs
 
 import prisma
 
-from .manager import users
+from bot.common.database.manager import users
 
 
 @attrs.define

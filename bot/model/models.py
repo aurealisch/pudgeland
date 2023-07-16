@@ -2,12 +2,12 @@ import attrs
 import hikari
 
 
-from ..databases import database
+from bot.common.database import databases
 
 
 @attrs.define
 class Model:
-    database: database.Database
+    database: databases.Database
 
     async def on_started_event(self, _: hikari.StartedEvent) -> None:
         await self.database.prisma.connect()

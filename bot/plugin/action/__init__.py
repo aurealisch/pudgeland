@@ -1,14 +1,14 @@
 import crescent
 
-from ...locales.plugins import locale
+from bot.plugin.locale import locales
 
 group = crescent.Group(
-    name=locale.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "action",
         russian="действие",
         ukrainian="дія",
     ),
-    description=locale.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Action",
         russian="Действие",
         ukrainian="Дія",
