@@ -1,7 +1,6 @@
 import attrs
 import hikari
 
-
 from bot.common.database import databases
 
 

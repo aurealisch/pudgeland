@@ -1,7 +1,6 @@
 import attrs
 
 import prisma
-
 from bot.common.database.manager import users
 
 
