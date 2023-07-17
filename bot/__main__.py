@@ -28,10 +28,10 @@ from bot.api.app import apps
 from bot.common import commons
 from bot.common.environment import environments
 
-commons.client.plugins.load_folder("pudgeland.plugin._action")
-commons.client.plugins.load_folder("pudgeland.plugin._animal")
-commons.client.plugins.load_folder("pudgeland.plugin._economics")
-commons.client.plugins.load_folder("pudgeland.plugin._server")
+commons.client.plugins.load_folder("bot.plugin._action")
+commons.client.plugins.load_folder("bot.plugin._animal")
+commons.client.plugins.load_folder("bot.plugin._economics")
+commons.client.plugins.load_folder("bot.plugin._server")
 
 threading.Thread(
     target=lambda: uvicorn.run(
