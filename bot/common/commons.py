@@ -2,7 +2,7 @@ import hikari
 
 import prisma
 from bot.client import clients
-from bot.client.model import models
+from bot.model import models
 from bot.common.database import databases
 from bot.common.environment import environments
 
