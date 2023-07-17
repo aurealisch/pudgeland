@@ -828,13 +828,13 @@ dnspython = ">=2.3.0,<3.0.0"
 
 [[package]]
 name = "meowy"
-version = "1.0.0"
+version = "1.0.1"
 description = "🐱 An unofficial The Cat API wrapper for Python"
 optional = false
 python-versions = ">=3.8.0,<3.12"
 files = [
-    {file = "meowy-1.0.0-py3-none-any.whl", hash = "sha256:ee5e9cbda8ac748fdf5f6422408ff47d9ad768b07fcb9a46c75837c95f5ac590"},
-    {file = "meowy-1.0.0.tar.gz", hash = "sha256:fd4bf6ce6d64e155a0a6002d3ad46d5697521f13ad7d206364fd3b5627ae07b7"},
+    {file = "meowy-1.0.1-py3-none-any.whl", hash = "sha256:2adb483c065d84731712ade7e49ea8eb3394740310dedcfaf87ee85b7209e6f8"},
+    {file = "meowy-1.0.1.tar.gz", hash = "sha256:b90e751961a256b6d65b9fda4356082f74a7a3ab2008c4fe5ba841c5d0b4a599"},
 ]
 
 [package.dependencies]
@@ -1490,4 +1490,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "59bf715154f6ddf0e8616339e396d74efa6bf57f8f407fa49914349400f5b7a4"
+content-hash = "e5034c650d9812b0d9696882f79147de5f68ca3a57d785b9a56a4e6184b573c3"
