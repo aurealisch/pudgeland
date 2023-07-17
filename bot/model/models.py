@@ -20,15 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import attrs
 import hikari
 
 from bot.common.database import databases
 
 
-@attrs.define
 class Model:
-    database: databases.Database
+    def __init__(self, database: databases.Database) -> None:
+        self.database = database
 
     async def on_started_event(self, _: hikari.StartedEvent) -> None:
         """

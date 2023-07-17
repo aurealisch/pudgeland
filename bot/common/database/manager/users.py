@@ -20,15 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import attrs
-
 import prisma
-from prisma import types, models
+from prisma import models, types
 
 
-@attrs.define
 class UserManager:
-    prisma: prisma.Prisma
+    def __init__(self, prisma: prisma.Prisma) -> None:
+        self.prisma = prisma
 
     async def find(self, *, id: str | types.StringFilter = ...) -> models.User | None:
         """

@@ -20,17 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import attrs
-
 import prisma
 from bot.common.database.manager import users
 
 
-@attrs.define
 class Database:
-    prisma: prisma.Prisma
+    def __init__(self, prisma: prisma.Prisma) -> None:
+        self.prisma = prisma
 
-    _user_manager = users.UserManager(prisma)
+        self._user_manager = users.UserManager(prisma)
 
     @property
     def users(self) -> users.UserManager:

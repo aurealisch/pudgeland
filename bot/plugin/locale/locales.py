@@ -22,17 +22,16 @@
 
 import typing
 
-import attrs
 import crescent
 import hikari
 
 
-@attrs.define
 class LocaleBuilder(crescent.LocaleBuilder):
-    _fallback: str
+    def __init__(self, _fallback: str, russian: str, ukrainian: str) -> None:
+        self._fallback = _fallback
 
-    russian: str
-    ukrainian: str
+        self.russian = russian
+        self.ukrainian = ukrainian
 
     def build(self) -> typing.Mapping[str, str]:
         """

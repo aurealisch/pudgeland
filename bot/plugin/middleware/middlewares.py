@@ -20,15 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import attrs
 import crescent
 
 from bot.plugin import plugins
 
 
-@attrs.define
 class Middleware:
-    plugin: plugins.Plugin
+    def __init__(self, plugin: plugins.Plugin) -> None:
+        self.plugin = plugin
 
     async def callback(self, context: crescent.Context) -> None:
         """
