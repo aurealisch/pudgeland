@@ -35,13 +35,13 @@ plugin = plugins.Plugin()
 @crescent.command(
     name=locales.LocaleBuilder(
         "pat",
-        ru="погладить",
-        uk="погладити",
+        russian="погладить",
+        ukrainian="погладити",
     ),
     description=locales.LocaleBuilder(
         "Pat",
-        ru="Погладить пользователя",
-        uk="Погладити користувача",
+        russian="Погладить пользователя",
+        ukrainian="Погладити користувача",
     ),
 )
 class Pat:
@@ -49,13 +49,13 @@ class Pat:
         hikari.User,
         name=locales.LocaleBuilder(
             "user",
-            ru="пользователь",
-            uk="користувач",
+            russian="пользователь",
+            ukrainian="користувач",
         ),
         description=locales.LocaleBuilder(
             "User",
-            ru="Пользователь",
-            uk="Користувач",
+            russian="Пользователь",
+            ukrainian="Користувач",
         ),
     )
 

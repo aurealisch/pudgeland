@@ -35,13 +35,13 @@ plugin = plugins.Plugin()
 @crescent.command(
     name=locales.LocaleBuilder(
         "kill",
-        ru="убить",
-        uk="вбивати",
+        russian="убить",
+        ukrainian="вбивати",
     ),
     description=locales.LocaleBuilder(
         "Kill",
-        ru="Убить пользователя",
-        uk="Вбивати користувача",
+        russian="Убить пользователя",
+        ukrainian="Вбивати користувача",
     ),
 )
 class Kill:
@@ -49,13 +49,13 @@ class Kill:
         hikari.User,
         name=locales.LocaleBuilder(
             "user",
-            ru="пользователь",
-            uk="користувач",
+            russian="пользователь",
+            ukrainian="користувач",
         ),
         description=locales.LocaleBuilder(
             "User",
-            ru="Пользователь",
-            uk="Користувач",
+            russian="Пользователь",
+            ukrainian="Користувач",
         ),
     )
 

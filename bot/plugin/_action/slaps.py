@@ -35,13 +35,13 @@ plugin = plugins.Plugin()
 @crescent.command(
     name=locales.LocaleBuilder(
         "slap",
-        ru="шлёпнуть",
-        uk="шльопнути",
+        russian="шлёпнуть",
+        ukrainian="шльопнути",
     ),
     description=locales.LocaleBuilder(
         "Slap",
-        ru="Шлёпнуть пользователя",
-        uk="Шльопнути користувача",
+        russian="Шлёпнуть пользователя",
+        ukrainian="Шльопнути користувача",
     ),
 )
 class Slap:
@@ -49,13 +49,13 @@ class Slap:
         hikari.User,
         name=locales.LocaleBuilder(
             "user",
-            ru="пользователь",
-            uk="користувач",
+            russian="пользователь",
+            ukrainian="користувач",
         ),
         description=locales.LocaleBuilder(
             "User",
-            ru="Пользователь",
-            uk="Користувач",
+            russian="Пользователь",
+            ukrainian="Користувач",
         ),
     )
 

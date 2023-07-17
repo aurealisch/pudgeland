@@ -35,13 +35,13 @@ plugin = plugins.Plugin()
 @crescent.command(
     name=locales.LocaleBuilder(
         "poke",
-        ru="тыкнуть",
-        uk="тицьнути",
+        russian="тыкнуть",
+        ukrainian="тицьнути",
     ),
     description=locales.LocaleBuilder(
         "Poke",
-        ru="Тыкнуть пользователя",
-        uk="Тицьнути користувача",
+        russian="Тыкнуть пользователя",
+        ukrainian="Тицьнути користувача",
     ),
 )
 class Poke:
@@ -49,13 +49,13 @@ class Poke:
         hikari.User,
         name=locales.LocaleBuilder(
             "user",
-            ru="пользователь",
-            uk="користувач",
+            russian="пользователь",
+            ukrainian="користувач",
         ),
         description=locales.LocaleBuilder(
             "User",
-            ru="Пользователь",
-            uk="Користувач",
+            russian="Пользователь",
+            ukrainian="Користувач",
         ),
     )
 
