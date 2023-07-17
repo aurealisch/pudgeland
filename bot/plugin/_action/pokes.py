@@ -69,6 +69,6 @@ class Poke:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await pokes.Middleware(plugin).callback(context)

@@ -54,6 +54,6 @@ class Statistics:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await statistics.Middleware(plugin).callback(context)

@@ -38,6 +38,6 @@ class Middleware:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         raise NotImplementedError("Method or function hasn't been implemented yet.")

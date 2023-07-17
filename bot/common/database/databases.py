@@ -40,6 +40,6 @@ class Database:
         """
         Returns
         -------
-        users.UserManager
+        `users.UserManager`
         """
         return self._user_manager

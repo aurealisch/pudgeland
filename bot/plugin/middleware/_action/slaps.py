@@ -37,7 +37,7 @@ class Middleware(middlewares.Middleware):
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await context.respond(
             embed=(

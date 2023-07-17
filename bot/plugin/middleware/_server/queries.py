@@ -38,7 +38,7 @@ class Middleware(middlewares.Middleware):
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         query_response = mcstatus.JavaServer(
             environments.java_server_host,

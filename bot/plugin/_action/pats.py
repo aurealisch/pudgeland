@@ -69,6 +69,6 @@ class Pat:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await pats.Middleware(plugin).callback(context)

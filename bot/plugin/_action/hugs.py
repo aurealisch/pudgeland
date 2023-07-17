@@ -69,6 +69,6 @@ class Hug:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await hugs.Middleware(plugin).callback(context)

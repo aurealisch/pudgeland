@@ -69,6 +69,6 @@ class Slap:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await slaps.Middleware(plugin).callback(context)

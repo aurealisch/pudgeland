@@ -69,6 +69,6 @@ class Kill:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await kills.Middleware(plugin).callback(context)

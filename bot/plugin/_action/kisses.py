@@ -69,6 +69,6 @@ class Kiss:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await kisses.Middleware(plugin).callback(context)

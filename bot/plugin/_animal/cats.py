@@ -54,6 +54,6 @@ class Cat:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await cats.Middleware(plugin).callback(context)

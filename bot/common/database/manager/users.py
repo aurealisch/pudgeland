@@ -33,15 +33,17 @@ class UserManager:
     def __init__(self, prisma: prisma.Prisma) -> None:
         self.prisma = prisma
 
-    async def find(self, *, id: str | types.StringFilter = ...) -> models.User | None:
+    async def find_first(
+        self, *, id: str | types.StringFilter = ...
+    ) -> models.User | None:
         """
         Other parameters
         -----------------
-        id : str | prisma.types.StringFilter
+        `id` : `str` | `prisma.types.StringFilter`
 
         Returns
         -------
-        prisma.models.User | None
+        `prisma.models.User` | `None`
         """
         user = await models.User.prisma().find_first(where=types.UserWhereInput(id=id))
 
@@ -49,3 +51,30 @@ class UserManager:
             user = await models.User.prisma().create(types.UserCreateInput(id=id))
 
         return user
+
+    async def update(
+        self,
+        *,
+        id: str = ...,
+        banana: types.AtomicIntInput | int = ...,
+        monkey: types.AtomicIntInput | int = ...,
+    ) -> models.User | None:
+        """
+        Other parameters
+        ----------------
+        - `id` : `str`
+        - `banana` : `types.AtomicIntInput` | `int`
+        - `monkey` : `types.AtomicIntInput` | `int`
+
+        Returns
+        -------
+        `prisma.models.User` | `None`
+        """
+        return await models.User.prisma().update(
+            types.UserUpdateInput(
+                id=id,
+                banana=banana,
+                monkey=monkey,
+            ),
+            where=types.UserWhereUniqueInput(id=id),
+        )

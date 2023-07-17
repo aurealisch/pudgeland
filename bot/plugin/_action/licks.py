@@ -69,6 +69,6 @@ class Lick:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await licks.Middleware(plugin).callback(context)

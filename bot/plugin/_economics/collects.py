@@ -21,31 +21,39 @@
 # SOFTWARE.
 from __future__ import annotations
 
-__all__: typing.Sequence[str] = ("Middleware",)
+__all__: typing.Sequence[str] = ("plugin", "Collect")
 
 import typing
 
-import collei
 import crescent
-import hikari
 
-from bot.plugin.middleware import middlewares
+from bot.plugin import _economics, plugins
+from bot.plugin.locale import locales
+from bot.plugin.middleware._economics import collects
+
+plugin = plugins.Plugin()
 
 
-class Middleware(middlewares.Middleware):
+@_economics.group.child
+@plugin.include
+@crescent.command(
+    name=locales.LocaleBuilder(
+        "collect",
+        russian="собирать",
+        ukrainian="збирати",
+    ),
+    description=locales.LocaleBuilder(
+        "Сollect",
+        russian="Cобирать",
+        ukrainian="Збирати",
+    ),
+)
+class Collect:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
         Parameters
         ----------
         - `context` : `crescent.Context`
         """
-        await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Тыкнуть",
-                    description=f"<@{context.user.id}> тыкнул(а) <@{self.user.id}>",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.POKE).url)
-            )
-        )
+        await collects.Middleware(plugin).callback(context)

@@ -36,17 +36,19 @@ class Middleware(middlewares.Middleware):
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
-        user = await self.plugin.model.database.users.find(id=str(context.user.id))
+        user = await self.plugin.model.database.users.find_first(
+            id=str(context.user.id)
+        )
 
         await context.respond(
             embed=(
                 hikari.Embed(
                     title="Статистика",
                     description=f"""\
-                        :banana: Бананы: *{user.banana}*
-                        :monkey: Обезьяны: *{user.monkey}*
+                        :banana: Бананы: `{user.banana}`
+                        :monkey: Обезьяны: `{user.monkey}`
                     """,
                 )
             )

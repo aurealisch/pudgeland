@@ -23,13 +23,12 @@ from __future__ import annotations
 
 __all__: typing.Sequence[str] = ("Middleware",)
 
+import random
 import typing
 
 import crescent
 import hikari
-import mcstatus
 
-from bot.common.environment import environments
 from bot.plugin.middleware import middlewares
 
 
@@ -40,45 +39,27 @@ class Middleware(middlewares.Middleware):
         ----------
         - `context` : `crescent.Context`
         """
-        java_status_response = mcstatus.JavaServer(
-            environments.java_server_host,
-            port=environments.java_server_port,
-        ).status()
+        id = str(context.user.id)
 
-        java_status_players = java_status_response.players
-        java_status_version = java_status_response.version
+        user = await self.plugin.model.database.users.find_first(id=id)
+
+        collecting = random.randint(25, 75)
+
+        await self.plugin.model.database.users.update(
+            id=id,
+            banana=user.banana + collecting,
+            monkey=user.monkey,
+        )
 
         await context.respond(
             embed=(
                 hikari.Embed(
-                    title="Статус",
-                    description="""\
-                        Проверяет статус сервера Minecraft Java Edition
-                        с помощью протокола статуса.
-                    """,
-                )
-                .add_field(
-                    "Игроки",
-                    value=f"""\
-                        Онлайн: *{java_status_players.online}*
-                        Максимум: *{java_status_players.max}*
-                        Образец: {
-                            ", ".join(
-                                [
-                                    f"*{java_status_player.name}"
-                                    f"(||{java_status_player.id}||)"
+                    title="Собирать",
+                    description=f"""
+                        <@{id}> собрал `{collecting}` бананов
 
-                                    for java_status_player in java_status_players.sample
-                                ]
-                            )
-                        }
-                    """,
-                )
-                .add_field(
-                    "Версия",
-                    value=f"""\
-                        Имя: *{java_status_version.name}*
-                        Протокол: *{java_status_version.protocol}*
+                        :banana: Бананы: `{user.banana + collecting}`
+                        :monkey: Обезьяны: `{user.monkey}`
                     """,
                 )
             )

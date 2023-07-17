@@ -54,6 +54,6 @@ class Dog:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await dogs.Middleware(plugin).callback(context)

@@ -69,6 +69,6 @@ class Bite:
         """
         Parameters
         ----------
-        context : crescent.Context
+        - `context` : `crescent.Context`
         """
         await bites.Middleware(plugin).callback(context)
