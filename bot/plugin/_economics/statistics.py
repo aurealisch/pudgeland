@@ -21,44 +21,29 @@
 # SOFTWARE.
 
 import crescent
-import hikari
 
-from bot.plugin import action, plugins
+from bot.plugin import _economics, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware.action import pokes
+from bot.plugin.middleware._economics import statistics
 
 plugin = plugins.Plugin()
 
 
-@action.group.child
+@_economics.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "poke",
-        ru="тыкнуть",
-        uk="тицьнути",
+        "statistics",
+        russian="статистика",
+        ukrainian="статистика",
     ),
     description=locales.LocaleBuilder(
-        "Poke",
-        ru="Тыкнуть пользователя",
-        uk="Тицьнути користувача",
+        "Statistics",
+        russian="Статистика",
+        ukrainian="Статистика",
     ),
 )
-class Poke:
-    user = crescent.option(
-        hikari.User,
-        name=locales.LocaleBuilder(
-            "user",
-            ru="пользователь",
-            uk="користувач",
-        ),
-        description=locales.LocaleBuilder(
-            "User",
-            ru="Пользователь",
-            uk="Користувач",
-        ),
-    )
-
+class Statistics:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -66,4 +51,4 @@ class Poke:
         ----------
         context : crescent.Context
         """
-        await pokes.Middleware(plugin).callback(context)
+        await statistics.Middleware(plugin).callback(context)

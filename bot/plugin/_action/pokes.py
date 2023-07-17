@@ -23,39 +23,39 @@
 import crescent
 import hikari
 
-from bot.plugin import action, plugins
+from bot.plugin import _action, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware.action import hugs
+from bot.plugin.middleware._action import pokes
 
 plugin = plugins.Plugin()
 
 
-@action.group.child
+@_action.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "hug",
-        russian="обнять",
-        ukrainian="обійняти",
+        "poke",
+        ru="тыкнуть",
+        uk="тицьнути",
     ),
     description=locales.LocaleBuilder(
-        "Hug the user",
-        russian="Обнять пользователя",
-        ukrainian="Обійняти користувача",
+        "Poke",
+        ru="Тыкнуть пользователя",
+        uk="Тицьнути користувача",
     ),
 )
-class Hug:
+class Poke:
     user = crescent.option(
         hikari.User,
         name=locales.LocaleBuilder(
             "user",
-            russian="пользователь",
-            ukrainian="користувач",
+            ru="пользователь",
+            uk="користувач",
         ),
         description=locales.LocaleBuilder(
             "User",
-            russian="Пользователь",
-            ukrainian="Користувач",
+            ru="Пользователь",
+            uk="Користувач",
         ),
     )
 
@@ -66,4 +66,4 @@ class Hug:
         ----------
         context : crescent.Context
         """
-        await hugs.Middleware(plugin).callback(context)
+        await pokes.Middleware(plugin).callback(context)

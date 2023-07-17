@@ -21,38 +21,44 @@
 # SOFTWARE.
 
 import crescent
+import hikari
 
-from bot.plugin import plugins, server
+from bot.plugin import _action, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware.server import queries
+from bot.plugin.middleware._action import slaps
 
 plugin = plugins.Plugin()
 
 
-@server.group.child
+@_action.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "query",
-        russian="запрос",
-        ukrainian="запит",
+        "slap",
+        ru="шлёпнуть",
+        uk="шльопнути",
     ),
     description=locales.LocaleBuilder(
-        """\
-            Checks the status of a Minecraft Java Edition server
-            via the query protocol.
-        """,
-        russian="""\
-            Проверяет статус сервера Minecraft Java Edition
-            с помощью протокола запроса.
-        """,
-        ukrainian="""\
-            Перевіряє статус сервера Minecraft Java Edition
-            за допомогою протоколу запиту.
-        """,
+        "Slap",
+        ru="Шлёпнуть пользователя",
+        uk="Шльопнути користувача",
     ),
 )
-class Query:
+class Slap:
+    user = crescent.option(
+        hikari.User,
+        name=locales.LocaleBuilder(
+            "user",
+            ru="пользователь",
+            uk="користувач",
+        ),
+        description=locales.LocaleBuilder(
+            "User",
+            ru="Пользователь",
+            uk="Користувач",
+        ),
+    )
+
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -60,4 +66,4 @@ class Query:
         ----------
         context : crescent.Context
         """
-        await queries.Middleware(plugin).callback(context)
+        await slaps.Middleware(plugin).callback(context)

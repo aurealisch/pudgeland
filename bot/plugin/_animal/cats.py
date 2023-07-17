@@ -21,44 +21,29 @@
 # SOFTWARE.
 
 import crescent
-import hikari
 
-from bot.plugin import action, plugins
+from bot.plugin import _animal, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware.action import bites
+from bot.plugin.middleware._animal import cats
 
 plugin = plugins.Plugin()
 
 
-@action.group.child
+@_animal.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "bite",
-        russian="укусить",
-        ukrainian="вкусити",
+        "cat",
+        russian="кот",
+        ukrainian="кiт",
     ),
     description=locales.LocaleBuilder(
-        "Bite the user",
-        russian="Укусить пользователя",
-        ukrainian="Вкусити користувача",
+        "Image of a cat",
+        russian="Изображение кота",
+        ukrainian="Зображення кота",
     ),
 )
-class Bite:
-    user = crescent.option(
-        hikari.User,
-        name=locales.LocaleBuilder(
-            "user",
-            russian="пользователь",
-            ukrainian="користувач",
-        ),
-        description=locales.LocaleBuilder(
-            "User",
-            russian="Пользователь",
-            ukrainian="Користувач",
-        ),
-    )
-
+class Cat:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -66,4 +51,4 @@ class Bite:
         ----------
         context : crescent.Context
         """
-        await bites.Middleware(plugin).callback(context)
+        await cats.Middleware(plugin).callback(context)

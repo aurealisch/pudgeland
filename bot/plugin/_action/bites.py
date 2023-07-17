@@ -23,28 +23,28 @@
 import crescent
 import hikari
 
-from bot.plugin import action, plugins
+from bot.plugin import _action, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware.action import kisses
+from bot.plugin.middleware._action import bites
 
 plugin = plugins.Plugin()
 
 
-@action.group.child
+@_action.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "kiss",
-        russian="поцеловать",
-        ukrainian="поцілувати",
+        "bite",
+        russian="укусить",
+        ukrainian="вкусити",
     ),
     description=locales.LocaleBuilder(
-        "Kiss the user",
-        russian="Поцеловать пользователя",
-        ukrainian="Поцілувати користувача",
+        "Bite the user",
+        russian="Укусить пользователя",
+        ukrainian="Вкусити користувача",
     ),
 )
-class Kiss:
+class Bite:
     user = crescent.option(
         hikari.User,
         name=locales.LocaleBuilder(
@@ -66,4 +66,4 @@ class Kiss:
         ----------
         context : crescent.Context
         """
-        await kisses.Middleware(plugin).callback(context)
+        await bites.Middleware(plugin).callback(context)

@@ -22,14 +22,14 @@
 
 import crescent
 
-from bot.plugin import plugins, server
+from bot.plugin import plugins, _server
 from bot.plugin.locale import locales
-from bot.plugin.middleware.server import statuses
+from bot.plugin.middleware._server import statuses
 
 plugin = plugins.Plugin()
 
 
-@server.group.child
+@_server.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(

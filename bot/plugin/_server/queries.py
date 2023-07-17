@@ -22,28 +22,37 @@
 
 import crescent
 
-from bot.plugin import economics, plugins
+from bot.plugin import plugins, _server
 from bot.plugin.locale import locales
-from bot.plugin.middleware.economics import statistics
+from bot.plugin.middleware._server import queries
 
 plugin = plugins.Plugin()
 
 
-@economics.group.child
+@_server.group.child
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "statistics",
-        russian="статистика",
-        ukrainian="статистика",
+        "query",
+        russian="запрос",
+        ukrainian="запит",
     ),
     description=locales.LocaleBuilder(
-        "Statistics",
-        russian="Статистика",
-        ukrainian="Статистика",
+        """\
+            Checks the status of a Minecraft Java Edition server
+            via the query protocol.
+        """,
+        russian="""\
+            Проверяет статус сервера Minecraft Java Edition
+            с помощью протокола запроса.
+        """,
+        ukrainian="""\
+            Перевіряє статус сервера Minecraft Java Edition
+            за допомогою протоколу запиту.
+        """,
     ),
 )
-class Statistics:
+class Query:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -51,4 +60,4 @@ class Statistics:
         ----------
         context : crescent.Context
         """
-        await statistics.Middleware(plugin).callback(context)
+        await queries.Middleware(plugin).callback(context)
