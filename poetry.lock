@@ -1386,13 +1386,13 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 
 [[package]]
 name = "woofy"
-version = "1.0.0"
+version = "1.0.1"
 description = "🐶 An unofficial The Dog API wrapper for Python"
 optional = false
 python-versions = ">=3.8.0,<3.12"
 files = [
-    {file = "woofy-1.0.0-py3-none-any.whl", hash = "sha256:2cfef23b3c498b79276fd679e96ce93aaa839dfa619ad24452cf64fffde2112b"},
-    {file = "woofy-1.0.0.tar.gz", hash = "sha256:6c25d0c557905c34824d419cb3bf6710f3aebe24e8644a2a59d03ec6f6327aec"},
+    {file = "woofy-1.0.1-py3-none-any.whl", hash = "sha256:003ae7555643a6c6624dccf33e380d681b10e47184a4b76eddf0f789513141c0"},
+    {file = "woofy-1.0.1.tar.gz", hash = "sha256:ab3cea78ba7276ba2a1ee9ccf46e3d49e80bb5e3b5e05ac7a008b29f8e868a9a"},
 ]
 
 [package.dependencies]
@@ -1490,4 +1490,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "59bf715154f6ddf0e8616339e396d74efa6bf57f8f407fa49914349400f5b7a4"
+content-hash = "92daa257f7cc445884ffc945f8bf557bba587fa44346202895192d61ee35e030"
