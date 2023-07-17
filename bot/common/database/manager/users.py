@@ -72,7 +72,6 @@ class UserManager:
         """
         return await models.User.prisma().update(
             types.UserUpdateInput(
-                id=id,
                 banana=banana,
                 monkey=monkey,
             ),
