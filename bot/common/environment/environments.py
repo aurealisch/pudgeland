@@ -23,6 +23,7 @@ from __future__ import annotations
 
 __all__: typing.Sequence[str] = (
     "gateway_bot_token",
+    "gateway_bot_banner",
     "java_server_host",
     "java_server_port",
     "database_url",
@@ -38,6 +39,7 @@ import dotenv
 dotenv.load_dotenv()
 
 gateway_bot_token = os.getenv("GATEWAY_BOT_TOKEN")
+gateway_bot_banner = os.getenv("GATEWAY_BOT_BANNER")
 
 java_server_host = os.getenv("JAVA_SERVER_HOST")
 java_server_port = int(os.getenv("JAVA_SERVER_PORT"))

@@ -38,7 +38,10 @@ from bot.common.database import databases
 from bot.common.environment import environments
 from bot.model import models
 
-bot = hikari.GatewayBot(environments.gateway_bot_token)
+bot = hikari.GatewayBot(
+    environments.gateway_bot_token,
+    banner=environments.gateway_bot_banner,
+)
 
 database = databases.Database(prisma.Prisma())
 
