@@ -19,14 +19,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 import hikari
 
 import prisma
 from bot.client import clients
-from bot.model import models
 from bot.common.database import databases
 from bot.common.environment import environments
+from bot.model import models
 
 bot = hikari.GatewayBot(environments.gateway_bot_token)
 
