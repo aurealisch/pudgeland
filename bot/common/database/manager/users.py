@@ -32,6 +32,15 @@ class UserManager:
     async def find(
         self, *, id: str | prisma.types.StringFilter = ...
     ) -> prisma.models.User | None:
+        """
+        Other parameters
+        -----------------
+        id : str | prisma.types.StringFilter
+
+        Returns
+        -------
+        prisma.models.User | None
+        """
         user = await prisma.models.User.prisma().find_first(
             where=prisma.types.UserWhereInput(id=id)
         )

@@ -29,6 +29,11 @@ from bot.plugin.middleware import middlewares
 
 class Middleware(middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await context.respond(
             embed=(
                 hikari.Embed(

@@ -61,4 +61,9 @@ class Lick:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await licks.Middleware(plugin).callback(context)

@@ -61,4 +61,9 @@ class Poke:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await pokes.Middleware(plugin).callback(context)

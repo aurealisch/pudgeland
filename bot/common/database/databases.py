@@ -34,4 +34,9 @@ class Database:
 
     @property
     def users(self) -> users.UserManager:
+        """
+        Returns
+        -------
+        users.UserManager
+        """
         return self._user_manager

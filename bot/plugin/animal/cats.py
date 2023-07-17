@@ -46,4 +46,9 @@ plugin = plugins.Plugin()
 class Cat:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await cats.Middleware(plugin).callback(context)

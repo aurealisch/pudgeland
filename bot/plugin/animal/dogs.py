@@ -46,4 +46,9 @@ plugin = plugins.Plugin()
 class Dog:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await dogs.Middleware(plugin).callback(context)

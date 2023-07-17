@@ -55,4 +55,9 @@ plugin = plugins.Plugin()
 class Query:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await queries.Middleware(plugin).callback(context)

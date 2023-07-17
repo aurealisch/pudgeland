@@ -30,6 +30,11 @@ from bot.plugin.middleware import middlewares
 
 class Middleware(middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         java_status_response = mcstatus.JavaServer(
             environments.java_server_host,
             port=environments.java_server_port,

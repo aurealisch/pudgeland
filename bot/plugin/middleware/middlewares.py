@@ -31,4 +31,9 @@ class Middleware:
     plugin: plugins.Plugin
 
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         raise NotImplementedError("Method or function hasn't been implemented yet.")

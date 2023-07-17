@@ -61,4 +61,9 @@ class Kiss:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await kisses.Middleware(plugin).callback(context)

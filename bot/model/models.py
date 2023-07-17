@@ -31,7 +31,17 @@ class Model:
     database: databases.Database
 
     async def on_started_event(self, _: hikari.StartedEvent) -> None:
+        """
+        Parameters
+        -----------------
+        _ : hikari.StartedEvent
+        """
         await self.database.prisma.connect()
 
     async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
+        """
+        Parameters
+        -----------------
+        _ : hikari.StoppedEvent
+        """
         await self.database.prisma.disconnect()

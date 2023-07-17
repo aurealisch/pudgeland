@@ -46,4 +46,9 @@ plugin = plugins.Plugin()
 class Statistics:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await statistics.Middleware(plugin).callback(context)

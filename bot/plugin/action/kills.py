@@ -61,4 +61,9 @@ class Kill:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await kills.Middleware(plugin).callback(context)

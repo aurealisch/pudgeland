@@ -28,6 +28,11 @@ from bot.plugin.middleware import middlewares
 
 class Middleware(middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         user = await self.plugin.model.database.users.find(id=str(context.user.id))
 
         await context.respond(

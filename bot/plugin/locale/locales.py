@@ -35,6 +35,11 @@ class LocaleBuilder(crescent.LocaleBuilder):
     ukrainian: str
 
     def build(self) -> typing.Mapping[str, str]:
+        """
+        Returns
+        -------
+        typing.Mapping[str, str]
+        """
         return {
             hikari.Locale.RU: self.russian,
             hikari.Locale.UK: self.ukrainian,
@@ -42,4 +47,9 @@ class LocaleBuilder(crescent.LocaleBuilder):
 
     @property
     def fallback(self) -> str:
+        """
+        Returns
+        -------
+        str
+        """
         return self._fallback

@@ -61,4 +61,9 @@ class Hug:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        """
+        Parameters
+        ----------
+        context : crescent.Context
+        """
         await hugs.Middleware(plugin).callback(context)
