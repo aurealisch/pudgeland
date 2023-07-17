@@ -354,13 +354,12 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
 name = "collei"
-version = "1.0.1"
+version = "1.0.2"
 description = "🍂 An unofficial Waifu.pics API wrapper for Python"
 optional = false
 python-versions = ">=3.8.0,<3.12"
 files = [
-    {file = "collei-1.0.1-py3-none-any.whl", hash = "sha256:12c6cb322154a4783c04d04858ecad66942040b155e0dd4373b23acf9dd657c0"},
-    {file = "collei-1.0.1.tar.gz", hash = "sha256:8f54e75713168d7180ce7cc451aa8e1794a0bfa8e80491ea06738bd66d5c6174"},
+    {file = "collei-1.0.2-py3-none-any.whl", hash = "sha256:2df1fdaa729cdd487582661dc816640d3956da9ca2966b5be82674ac68d272de"},
 ]
 
 [package.dependencies]
@@ -1490,4 +1489,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<3.12"
-content-hash = "59bf715154f6ddf0e8616339e396d74efa6bf57f8f407fa49914349400f5b7a4"
+content-hash = "66001ee2f2c9baea0e7bce2fbb29e948c82b32586eebe38759be7622235de225"

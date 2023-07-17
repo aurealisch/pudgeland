@@ -25,7 +25,7 @@ hikari = "^2.0.0.dev120"
 hikari-crescent = {extras = ["cooldowns"], version = "^0.6.2"}
 mcstatus = "^11.0.0"
 python-dotenv = "^1.0.0"
-collei = "^1.0.1"
+collei = "^1.0.2"
 msgspec = "^0.16.0"
 meowy = "^1.0.0"
 woofy = "^1.0.0"
