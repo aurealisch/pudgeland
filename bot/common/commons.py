@@ -33,6 +33,7 @@ __all__: typing.Sequence[str] = (
 import os
 import typing
 
+import dotenv
 import hikari
 
 import prisma as _prisma
@@ -41,16 +42,18 @@ from bot.common.database import databases
 from bot.common.environment import environments
 from bot.common.model import models
 
+dotenv.load_dotenv()
+
 environment = environments.Environment(
     os.environ.get("GATEWAY_BOT_TOKEN"),
     os.environ.get("GATEWAY_BOT_BANNER"),
     os.environ.get("JAVA_SERVER_HOST"),
-    os.environ.get("JAVA_SERVER_PORT"),
+    int(os.environ.get("JAVA_SERVER_PORT")),
     os.environ.get("DATABASE_URL"),
     os.environ.get("API_HOST"),
-    os.environ.get("API_PORT"),
-    os.environ.get("BY_HAND_MINIMAL"),
-    os.environ.get("BY_HAND_MAXIMUM"),
+    int(os.environ.get("API_PORT")),
+    int(os.environ.get("BY_HAND_MINIMAL")),
+    int(os.environ.get("BY_HAND_MAXIMUM")),
     os.environ.get("DEFAULT_MODE_COLOR"),
     os.environ.get("ERROR_MODE_COLOR"),
     os.environ.get("SUCCESS_MODE_COLOR"),
