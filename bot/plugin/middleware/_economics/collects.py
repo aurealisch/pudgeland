@@ -29,6 +29,7 @@ import typing
 import crescent
 import hikari
 
+from bot.common.environment import environments
 from bot.plugin.middleware import middlewares
 
 
@@ -43,24 +44,30 @@ class Middleware(middlewares.Middleware):
 
         user = await self.plugin.model.database.users.find_first(id=id)
 
-        collecting = random.randint(25, 75)
+        banana = user.banana
+        monkey = user.monkey
+
+        collecting = random.choice(
+            range(
+                environments.by_hand_minimal,
+                environments.by_hand_maximum,
+            )
+        )
 
         await self.plugin.model.database.users.update(
             id=id,
-            banana=user.banana + collecting,
-            monkey=user.monkey,
+            banana=banana + collecting,
+            monkey=monkey,
         )
 
         await context.respond(
-            embed=(
-                hikari.Embed(
-                    title="Собирать",
-                    description=f"""
-                        <@{id}> собрал `{collecting}` бананов
+            embed=hikari.Embed(
+                title="Собирать",
+                description=f"""
+                    <@{id}> собрал `{collecting}` бананов
 
-                        :banana: Бананы: `{user.banana + collecting}`
-                        :monkey: Обезьяны: `{user.monkey}`
-                    """,
-                )
+                    :banana: Бананы: `{banana + collecting}`
+                    :monkey: Обезьяны: `{monkey}`
+                """,
             )
         )

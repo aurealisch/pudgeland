@@ -48,3 +48,8 @@ database_url = os.getenv("DATABASE_URL")
 
 api_host = os.getenv("API_HOST")
 api_port = int(os.getenv("API_PORT"))
+
+by_hand_minimal = os.getenv("BY_HAND_MINIMAL")
+by_hand_maximum = os.getenv("BY_HAND_MAXIMUM")
+
+by_monkey_multiplier = os.getenv("BY_MONKEY_MULTIPLIER")
