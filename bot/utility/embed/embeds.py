@@ -7,9 +7,9 @@ from bot.common import commons
 Mode = typing.Literal["default", "error", "success"]
 
 colors = {
-    "default": commons.environment.DEFAULT_MODE_COLOR,
-    "error": commons.environment.ERROR_MODE_COLOR,
-    "success": commons.environment.SUCCESS_MODE_COLOR,
+    "default": commons.environment.default_mode_color,
+    "error": commons.environment.error_mode_color,
+    "success": commons.environment.success_mode_color,
 }
 
 
