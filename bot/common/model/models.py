@@ -27,12 +27,16 @@ import typing
 
 import hikari
 
+from bot.common.environment import environments
 from bot.common.database import databases
 
 
 class Model:
-    def __init__(self, database: databases.Database) -> None:
+    def __init__(
+        self, database: databases.Database, environment: environments.Environment
+    ) -> None:
         self.database = database
+        self.environment = environment
 
     async def on_started_event(self, _: hikari.StartedEvent) -> None:
         """

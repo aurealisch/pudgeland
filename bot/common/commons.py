@@ -22,12 +22,15 @@
 from __future__ import annotations
 
 __all__: typing.Sequence[str] = (
+    "environment",
     "bot",
+    "prisma",
     "database",
     "model",
     "client",
 )
 
+import os
 import typing
 
 import hikari
@@ -36,11 +39,26 @@ import prisma as _prisma
 from bot.client import clients
 from bot.common.database import databases
 from bot.common.environment import environments
-from bot.model import models
+from bot.common.model import models
+
+environment = environments.Environment(
+    os.environ.get("GATEWAY_BOT_TOKEN"),
+    os.environ.get("GATEWAY_BOT_BANNER"),
+    os.environ.get("JAVA_SERVER_HOST"),
+    os.environ.get("JAVA_SERVER_PORT"),
+    os.environ.get("DATABASE_URL"),
+    os.environ.get("API_HOST"),
+    os.environ.get("API_PORT"),
+    os.environ.get("BY_HAND_MINIMAL"),
+    os.environ.get("BY_HAND_MAXIMUM"),
+    os.environ.get("DEFAULT_MODE_COLOR"),
+    os.environ.get("ERROR_MODE_COLOR"),
+    os.environ.get("SUCCESS_MODE_COLOR"),
+)
 
 bot = hikari.GatewayBot(
-    environments.gateway_bot_token,
-    banner=environments.gateway_bot_banner,
+    environment.gateway_bot_token,
+    banner=environment.gateway_bot_banner,
 )
 
 prisma = _prisma.Prisma()
@@ -49,7 +67,7 @@ _prisma.register(prisma)
 
 database = databases.Database(prisma)
 
-model = models.Model(database)
+model = models.Model(database, environment=environment)
 
 bot.subscribe(hikari.StartedEvent, model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)

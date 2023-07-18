@@ -29,7 +29,6 @@ import crescent
 import hikari
 import mcstatus
 
-from bot.common.environment import environments
 from bot.plugin.middleware import middlewares
 
 
@@ -41,8 +40,8 @@ class Middleware(middlewares.Middleware):
         - `context` : `crescent.Context`
         """
         java_status_response = mcstatus.JavaServer(
-            environments.java_server_host,
-            port=environments.java_server_port,
+            self.plugin.model.environment.java_server_host,
+            port=self.plugin.model.environment.java_server_port,
         ).status()
 
         java_status_players = java_status_response.players

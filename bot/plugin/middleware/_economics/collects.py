@@ -29,7 +29,6 @@ import typing
 import crescent
 import hikari
 
-from bot.common.environment import environments
 from bot.plugin.middleware import middlewares
 
 
@@ -49,8 +48,8 @@ class Middleware(middlewares.Middleware):
 
         collecting = random.choice(
             range(
-                environments.by_hand_minimal,
-                environments.by_hand_maximum,
+                self.plugin.model.environment.by_hand_minimal,
+                self.plugin.model.environment.by_hand_maximum,
             )
         )
 

@@ -28,7 +28,7 @@ import typing
 import crescent
 import hikari
 
-from bot.model import models
+from bot.common.model import models
 
 
 class Plugin(crescent.Plugin[hikari.GatewayBot, models.Model]):

@@ -21,33 +21,67 @@
 # SOFTWARE.
 from __future__ import annotations
 
-__all__: typing.Sequence[str] = (
-    "gateway_bot_token",
-    "gateway_bot_banner",
-    "java_server_host",
-    "java_server_port",
-    "database_url",
-    "api_host",
-    "api_port",
-)
+__all__: typing.Sequence[str] = ("Environment",)
 
 import typing
-import os
 
-import dotenv
 
-dotenv.load_dotenv()
+class Environment:
+    __slots__: typing.Sequence[str] = (
+        "gateway_bot_token",
+        "gateway_bot_banner",
+        "java_server_host",
+        "java_server_port",
+        "database_url",
+        "api_host",
+        "api_port",
+        "by_hand_minimal",
+        "by_hand_maximum",
+        "default_mode_color",
+        "error_mode_color",
+        "success_mode_color",
+    )
 
-gateway_bot_token = os.getenv("GATEWAY_BOT_TOKEN")
-gateway_bot_banner = os.getenv("GATEWAY_BOT_BANNER")
-
-java_server_host = os.getenv("JAVA_SERVER_HOST")
-java_server_port = int(os.getenv("JAVA_SERVER_PORT"))
-
-database_url = os.getenv("DATABASE_URL")
-
-api_host = os.getenv("API_HOST")
-api_port = int(os.getenv("API_PORT"))
-
-by_hand_minimal = os.getenv("BY_HAND_MINIMAL")
-by_hand_maximum = os.getenv("BY_HAND_MAXIMUM")
+    def __init__(
+        self,
+        gateway_bot_token: str,
+        gateway_bot_banner: str,
+        java_server_host: str,
+        java_server_port: int,
+        database_url: str,
+        api_host: str,
+        api_port: int,
+        by_hand_minimal: int,
+        by_hand_maximum: int,
+        default_mode_color: str,
+        error_mode_color: str,
+        success_mode_color: str,
+    ) -> None:
+        """
+        Parameters
+        ---------
+        - `gateway_bot_token` : `str`
+        - `gateway_bot_banner` : `str`
+        - `java_server_host` : `str`
+        - `java_server_port` : `int`
+        - `database_url` : `str`
+        - `api_host` : `str`
+        - `api_port` : `int`
+        - `by_hand_minimal` : `int`
+        - `by_hand_maximum` : `int`
+        - `default_mode_color` : `str`
+        - `error_mode_color` : `str`
+        - `success_mode_color` : `str`
+        """
+        self.gateway_bot_token = gateway_bot_token
+        self.gateway_bot_banner = gateway_bot_banner
+        self.java_server_host = java_server_host
+        self.java_server_port = java_server_port
+        self.database_url = database_url
+        self.api_host = api_host
+        self.api_port = api_port
+        self.by_hand_minimal = by_hand_minimal
+        self.by_hand_maximum = by_hand_maximum
+        self.default_mode_color = default_mode_color
+        self.error_mode_color = error_mode_color
+        self.success_mode_color = success_mode_color

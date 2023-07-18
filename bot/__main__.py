@@ -22,21 +22,23 @@
 import threading
 
 import uvicorn
+import dotenv
 
 from bot.api.app import apps
 from bot.common import commons
-from bot.common.environment import environments
 
 commons.client.plugins.load_folder("bot.plugin._action")
 commons.client.plugins.load_folder("bot.plugin._animal")
 commons.client.plugins.load_folder("bot.plugin._economics")
 commons.client.plugins.load_folder("bot.plugin._server")
 
+dotenv.load_dotenv()
+
 threading.Thread(
     target=lambda: uvicorn.run(
         apps.app,
-        host=environments.api_host,
-        port=environments.api_port,
+        host=commons.environment.api_host,
+        port=commons.environment.api_port,
     )
 ).start()
 
