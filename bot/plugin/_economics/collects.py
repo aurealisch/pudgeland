@@ -23,13 +23,14 @@ from __future__ import annotations
 
 __all__: typing.Sequence[str] = ("plugin", "Collect")
 
+import random
 import typing
 
 import crescent
 
 from bot.plugin import _economics, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._economics import collects
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -56,4 +57,35 @@ class Collect:
         ----------
         - `context` : `crescent.Context`
         """
-        await collects.Middleware(plugin).callback(context)
+        id = str(context.user.id)
+
+        user = await self.plugin.model.database.users.find_first(id=id)
+
+        banana = user.banana
+        monkey = user.monkey
+
+        collecting = random.choice(
+            range(
+                self.plugin.model.environment.by_hand_minimal,
+                self.plugin.model.environment.by_hand_maximum,
+            )
+        )
+
+        await self.plugin.model.database.users.update(
+            id=id,
+            banana=banana + collecting,
+            monkey=monkey,
+        )
+
+        await context.respond(
+            embed=embeds.embed(
+                title="Собирать",
+                description=f"""
+                    <@{id}> собрал `{collecting}` бананов
+
+                    :banana: Бананы: `{banana + collecting}`
+                    :monkey: Обезьяны: `{monkey}`
+                """,
+                color="default",
+            )
+        )

@@ -46,17 +46,14 @@ dotenv.load_dotenv()
 
 environment = environments.Environment(
     os.environ.get("GATEWAY_BOT_TOKEN"),
-    os.environ.get("GATEWAY_BOT_BANNER"),
-    os.environ.get("JAVA_SERVER_HOST"),
-    int(os.environ.get("JAVA_SERVER_PORT")),
-    os.environ.get("DATABASE_URL"),
-    os.environ.get("API_HOST"),
-    int(os.environ.get("API_PORT")),
-    int(os.environ.get("BY_HAND_MINIMAL")),
-    int(os.environ.get("BY_HAND_MAXIMUM")),
-    os.environ.get("DEFAULT_MODE_COLOR"),
-    os.environ.get("ERROR_MODE_COLOR"),
-    os.environ.get("SUCCESS_MODE_COLOR"),
+    gateway_bot_banner=os.environ.get("GATEWAY_BOT_BANNER"),
+    java_server_host=os.environ.get("JAVA_SERVER_HOST"),
+    java_server_port=int(os.environ.get("JAVA_SERVER_PORT")),
+    database_url=os.environ.get("DATABASE_URL"),
+    api_host=os.environ.get("API_HOST"),
+    api_port=int(os.environ.get("API_PORT")),
+    by_hand_minimal=int(os.environ.get("BY_HAND_MINIMAL")),
+    by_hand_maximum=int(os.environ.get("BY_HAND_MAXIMUM")),
 )
 
 bot = hikari.GatewayBot(

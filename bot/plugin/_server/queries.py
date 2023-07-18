@@ -26,10 +26,11 @@ __all__: typing.Sequence[str] = ("plugin", "Query")
 import typing
 
 import crescent
+import mcstatus
 
-from bot.plugin import plugins, _server
+from bot.plugin import _server, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._server import queries
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -65,4 +66,55 @@ class Query:
         ----------
         context : crescent.Context
         """
-        await queries.Middleware(plugin).callback(context)
+        query_response = mcstatus.JavaServer(
+            self.plugin.model.environment.java_server_host,
+            port=self.plugin.model.environment.java_server_port,
+        ).query()
+
+        players = query_response.players
+        software = query_response.software
+
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Запрос",
+                    description="""\
+                        Проверяет статус сервера Minecraft Java Edition
+                        с помощью протокола запроса.
+                    """,
+                    color="default",
+                )
+                .add_field(
+                    "Игроки",
+                    value=f"""\
+                        Онлайн: *{players.online}*
+                        Максимум: *{players.max}*
+                        Имена: ||{
+                            ", ".join(
+                                [
+                                    f"`{name}`"
+
+                                    for name in players.names
+                                ]
+                            )
+                        }||
+                    """,
+                )
+                .add_field(
+                    "Программное обеспечение",
+                    value=f"""\
+                        Марка: *{software.brand}*
+                        Плагины: ||{
+                            ", ".join(
+                                [
+                                    f"`{plugin}`"
+
+                                    for plugin in software.plugins
+                                ]
+                            )
+                        }||
+                        Версия: *{software.version}*
+                    """,
+                )
+            )
+        )

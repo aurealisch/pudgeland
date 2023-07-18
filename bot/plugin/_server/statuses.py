@@ -26,10 +26,11 @@ __all__: typing.Sequence[str] = ("plugin", "Status")
 import typing
 
 import crescent
+import mcstatus
 
 from bot.plugin import plugins, _server
 from bot.plugin.locale import locales
-from bot.plugin.middleware._server import statuses
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -65,4 +66,47 @@ class Status:
         ----------
         context : crescent.Context
         """
-        await statuses.Middleware(plugin).callback(context)
+        java_status_response = mcstatus.JavaServer(
+            self.plugin.model.environment.java_server_host,
+            port=self.plugin.model.environment.java_server_port,
+        ).status()
+
+        java_status_players = java_status_response.players
+        java_status_version = java_status_response.version
+
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Статус",
+                    description="""\
+                        Проверяет статус сервера Minecraft Java Edition
+                        с помощью протокола статуса.
+                    """,
+                    color="default",
+                )
+                .add_field(
+                    "Игроки",
+                    value=f"""\
+                        Онлайн: *{java_status_players.online}*
+                        Максимум: *{java_status_players.max}*
+                        Образец: {
+                            ", ".join(
+                                [
+                                    f"*{java_status_player.name}"
+                                    f"(||{java_status_player.id}||)"
+
+                                    for java_status_player in java_status_players.sample
+                                ]
+                            )
+                        }
+                    """,
+                )
+                .add_field(
+                    "Версия",
+                    value=f"""\
+                        Имя: *{java_status_version.name}*
+                        Протокол: *{java_status_version.protocol}*
+                    """,
+                )
+            )
+        )

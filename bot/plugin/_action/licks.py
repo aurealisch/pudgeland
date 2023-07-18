@@ -25,12 +25,13 @@ __all__: typing.Sequence[str] = ("plugin", "Lick")
 
 import typing
 
+import collei
 import crescent
 import hikari
 
 from bot.plugin import _action, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._action import licks
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -71,4 +72,14 @@ class Lick:
         ----------
         - `context` : `crescent.Context`
         """
-        await licks.Middleware(plugin).callback(context)
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Лизнуть",
+                    description=f"<@{context.user.id}> лизнул(а) <@{self.user.id}>",
+                    color="default",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.LICK).url)
+            )
+        )

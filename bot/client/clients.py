@@ -22,11 +22,30 @@
 from __future__ import annotations
 
 import typing
+import traceback
 
 __all__: typing.Sequence[str] = ("Client",)
 
 import crescent
 
+from bot.utility.embed import embeds
+
 
 class Client(crescent.Client):
-    pass
+    async def on_crescent_command_error(
+        self, exc: Exception, ctx: crescent.Context, was_handled: bool
+    ) -> None:
+        if not was_handled:
+            exc_class = exc.__class__
+            exc_class_name = exc_class.__name__
+            exc_traceback = exc.__traceback__
+
+            await ctx.respond(
+                embed=embeds.embed(
+                    title="Исключение",
+                    description=f"`{exc_class_name}: {exc}`",
+                    color="exception",
+                )
+            )
+
+            traceback.print_exception(exc_class, value=exc, tb=exc_traceback)

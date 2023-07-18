@@ -29,7 +29,7 @@ import crescent
 
 from bot.plugin import _economics, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._economics import statistics
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -56,4 +56,19 @@ class Statistics:
         ----------
         - `context` : `crescent.Context`
         """
-        await statistics.Middleware(plugin).callback(context)
+        user = await self.plugin.model.database.users.find_first(
+            id=str(context.user.id)
+        )
+
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Статистика",
+                    description=f"""\
+                        :banana: Бананы: `{user.banana}`
+                        :monkey: Обезьяны: `{user.monkey}`
+                    """,
+                    color="default",
+                )
+            )
+        )

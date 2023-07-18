@@ -25,12 +25,13 @@ __all__: typing.Sequence[str] = ("plugin", "Kiss")
 
 import typing
 
+import collei
 import crescent
 import hikari
 
 from bot.plugin import _action, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._action import kisses
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -71,4 +72,14 @@ class Kiss:
         ----------
         - `context` : `crescent.Context`
         """
-        await kisses.Middleware(plugin).callback(context)
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Поцеловать",
+                    description=f"<@{context.user.id}> поцеловал(а) <@{self.user.id}>",
+                    color="default",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.KISS).url)
+            )
+        )

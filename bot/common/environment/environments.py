@@ -37,9 +37,6 @@ class Environment:
         "api_port",
         "by_hand_minimal",
         "by_hand_maximum",
-        "default_mode_color",
-        "error_mode_color",
-        "success_mode_color",
     )
 
     def __init__(
@@ -53,9 +50,6 @@ class Environment:
         api_port: int,
         by_hand_minimal: int,
         by_hand_maximum: int,
-        default_mode_color: str,
-        error_mode_color: str,
-        success_mode_color: str,
     ) -> None:
         """
         Parameters
@@ -69,9 +63,6 @@ class Environment:
         - `api_port` : `int`
         - `by_hand_minimal` : `int`
         - `by_hand_maximum` : `int`
-        - `default_mode_color` : `str`
-        - `error_mode_color` : `str`
-        - `success_mode_color` : `str`
         """
         self.gateway_bot_token = gateway_bot_token
         self.gateway_bot_banner = gateway_bot_banner
@@ -82,6 +73,3 @@ class Environment:
         self.api_port = api_port
         self.by_hand_minimal = by_hand_minimal
         self.by_hand_maximum = by_hand_maximum
-        self.default_mode_color = default_mode_color
-        self.error_mode_color = error_mode_color
-        self.success_mode_color = success_mode_color

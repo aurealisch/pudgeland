@@ -26,10 +26,11 @@ __all__: typing.Sequence[str] = ("plugin", "Dog")
 import typing
 
 import crescent
+import woofy
 
 from bot.plugin import _animal, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._animal import dogs
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -56,4 +57,14 @@ class Dog:
         ----------
         - `context` : `crescent.Context`
         """
-        await dogs.Middleware(plugin).callback(context)
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Собака",
+                    description="Изображение собаки",
+                    color="default",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(woofy.Client().images.search()[0].url)
+            )
+        )

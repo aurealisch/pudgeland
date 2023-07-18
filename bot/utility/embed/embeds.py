@@ -2,38 +2,36 @@ import typing
 
 import hikari
 
-from bot.common import commons
-
-Mode = typing.Literal["default", "error", "success"]
+Color = typing.Literal["default", "exception", "success"]
 
 colors = {
-    "default": commons.environment.default_mode_color,
-    "error": commons.environment.error_mode_color,
-    "success": commons.environment.success_mode_color,
+    "default": "#a93b3a",
+    "exception": "#ff4b4b",
+    "success": "#77b25a",
 }
 
 
 def embed(
     *,
-    mode: Mode,
-    title: typing.Any = None,
-    description: typing.Any = None,
+    title: typing.Any,
+    description: typing.Any,
+    color: Color,
 ) -> hikari.Embed:
     """
     Other parameters
     ----------------
-    - `mode` : `Mode`
-    - `title` : `typing.Any` = `None`
-    - `description` : `typing.Any` = `None`
+    - `title` : `typing.Any`
+    - `description` : `typing.Any`
+    - `color` : `Color`
 
     Returns
     -------
     `hikari.Embed`
     """
-    color = hikari.Color.of(colors[mode])
+    _color = hikari.Color.of(colors[color])
 
     return hikari.Embed(
         title=title,
         description=description,
-        color=color,
+        color=_color,
     )

@@ -26,10 +26,11 @@ __all__: typing.Sequence[str] = ("plugin", "Cat")
 import typing
 
 import crescent
+import meowy
 
 from bot.plugin import _animal, plugins
 from bot.plugin.locale import locales
-from bot.plugin.middleware._animal import cats
+from bot.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
@@ -56,4 +57,14 @@ class Cat:
         ----------
         - `context` : `crescent.Context`
         """
-        await cats.Middleware(plugin).callback(context)
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Кот",
+                    description="Изображение кота",
+                    color="default",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(meowy.Client().images.search()[0].url)
+            )
+        )
