@@ -25,17 +25,16 @@ import typing
 
 __all__: typing.Sequence[str] = ("UserManager",)
 
-import prisma
-from prisma import models, types
+import prisma as _prisma
 
 
 class UserManager:
-    def __init__(self, prisma: prisma.Prisma) -> None:
+    def __init__(self, prisma: _prisma.Prisma) -> None:
         self.prisma = prisma
 
     async def find_first(
-        self, *, id: str | types.StringFilter = ...
-    ) -> models.User | None:
+        self, *, id: str | _prisma.types.StringFilter = ...
+    ) -> _prisma.models.User | None:
         """
         Other parameters
         -----------------
@@ -45,10 +44,14 @@ class UserManager:
         -------
         `prisma.models.User` | `None`
         """
-        user = await models.User.prisma().find_first(where=types.UserWhereInput(id=id))
+        user = await _prisma.models.User.prisma().find_first(
+            where=_prisma.types.UserWhereInput(id=id)
+        )
 
         if user is None:
-            user = await models.User.prisma().create(types.UserCreateInput(id=id))
+            user = await _prisma.models.User.prisma().create(
+                _prisma.types.UserCreateInput(id=id)
+            )
 
         return user
 
@@ -56,9 +59,9 @@ class UserManager:
         self,
         *,
         id: str = ...,
-        banana: types.AtomicIntInput | int = ...,
-        monkey: types.AtomicIntInput | int = ...,
-    ) -> models.User | None:
+        banana: _prisma.types.AtomicIntInput | int = ...,
+        monkey: _prisma.types.AtomicIntInput | int = ...,
+    ) -> _prisma.models.User | None:
         """
         Other parameters
         ----------------
@@ -70,10 +73,10 @@ class UserManager:
         -------
         `prisma.models.User` | `None`
         """
-        return await models.User.prisma().update(
-            types.UserUpdateInput(
+        return await _prisma.models.User.prisma().update(
+            _prisma.types.UserUpdateInput(
                 banana=banana,
                 monkey=monkey,
             ),
-            where=types.UserWhereUniqueInput(id=id),
+            where=_prisma.types.UserWhereUniqueInput(id=id),
         )

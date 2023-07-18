@@ -25,7 +25,6 @@ hikari = {extras = ["speedups"], version = "^2.0.0.dev120"}
 hikari-crescent = {extras = ["cooldowns"], version = "^0.6.2"}
 mcstatus = "^11.0.0"
 python-dotenv = "^1.0.0"
-msgspec = "^0.16.0"
 black = "^23.7.0"
 prisma = "^0.9.1"
 fastapi = "^0.100.0"

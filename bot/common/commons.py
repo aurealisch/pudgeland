@@ -32,7 +32,7 @@ import typing
 
 import hikari
 
-import prisma
+import prisma as _prisma
 from bot.client import clients
 from bot.common.database import databases
 from bot.common.environment import environments
@@ -43,9 +43,11 @@ bot = hikari.GatewayBot(
     banner=environments.gateway_bot_banner,
 )
 
-database = databases.Database(prisma.Prisma())
+prisma = _prisma.Prisma()
 
-prisma.register(database.prisma)
+_prisma.register(prisma)
+
+database = databases.Database(prisma)
 
 model = models.Model(database)
 
