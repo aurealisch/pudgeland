@@ -27,9 +27,9 @@ import random
 import typing
 
 import crescent
-import hikari
 
 from bot.plugin.middleware import middlewares
+from bot.utility.embed import embeds
 
 
 class Middleware(middlewares.Middleware):
@@ -60,7 +60,8 @@ class Middleware(middlewares.Middleware):
         )
 
         await context.respond(
-            embed=hikari.Embed(
+            embed=embeds.embed(
+                mode="default",
                 title="Собирать",
                 description=f"""
                     <@{id}> собрал `{collecting}` бананов

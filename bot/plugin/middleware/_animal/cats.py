@@ -26,10 +26,10 @@ __all__: typing.Sequence[str] = ("Middleware",)
 import typing
 
 import crescent
-import hikari
 import meowy
 
 from bot.plugin.middleware import middlewares
+from bot.utility.embed import embeds
 
 
 class Middleware(middlewares.Middleware):
@@ -41,7 +41,8 @@ class Middleware(middlewares.Middleware):
         """
         await context.respond(
             embed=(
-                hikari.Embed(
+                embeds.embed(
+                    mode="default",
                     title="Кот",
                     description="Изображение кота",
                 )
