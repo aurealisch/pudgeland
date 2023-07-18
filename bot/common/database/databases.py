@@ -33,7 +33,7 @@ class Database:
     def __init__(self, prisma: prisma.Prisma) -> None:
         self.prisma = prisma
 
-        self._user_manager = users.UserManager(self.prisma, cache=self.cache)
+        self._user_manager = users.UserManager(self.prisma)
 
     @property
     def users(self) -> users.UserManager:
