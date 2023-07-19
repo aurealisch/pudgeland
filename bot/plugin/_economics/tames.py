@@ -34,17 +34,17 @@ plugin = plugins.Plugin()
 @plugin.include
 @crescent.command(
     name=locales.LocaleBuilder(
-        "collect",
-        russian="собирать",
-        ukrainian="збирати",
+        "tame",
+        russian="приручать",
+        ukrainian="приручати",
     ),
     description=locales.LocaleBuilder(
-        "Сollect",
-        russian="Cобирать",
-        ukrainian="Збирати",
+        "Tame",
+        russian="Приручать",
+        ukrainian="Приручати",
     ),
 )
-class Collect:
+class Tame:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -59,28 +59,52 @@ class Collect:
         banana = user.banana
         monkey = user.monkey
 
-        collecting = random.choice(
-            range(
-                plugin.model.configuration.by_hand_minimal,
-                plugin.model.configuration.by_hand_maximum,
+        fed = (monkey + 1) * 250
+
+        if random.choice(range(1, 10)) != 1:
+            await plugin.model.database.users.update(
+                id=id,
+                banana=banana - fed,
+                monkey=monkey,
             )
-        )
+
+            await context.respond(
+                embed=embeds.embed(
+                    title="Приручать",
+                    description=f"""
+                        Вы скормили 🍌 `{fed}` бананов
+                        и..
+
+                        ❌ Не получилось приручить обезьяну...
+
+                        ```diff\n- {fed} бананов 🍌```
+
+                        :banana: Бананы: `{banana}`
+                        :monkey: Обезьяны: `{monkey}`
+                    """,
+                )
+            )
 
         await plugin.model.database.users.update(
             id=id,
-            banana=banana + collecting,
-            monkey=monkey,
+            banana=banana - fed,
+            monkey=monkey + 1,
         )
 
         await context.respond(
             embed=embeds.embed(
-                title="Собирать",
+                title="Приручать",
                 description=f"""
-                    <@{id}> собрал `{collecting}` бананов
+                    Вы скормили 🍌 `{fed}` бананов
+                    и..
 
-                    :banana: Бананы: `{banana + collecting}`
-                    :monkey: Обезьяны: `{monkey}`
+                    ✅ Получилось приручить обезьяну!!!
+
+                    ```diff\n- {fed} бананов 🍌```
+                    ```diff\n+ 1 обезьяна 🐒```
+
+                    :banana: Бананы: `{user.banana}`
+                    :monkey: Обезьяны: `{user.monkey}`
                 """,
-                color="default",
             )
         )

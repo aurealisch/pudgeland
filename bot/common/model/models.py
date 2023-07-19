@@ -19,12 +19,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from __future__ import annotations
-
-__all__: typing.Sequence[str] = ("Model",)
-
-import typing
-
 import hikari
 
 from bot.common.environment import environments
@@ -33,12 +27,6 @@ from bot.common.configuration import configurations
 
 
 class Model:
-    __slots__: typing.Sequence[str] = (
-        "configuration",
-        "database",
-        "environment",
-    )
-
     def __init__(
         self,
         configuration: configurations.Configuration,

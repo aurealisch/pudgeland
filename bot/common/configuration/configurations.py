@@ -19,24 +19,9 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from __future__ import annotations
-
-__all__: typing.Sequence[str] = ("Configuration",)
-
-import typing
 
 
 class Configuration:
-    __slots__: typing.Sequence[str] = (
-        "gateway_bot_banner",
-        "java_server_host",
-        "java_server_port",
-        "api_host",
-        "api_port",
-        "by_hand_minimal",
-        "by_hand_maximum",
-    )
-
     def __init__(
         self,
         gateway_bot_banner: str,

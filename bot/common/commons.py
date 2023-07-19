@@ -19,21 +19,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-from __future__ import annotations
-
-__all__: typing.Sequence[str] = (
-    "environment",
-    "bot",
-    "prisma",
-    "database",
-    "configuration",
-    "model",
-    "client",
-)
-
 import json
 import os
-import typing
 
 import dotenv
 import hikari
