@@ -29,12 +29,23 @@ import hikari
 
 from bot.common.environment import environments
 from bot.common.database import databases
+from bot.common.configuration import configurations
 
 
 class Model:
+    __slots__: typing.Sequence[str] = (
+        "configuration",
+        "database",
+        "environment",
+    )
+
     def __init__(
-        self, database: databases.Database, environment: environments.Environment
+        self,
+        configuration: configurations.Configuration,
+        database: databases.Database,
+        environment: environments.Environment,
     ) -> None:
+        self.configuration = configuration
         self.database = database
         self.environment = environment
 

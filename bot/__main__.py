@@ -34,8 +34,8 @@ commons.client.plugins.load_folder("bot.plugin._server")
 threading.Thread(
     target=lambda: uvicorn.run(
         apps.app,
-        host=commons.environment.api_host,
-        port=commons.environment.api_port,
+        host=commons.configuration.api_host,
+        port=commons.configuration.api_port,
     )
 ).start()
 

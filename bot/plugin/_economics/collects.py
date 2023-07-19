@@ -66,8 +66,8 @@ class Collect:
 
         collecting = random.choice(
             range(
-                plugin.model.environment.by_hand_minimal,
-                plugin.model.environment.by_hand_maximum,
+                plugin.model.configuration.by_hand_minimal,
+                plugin.model.configuration.by_hand_maximum,
             )
         )
 

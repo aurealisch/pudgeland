@@ -26,10 +26,12 @@ __all__: typing.Sequence[str] = (
     "bot",
     "prisma",
     "database",
+    "configuration",
     "model",
     "client",
 )
 
+import json
 import os
 import typing
 
@@ -38,27 +40,23 @@ import hikari
 
 import prisma as _prisma
 from bot.client import clients
+from bot.common.configuration import configurations
 from bot.common.database import databases
 from bot.common.environment import environments
 from bot.common.model import models
 
 dotenv.load_dotenv()
 
+configuration = configurations.Configuration(
+    **json.loads(open("./configuration.json", encoding="utf-8").read())
+)
+
 environment = environments.Environment(
-    os.environ.get("GATEWAY_BOT_TOKEN"),
-    gateway_bot_banner=os.environ.get("GATEWAY_BOT_BANNER"),
-    java_server_host=os.environ.get("JAVA_SERVER_HOST"),
-    java_server_port=int(os.environ.get("JAVA_SERVER_PORT")),
-    database_url=os.environ.get("DATABASE_URL"),
-    api_host=os.environ.get("API_HOST"),
-    api_port=int(os.environ.get("API_PORT")),
-    by_hand_minimal=int(os.environ.get("BY_HAND_MINIMAL")),
-    by_hand_maximum=int(os.environ.get("BY_HAND_MAXIMUM")),
+    os.environ.get("GATEWAY_BOT_TOKEN"), database_url=os.environ.get("DATABASE_URL")
 )
 
 bot = hikari.GatewayBot(
-    environment.gateway_bot_token,
-    banner=environment.gateway_bot_banner,
+    environment.gateway_bot_token, banner=configuration.gateway_bot_banner
 )
 
 prisma = _prisma.Prisma()
@@ -67,7 +65,7 @@ _prisma.register(prisma)
 
 database = databases.Database(prisma)
 
-model = models.Model(database, environment=environment)
+model = models.Model(configuration, database=database, environment=environment)
 
 bot.subscribe(hikari.StartedEvent, model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)

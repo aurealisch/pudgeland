@@ -67,8 +67,8 @@ class Query:
         context : crescent.Context
         """
         query_response = mcstatus.JavaServer(
-            plugin.model.environment.java_server_host,
-            port=plugin.model.environment.java_server_port,
+            plugin.model.configuration.java_server_host,
+            port=plugin.model.configuration.java_server_port,
         ).query()
 
         players = query_response.players

@@ -21,20 +21,47 @@
 # SOFTWARE.
 from __future__ import annotations
 
-__all__: typing.Sequence[str] = ("Environment",)
+__all__: typing.Sequence[str] = ("Configuration",)
 
 import typing
 
 
-class Environment:
-    __slots__: typing.Sequence[str] = ("gateway_bot_token", "database_url")
+class Configuration:
+    __slots__: typing.Sequence[str] = (
+        "gateway_bot_banner",
+        "java_server_host",
+        "java_server_port",
+        "api_host",
+        "api_port",
+        "by_hand_minimal",
+        "by_hand_maximum",
+    )
 
-    def __init__(self, gateway_bot_token: str, database_url: str) -> None:
+    def __init__(
+        self,
+        gateway_bot_banner: str,
+        java_server_host: str,
+        java_server_port: int,
+        api_host: str,
+        api_port: int,
+        by_hand_minimal: int,
+        by_hand_maximum: int,
+    ) -> None:
         """
         Parameters
         ---------
-        - `gateway_bot_token` : `str`
-        - `database_url` : `str`
+        - `gateway_bot_banner` : `str`
+        - `java_server_host` : `str`
+        - `java_server_port` : `int`
+        - `api_host` : `str`
+        - `api_port` : `int`
+        - `by_hand_minimal` : `int`
+        - `by_hand_maximum` : `int`
         """
-        self.gateway_bot_token = gateway_bot_token
-        self.database_url = database_url
+        self.gateway_bot_banner = gateway_bot_banner
+        self.java_server_host = java_server_host
+        self.java_server_port = java_server_port
+        self.api_host = api_host
+        self.api_port = api_port
+        self.by_hand_minimal = by_hand_minimal
+        self.by_hand_maximum = by_hand_maximum
