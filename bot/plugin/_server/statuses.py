@@ -67,8 +67,8 @@ class Status:
         context : crescent.Context
         """
         java_status_response = mcstatus.JavaServer(
-            self.plugin.model.environment.java_server_host,
-            port=self.plugin.model.environment.java_server_port,
+            plugin.model.environment.java_server_host,
+            port=plugin.model.environment.java_server_port,
         ).status()
 
         java_status_players = java_status_response.players

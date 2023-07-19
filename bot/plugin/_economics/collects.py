@@ -59,19 +59,19 @@ class Collect:
         """
         id = str(context.user.id)
 
-        user = await self.plugin.model.database.users.find_first(id=id)
+        user = await plugin.model.database.users.find_first(id=id)
 
         banana = user.banana
         monkey = user.monkey
 
         collecting = random.choice(
             range(
-                self.plugin.model.environment.by_hand_minimal,
-                self.plugin.model.environment.by_hand_maximum,
+                plugin.model.environment.by_hand_minimal,
+                plugin.model.environment.by_hand_maximum,
             )
         )
 
-        await self.plugin.model.database.users.update(
+        await plugin.model.database.users.update(
             id=id,
             banana=banana + collecting,
             monkey=monkey,

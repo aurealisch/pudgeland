@@ -56,9 +56,7 @@ class Statistics:
         ----------
         - `context` : `crescent.Context`
         """
-        user = await self.plugin.model.database.users.find_first(
-            id=str(context.user.id)
-        )
+        user = await plugin.model.database.users.find_first(id=str(context.user.id))
 
         await context.respond(
             embed=(
