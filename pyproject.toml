@@ -2,12 +2,23 @@
 name = "pudgeland"
 version = "0.1.0"
 description = "Pudgeland"
-authors = ["elaresai <elaresai@gmail.com>"]
 license = "MIT"
+authors = ["elaresai <elaresai@gmail.com>"]
+maintainers = ["elaresai <elaresai@gmail.com>"]
 readme = "README.md"
+homepage = "https://github.com/elaresai/pudgeland"
+repository = "https://github.com/elaresai/pudgeland"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.8",
+]
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = ">=3.8.0,<3.12"
 pre-commit = "^3.3.3"
 ruff = "^0.0.278"
 attrs = "^23.1.0"
