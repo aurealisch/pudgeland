@@ -33,7 +33,7 @@ class Middleware:
     async def find_first(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User | None:
-        return await _prisma.models.User.prisma().find_first(
+        return await self.prisma.user.prisma().find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
 
@@ -41,9 +41,7 @@ class Middleware:
     async def create(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User:
-        return await _prisma.models.User.prisma().create(
-            _prisma.types.UserCreateInput(id=id__)
-        )
+        return await self.prisma.user.create(_prisma.types.UserCreateInput(id=id__))
 
     # noinspection PyMethodMayBeStatic
     async def update(
@@ -54,7 +52,7 @@ class Middleware:
         monkey: _prisma.types.AtomicIntInput | int,
         reputation: _prisma.types.AtomicIntInput | int,
     ) -> _prisma.models.User | None:
-        return await _prisma.models.User.prisma().update(
+        return await self.prisma.user.update(
             _prisma.types.UserUpdateInput(
                 banana=banana,
                 monkey=monkey,
