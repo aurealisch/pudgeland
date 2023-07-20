@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +22,17 @@
 # SOFTWARE.
 import crescent
 
-from bot.plugin.locale import locales
+from bot.plugin._locale import _locales
 
 group = crescent.Group(
-    name=locales.LocaleBuilder(
+    name=_locales.LocaleBuilder(
         "action",
-        russian="действие",
-        ukrainian="дія",
+        ru="действие",
+        uk="дія",
     ),
-    description=locales.LocaleBuilder(
+    description=_locales.LocaleBuilder(
         "Action",
-        russian="Действие",
-        ukrainian="Дія",
+        ru="Действие",
+        uk="Дія",
     ),
 )

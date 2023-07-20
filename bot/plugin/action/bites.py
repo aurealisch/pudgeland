@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,14 +20,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import typing
+
 import collei
 import crescent
 import hikari
 
 from bot.plugin import _plugins
+from bot.plugin._locale import _locales
 from bot.plugin.action import _groups
-from bot.plugin.locale import locales
-from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
 
@@ -34,47 +36,39 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
+    name=_locales.LocaleBuilder(
         "bite",
-        russian="укусить",
-        ukrainian="вкусити",
+        ru="укусить",
+        uk="вкусити",
     ),
-    description=locales.LocaleBuilder(
+    description=_locales.LocaleBuilder(
         "Bite the user",
-        russian="Укусить пользователя",
-        ukrainian="Вкусити користувача",
+        ru="Укусить пользователя",
+        uk="Вкусити користувача",
     ),
 )
 class Bite:
     user = crescent.option(
         hikari.User,
-        name=locales.LocaleBuilder(
+        name=_locales.LocaleBuilder(
             "user",
-            russian="пользователь",
-            ukrainian="користувач",
+            ru="пользователь",
+            uk="користувач",
         ),
-        description=locales.LocaleBuilder(
+        description=_locales.LocaleBuilder(
             "User",
-            russian="Пользователь",
-            ukrainian="Користувач",
+            ru="Пользователь",
+            uk="Користувач",
         ),
     )
 
     # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        """
-        Parameters
-        ----------
-        - `context` : `crescent.Context`
-        """
-        await context.respond(
-            embed=(
-                embeds.embed(
-                    title="Укусить",
-                    description=f"<@{context.user.id}> укусил(а) <@{self.user.id}>",
-                    color="default",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
-            )
-        )
+    async def callback(self: typing.Self, context: crescent.Context) -> None:
+        title = "Укусить"
+        description = f"<@{context.user.id}> укусил(а) <@{self.user.id}>"
+
+        embed = hikari.Embed(title=title, description=description)
+
+        embed.set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
+
+        await context.respond(embed=embed)

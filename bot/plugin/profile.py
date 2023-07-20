@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +22,41 @@
 # SOFTWARE.
 import typing
 
-import attrs
 import crescent
 import hikari
 
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
 
-@attrs.define
-class LocaleBuilder(crescent.LocaleBuilder):
-    _fallback: str
+plugin = _plugins.Plugin()
 
-    russian: str
-    ukrainian: str
 
-    def build(self) -> typing.Mapping[str, str]:
-        """
-        Returns
-        -------
-        typing.Mapping[str, str]
-        """
-        return {
-            hikari.Locale.RU: self.russian,
-            hikari.Locale.UK: self.ukrainian,
-        }
+@plugin.include
+@crescent.command(
+    name=_locales.LocaleBuilder(
+        "profile",
+        ru="профиль",
+        uk="профіль",
+    ),
+    description=_locales.LocaleBuilder(
+        "Profile",
+        ru="Профиль",
+        uk="Профіль",
+    ),
+)
+class Profile:
+    # noinspection PyMethodMayBeStatic
+    async def callback(self: typing.Self, context: crescent.Context) -> None:
+        user = await plugin.model.database.find_first(str(context.user.id))
 
-    @property
-    def fallback(self) -> str:
+        title = "Профиль"
+        description = f"""\
+            🍌 Бананы: `{user.banana}`
+            🐒 Обезьяны: `{user.monkey}`
+
+            📊 Репутация: `{user.reputation}`
         """
-        Returns
-        -------
-        str
-        """
-        return self._fallback
+
+        embed = hikari.Embed(title=title, description=description)
+
+        await context.respond(embed=embed)

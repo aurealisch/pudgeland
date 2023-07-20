@@ -20,26 +20,45 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import typing
-
 import attrs
-import hikari
 
-from bot.common.configuration import configurations
-from bot.common.database import databases
-from bot.common.environment import environments
+import prisma as _prisma
 
 
 @attrs.define
-class Model:
-    configuration: configurations.Configuration
-    database: databases.Database
-    environment: environments.Environment
+class Middleware:
+    prisma: _prisma.Prisma
 
     # noinspection PyMethodMayBeStatic
-    async def on_started_event(self: typing.Self, _: hikari.StartedEvent) -> None:
-        await self.database.middleware.prisma.connect()
+    async def find_first(
+        self, id__: str | _prisma.types.StringFilter
+    ) -> _prisma.models.User | None:
+        return await _prisma.models.User.prisma().find_first(
+            where=_prisma.types.UserWhereInput(id=id__)
+        )
 
     # noinspection PyMethodMayBeStatic
-    async def on_stopped_event(self: typing.Self, _: hikari.StoppedEvent) -> None:
-        await self.database.middleware.prisma.disconnect()
+    async def create(
+        self, id__: str | _prisma.types.StringFilter
+    ) -> _prisma.models.User:
+        return await _prisma.models.User.prisma().create(
+            _prisma.types.UserCreateInput(id=id__)
+        )
+
+    # noinspection PyMethodMayBeStatic
+    async def update(
+        self,
+        id__: str | _prisma.types.StringFilter,
+        *,
+        banana: _prisma.types.AtomicIntInput | int,
+        monkey: _prisma.types.AtomicIntInput | int,
+        reputation: _prisma.types.AtomicIntInput | int,
+    ) -> _prisma.models.User | None:
+        return await _prisma.models.User.prisma().update(
+            _prisma.types.UserUpdateInput(
+                banana=banana,
+                monkey=monkey,
+                reputation=reputation,
+            ),
+            where=_prisma.types.UserWhereInput(id=id__),
+        )

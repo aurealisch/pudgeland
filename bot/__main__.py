@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +27,16 @@ import uvicorn
 from bot.api.app import apps
 from bot.common import commons
 
-commons.client.plugins.load_folder("bot.plugin.action")
-commons.client.plugins.load_folder("bot.plugin.animal")
-commons.client.plugins.load_folder("bot.plugin.economics")
-commons.client.plugins.load_folder("bot.plugin.server")
 
-threading.Thread(
-    target=lambda: uvicorn.run(
+def target() -> None:
+    return uvicorn.run(
         apps.app,
-        host=commons.configuration.api_host,
-        port=commons.configuration.api_port,
+        host=commons.configuration.api.host,
+        port=commons.configuration.api.port,
     )
-).start()
 
-commons.bot.run(
-    asyncio_debug=True,
-    coroutine_tracking_depth=20,
-    propagate_interrupts=True,
-)
+
+thread = threading.Thread(target=target)
+thread.start()
+
+commons.bot.run()

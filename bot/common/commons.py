@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,40 +20,45 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import json
 import os
 
 import dotenv
 import hikari
-import prisma as _prisma
+import msgspec
 
+import prisma as _prisma
 from bot.client import clients
 from bot.common.configuration import configurations
 from bot.common.database import databases
+from bot.common.database.middleware import middlewares
 from bot.common.environment import environments
 from bot.common.model import models
 
 dotenv.load_dotenv()
 
-environment = environments.Environment(os.environ.get("GATEWAY_BOT_TOKEN"))
+with open("configuration.json") as stream:
+    buffer = stream.read()
 
-configuration = configurations.Configuration(
-    **json.loads(open("./configuration.json", encoding="utf-8").read())
-)
-
-bot = hikari.GatewayBot(
-    environment.gateway_bot_token, banner=configuration.gateway_bot_banner
-)
+    configuration = msgspec.json.decode(buffer, type=configurations.Configuration)
 
 prisma = _prisma.Prisma()
 
 _prisma.register(prisma)
 
-database = databases.Database(prisma)
+database = databases.Database(middlewares.Middleware(prisma))
+
+token = os.environ.get("TOKEN")
+url = os.environ.get("URL")
+
+environment = environments.Environment(token, url=url)
 
 model = models.Model(configuration, database=database, environment=environment)
+
+bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
 
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
 client = clients.Client(bot, model=model)
+
+client.plugins.load_folder("bot.plugin")

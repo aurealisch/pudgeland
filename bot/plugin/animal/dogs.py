@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,13 +20,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import typing
+
 import crescent
-import woofy
+import hikari
+import meowy
 
 from bot.plugin import _plugins
+from bot.plugin._locale import _locales
 from bot.plugin.animal import _groups
-from bot.plugin.locale import locales
-from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
 
@@ -33,33 +36,25 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
+    name=_locales.LocaleBuilder(
         "dog",
-        russian="собака",
-        ukrainian="пес",
+        ru="собака",
+        uk="пес",
     ),
-    description=locales.LocaleBuilder(
-        "Image of a dog",
-        russian="Изображение собаки",
-        ukrainian="Зображення собаки",
+    description=_locales.LocaleBuilder(
+        "Random dog image",
+        ru="Случайное изображение собаки",
+        uk="Випадкове зображення собаки",
     ),
 )
 class Dog:
     # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        """
-        Parameters
-        ----------
-        - `context` : `crescent.Context`
-        """
-        await context.respond(
-            embed=(
-                embeds.embed(
-                    title="Собака",
-                    description="Изображение собаки",
-                    color="default",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(woofy.Client().images.search()[0].url)
-            )
-        )
+    async def callback(self: typing.Self, context: crescent.Context) -> None:
+        title = "Собака"
+        description = "Случайное изображение собаки"
+
+        embed = hikari.Embed(title=title, description=description)
+
+        embed.set_image(meowy.Client().images.search()[0].url)
+
+        await context.respond(embed=embed)

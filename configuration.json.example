@@ -1,9 +1,17 @@
 {
-  "gatewayBotBanner": "bot",
-  "javaServerHost": "galaxy.minecraft.rent",
-  "javaServerPort": 25615,
-  "apiHost": "0.0.0.0",
-  "apiPort": 8080,
-  "byHandMinimal": 25,
-  "byHandMaximum": 75
+  "gateway": {
+    "bot": {
+      "banner": "bot"
+    }
+  },
+  "api": {
+    "host": "0.0.0.0",
+    "port": 8080
+  },
+  "plugins": {
+    "collect": {
+      "minimal": 25,
+      "maximum": 75
+    }
+  }
 }

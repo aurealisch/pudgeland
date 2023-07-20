@@ -1,40 +1,26 @@
 [tool.poetry]
 name = "pudgeland"
 version = "0.1.0"
-description = "🔥 Pudgeland"
-license = "MIT"
+description = "Pudgeland"
 authors = ["elaresai <elaresai@gmail.com>"]
-maintainers = ["elaresai <elaresai@gmail.com>"]
+license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/elaresai/pudgeland"
-repository = "https://github.com/elaresai/pudgeland"
-classifiers = [
-    "License :: OSI Approved :: MIT License",
-
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.8",
-]
 
 [tool.poetry.dependencies]
-python = ">=3.8.1,<3.12"
-hikari = { extras = ["speedups"], version = "^2.0.0.dev120" }
-hikari-crescent = { extras = ["cooldowns"], version = "^0.6.2" }
-mcstatus = "^11.0.0"
+python = ">=3.11,<3.12"
+pre-commit = "^3.3.3"
+ruff = "^0.0.278"
+attrs = "^23.1.0"
 python-dotenv = "^1.0.0"
 prisma = "^0.9.1"
 fastapi = "^0.100.0"
-uvicorn = "^0.23.0"
-collei = "^1.0.2"
+uvicorn = "^0.23.1"
 meowy = "^1.0.1"
 woofy = "^1.0.1"
-attrs = "^23.1.0"
-
-[tool.poetry.dev-dependencies]
-pre-commit = "^3.3.3"
-ruff = "^0.0.278"
-black = "^23.7.0"
+collei = "^1.0.2"
+msgspec = "^0.16.0"
+hikari = "^2.0.0.dev120"
+hikari-crescent = "^0.6.2"
 
 [build-system]
 requires = ["poetry-core"]

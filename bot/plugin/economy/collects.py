@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +21,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import random
+import typing
 
 import crescent
+import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.economics import _groups
-from bot.plugin.locale import locales
-from bot.utility.embed import embeds
+from bot.plugin._locale import _locales
+from bot.plugin.economy import _groups
 
 plugin = _plugins.Plugin()
 
@@ -34,54 +36,50 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
+    name=_locales.LocaleBuilder(
         "collect",
-        russian="собирать",
-        ukrainian="збирати",
+        ru="собирать",
+        uk="збирати",
     ),
-    description=locales.LocaleBuilder(
+    description=_locales.LocaleBuilder(
         "Сollect",
-        russian="Cобирать",
-        ukrainian="Збирати",
+        ru="Cобирать",
+        uk="Збирати",
     ),
 )
 class Collect:
     # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        """
-        Parameters
-        ----------
-        - `context` : `crescent.Context`
-        """
-        id__ = str(context.user.id)
+    async def callback(self: typing.Self, context: crescent.Context) -> None:
+        contextual = str(context.user.id)
 
-        user = await plugin.model.database.find_first(id__=id__)
+        user = await plugin.model.database.find_first(contextual)
 
         banana = user.banana
         monkey = user.monkey
+        reputation = user.reputation
 
         collecting = random.choice(
             range(
-                plugin.model.configuration.by_hand_minimal,
-                plugin.model.configuration.by_hand_maximum,
+                plugin.model.configuration.plugins.collect.minimal,
+                plugin.model.configuration.plugins.collect.maximum,
             )
         )
 
-        await plugin.model.database.update(
-            id__=id__,
+        await plugin.model.database.middleware.update(
+            contextual,
             banana=banana + collecting,
             monkey=monkey,
+            reputation=reputation,
         )
 
-        await context.respond(
-            embed=embeds.embed(
-                title="Собирать",
-                description=f"""
-                    <@{id}> собрал `{collecting}` бананов
+        title = "Собирать"
+        description = f"""\
+            <@{contextual}> собрал `{collecting}` бананов
 
-                    :banana: Бананы: `{banana + collecting}`
-                    :monkey: Обезьяны: `{monkey}`
-                """,
-                color="default",
-            )
-        )
+            :banana: Бананы: `{banana + collecting}`
+            :monkey: Обезьяны: `{monkey}`
+        """
+
+        embed = hikari.Embed(title=title, description=description)
+
+        await context.respond(embed=embed)

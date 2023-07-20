@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,58 +24,20 @@ import attrs
 
 import prisma as _prisma
 
+from bot.common.database.middleware import middlewares
+
 
 @attrs.define
 class Database:
-    prisma: _prisma.Prisma
+    middleware: middlewares.Middleware
 
     # noinspection PyMethodMayBeStatic
     async def find_first(
-        self, *, id__: str | _prisma.types.StringFilter = ...
-    ) -> _prisma.models.User | None:
-        """
-        Other parameters
-        -----------------
-        `id__` : `str` | `prisma.types.StringFilter`
-
-        Returns
-        -------
-        `prisma.models.User` | `None`
-        """
-        user = await _prisma.models.User.prisma().find_first(
-            where=_prisma.types.UserWhereInput(id=id__)
-        )
+        self, id__: str | _prisma.types.StringFilter
+    ) -> _prisma.models.User:
+        user = await self.middleware.find_first(id__)
 
         if user is None:
-            user = await _prisma.models.User.prisma().create(
-                _prisma.types.UserCreateInput(id=id__)
-            )
+            return await self.middleware.create(id__)
 
         return user
-
-    # noinspection PyMethodMayBeStatic
-    async def update(
-        self,
-        *,
-        id__: str = ...,
-        banana: _prisma.types.AtomicIntInput | int = ...,
-        monkey: _prisma.types.AtomicIntInput | int = ...,
-    ) -> _prisma.models.User | None:
-        """
-        Other parameters
-        ----------------
-        - `id__` : `str`
-        - `banana` : `types.AtomicIntInput` | `int`
-        - `monkey` : `types.AtomicIntInput` | `int`
-
-        Returns
-        -------
-        `prisma.models.User` | `None`
-        """
-        return await _prisma.models.User.prisma().update(
-            _prisma.types.UserUpdateInput(
-                banana=banana,
-                monkey=monkey,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=id__),
-        )

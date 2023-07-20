@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,15 +20,34 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import attrs
+import msgspec
 
 
-@attrs.define
-class Configuration:
-    gateway_bot_banner: str = attrs.field(alias="gatewayBotBanner")
-    java_server_host: str = attrs.field(alias="javaServerHost")
-    java_server_port: int = attrs.field(alias="javaServerPort")
-    api_host: str = attrs.field(alias="apiHost")
-    api_port: int = attrs.field(alias="apiPort")
-    by_hand_minimal: int = attrs.field(alias="byHandMinimal")
-    by_hand_maximum: int = attrs.field(alias="byHandMaximum")
+class Bot(msgspec.Struct):
+    banner: str
+
+
+class Gateway(msgspec.Struct):
+    bot: Bot
+
+
+class Api(msgspec.Struct):
+    host: str
+    port: int
+
+
+class Collect(msgspec.Struct):
+    minimal: int
+    maximum: int
+
+
+class Plugins(msgspec.Struct):
+    collect: Collect
+
+
+class Configuration(msgspec.Struct):
+    gateway: Gateway
+
+    api: Api
+
+    plugins: Plugins

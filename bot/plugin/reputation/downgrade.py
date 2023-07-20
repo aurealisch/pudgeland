@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,13 +20,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import collei
+import typing
+
 import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.action import _groups
 from bot.plugin._locale import _locales
+from bot.plugin.reputation import _groups
 
 plugin = _plugins.Plugin()
 
@@ -34,17 +36,17 @@ plugin = _plugins.Plugin()
 @plugin.include
 @crescent.command(
     name=_locales.LocaleBuilder(
-        "kiss",
-        ru="поцеловать",
-        uk="поцілувати",
+        "downgrade",
+        ru="понизить",
+        uk="понизивши",
     ),
     description=_locales.LocaleBuilder(
-        "Kiss the user",
-        ru="Поцеловать пользователя",
-        uk="Поцілувати користувача",
+        "Downgrade",
+        ru="Понизить",
+        uk="Понизивши",
     ),
 )
-class Kiss:
+class Downgrade:
     user = crescent.option(
         hikari.User,
         name=_locales.LocaleBuilder(
@@ -60,12 +62,25 @@ class Kiss:
     )
 
     # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        title = "Поцеловать"
-        description = f"<@{context.user.id}> поцеловал(а) <@{self.user.id}>"
+    async def callback(self: typing.Self, context: crescent.Context) -> None:
+        _optional = str(self.user.id)
+
+        optional = await plugin.model.database.find_first(_optional)
+
+        await plugin.model.database.middleware.update(
+            _optional,
+            banana=optional.banana,
+            monkey=optional.monkey,
+            reputation=optional.reputation - 1,
+        )
+
+        title = "Понизить"
+        description = f"""\
+            <@{context.user.id}> понизил репутацию <@{_optional}>
+
+            📉 Репутация: `{optional.reputation - 1}`
+        """
 
         embed = hikari.Embed(title=title, description=description)
-
-        embed.set_image(collei.Client().sfw.get(collei.SfwCategory.KISS).url)
 
         await context.respond(embed=embed)

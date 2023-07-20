@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 # MIT License
 #
-# Copyright (c) 2023 elaresai
+# Copyright (c) 2023 pudgeland
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,4 +20,26 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-pass
+import typing
+import attrs
+
+import hikari
+import crescent
+
+
+@attrs.define
+class LocaleBuilder(crescent.LocaleBuilder):
+    _fallback: str
+
+    ru: str
+    uk: str
+
+    def build(self: typing.Self) -> typing.Mapping[str, str]:
+        return {
+            hikari.Locale.RU: self.ru,
+            hikari.Locale.UK: self.uk,
+        }
+
+    @property
+    def fallback(self: typing.Self) -> str:
+        return self._fallback
