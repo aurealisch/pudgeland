@@ -19,35 +19,19 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import typing
-
 import crescent
-import hikari
 
+from bot.plugin._locale import _locales
 
-class LocaleBuilder(crescent.LocaleBuilder):
-    def __init__(self, _fallback: str, russian: str, ukrainian: str) -> None:
-        self._fallback = _fallback
-
-        self.russian = russian
-        self.ukrainian = ukrainian
-
-    def build(self) -> typing.Mapping[str, str]:
-        """
-        Returns
-        -------
-        typing.Mapping[str, str]
-        """
-        return {
-            hikari.Locale.RU: self.russian,
-            hikari.Locale.UK: self.ukrainian,
-        }
-
-    @property
-    def fallback(self) -> str:
-        """
-        Returns
-        -------
-        str
-        """
-        return self._fallback
+group = crescent.Group(
+    name=_locales.LocaleBuilder(
+        "animal",
+        russian="животное",
+        ukrainian="тварина",
+    ),
+    description=_locales.LocaleBuilder(
+        "Animal",
+        russian="Животное",
+        ukrainian="Тварина",
+    ),
+)

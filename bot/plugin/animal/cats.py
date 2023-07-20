@@ -19,32 +19,47 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import attrs
-import hikari
+import crescent
+import meowy
 
-from bot.common.configuration import configurations
-from bot.common.database import databases
-from bot.common.environment import environments
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.animal import _groups
+from bot.utility.embed import embeds
+
+plugin = _plugins.Plugin()
 
 
-@attrs.define
-class Model:
-    configuration: configurations.Configuration
-    database: databases.Database
-    environment: environments.Environment
-
-    async def on_started_event(self, _: hikari.StartedEvent) -> None:
+@_groups.group.child
+@plugin.include
+@crescent.command(
+    name=_locales.LocaleBuilder(
+        "cat",
+        russian="кот",
+        ukrainian="кiт",
+    ),
+    description=_locales.LocaleBuilder(
+        "Image of a cat",
+        russian="Изображение кота",
+        ukrainian="Зображення кота",
+    ),
+)
+class Cat:
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
         """
         Parameters
-        -----------------
-        _ : hikari.StartedEvent
+        ----------
+        - `context` : `crescent.Context`
         """
-        await self.database.prisma.connect()
-
-    async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
-        """
-        Parameters
-        -----------------
-        _ : hikari.StoppedEvent
-        """
-        await self.database.prisma.disconnect()
+        await context.respond(
+            embed=(
+                embeds.embed(
+                    title="Кот",
+                    description="Изображение кота",
+                    color="default",
+                )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(meowy.Client().images.search()[0].url)
+            )
+        )

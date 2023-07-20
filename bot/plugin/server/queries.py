@@ -22,37 +22,38 @@
 import crescent
 import mcstatus
 
-from bot.plugin import plugins, _server
-from bot.plugin.locale import locales
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.server import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_server.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "status",
-        russian="статус",
-        ukrainian="статус",
+    name=_locales.LocaleBuilder(
+        "query",
+        russian="запрос",
+        ukrainian="запит",
     ),
-    description=locales.LocaleBuilder(
+    description=_locales.LocaleBuilder(
         """\
             Checks the status of a Minecraft Java Edition server
-            via the status protocol.
+            via the query protocol.
         """,
         russian="""\
             Проверяет статус сервера Minecraft Java Edition
-            с помощью протокола статуса.
+            с помощью протокола запроса.
         """,
         ukrainian="""\
             Перевіряє статус сервера Minecraft Java Edition
-            за допомогою протоколу статуса.
+            за допомогою протоколу запиту.
         """,
     ),
 )
-class Status:
+class Query:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -60,46 +61,54 @@ class Status:
         ----------
         context : crescent.Context
         """
-        java_status_response = mcstatus.JavaServer(
+        query_response = mcstatus.JavaServer(
             plugin.model.configuration.java_server_host,
             port=plugin.model.configuration.java_server_port,
-        ).status()
+        ).query()
 
-        java_status_players = java_status_response.players
-        java_status_version = java_status_response.version
+        players = query_response.players
+        software = query_response.software
 
         await context.respond(
             embed=(
                 embeds.embed(
-                    title="Статус",
+                    title="Запрос",
                     description="""\
                         Проверяет статус сервера Minecraft Java Edition
-                        с помощью протокола статуса.
+                        с помощью протокола запроса.
                     """,
                     color="default",
                 )
                 .add_field(
                     "Игроки",
                     value=f"""\
-                        Онлайн: *{java_status_players.online}*
-                        Максимум: *{java_status_players.max}*
-                        Образец: {
+                        Онлайн: *{players.online}*
+                        Максимум: *{players.max}*
+                        Имена: ||{
                             ", ".join(
                                 [
-                                    f"*{java_status_player.name}"
-                                    f"(||{java_status_player.id}||)"
+                                    f"`{name}`"
 
-                                    for java_status_player in java_status_players.sample
+                                    for name in players.names
                                 ]
                             )
-                        }
+                        }||
                     """,
                 )
                 .add_field(
-                    "Версия",
+                    "Программное обеспечение",
                     value=f"""\
-                        Имя: *{java_status_version.name}*
-                        Протокол: *{java_status_version.protocol}*
+                        Марка: *{software.brand}*
+                        Плагины: ||{
+                            ", ".join(
+                                [
+                                    f"`{plugin}`"
+
+                                    for plugin in software.plugins
+                                ]
+                            )
+                        }||
+                        Версия: *{software.version}*
                     """,
                 )
             )

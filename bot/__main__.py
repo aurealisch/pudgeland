@@ -26,10 +26,7 @@ import uvicorn
 from bot.api.app import apps
 from bot.common import commons
 
-commons.client.plugins.load_folder("bot.plugin._action")
-commons.client.plugins.load_folder("bot.plugin._animal")
-commons.client.plugins.load_folder("bot.plugin._economics")
-commons.client.plugins.load_folder("bot.plugin._server")
+commons.client.plugins.load_folder("bot.plugin")
 
 threading.Thread(
     target=lambda: uvicorn.run(
@@ -39,4 +36,8 @@ threading.Thread(
     )
 ).start()
 
-commons.bot.run()
+commons.bot.run(
+    asyncio_debug=True,
+    coroutine_tracking_depth=20,
+    propagate_interrupts=True,
+)

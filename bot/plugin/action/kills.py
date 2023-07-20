@@ -23,36 +23,37 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _action, plugins
-from bot.plugin.locale import locales
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.action import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_action.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "kiss",
-        russian="поцеловать",
-        ukrainian="поцілувати",
+    name=_locales.LocaleBuilder(
+        "kill",
+        russian="убить",
+        ukrainian="вбивати",
     ),
-    description=locales.LocaleBuilder(
-        "Kiss the user",
-        russian="Поцеловать пользователя",
-        ukrainian="Поцілувати користувача",
+    description=_locales.LocaleBuilder(
+        "Kill",
+        russian="Убить пользователя",
+        ukrainian="Вбивати користувача",
     ),
 )
-class Kiss:
+class Kill:
     user = crescent.option(
         hikari.User,
-        name=locales.LocaleBuilder(
+        name=_locales.LocaleBuilder(
             "user",
             russian="пользователь",
             ukrainian="користувач",
         ),
-        description=locales.LocaleBuilder(
+        description=_locales.LocaleBuilder(
             "User",
             russian="Пользователь",
             ukrainian="Користувач",
@@ -69,11 +70,11 @@ class Kiss:
         await context.respond(
             embed=(
                 embeds.embed(
-                    title="Поцеловать",
-                    description=f"<@{context.user.id}> поцеловал(а) <@{self.user.id}>",
+                    title="Убить",
+                    description=f"<@{context.user.id}> убил(а) <@{self.user.id}>",
                     color="default",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.KISS).url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.KILL).url)
             )
         )

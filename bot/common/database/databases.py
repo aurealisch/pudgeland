@@ -19,21 +19,60 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import prisma
-from bot.common.database.manager import users
+import attrs
+
+import prisma as _prisma
 
 
+@attrs.define
 class Database:
-    def __init__(self, prisma: prisma.Prisma) -> None:
-        self.prisma = prisma
+    prisma: _prisma.Prisma
 
-        self._user_manager = users.UserManager(self.prisma)
-
-    @property
-    def users(self) -> users.UserManager:
+    async def find_first(
+        self, *, id: str | _prisma.types.StringFilter = ...
+    ) -> _prisma.models.User | None:
         """
+        Other parameters
+        -----------------
+        `id` : `str` | `prisma.types.StringFilter`
+
         Returns
         -------
-        `users.UserManager`
+        `prisma.models.User` | `None`
         """
-        return self._user_manager
+        user = await _prisma.models.User.prisma().find_first(
+            where=_prisma.types.UserWhereInput(id=id)
+        )
+
+        if user is None:
+            user = await _prisma.models.User.prisma().create(
+                _prisma.types.UserCreateInput(id=id)
+            )
+
+        return user
+
+    async def update(
+        self,
+        *,
+        id: str = ...,
+        banana: _prisma.types.AtomicIntInput | int = ...,
+        monkey: _prisma.types.AtomicIntInput | int = ...,
+    ) -> _prisma.models.User | None:
+        """
+        Other parameters
+        ----------------
+        - `id` : `str`
+        - `banana` : `types.AtomicIntInput` | `int`
+        - `monkey` : `types.AtomicIntInput` | `int`
+
+        Returns
+        -------
+        `prisma.models.User` | `None`
+        """
+        return await _prisma.models.User.prisma().update(
+            _prisma.types.UserUpdateInput(
+                banana=banana,
+                monkey=monkey,
+            ),
+            where=_prisma.types.UserWhereUniqueInput(id=id),
+        )

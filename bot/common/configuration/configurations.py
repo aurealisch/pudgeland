@@ -19,34 +19,15 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import attrs
 
 
+@attrs.define
 class Configuration:
-    def __init__(
-        self,
-        gateway_bot_banner: str,
-        java_server_host: str,
-        java_server_port: int,
-        api_host: str,
-        api_port: int,
-        by_hand_minimal: int,
-        by_hand_maximum: int,
-    ) -> None:
-        """
-        Parameters
-        ---------
-        - `gateway_bot_banner` : `str`
-        - `java_server_host` : `str`
-        - `java_server_port` : `int`
-        - `api_host` : `str`
-        - `api_port` : `int`
-        - `by_hand_minimal` : `int`
-        - `by_hand_maximum` : `int`
-        """
-        self.gateway_bot_banner = gateway_bot_banner
-        self.java_server_host = java_server_host
-        self.java_server_port = java_server_port
-        self.api_host = api_host
-        self.api_port = api_port
-        self.by_hand_minimal = by_hand_minimal
-        self.by_hand_maximum = by_hand_maximum
+    gateway_bot_banner: str = attrs.field(alias="gatewayBotBanner")
+    java_server_host: str = attrs.field(alias="javaServerHost")
+    java_server_port: int = attrs.field(alias="javaServerPort")
+    api_host: str = attrs.field(alias="apiHost")
+    api_port: int = attrs.field(alias="apiPort")
+    by_hand_minimal: int = attrs.field(alias="byHandMinimal")
+    by_hand_maximum: int = attrs.field(alias="byHandMaximum")

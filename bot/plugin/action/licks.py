@@ -19,30 +19,47 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import collei
 import crescent
+import hikari
 
-from bot.plugin import _economics, plugins
-from bot.plugin.locale import locales
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.action import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_economics.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "statistics",
-        russian="статистика",
-        ukrainian="статистика",
+    name=_locales.LocaleBuilder(
+        "lick",
+        russian="лизнуть",
+        ukrainian="лизнути",
     ),
-    description=locales.LocaleBuilder(
-        "Statistics",
-        russian="Статистика",
-        ukrainian="Статистика",
+    description=_locales.LocaleBuilder(
+        "Lick the user",
+        russian="Лизнуть пользователя",
+        ukrainian="Лизнути користувача",
     ),
 )
-class Statistics:
+class Lick:
+    user = crescent.option(
+        hikari.User,
+        name=_locales.LocaleBuilder(
+            "user",
+            russian="пользователь",
+            ukrainian="користувач",
+        ),
+        description=_locales.LocaleBuilder(
+            "User",
+            russian="Пользователь",
+            ukrainian="Користувач",
+        ),
+    )
+
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -50,17 +67,14 @@ class Statistics:
         ----------
         - `context` : `crescent.Context`
         """
-        user = await plugin.model.database.users.find_first(id=str(context.user.id))
-
         await context.respond(
             embed=(
                 embeds.embed(
-                    title="Статистика",
-                    description=f"""\
-                        :banana: Бананы: `{user.banana}`
-                        :monkey: Обезьяны: `{user.monkey}`
-                    """,
+                    title="Лизнуть",
+                    description=f"<@{context.user.id}> лизнул(а) <@{self.user.id}>",
                     color="default",
                 )
+                .set_author(name=context.user.username, icon=context.user.avatar_url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.LICK).url)
             )
         )

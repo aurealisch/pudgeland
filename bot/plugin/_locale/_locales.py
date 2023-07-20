@@ -19,46 +19,36 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import typing
+
+import attrs
 import crescent
-import woofy
-
-from bot.plugin import _animal, plugins
-from bot.plugin.locale import locales
-from bot.utility.embed import embeds
-
-plugin = plugins.Plugin()
+import hikari
 
 
-@_animal.group.child
-@plugin.include
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "dog",
-        russian="собака",
-        ukrainian="пес",
-    ),
-    description=locales.LocaleBuilder(
-        "Image of a dog",
-        russian="Изображение собаки",
-        ukrainian="Зображення собаки",
-    ),
-)
-class Dog:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
+@attrs.define
+class LocaleBuilder(crescent.LocaleBuilder):
+    _fallback: str
+
+    russian: str
+    ukrainian: str
+
+    def build(self) -> typing.Mapping[str, str]:
         """
-        Parameters
-        ----------
-        - `context` : `crescent.Context`
+        Returns
+        -------
+        typing.Mapping[str, str]
         """
-        await context.respond(
-            embed=(
-                embeds.embed(
-                    title="Собака",
-                    description="Изображение собаки",
-                    color="default",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(woofy.Client().images.search()[0].url)
-            )
-        )
+        return {
+            hikari.Locale.RU: self.russian,
+            hikari.Locale.UK: self.ukrainian,
+        }
+
+    @property
+    def fallback(self) -> str:
+        """
+        Returns
+        -------
+        str
+        """
+        return self._fallback

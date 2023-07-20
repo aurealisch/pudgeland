@@ -23,36 +23,37 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _action, plugins
-from bot.plugin.locale import locales
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.action import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_action.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "poke",
-        russian="тыкнуть",
-        ukrainian="тицьнути",
+    name=_locales.LocaleBuilder(
+        "hug",
+        russian="обнять",
+        ukrainian="обійняти",
     ),
-    description=locales.LocaleBuilder(
-        "Poke",
-        russian="Тыкнуть пользователя",
-        ukrainian="Тицьнути користувача",
+    description=_locales.LocaleBuilder(
+        "Hug the user",
+        russian="Обнять пользователя",
+        ukrainian="Обійняти користувача",
     ),
 )
-class Poke:
+class Hug:
     user = crescent.option(
         hikari.User,
-        name=locales.LocaleBuilder(
+        name=_locales.LocaleBuilder(
             "user",
             russian="пользователь",
             ukrainian="користувач",
         ),
-        description=locales.LocaleBuilder(
+        description=_locales.LocaleBuilder(
             "User",
             russian="Пользователь",
             ukrainian="Користувач",
@@ -69,11 +70,11 @@ class Poke:
         await context.respond(
             embed=(
                 embeds.embed(
-                    title="Тыкнуть",
-                    description=f"<@{context.user.id}> тыкнул(а) <@{self.user.id}>",
+                    title="Обнять",
+                    description=f"<@{context.user.id}> обнял(а) <@{self.user.id}>",
                     color="default",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.POKE).url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.HUG).url)
             )
         )

@@ -23,36 +23,37 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _action, plugins
-from bot.plugin.locale import locales
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.action import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_action.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "pat",
-        russian="погладить",
-        ukrainian="погладити",
+    name=_locales.LocaleBuilder(
+        "bite",
+        russian="укусить",
+        ukrainian="вкусити",
     ),
-    description=locales.LocaleBuilder(
-        "Pat",
-        russian="Погладить пользователя",
-        ukrainian="Погладити користувача",
+    description=_locales.LocaleBuilder(
+        "Bite the user",
+        russian="Укусить пользователя",
+        ukrainian="Вкусити користувача",
     ),
 )
-class Pat:
+class Bite:
     user = crescent.option(
         hikari.User,
-        name=locales.LocaleBuilder(
+        name=_locales.LocaleBuilder(
             "user",
             russian="пользователь",
             ukrainian="користувач",
         ),
-        description=locales.LocaleBuilder(
+        description=_locales.LocaleBuilder(
             "User",
             russian="Пользователь",
             ukrainian="Користувач",
@@ -69,11 +70,11 @@ class Pat:
         await context.respond(
             embed=(
                 embeds.embed(
-                    title="Погладить",
-                    description=f"<@{context.user.id}> погладил(а) <@{self.user.id}>",
+                    title="Укусить",
+                    description=f"<@{context.user.id}> укусил(а) <@{self.user.id}>",
                     color="default",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.PAT).url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
             )
         )

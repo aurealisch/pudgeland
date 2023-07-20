@@ -19,19 +19,4 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import crescent
-
-from bot.plugin.locale import locales
-
-group = crescent.Group(
-    name=locales.LocaleBuilder(
-        "animal",
-        russian="животное",
-        ukrainian="тварина",
-    ),
-    description=locales.LocaleBuilder(
-        "Animal",
-        russian="Животное",
-        ukrainian="Тварина",
-    ),
-)
+pass

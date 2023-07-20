@@ -20,45 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import crescent
-import meowy
 
-from bot.plugin import _animal, plugins
-from bot.plugin.locale import locales
-from bot.utility.embed import embeds
+from bot.plugin._locale import _locales
 
-plugin = plugins.Plugin()
-
-
-@_animal.group.child
-@plugin.include
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "cat",
-        russian="кот",
-        ukrainian="кiт",
+group = crescent.Group(
+    name=_locales.LocaleBuilder(
+        "action",
+        russian="действие",
+        ukrainian="дія",
     ),
-    description=locales.LocaleBuilder(
-        "Image of a cat",
-        russian="Изображение кота",
-        ukrainian="Зображення кота",
+    description=_locales.LocaleBuilder(
+        "Action",
+        russian="Действие",
+        ukrainian="Дія",
     ),
 )
-class Cat:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        """
-        Parameters
-        ----------
-        - `context` : `crescent.Context`
-        """
-        await context.respond(
-            embed=(
-                embeds.embed(
-                    title="Кот",
-                    description="Изображение кота",
-                    color="default",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(meowy.Client().images.search()[0].url)
-            )
-        )

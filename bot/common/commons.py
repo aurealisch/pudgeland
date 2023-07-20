@@ -22,11 +22,11 @@
 import json
 import os
 
+import crescent
 import dotenv
 import hikari
 
 import prisma as _prisma
-from bot.client import clients
 from bot.common.configuration import configurations
 from bot.common.database import databases
 from bot.common.environment import environments
@@ -34,12 +34,10 @@ from bot.common.model import models
 
 dotenv.load_dotenv()
 
+environment = environments.Environment(os.environ.get("GATEWAY_BOT_TOKEN"))
+
 configuration = configurations.Configuration(
     **json.loads(open("./configuration.json", encoding="utf-8").read())
-)
-
-environment = environments.Environment(
-    os.environ.get("GATEWAY_BOT_TOKEN"), database_url=os.environ.get("DATABASE_URL")
 )
 
 bot = hikari.GatewayBot(
@@ -57,4 +55,4 @@ model = models.Model(configuration, database=database, environment=environment)
 bot.subscribe(hikari.StartedEvent, model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, model.on_stopped_event)
 
-client = clients.Client(bot, model=model)
+client = crescent.Client(bot, model=model)

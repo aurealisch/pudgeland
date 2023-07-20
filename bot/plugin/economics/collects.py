@@ -19,46 +19,33 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import collei
-import crescent
-import hikari
+import random
 
-from bot.plugin import _action, plugins
-from bot.plugin.locale import locales
+import crescent
+
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.economics import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_action.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "kill",
-        russian="убить",
-        ukrainian="вбивати",
+    name=_locales.LocaleBuilder(
+        "collect",
+        russian="собирать",
+        ukrainian="збирати",
     ),
-    description=locales.LocaleBuilder(
-        "Kill",
-        russian="Убить пользователя",
-        ukrainian="Вбивати користувача",
+    description=_locales.LocaleBuilder(
+        "Сollect",
+        russian="Cобирать",
+        ukrainian="Збирати",
     ),
 )
-class Kill:
-    user = crescent.option(
-        hikari.User,
-        name=locales.LocaleBuilder(
-            "user",
-            russian="пользователь",
-            ukrainian="користувач",
-        ),
-        description=locales.LocaleBuilder(
-            "User",
-            russian="Пользователь",
-            ukrainian="Користувач",
-        ),
-    )
-
+class Collect:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         """
@@ -66,14 +53,35 @@ class Kill:
         ----------
         - `context` : `crescent.Context`
         """
+        id = str(context.user.id)
+
+        user = await plugin.model.database.find_first(id=id)
+
+        banana = user.banana
+        monkey = user.monkey
+
+        collecting = random.choice(
+            range(
+                plugin.model.configuration.by_hand_minimal,
+                plugin.model.configuration.by_hand_maximum,
+            )
+        )
+
+        await plugin.model.database.update(
+            id=id,
+            banana=banana + collecting,
+            monkey=monkey,
+        )
+
         await context.respond(
-            embed=(
-                embeds.embed(
-                    title="Убить",
-                    description=f"<@{context.user.id}> убил(а) <@{self.user.id}>",
-                    color="default",
-                )
-                .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.KILL).url)
+            embed=embeds.embed(
+                title="Собирать",
+                description=f"""
+                    <@{id}> собрал `{collecting}` бананов
+
+                    :banana: Бананы: `{banana + collecting}`
+                    :monkey: Обезьяны: `{monkey}`
+                """,
+                color="default",
             )
         )

@@ -23,36 +23,37 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _action, plugins
-from bot.plugin.locale import locales
+from bot.plugin import _plugins
+from bot.plugin._locale import _locales
+from bot.plugin.action import _groups
 from bot.utility.embed import embeds
 
-plugin = plugins.Plugin()
+plugin = _plugins.Plugin()
 
 
-@_action.group.child
+@_groups.group.child
 @plugin.include
 @crescent.command(
-    name=locales.LocaleBuilder(
-        "slap",
-        russian="шлёпнуть",
-        ukrainian="шльопнути",
+    name=_locales.LocaleBuilder(
+        "pat",
+        russian="погладить",
+        ukrainian="погладити",
     ),
-    description=locales.LocaleBuilder(
-        "Slap",
-        russian="Шлёпнуть пользователя",
-        ukrainian="Шльопнути користувача",
+    description=_locales.LocaleBuilder(
+        "Pat",
+        russian="Погладить пользователя",
+        ukrainian="Погладити користувача",
     ),
 )
-class Slap:
+class Pat:
     user = crescent.option(
         hikari.User,
-        name=locales.LocaleBuilder(
+        name=_locales.LocaleBuilder(
             "user",
             russian="пользователь",
             ukrainian="користувач",
         ),
-        description=locales.LocaleBuilder(
+        description=_locales.LocaleBuilder(
             "User",
             russian="Пользователь",
             ukrainian="Користувач",
@@ -69,11 +70,11 @@ class Slap:
         await context.respond(
             embed=(
                 embeds.embed(
-                    title="Шлёпнуть",
-                    description=f"<@{context.user.id}> шлёпнул(а) <@{self.user.id}>",
+                    title="Погладить",
+                    description=f"<@{context.user.id}> погладил(а) <@{self.user.id}>",
                     color="default",
                 )
                 .set_author(name=context.user.username, icon=context.user.avatar_url)
-                .set_image(collei.Client().sfw.get(collei.SfwCategory.SLAP).url)
+                .set_image(collei.Client().sfw.get(collei.SfwCategory.PAT).url)
             )
         )
