@@ -23,7 +23,7 @@ import crescent
 import mcstatus
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
+from bot.plugin.locale import locales
 from bot.plugin.server import _groups
 from bot.utility.embed import embeds
 
@@ -33,12 +33,12 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "query",
         russian="запрос",
         ukrainian="запит",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         """\
             Checks the status of a Minecraft Java Edition server
             via the query protocol.
@@ -102,9 +102,9 @@ class Query:
                         Плагины: ||{
                             ", ".join(
                                 [
-                                    f"`{plugin}`"
+                                    f"`{_plugin}`"
 
-                                    for plugin in software.plugins
+                                    for _plugin in software.plugins
                                 ]
                             )
                         }||

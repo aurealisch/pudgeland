@@ -26,7 +26,10 @@ import uvicorn
 from bot.api.app import apps
 from bot.common import commons
 
-commons.client.plugins.load_folder("bot.plugin")
+commons.client.plugins.load_folder("bot.plugin.action")
+commons.client.plugins.load_folder("bot.plugin.animal")
+commons.client.plugins.load_folder("bot.plugin.economics")
+commons.client.plugins.load_folder("bot.plugin.server")
 
 threading.Thread(
     target=lambda: uvicorn.run(

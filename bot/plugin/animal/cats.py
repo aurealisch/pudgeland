@@ -23,8 +23,8 @@ import crescent
 import meowy
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
 from bot.plugin.animal import _groups
+from bot.plugin.locale import locales
 from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
@@ -33,12 +33,12 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "cat",
         russian="кот",
         ukrainian="кiт",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Image of a cat",
         russian="Изображение кота",
         ukrainian="Зображення кота",

@@ -24,8 +24,8 @@ import random
 import crescent
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
 from bot.plugin.economics import _groups
+from bot.plugin.locale import locales
 from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
@@ -34,12 +34,12 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "collect",
         russian="собирать",
         ukrainian="збирати",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Сollect",
         russian="Cобирать",
         ukrainian="Збирати",
@@ -53,9 +53,9 @@ class Collect:
         ----------
         - `context` : `crescent.Context`
         """
-        id = str(context.user.id)
+        id__ = str(context.user.id)
 
-        user = await plugin.model.database.find_first(id=id)
+        user = await plugin.model.database.find_first(id__=id__)
 
         banana = user.banana
         monkey = user.monkey
@@ -68,7 +68,7 @@ class Collect:
         )
 
         await plugin.model.database.update(
-            id=id,
+            id__=id__,
             banana=banana + collecting,
             monkey=monkey,
         )

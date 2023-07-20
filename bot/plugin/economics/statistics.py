@@ -22,8 +22,8 @@
 import crescent
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
 from bot.plugin.economics import _groups
+from bot.plugin.locale import locales
 from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
@@ -32,12 +32,12 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "statistics",
         russian="статистика",
         ukrainian="статистика",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Statistics",
         russian="Статистика",
         ukrainian="Статистика",
@@ -51,7 +51,7 @@ class Statistics:
         ----------
         - `context` : `crescent.Context`
         """
-        user = await plugin.model.database.find_first(id=str(context.user.id))
+        user = await plugin.model.database.find_first(id__=str(context.user.id))
 
         await context.respond(
             embed=(

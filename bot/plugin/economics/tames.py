@@ -24,8 +24,8 @@ import random
 import crescent
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
 from bot.plugin.economics import _groups
+from bot.plugin.locale import locales
 from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
@@ -34,12 +34,12 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "tame",
         russian="приручать",
         ukrainian="приручати",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Tame",
         russian="Приручать",
         ukrainian="Приручати",
@@ -53,9 +53,9 @@ class Tame:
         ----------
         - `context` : `crescent.Context`
         """
-        id = str(context.user.id)
+        id__ = str(context.user.id)
 
-        user = await plugin.model.database.find_first(id=id)
+        user = await plugin.model.database.find_first(id__=id__)
 
         banana = user.banana
         monkey = user.monkey
@@ -64,7 +64,7 @@ class Tame:
 
         if random.choice(range(1, 10)) != 1:
             await plugin.model.database.update(
-                id=id,
+                id__=id__,
                 banana=banana - fed,
                 monkey=monkey,
             )
@@ -83,11 +83,12 @@ class Tame:
                         :banana: Бананы: `{banana}`
                         :monkey: Обезьяны: `{monkey}`
                     """,
+                    color="default",
                 )
             )
 
-        await plugin.model.database.users.update(
-            id=id,
+        await plugin.model.database.update(
+            id__=id__,
             banana=banana - fed,
             monkey=monkey + 1,
         )
@@ -107,5 +108,6 @@ class Tame:
                     :banana: Бананы: `{user.banana}`
                     :monkey: Обезьяны: `{user.monkey}`
                 """,
+                color="default",
             )
         )

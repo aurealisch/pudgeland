@@ -24,8 +24,8 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
 from bot.plugin.action import _groups
+from bot.plugin.locale import locales
 from bot.utility.embed import embeds
 
 plugin = _plugins.Plugin()
@@ -34,12 +34,12 @@ plugin = _plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "lick",
         russian="лизнуть",
         ukrainian="лизнути",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Lick the user",
         russian="Лизнуть пользователя",
         ukrainian="Лизнути користувача",
@@ -48,12 +48,12 @@ plugin = _plugins.Plugin()
 class Lick:
     user = crescent.option(
         hikari.User,
-        name=_locales.LocaleBuilder(
+        name=locales.LocaleBuilder(
             "user",
             russian="пользователь",
             ukrainian="користувач",
         ),
-        description=_locales.LocaleBuilder(
+        description=locales.LocaleBuilder(
             "User",
             russian="Пользователь",
             ukrainian="Користувач",

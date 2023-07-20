@@ -28,40 +28,42 @@ import prisma as _prisma
 class Database:
     prisma: _prisma.Prisma
 
+    # noinspection PyMethodMayBeStatic
     async def find_first(
-        self, *, id: str | _prisma.types.StringFilter = ...
+        self, *, id__: str | _prisma.types.StringFilter = ...
     ) -> _prisma.models.User | None:
         """
         Other parameters
         -----------------
-        `id` : `str` | `prisma.types.StringFilter`
+        `id__` : `str` | `prisma.types.StringFilter`
 
         Returns
         -------
         `prisma.models.User` | `None`
         """
         user = await _prisma.models.User.prisma().find_first(
-            where=_prisma.types.UserWhereInput(id=id)
+            where=_prisma.types.UserWhereInput(id=id__)
         )
 
         if user is None:
             user = await _prisma.models.User.prisma().create(
-                _prisma.types.UserCreateInput(id=id)
+                _prisma.types.UserCreateInput(id=id__)
             )
 
         return user
 
+    # noinspection PyMethodMayBeStatic
     async def update(
         self,
         *,
-        id: str = ...,
+        id__: str = ...,
         banana: _prisma.types.AtomicIntInput | int = ...,
         monkey: _prisma.types.AtomicIntInput | int = ...,
     ) -> _prisma.models.User | None:
         """
         Other parameters
         ----------------
-        - `id` : `str`
+        - `id__` : `str`
         - `banana` : `types.AtomicIntInput` | `int`
         - `monkey` : `types.AtomicIntInput` | `int`
 
@@ -74,5 +76,5 @@ class Database:
                 banana=banana,
                 monkey=monkey,
             ),
-            where=_prisma.types.UserWhereUniqueInput(id=id),
+            where=_prisma.types.UserWhereUniqueInput(id=id__),
         )

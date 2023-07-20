@@ -24,8 +24,8 @@ import os
 
 import dotenv
 import hikari
-
 import prisma as _prisma
+
 from bot.client import clients
 from bot.common.configuration import configurations
 from bot.common.database import databases
