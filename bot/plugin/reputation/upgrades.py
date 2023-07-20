@@ -64,6 +64,12 @@ class Upgrade:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
         _optional = str(self.user.id)
+        _contextual = str(context.user.id)
+
+        if _optional == _contextual:
+            raise ValueError("Выбранный пользователь является автором взаимодействия")
+
+        _optional = str(self.user.id)
 
         optional = await plugin.model.database.find_first(_optional)
 
@@ -76,7 +82,7 @@ class Upgrade:
 
         title = "Повысить"
         description = f"""\
-            <@{context.user.id}> повысил репутацию <@{_optional}>
+            <@{_contextual}> повысил репутацию <@{_optional}>
 
             📈 Репутация: `{optional.reputation + 1}`
         """

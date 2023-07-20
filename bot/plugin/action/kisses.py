@@ -61,6 +61,12 @@ class Kiss:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
+        optional = self.user.id
+        contextual = context.user.id
+
+        if optional == contextual:
+            raise ValueError("Выбранный пользователь является автором взаимодействия")
+
         title = "Поцеловать"
         description = f"<@{context.user.id}> поцеловал(а) <@{self.user.id}>"
 

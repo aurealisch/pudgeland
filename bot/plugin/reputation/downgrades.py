@@ -64,6 +64,10 @@ class Downgrade:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
         _optional = str(self.user.id)
+        _contextual = str(context.user.id)
+
+        if _optional == _contextual:
+            raise ValueError("Выбранный пользователь является автором взаимодействия")
 
         optional = await plugin.model.database.find_first(_optional)
 
@@ -76,7 +80,7 @@ class Downgrade:
 
         title = "Понизить"
         description = f"""\
-            <@{context.user.id}> понизил репутацию <@{_optional}>
+            <@{_contextual}> понизил репутацию <@{_optional}>
 
             📉 Репутация: `{optional.reputation - 1}`
         """

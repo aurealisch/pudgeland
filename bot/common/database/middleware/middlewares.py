@@ -33,7 +33,7 @@ class Middleware:
     async def find_first(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User | None:
-        return await self.prisma.user.prisma().find_first(
+        return await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
 

@@ -64,6 +64,12 @@ class Hug:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        optional = self.user.id
+        contextual = context.user.id
+
+        if optional == contextual:
+            raise ValueError("Выбранный пользователь является автором взаимодействия")
+
         title = "Обнять"
         description = f"<@{context.user.id}> обнял(а) <@{self.user.id}>"
 
