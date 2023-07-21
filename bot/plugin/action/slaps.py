@@ -26,8 +26,9 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _plugins
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -64,14 +65,39 @@ class Slap:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         optional = self.user.id
         contextual = context.user.id
 
         if optional == contextual:
-            raise ValueError("Выбранный пользователь является автором взаимодействия")
+            raise ValueError(
+                helpers.helper(
+                    locale,
+                    localesBuilder=locales.LocaleBuilder(
+                        "The contextual user is the selected user",
+                        ru="Контекстный пользователь является выбранным пользователем",
+                        uk="Контекстний користувач є обраним Користувачем",
+                    ),
+                )
+            )
 
-        title = "Шлёпнуть"
-        description = f"<@{context.user.id}> шлёпнул(а) <@{self.user.id}>"
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Slap",
+                ru="Шлёпнуть",
+                uk="Шльопнути",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"<@{context.user.id} slapped <@{self.user.id}",
+                ru=f"<@{context.user.id}> шлёпнул <@{self.user.id}>",
+                uk=f"<@{context.user.id}> шльопнути <@{self.user.id}>",
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
