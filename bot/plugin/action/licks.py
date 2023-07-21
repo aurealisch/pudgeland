@@ -27,19 +27,19 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.locale import _locales
+from bot.locale.plugin import locales
 
 plugin = _plugins.Plugin()
 
 
 @plugin.include
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "lick",
         ru="лизнуть",
         uk="лизнути",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Lick the user",
         ru="Лизнуть пользователя",
         uk="Лизнути користувача",
@@ -49,12 +49,12 @@ class Lick:
     # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
-        name=_locales.LocaleBuilder(
+        name=locales.LocaleBuilder(
             "user",
             ru="пользователь",
             uk="користувач",
         ),
-        description=_locales.LocaleBuilder(
+        description=locales.LocaleBuilder(
             "User",
             ru="Пользователь",
             uk="Користувач",

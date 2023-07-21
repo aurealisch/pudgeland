@@ -26,8 +26,8 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.cooldown import _cooldowns
-from bot.plugin.locale import _locales
+from bot.cooldown.plugin import cooldowns
+from bot.locale.plugin import locales
 
 plugin = _plugins.Plugin()
 
@@ -37,15 +37,15 @@ period = 6 * 60 * 60
 
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(_cooldowns.cooldown(1, period=period))
+@crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "downgrade",
         ru="понизить",
         uk="понизивши",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Downgrade",
         ru="Понизить",
         uk="Понизивши",
@@ -55,12 +55,12 @@ class Downgrade:
     # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
-        name=_locales.LocaleBuilder(
+        name=locales.LocaleBuilder(
             "user",
             ru="пользователь",
             uk="користувач",
         ),
-        description=_locales.LocaleBuilder(
+        description=locales.LocaleBuilder(
             "User",
             ru="Пользователь",
             uk="Користувач",

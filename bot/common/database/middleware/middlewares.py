@@ -61,5 +61,5 @@ class Middleware:
                 monkey=monkey,
                 reputation=reputation,
             ),
-            where=_prisma.types.UserWhereInput(id=id__),
+            where=_prisma.types.UserWhereUniqueInput(id=id__),
         )

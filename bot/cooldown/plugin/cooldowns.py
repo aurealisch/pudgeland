@@ -118,7 +118,6 @@ class Cooldown(typing.Generic[_K]):
 
             return sliding_windows
 
-    @property
     def remained(self, key: _K) -> float:
         return self.get_bucket(key).remained
 
@@ -126,11 +125,13 @@ class Cooldown(typing.Generic[_K]):
         return self.get_bucket(key).trigger()
 
 
-def cooldown(capacity: float, period: float) -> None:
-    cooldown = Cooldown(capacity, period=period)
+def cooldown(
+    capacity: float, period: float
+) -> typing.Callable[[crescent.Context], typing.Awaitable[crescent.HookResult | None]]:
+    _cooldown = Cooldown(capacity, period=period)
 
-    async def inner(context: crescent.Context) -> None:
-        remained = cooldown.trigger(context.user.id)
+    async def inner(context: crescent.Context) -> crescent.HookResult | None:
+        remained = _cooldown.trigger(context.user.id)
 
         if remained is None:
             return None

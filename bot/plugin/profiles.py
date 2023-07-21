@@ -26,8 +26,8 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.cooldown import _cooldowns
-from bot.plugin.locale import _locales
+from bot.cooldown.plugin import cooldowns
+from bot.locale.plugin import locales
 
 plugin = _plugins.Plugin()
 
@@ -37,15 +37,15 @@ period = 5
 
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(_cooldowns.cooldown(1, period=period))
+@crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "profile",
         ru="профиль",
         uk="профіль",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Profile",
         ru="Профиль",
         uk="Профіль",

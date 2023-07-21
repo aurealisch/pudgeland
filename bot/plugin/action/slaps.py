@@ -27,7 +27,7 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.locale import _locales
+from bot.locale.plugin import locales
 
 plugin = _plugins.Plugin()
 
@@ -35,12 +35,12 @@ plugin = _plugins.Plugin()
 @plugin.include
 # Register a slash command.
 @crescent.command(
-    name=_locales.LocaleBuilder(
+    name=locales.LocaleBuilder(
         "slap",
         ru="шлёпнуть",
         uk="шльопнути",
     ),
-    description=_locales.LocaleBuilder(
+    description=locales.LocaleBuilder(
         "Slap",
         ru="Шлёпнуть пользователя",
         uk="Шльопнути користувача",
@@ -50,12 +50,12 @@ class Slap:
     # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
-        name=_locales.LocaleBuilder(
+        name=locales.LocaleBuilder(
             "user",
             ru="пользователь",
             uk="користувач",
         ),
-        description=_locales.LocaleBuilder(
+        description=locales.LocaleBuilder(
             "User",
             ru="Пользователь",
             uk="Користувач",
