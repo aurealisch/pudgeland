@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import typing
+import string
 
 import crescent
 import hikari
@@ -64,33 +65,45 @@ class Profile:
 
         title = locales.of(
             locale,
-            locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Profile",
                 ru="Профиль",
                 uk="Профіль",
             ),
         )
+
+        template = string.Template(
+            f"""\
+                🍌 $bananas: `{user.banana}`
+                🐒 $monkeys: `{user.monkey}`
+
+                📊 $reputation: `{user.reputation}`
+            """,
+        )
+
         description = locales.of(
             locale,
-            locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 f"""\
                     🍌 Bananas: `{user.banana}`
                     🐒 Monkeys: `{user.monkey}`
 
                     📊 Reputation: `{user.reputation}`
                 """,
-                ru=f"""\
-                    🍌 Бананы: `{user.banana}`
-                    🐒 Обезьяны: `{user.monkey}`
-
-                    📊 Репутация: `{user.reputation}`
-                """,
-                uk=f"""\
-                    🍌 Банан: `{user.banana}`
-                    🐒 Мавпа: `{user.monkey}`
-
-                    📊 Репутація: `{user.reputation}`
-                """,
+                ru=template.substitute(
+                    {
+                        "bananas": "Бананы",
+                        "monkeys": "Обезьян",
+                        "reputation": "Репутация",
+                    }
+                ),
+                uk=template.substitute(
+                    {
+                        "bananas": "Банан",
+                        "monkeys": "Мавпа",
+                        "reputation": "Репутація",
+                    }
+                ),
             ),
         )
 
