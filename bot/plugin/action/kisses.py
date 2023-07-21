@@ -25,7 +25,7 @@ import hikari
 
 from bot.plugin import _plugins
 from bot.plugin.action import _groups
-from bot.plugin._locale import _locales
+from bot.plugin.locale import _locales
 
 plugin = _plugins.Plugin()
 

@@ -26,14 +26,19 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
+from bot.plugin.cooldown import _cooldowns
+from bot.plugin.locale import _locales
 from bot.plugin.reputation import _groups
 
 plugin = _plugins.Plugin()
 
+# 6 hours
+period = 6 * 60 * 60
+
 
 @_groups.group.child
 @plugin.include
+@crescent.hook(_cooldowns.cooldown(1, period=period))
 @crescent.command(
     name=_locales.LocaleBuilder(
         "upgrade",
@@ -68,8 +73,6 @@ class Upgrade:
 
         if _optional == _contextual:
             raise ValueError("Выбранный пользователь является автором взаимодействия")
-
-        _optional = str(self.user.id)
 
         optional = await plugin.model.database.find_first(_optional)
 

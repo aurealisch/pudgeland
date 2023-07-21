@@ -37,6 +37,7 @@ def target() -> None:
 
 
 thread = threading.Thread(target=target)
+
 thread.start()
 
 commons.bot.run()

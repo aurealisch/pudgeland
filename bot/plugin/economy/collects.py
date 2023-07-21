@@ -27,14 +27,20 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
+from bot.plugin.cooldown import _cooldowns
 from bot.plugin.economy import _groups
+from bot.plugin.locale import _locales
 
 plugin = _plugins.Plugin()
 
 
+# 2 hours
+period = 2 * 60 * 60
+
+
 @_groups.group.child
 @plugin.include
+@crescent.hook(_cooldowns.cooldown(1, period=period))
 @crescent.command(
     name=_locales.LocaleBuilder(
         "collect",
@@ -65,18 +71,33 @@ class Collect:
             )
         )
 
-        await plugin.model.database.middleware.update(
-            contextual,
-            banana=banana + collecting,
-            monkey=monkey,
-            reputation=reputation,
-        )
+        banana += collecting
 
         title = "Собирать"
         description = f"""\
             <@{contextual}> собрал `{collecting}` бананов
+        """
 
-            :banana: Бананы: `{banana + collecting}`
+        if monkey != 0:
+            # If user has monkeys
+            ratio = random.choice(range(1, 50))
+
+            monkeyish = monkey * (50 + ratio)
+
+            banana += monkeyish
+
+            description += f"\n+ `{monkeyish}` бананов от `{monkey}` обезьян"
+
+        await plugin.model.database.middleware.update(
+            contextual,
+            banana=banana,
+            monkey=monkey,
+            reputation=reputation,
+        )
+
+        description += f"""\
+            \n\n
+            :banana: Бананы: `{banana}`
             :monkey: Обезьяны: `{monkey}`
         """
 

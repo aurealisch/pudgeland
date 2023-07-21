@@ -26,12 +26,17 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
+from bot.plugin.cooldown import _cooldowns
+from bot.plugin.locale import _locales
 
 plugin = _plugins.Plugin()
 
+# 5 seconds
+period = 5
+
 
 @plugin.include
+@crescent.hook(_cooldowns.cooldown(1, period=period))
 @crescent.command(
     name=_locales.LocaleBuilder(
         "profile",

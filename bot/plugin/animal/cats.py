@@ -27,7 +27,7 @@ import hikari
 import meowy
 
 from bot.plugin import _plugins
-from bot.plugin._locale import _locales
+from bot.plugin.locale import _locales
 from bot.plugin.animal import _groups
 
 plugin = _plugins.Plugin()

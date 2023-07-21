@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8.0,<3.12"
+python = ">=3.10,<3.12"
 pre-commit = "^3.3.3"
 ruff = "^0.0.278"
 attrs = "^23.1.0"
@@ -31,7 +31,7 @@ woofy = "^1.0.1"
 collei = "^1.0.2"
 msgspec = "^0.16.0"
 hikari = "^2.0.0.dev120"
-hikari-crescent = {extras = ["cooldowns"], version = "^0.6.2"}
+hikari-crescent = "^0.6.2"
 
 [build-system]
 requires = ["poetry-core"]

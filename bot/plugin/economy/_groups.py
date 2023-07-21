@@ -22,7 +22,7 @@
 # SOFTWARE.
 import crescent
 
-from bot.plugin._locale import _locales
+from bot.plugin.locale import _locales
 
 group = crescent.Group(
     name=_locales.LocaleBuilder(
