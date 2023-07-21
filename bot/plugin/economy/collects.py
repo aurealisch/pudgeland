@@ -26,9 +26,9 @@ import typing
 import crescent
 import hikari
 
-from bot.plugin import _plugins
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 

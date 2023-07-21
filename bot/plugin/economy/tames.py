@@ -24,12 +24,12 @@ import random
 import typing
 
 import crescent
-
 import hikari
+import miru
 
-from bot.plugin import _plugins
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -37,30 +37,18 @@ plugin = _plugins.Plugin()
 period = 5
 
 
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "tame",
-        ru="приручать",
-        uk="приручати",
-    ),
-    description=locales.LocaleBuilder(
-        "Tame",
-        ru="Приручать",
-        uk="Приручати",
-    ),
-)
-class Tame:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self: typing.Self, context: crescent.Context) -> None:
-        # Defer this interaction response,
-        # allowing you to respond within the next 15 minutes.
-        await context.defer(ephemeral=False)
+class View(miru.View):
+    # A decorator to transform a coroutine function into a Discord UI Button's callback.
+    # This must be inside a subclass of View.
+    @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
+    async def ok(self, _: miru.Button, view_context: miru.ViewContext) -> None:
+        view = view_context.view
 
-        contextual = str(context.user.id)
+        # Short-hand method to defer an interaction response.
+        # Raises RuntimeError if the interaction was already responded to.
+        await view_context.defer(ephemeral=False)
+
+        contextual = str(view_context.user.id)
 
         user = await plugin.model.database.find_first(contextual)
 
@@ -69,6 +57,9 @@ class Tame:
         reputation = user.reputation
 
         fed = (monkey + 1) * 250
+
+        if fed > banana:
+            raise ValueError("Недостаточно бананов")
 
         if random.choice(range(1, 10)) != 1:
             await plugin.model.database.middleware.update(
@@ -85,7 +76,7 @@ class Tame:
 
                 ❌ Не получилось приручить обезьяну...
 
-                ```diff\n- {fed} бананов 🍌```
+                ```diff- {fed} бананов 🍌```
 
                 :banana: Бананы: `{banana - fed}`
                 :monkey: Обезьяны: `{monkey}`
@@ -93,9 +84,13 @@ class Tame:
 
             embed = hikari.Embed(title=title, description=description)
 
-            # Respond to an interaction.
-            # This function can be used multiple times for one interaction.
-            await context.respond(embed=embed)
+            # Short-hand method to create a new message response via the interaction
+            # this context represents.
+            await view_context.respond(embed=embed)
+
+            if view is not None:
+                # Stop listening for interactions.
+                view.stop()
 
             return
 
@@ -122,6 +117,76 @@ class Tame:
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Short-hand method to create a new message response via the interaction
+        # this context represents.
+        await view_context.respond(embed=embed)
+
+        if view is not None:
+            # Stop listening for interactions.
+            view.stop()
+
+    # A decorator to transform a coroutine function into a Discord UI Button's callback.
+    # This must be inside a subclass of View.
+    @miru.button(label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌")
+    async def cancel(self, _: miru.Button, view_context: miru.ViewContext) -> None:
+        view = view_context.view
+
+        title = "Отменить"
+        description = "Отменено"
+
+        embed = hikari.Embed(title=title, description=description)
+
+        # Short-hand method to create a new message response via the interaction this
+        # context represents.
+        await view_context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+        if view is not None:
+            # Stop listening for interactions.
+            view.stop()
+
+
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(
+    name=locales.LocaleBuilder(
+        "tame",
+        ru="приручать",
+        uk="приручати",
+    ),
+    description=locales.LocaleBuilder(
+        "Tame",
+        ru="Приручать",
+        uk="Приручати",
+    ),
+)
+class Tame:
+    # noinspection PyMethodMayBeStatic
+    async def callback(self: typing.Self, context: crescent.Context) -> None:
+        contextual = str(context.user.id)
+
+        user = await plugin.model.database.find_first(contextual)
+
+        monkey = user.monkey
+
+        fed = (monkey + 1) * 250
+
+        title = "Приручать"
+        description = f"""\
+            Чтобы попробовать приручить обезьяну потребуется скормить `{fed}` бананов
+        """
+
+        embed = hikari.Embed(title=title, description=description)
+
+        view = View(timeout=60)
+
         # Respond to an interaction.
         # This function can be used multiple times for one interaction.
-        await context.respond(embed=embed)
+        message = await context.respond(
+            ensure_message=True, ephemeral=True, components=view, embed=embed
+        )
+
+        if message is not None:
+            # Start up the view and begin listening for interactions.
+            await view.start(message)

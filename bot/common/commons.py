@@ -24,6 +24,7 @@ import os
 
 import dotenv
 import hikari
+import miru
 import msgspec
 
 import prisma as _prisma
@@ -57,6 +58,9 @@ environment = environments.Environment(token, url=url)
 model = models.Model(configuration, database=database, environment=environment)
 
 bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
+
+# Install flare under the given bot instance.
+miru.install(bot)
 
 # Subscribe a given callback to a given event type.
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)

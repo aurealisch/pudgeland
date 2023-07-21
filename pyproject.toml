@@ -32,6 +32,7 @@ collei = "^1.0.2"
 msgspec = "^0.16.0"
 hikari = "^2.0.0.dev120"
 hikari-crescent = "^0.6.2"
+hikari-miru = "^3.1.2"
 
 [build-system]
 requires = ["poetry-core"]

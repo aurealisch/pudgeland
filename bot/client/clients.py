@@ -34,11 +34,10 @@ class Client(crescent.Client):
             return
 
         exc_class = exc.__class__
-        exc_class_name = exc_class.__name__
         exc_traceback = exc.__traceback__
 
         title = "Исключение"
-        description = f"`{exc_class_name}: {exc}`"
+        description = f"`{exc}`"
 
         embed = hikari.Embed(title=title, description=description)
 
