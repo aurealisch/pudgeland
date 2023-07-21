@@ -20,6 +20,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import string
 import typing
 
 import crescent
@@ -99,24 +100,36 @@ class Remove:
                 uk="Поприбирати",
             ),
         )
+
+        template = string.Template(
+            f"""
+                <@{_contextual} $action <@{_optional}>
+
+                📉 $reputation: `{optional.reputation - 1}`
+            """
+        )
+
         description = helpers.helper(
             locale,
             localesBuilder=locales.LocaleBuilder(
-                f"""\
-                    <@{_contextual} removed the reputation <@{_optional}>
-
-                    📉 Reputation: `{optional.reputation - 1}`
-                """,
-                ru=f"""\
-                    <@{_contextual}> убрал репутацию <@{_optional}>
-
-                    📉 Репутация: `{optional.reputation - 1}`
-                """,
-                uk=f"""\
-                    <@{_contextual} прибрав репутацію <@{_optional}>
-
-                    📉 Репутація: `{optional.reputation - 1}`
-                """,
+                template.substitute(
+                    {
+                        "action": "removed the reputation",
+                        "reputation": "Reputation",
+                    },
+                ),
+                ru=template.substitute(
+                    {
+                        "action": "убрал репутацию",
+                        "reputation": "Репутация",
+                    },
+                ),
+                uk=template.substitute(
+                    {
+                        "action": "прибрав репутацію",
+                        "reputation": "Репутація",
+                    },
+                ),
             ),
         )
 

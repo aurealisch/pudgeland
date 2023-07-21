@@ -20,6 +20,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import string
 import typing
 
 import crescent
@@ -99,24 +100,36 @@ class Add:
                 uk="Пiдвищивши",
             ),
         )
+
+        template = string.Template(
+            f"""
+                <@{_contextual} $action <@{_optional}>
+
+                📈 $reputation: `{optional.reputation + 1}`
+            """
+        )
+
         description = helpers.helper(
             locale,
             localesBuilder=locales.LocaleBuilder(
-                f"""\
-                    <@{_contextual} added a reputation <@{_optional}>
-
-                    📈 Reputation: `{optional.reputation + 1}`
-                """,
-                ru=f"""\
-                    <@{_contextual}> добавил репутацию <@{_optional}>
-
-                    📈 Репутация: `{optional.reputation + 1}`
-                """,
-                uk=f"""\
-                    <@{_contextual} додав репутацію <@{_optional}>
-
-                    📈 Репутація: `{optional.reputation + 1}`
-                """,
+                template.substitute(
+                    {
+                        "action": "added a reputation",
+                        "reputation": "Reputation",
+                    },
+                ),
+                ru=template.substitute(
+                    {
+                        "action": "добавил репутацию",
+                        "reputation": "Репутация",
+                    },
+                ),
+                uk=template.substitute(
+                    {
+                        "action": "додав репутацію",
+                        "reputation": "Репутація",
+                    },
+                ),
             ),
         )
 
