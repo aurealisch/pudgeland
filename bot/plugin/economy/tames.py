@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import random
+import string
 import typing
 
 import crescent
@@ -29,6 +30,7 @@ import miru
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -42,6 +44,8 @@ class View(miru.View):
     # This must be inside a subclass of View.
     @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
     async def ok(self, _: miru.Button, view_context: miru.ViewContext) -> None:
+        locale = view_context.locale
+
         view = view_context.view
 
         # Short-hand method to defer an interaction response.
@@ -59,7 +63,25 @@ class View(miru.View):
         fed = (monkey + 1) * 250
 
         if fed > banana:
-            raise ValueError("Недостаточно бананов")
+            raise ValueError(
+                helpers.helper(
+                    locale,
+                    localesBuilder=locales.LocaleBuilder(
+                        "Not enough bananas",
+                        ru="Недостаточно бананов",
+                        uk="Недостатньо бананів",
+                    ),
+                )
+            )
+
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Tame",
+                ru="Приручать",
+                uk="Приручати",
+            ),
+        )
 
         if random.choice(range(1, 10)) != 1:
             await plugin.model.database.middleware.update(
@@ -69,18 +91,58 @@ class View(miru.View):
                 reputation=reputation,
             )
 
-            title = "Приручать"
-            description = f"""\
-                Вы скормили 🍌 `{fed}` бананов
-                и..
+            template = string.Template(
+                f"""\
+                    $you $fed 🍌 `{fed}` $bananas1
+                    $and...
 
-                ❌ Не получилось приручить обезьяну...
+                    ❌ $failedToTameTheMonkey...
 
-                ```diff- {fed} бананов 🍌```
+                    ```diff\n- {fed} $bananas1 🍌```
 
-                :banana: Бананы: `{banana - fed}`
-                :monkey: Обезьяны: `{monkey}`
-            """
+                    🍌 $bananas2: `{banana - fed}`
+                    🐒 $monkeys: `{monkey}`
+                """
+            )
+
+            description = helpers.helper(
+                locale,
+                localesBuilder=locales.LocaleBuilder(
+                    f"""\
+                        You fed 🍌 `{fed}` bananas
+                        and...
+
+                        ❌ Failed to tame the monkey...
+
+                        ```diff\n- {fed} bananas 🍌```
+
+                        🍌 Bananas: `{banana - fed}`
+                        🐒 Monkeys: `{monkey}`
+                    """,
+                    ru=template.substitute(
+                        {
+                            "you": "Вы",
+                            "fed": "скормили",
+                            "bananas1": "бананов",
+                            "and": "и",
+                            "failedToTameTheMonkey": "Не получилось приручить обезьяну",
+                            "bananas2": "Бананы",
+                            "monkeys": "Обезьян",
+                        },
+                    ),
+                    uk=template.substitute(
+                        {
+                            "you": "Ви",
+                            "fed": "нагодували",
+                            "bananas1": "бананів",
+                            "and": "і",
+                            "failedToTameTheMonkey": "Не вийшло приручити мавпу",
+                            "bananas2": "Банан",
+                            "monkeys": "Мавпа",
+                        },
+                    ),
+                ),
+            )
 
             embed = hikari.Embed(title=title, description=description)
 
@@ -101,19 +163,60 @@ class View(miru.View):
             reputation=reputation,
         )
 
-        title = "Приручать"
-        description = f"""\
-            Вы скормили 🍌 `{fed}` бананов
-            и..
+        template = string.Template(
+            f"""\
+                $you $fed 🍌 `{fed}` $bananas1
+                $and...
 
-            ✅ Получилось приручить обезьяну!!!
+                ✅ $itTurnedOutToTameAMonkey!!!
 
-            ```diff\n- {fed} бананов 🍌```
-            ```diff\n+ 1 обезьяна 🐒```
+                ```diff\n- {fed} $bananas1 🍌```
+                ```diff\n+ 1 $monkey 🐒```
 
-            :banana: Бананы: `{user.banana - fed}`
-            :monkey: Обезьяны: `{user.monkey + 1}`
-        """
+                🍌 $bananas2: `{banana - fed}`
+                🐒 $monkeys: `{monkey + 1}`
+            """
+        )
+
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"""\
+                    You fed 🍌 `{fed}` bananas
+                    and...
+
+                    ✅ It turned out to tame a monkey!!!
+
+                    ```diff\n- {fed} bananas 🍌```
+                    ```diff\n+ 1 monkey 🐒```
+
+                    🍌 Bananas: `{banana - fed}`
+                    🐒 Monkeys: `{monkey + 1}`
+                """,
+                ru=template.substitute(
+                    {
+                        "you": "Вы",
+                        "fed": "скормили",
+                        "bananas1": "бананов",
+                        "and": "и",
+                        "itTurnedOutToTameAMonkey": "Получилось приручить обезьяну",
+                        "bananas2": "Бананы",
+                        "monkeys": "Обезьян",
+                    },
+                ),
+                uk=template.substitute(
+                    {
+                        "you": "Ви",
+                        "fed": "нагодували",
+                        "bananas1": "бананів",
+                        "and": "і",
+                        "itTurnedOutToTameAMonkey": "Вийшло приручити мавпу",
+                        "bananas2": "Банан",
+                        "monkeys": "Мавпа",
+                    },
+                ),
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -129,10 +232,26 @@ class View(miru.View):
     # This must be inside a subclass of View.
     @miru.button(label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌")
     async def cancel(self, _: miru.Button, view_context: miru.ViewContext) -> None:
+        locale = view_context.locale
+
         view = view_context.view
 
-        title = "Отменить"
-        description = "Отменено"
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Cancel",
+                ru="Отменить",
+                uk="Відмінивши",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Cancelled",
+                ru="Отменено",
+                uk="Скасований",
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -164,6 +283,8 @@ class View(miru.View):
 class Tame:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         contextual = str(context.user.id)
 
         user = await plugin.model.database.find_first(contextual)
@@ -172,10 +293,39 @@ class Tame:
 
         fed = (monkey + 1) * 250
 
-        title = "Приручать"
-        description = f"""\
-            Чтобы попробовать приручить обезьяну потребуется скормить `{fed}` бананов
-        """
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Tame",
+                ru="Приручать",
+                uk="Приручати",
+            ),
+        )
+
+        template = string.Template(
+            f"$toTryToTameAMonkey, $youWillNeedToFeed `{fed}` $bananas"
+        )
+
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"To try to tame a monkey, you will need to feed `{fed}` bananas",
+                ru=template.substitute(
+                    {
+                        "toTryToTameAMonkey": "Чтобы попробовать приручить обезьяну",
+                        "youWillNeedToFeed": "потребуется скормить",
+                        "bananas": "бананов",
+                    }
+                ),
+                uk=template.substitute(
+                    {
+                        "toTryToTameAMonkey": "Щоб спробувати приручити мавпу",
+                        "youWillNeedToFeed": "потрібно згодувати ",
+                        "bananas": "бананів",
+                    }
+                ),
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
