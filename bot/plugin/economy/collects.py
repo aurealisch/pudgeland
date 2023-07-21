@@ -21,6 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import random
+import string
 import typing
 
 import crescent
@@ -28,6 +29,7 @@ import hikari
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -56,6 +58,8 @@ period = 2 * 60 * 60
 class Collect:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         # Defer this interaction response,
         # allowing you to respond within the next 15 minutes.
         await context.defer(ephemeral=False)
@@ -78,10 +82,27 @@ class Collect:
 
         banana += collecting
 
-        title = "Собирать"
-        description = f"""\
-            <@{contextual}> собрал `{collecting}` бананов
-        """
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Collect",
+                ru="Собирать",
+                uk="Збирати",
+            ),
+        )
+
+        template = string.Template(
+            f"<@{contextual}> $collected `{collecting}` $bananas"
+        )
+
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"<@{contextual} collected `{collecting}` bananas",
+                ru=template.substitute({"collected": "собрал", "bananas": "бананов"}),
+                uk=template.substitute({"collected": "зібрав", "bananas": "бананів"}),
+            ),
+        )
 
         if monkey != 0:
             # Choose a random element from a non-empty sequence.
@@ -91,7 +112,30 @@ class Collect:
 
             banana += monkeyish
 
-            description += f"\n+ `{monkeyish}` бананов от `{monkey}` обезьян"
+            template = string.Template(
+                f"\n+ `{monkeyish}` $bananas $from `{monkey}` $monkeys"
+            )
+
+            description += helpers.helper(
+                locale,
+                localesBuilder=locales.LocaleBuilder(
+                    f"\n+ `{monkeyish}` bananas from `{monkey}` monkeys",
+                    ru=template.substitute(
+                        {
+                            "bananas": "бананов",
+                            "from": "от",
+                            "monkeys": "обезьян",
+                        }
+                    ),
+                    uk=template.substitute(
+                        {
+                            "bananas": "бананів",
+                            "from": "від",
+                            "monkeys": "мавп",
+                        }
+                    ),
+                ),
+            )
 
         await plugin.model.database.middleware.update(
             contextual,
@@ -100,11 +144,18 @@ class Collect:
             reputation=reputation,
         )
 
-        description += f"""\
-            \n\n
-            :banana: Бананы: `{banana}`
-            :monkey: Обезьяны: `{monkey}`
-        """
+        template = string.Template(
+            f"\n\n🍌 $bananas: `{banana}`\n🐒 $monkeys: `{monkey}`"
+        )
+
+        description += helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"\n\n🍌 Bananas: `{banana}`\n🐒 Monkeys: `{monkey}`",
+                ru=template.substitute({"bananas": "Бананы", "monkeys": "Обезьяны"}),
+                uk=template.substitute({"bananas": "Банан", "monkeys": "Мавпа"}),
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
