@@ -38,6 +38,8 @@ def target() -> None:
 
 thread = threading.Thread(target=target)
 
+# Start the thread's activity.
 thread.start()
 
+# Start the application and block until it's finished running.
 commons.bot.run()

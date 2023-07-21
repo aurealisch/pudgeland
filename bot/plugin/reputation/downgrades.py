@@ -36,7 +36,9 @@ period = 6 * 60 * 60
 
 
 @plugin.include
+# Register a hook to a command.
 @crescent.hook(_cooldowns.cooldown(1, period=period))
+# Register a slash command.
 @crescent.command(
     name=_locales.LocaleBuilder(
         "downgrade",
@@ -50,6 +52,7 @@ period = 6 * 60 * 60
     ),
 )
 class Downgrade:
+    # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
         name=_locales.LocaleBuilder(
@@ -66,7 +69,9 @@ class Downgrade:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
-        await context.defer()
+        # Defer this interaction response,
+        # allowing you to respond within the next 15 minutes.
+        await context.defer(ephemeral=False)
 
         _optional = str(self.user.id)
         _contextual = str(context.user.id)
@@ -92,4 +97,6 @@ class Downgrade:
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)

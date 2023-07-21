@@ -21,10 +21,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import typing
-import attrs
 
-import hikari
+import attrs
 import crescent
+import hikari
 
 
 @attrs.define

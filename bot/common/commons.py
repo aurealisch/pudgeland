@@ -34,6 +34,7 @@ from bot.common.database.middleware import middlewares
 from bot.common.environment import environments
 from bot.common.model import models
 
+# Parse a .env file and then load all the variables found as environment variables.
 dotenv.load_dotenv()
 
 with open("configuration.json") as stream:
@@ -43,6 +44,7 @@ with open("configuration.json") as stream:
 
 prisma = _prisma.Prisma()
 
+# Register a client instance to be retrieved by `get_client()`.
 _prisma.register(prisma)
 
 database = databases.Database(middlewares.Middleware(prisma))
@@ -56,9 +58,11 @@ model = models.Model(configuration, database=database, environment=environment)
 
 bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
 
+# Subscribe a given callback to a given event type.
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
 client = clients.Client(bot, model=model)
 
+# Loads plugins from a folder.
 client.plugins.load_folder("bot.plugin")

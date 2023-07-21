@@ -38,8 +38,10 @@ class Model:
 
     # noinspection PyMethodMayBeStatic
     async def on_started_event(self: typing.Self, _: hikari.StartedEvent) -> None:
+        # Connect to the Prisma query engine.
         await self.database.middleware.prisma.connect()
 
     # noinspection PyMethodMayBeStatic
     async def on_stopped_event(self: typing.Self, _: hikari.StoppedEvent) -> None:
+        # Connect to the Prisma query engine.
         await self.database.middleware.prisma.disconnect()

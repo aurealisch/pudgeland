@@ -43,6 +43,7 @@ plugin = _plugins.Plugin()
     ),
 )
 class Kiss:
+    # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
         name=_locales.LocaleBuilder(
@@ -70,6 +71,9 @@ class Kiss:
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Set the image on this embed.
         embed.set_image(collei.Client().sfw.get(collei.SfwCategory.KISS).url)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)

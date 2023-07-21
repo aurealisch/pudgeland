@@ -42,6 +42,9 @@ class Client(crescent.Client):
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction
         await ctx.respond(embed=embed)
 
+        # Print exception up to 'limit' stack trace entries from 'tb' to 'file'.
         traceback.print_exception(exc_class, value=exc, tb=exc_traceback)

@@ -33,6 +33,7 @@ plugin = _plugins.Plugin()
 
 
 @plugin.include
+# Register a slash command.
 @crescent.command(
     name=_locales.LocaleBuilder(
         "cat",
@@ -53,6 +54,9 @@ class Cat:
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Set the image on this embed.
         embed.set_image(meowy.Client().images.search()[0].url)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)

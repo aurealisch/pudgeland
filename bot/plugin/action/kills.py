@@ -33,6 +33,7 @@ plugin = _plugins.Plugin()
 
 
 @plugin.include
+# Register a slash command.
 @crescent.command(
     name=_locales.LocaleBuilder(
         "kill",
@@ -46,6 +47,7 @@ plugin = _plugins.Plugin()
     ),
 )
 class Kill:
+    # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
         name=_locales.LocaleBuilder(
@@ -73,6 +75,9 @@ class Kill:
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Set the image on this embed.
         embed.set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)

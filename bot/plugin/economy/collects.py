@@ -38,7 +38,9 @@ period = 2 * 60 * 60
 
 
 @plugin.include
+# Register a hook to a command.
 @crescent.hook(_cooldowns.cooldown(1, period=period))
+# Register a slash command.
 @crescent.command(
     name=_locales.LocaleBuilder(
         "collect",
@@ -54,7 +56,9 @@ period = 2 * 60 * 60
 class Collect:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
-        await context.defer()
+        # Defer this interaction response,
+        # allowing you to respond within the next 15 minutes.
+        await context.defer(ephemeral=False)
 
         contextual = str(context.user.id)
 
@@ -64,6 +68,7 @@ class Collect:
         monkey = user.monkey
         reputation = user.reputation
 
+        # Choose a random element from a non-empty sequence.
         collecting = random.choice(
             range(
                 plugin.model.configuration.plugins.collect.minimal,
@@ -79,7 +84,7 @@ class Collect:
         """
 
         if monkey != 0:
-            # If user has monkeys
+            # Choose a random element from a non-empty sequence.
             ratio = random.choice(range(1, 50))
 
             monkeyish = monkey * (50 + ratio)
@@ -103,4 +108,6 @@ class Collect:
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction
         await context.respond(embed=embed)

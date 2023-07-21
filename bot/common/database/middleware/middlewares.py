@@ -33,6 +33,7 @@ class Middleware:
     async def find_first(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User | None:
+        # Find a single User record.
         return await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
@@ -41,6 +42,7 @@ class Middleware:
     async def create(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User:
+        # Create a new User record.
         return await self.prisma.user.create(_prisma.types.UserCreateInput(id=id__))
 
     # noinspection PyMethodMayBeStatic
@@ -52,6 +54,7 @@ class Middleware:
         monkey: _prisma.types.AtomicIntInput | int,
         reputation: _prisma.types.AtomicIntInput | int,
     ) -> _prisma.models.User | None:
+        # Update a single User record.
         return await self.prisma.user.update(
             _prisma.types.UserUpdateInput(
                 banana=banana,

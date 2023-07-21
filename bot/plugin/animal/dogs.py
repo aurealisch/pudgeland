@@ -24,7 +24,7 @@ import typing
 
 import crescent
 import hikari
-import meowy
+import woofy
 
 from bot.plugin import _plugins
 from bot.plugin.locale import _locales
@@ -33,6 +33,7 @@ plugin = _plugins.Plugin()
 
 
 @plugin.include
+# Register a slash command.
 @crescent.command(
     name=_locales.LocaleBuilder(
         "dog",
@@ -53,6 +54,9 @@ class Dog:
 
         embed = hikari.Embed(title=title, description=description)
 
-        embed.set_image(meowy.Client().images.search()[0].url)
+        # Set the image on this embed.
+        embed.set_image(woofy.Client().images.search()[0].url)
 
+        # Respond to an interaction.
+        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)
