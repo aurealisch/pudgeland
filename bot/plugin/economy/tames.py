@@ -53,6 +53,8 @@ period = 5
 class Tame:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        await context.defer()
+
         contextual = str(context.user.id)
 
         user = await plugin.model.database.find_first(contextual)

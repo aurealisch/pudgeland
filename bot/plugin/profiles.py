@@ -52,6 +52,8 @@ period = 5
 class Profile:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        await context.defer()
+
         user = await plugin.model.database.find_first(str(context.user.id))
 
         title = "Профиль"

@@ -66,6 +66,8 @@ class Upgrade:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        await context.defer()
+
         _optional = str(self.user.id)
         _contextual = str(context.user.id)
 

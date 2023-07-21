@@ -54,6 +54,8 @@ period = 2 * 60 * 60
 class Collect:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        await context.defer()
+
         contextual = str(context.user.id)
 
         user = await plugin.model.database.find_first(contextual)
