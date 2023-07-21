@@ -27,6 +27,7 @@ import hikari
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -41,17 +42,17 @@ period = 6 * 60 * 60
 # Register a slash command.
 @crescent.command(
     name=locales.LocaleBuilder(
-        "downgrade",
-        ru="понизить",
-        uk="понизивши",
+        "remove",
+        ru="убрать",
+        uk="поприбирати",
     ),
     description=locales.LocaleBuilder(
-        "Downgrade",
-        ru="Понизить",
-        uk="Понизивши",
+        "Remove",
+        ru="Убрать",
+        uk="Поприбирати",
     ),
 )
-class Downgrade:
+class Remove:
     # An option when declaring a command using class syntax.
     user = crescent.option(
         hikari.User,
@@ -69,6 +70,8 @@ class Downgrade:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         # Defer this interaction response,
         # allowing you to respond within the next 15 minutes.
         await context.defer(ephemeral=False)
@@ -88,12 +91,34 @@ class Downgrade:
             reputation=optional.reputation - 1,
         )
 
-        title = "Понизить"
-        description = f"""\
-            <@{_contextual}> понизил репутацию <@{_optional}>
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Remove",
+                ru="Убрать",
+                uk="Поприбирати",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"""\
+                    <@{_contextual} removed the reputation <@{_optional}>
 
-            📉 Репутация: `{optional.reputation - 1}`
-        """
+                    📉 Reputation: `{optional.reputation - 1}`
+                """,
+                ru=f"""\
+                    <@{_contextual}> убрал репутацию <@{_optional}>
+
+                    📉 Репутация: `{optional.reputation - 1}`
+                """,
+                uk=f"""\
+                    <@{_contextual} прибрав репутацію <@{_optional}>
+
+                    📉 Репутація: `{optional.reputation - 1}`
+                """,
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
