@@ -20,6 +20,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import string
 import typing
 
 import collei
@@ -75,7 +76,7 @@ class Lick:
                     locale,
                     localesBuilder=locales.LocaleBuilder(
                         "You can't do that",
-                        ru="Так нельзя.",
+                        ru="Так нельзя",
                         uk="Так не можна",
                     ),
                 )
@@ -84,17 +85,20 @@ class Lick:
         title = helpers.helper(
             locale,
             localesBuilder=locales.LocaleBuilder(
-                "lick",
-                ru="лизнуть",
-                uk="лизнути",
-            )
+                "Lick",
+                ru="Лизнуть",
+                uk="Лизнути",
+            ),
         )
+
+        template = string.Template(f"<@{contextual}> $action <@{optional}>")
+
         description = helpers.helper(
             locale,
             localesBuilder=locales.LocaleBuilder(
-                f"<@{context.user.id} licks <@{self.user.id}",
-                ru=f"<@{context.user.id}> лижет <@{self.user.id}>",
-                uk=f"<@{context.user.id}> лизати <@{self.user.id}>",
+                template.substitute({"action": "licks"}),
+                ru=template.substitute({"action": "лижет"}),
+                uk=template.substitute({"action": "лизати"}),
             ),
         )
 
