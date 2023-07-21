@@ -24,13 +24,11 @@ import crescent
 import hikari
 
 from bot.plugin import _plugins
-from bot.plugin.action import _groups
 from bot.plugin.locale import _locales
 
 plugin = _plugins.Plugin()
 
 
-@_groups.group.child
 @plugin.include
 @crescent.command(
     name=_locales.LocaleBuilder(

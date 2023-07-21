@@ -28,7 +28,6 @@ import hikari
 
 from bot.plugin import _plugins
 from bot.plugin.cooldown import _cooldowns
-from bot.plugin.economy import _groups
 from bot.plugin.locale import _locales
 
 plugin = _plugins.Plugin()
@@ -37,7 +36,6 @@ plugin = _plugins.Plugin()
 period = 5
 
 
-@_groups.group.child
 @plugin.include
 @crescent.hook(_cooldowns.cooldown(1, period=period))
 @crescent.command(
