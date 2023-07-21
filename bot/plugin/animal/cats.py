@@ -26,8 +26,9 @@ import crescent
 import hikari
 import meowy
 
-from bot.plugin import _plugins
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -49,8 +50,24 @@ plugin = _plugins.Plugin()
 class Cat:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
-        title = "Кот"
-        description = "Случайное изображение кота"
+        locale = context.locale
+
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "cat",
+                ru="кот",
+                uk="кiт",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Random cat image",
+                ru="Случайное изображение кота",
+                uk="Випадкове зображення кота",
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
