@@ -25,9 +25,10 @@ import typing
 import crescent
 import hikari
 
-from bot.plugin import _plugins
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -54,19 +55,45 @@ period = 5
 class Profile:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         # Defer this interaction response,
         # allowing you to respond within the next 15 minutes.
         await context.defer(ephemeral=False)
 
         user = await plugin.model.database.find_first(str(context.user.id))
 
-        title = "Профиль"
-        description = f"""\
-            🍌 Бананы: `{user.banana}`
-            🐒 Обезьяны: `{user.monkey}`
+        title = helpers.helper(
+            locale,
+            locales.LocaleBuilder(
+                "Profile",
+                ru="Профиль",
+                uk="Профіль",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            locales.LocaleBuilder(
+                f"""\
+                    🍌 Bananas: `{user.banana}`
+                    🐒 Monkeys: `{user.monkey}`
 
-            📊 Репутация: `{user.reputation}`
-        """
+                    📊 Reputation: `{user.reputation}`
+                """,
+                ru=f"""\
+                    🍌 Бананы: `{user.banana}`
+                    🐒 Обезьяны: `{user.monkey}`
+
+                    📊 Репутация: `{user.reputation}`
+                """,
+                uk=f"""\
+                    🍌 Банан: `{user.banana}`
+                    🐒 Мавпа: `{user.monkey}`
+
+                    📊 Репутація: `{user.reputation}`
+                """,
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
