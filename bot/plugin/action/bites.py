@@ -26,8 +26,9 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _plugins
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -64,14 +65,39 @@ class Bite:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         optional = self.user.id
         contextual = context.user.id
 
         if optional == contextual:
-            raise ValueError("Выбранный пользователь является автором взаимодействия")
+            raise ValueError(
+                helpers.helper(
+                    locale,
+                    localesBuilder=locales.LocaleBuilder(
+                        "You can't do that",
+                        ru="Так нельзя.",
+                        uk="Так не можна",
+                    ),
+                )
+            )
 
-        title = "Укусить"
-        description = f"<@{context.user.id}> укусил(а) <@{self.user.id}>"
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "bite",
+                ru="укусить",
+                uk="вкусити",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"<@{context.user.id} bites <@{self.user.id}",
+                ru=f"<@{context.user.id}> кусает <@{self.user.id}>",
+                uk=f"<@{context.user.id}> кусати <@{self.user.id}>",
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 

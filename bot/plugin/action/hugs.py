@@ -26,8 +26,9 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin import _plugins
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -64,14 +65,39 @@ class Hug:
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
+        locale = context.locale
+
         optional = self.user.id
         contextual = context.user.id
 
         if optional == contextual:
-            raise ValueError("Выбранный пользователь является автором взаимодействия")
+            raise ValueError(
+                helpers.helper(
+                    locale,
+                    localesBuilder=locales.LocaleBuilder(
+                        "You can't do that",
+                        ru="Так нельзя.",
+                        uk="Так не можна",
+                    ),
+                )
+            )
 
-        title = "Обнять"
-        description = f"<@{context.user.id}> обнял(а) <@{self.user.id}>"
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "hug",
+                ru="обнять",
+                uk="обійняти",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                f"<@{context.user.id} hugs <@{self.user.id}",
+                ru=f"<@{context.user.id}> обнимает <@{self.user.id}>",
+                uk=f"<@{context.user.id}> обіймати <@{self.user.id}>",
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 

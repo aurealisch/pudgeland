@@ -75,9 +75,9 @@ class Slap:
                 helpers.helper(
                     locale,
                     localesBuilder=locales.LocaleBuilder(
-                        "The contextual user is the selected user",
-                        ru="Контекстный пользователь является выбранным пользователем",
-                        uk="Контекстний користувач є обраним Користувачем",
+                        "You can't do that",
+                        ru="Так нельзя.",
+                        uk="Так не можна",
                     ),
                 )
             )
@@ -93,9 +93,9 @@ class Slap:
         description = helpers.helper(
             locale,
             localesBuilder=locales.LocaleBuilder(
-                f"<@{context.user.id} slapped <@{self.user.id}",
-                ru=f"<@{context.user.id}> шлёпнул <@{self.user.id}>",
-                uk=f"<@{context.user.id}> шльопнути <@{self.user.id}>",
+                f"<@{context.user.id} slaps <@{self.user.id}",
+                ru=f"<@{context.user.id}> шлёпает <@{self.user.id}>",
+                uk=f"<@{context.user.id}> шльопати <@{self.user.id}>",
             ),
         )
 
