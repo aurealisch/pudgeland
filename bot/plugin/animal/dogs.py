@@ -26,8 +26,9 @@ import crescent
 import hikari
 import woofy
 
-from bot.plugin import _plugins
 from bot.locale.plugin import locales
+from bot.locale.plugin.helper import helpers
+from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
@@ -49,8 +50,24 @@ plugin = _plugins.Plugin()
 class Dog:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
-        title = "Собака"
-        description = "Случайное изображение собаки"
+        locale = context.locale
+
+        title = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Dog",
+                ru="Собака",
+                uk="Пес",
+            ),
+        )
+        description = helpers.helper(
+            locale,
+            localesBuilder=locales.LocaleBuilder(
+                "Random dog image",
+                ru="Случайное изображение собаки",
+                uk="Випадкове зображення собаки",
+            ),
+        )
 
         embed = hikari.Embed(title=title, description=description)
 
