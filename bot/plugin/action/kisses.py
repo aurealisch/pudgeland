@@ -27,7 +27,6 @@ import crescent
 import hikari
 
 from bot.locale.plugin import locales
-from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -71,9 +70,9 @@ class Kiss:
 
         if optional == contextual:
             raise ValueError(
-                helpers.helper(
+                locales.of(
                     locale,
-                    localesBuilder=locales.LocaleBuilder(
+                    locale_builder=locales.LocaleBuilder(
                         "You can't do that",
                         ru="Так нельзя",
                         uk="Так не можна",
@@ -81,9 +80,9 @@ class Kiss:
                 )
             )
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Kiss",
                 ru="Поцеловать",
                 uk="Поцілувати",
@@ -92,9 +91,9 @@ class Kiss:
 
         template = string.Template(f"<@{contextual}> $action <@{optional}>")
 
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 template.substitute({"action": "kisses"}),
                 ru=template.substitute({"action": "целует"}),
                 uk=template.substitute({"action": "цілувати"}),

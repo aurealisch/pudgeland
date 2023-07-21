@@ -29,7 +29,6 @@ import hikari
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
-from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -82,9 +81,9 @@ class Collect:
 
         banana += collecting
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Collect",
                 ru="Собирать",
                 uk="Збирати",
@@ -95,9 +94,9 @@ class Collect:
             f"<@{contextual}> $collected `{collecting}` $bananas"
         )
 
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 f"<@{contextual} collected `{collecting}` bananas",
                 ru=template.substitute({"collected": "собрал", "bananas": "бананов"}),
                 uk=template.substitute({"collected": "зібрав", "bananas": "бананів"}),
@@ -116,9 +115,9 @@ class Collect:
                 f"\n+ `{monkeyish}` $bananas $from `{monkey}` $monkeys"
             )
 
-            description += helpers.helper(
+            description += locales.of(
                 locale,
-                localesBuilder=locales.LocaleBuilder(
+                locale_builder=locales.LocaleBuilder(
                     f"\n+ `{monkeyish}` bananas from `{monkey}` monkeys",
                     ru=template.substitute(
                         {
@@ -148,9 +147,9 @@ class Collect:
             f"\n\n🍌 $bananas: `{banana}`\n🐒 $monkeys: `{monkey}`"
         )
 
-        description += helpers.helper(
+        description += locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 f"\n\n🍌 Bananas: `{banana}`\n🐒 Monkeys: `{monkey}`",
                 ru=template.substitute({"bananas": "Бананы", "monkeys": "Обезьяны"}),
                 uk=template.substitute({"bananas": "Банан", "monkeys": "Мавпа"}),

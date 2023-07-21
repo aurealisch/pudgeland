@@ -27,7 +27,6 @@ import hikari
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
-from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -63,7 +62,7 @@ class Profile:
 
         user = await plugin.model.database.find_first(str(context.user.id))
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
             locales.LocaleBuilder(
                 "Profile",
@@ -71,7 +70,7 @@ class Profile:
                 uk="Профіль",
             ),
         )
-        description = helpers.helper(
+        description = locales.of(
             locale,
             locales.LocaleBuilder(
                 f"""\

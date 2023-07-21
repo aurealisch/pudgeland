@@ -27,7 +27,6 @@ import hikari
 import meowy
 
 from bot.locale.plugin import locales
-from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -52,17 +51,17 @@ class Cat:
     async def callback(self: typing.Self, context: crescent.Context) -> None:
         locale = context.locale
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
-                "cat",
-                ru="кот",
-                uk="кiт",
+            locale_builder=locales.LocaleBuilder(
+                "Cat",
+                ru="Кот",
+                uk="Кiт",
             ),
         )
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Random cat image",
                 ru="Случайное изображение кота",
                 uk="Випадкове зображення кота",

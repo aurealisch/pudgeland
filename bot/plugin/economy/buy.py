@@ -23,56 +23,49 @@
 import typing
 
 import crescent
-import hikari
-import woofy
 
+from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
 
+# 5 seconds
+period = 5
+
+
 @plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(
     name=locales.LocaleBuilder(
-        "dog",
-        ru="собака",
-        uk="пес",
+        "buy",
+        ru="купить",
+        uk="купити",
     ),
     description=locales.LocaleBuilder(
-        "Random dog image",
-        ru="Случайное изображение собаки",
-        uk="Випадкове зображення собаки",
+        "Buy",
+        ru="Купить",
+        uk="Купити",
     ),
 )
-class Dog:
+class Buy:
+    item = crescent.option(
+        int,
+        name=locales.LocaleBuilder(
+            "item",
+            ru="предмет",
+            uk="предмет",
+        ),
+        description=locales.LocaleBuilder(
+            "Item",
+            ru="Предмет",
+            uk="Предмет",
+        ),
+    )
+
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Dog",
-                ru="Собака",
-                uk="Пес",
-            ),
-        )
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Random dog image",
-                ru="Случайное изображение собаки",
-                uk="Випадкове зображення собаки",
-            ),
-        )
-
-        embed = hikari.Embed(title=title, description=description)
-
-        # Set the image on this embed.
-        embed.set_image(woofy.Client().images.search()[0].url)
-
-        # Respond to an interaction.
-        # This function can be used multiple times for one interaction.
-        await context.respond(embed=embed)
+        await context.respond("Hello, World!")

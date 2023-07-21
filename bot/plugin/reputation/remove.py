@@ -28,7 +28,6 @@ import hikari
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
-from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -92,9 +91,9 @@ class Remove:
             reputation=optional.reputation - 1,
         )
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Remove",
                 ru="Убрать",
                 uk="Поприбирати",
@@ -109,9 +108,9 @@ class Remove:
             """
         )
 
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 template.substitute(
                     {
                         "action": "removed the reputation",

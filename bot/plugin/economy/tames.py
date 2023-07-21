@@ -30,7 +30,6 @@ import miru
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
-from bot.locale.plugin.helper import helpers
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -64,9 +63,9 @@ class View(miru.View):
 
         if fed > banana:
             raise ValueError(
-                helpers.helper(
+                locales.of(
                     locale,
-                    localesBuilder=locales.LocaleBuilder(
+                    locale_builder=locales.LocaleBuilder(
                         "Not enough bananas",
                         ru="Недостаточно бананов",
                         uk="Недостатньо бананів",
@@ -74,9 +73,9 @@ class View(miru.View):
                 )
             )
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Tame",
                 ru="Приручать",
                 uk="Приручати",
@@ -105,9 +104,9 @@ class View(miru.View):
                 """
             )
 
-            description = helpers.helper(
+            description = locales.of(
                 locale,
-                localesBuilder=locales.LocaleBuilder(
+                locale_builder=locales.LocaleBuilder(
                     f"""\
                         You fed 🍌 `{fed}` bananas
                         and...
@@ -178,9 +177,9 @@ class View(miru.View):
             """
         )
 
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 f"""\
                     You fed 🍌 `{fed}` bananas
                     and...
@@ -236,17 +235,17 @@ class View(miru.View):
 
         view = view_context.view
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Cancel",
                 ru="Отменить",
                 uk="Відмінивши",
             ),
         )
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Cancelled",
                 ru="Отменено",
                 uk="Скасований",
@@ -293,9 +292,9 @@ class Tame:
 
         fed = (monkey + 1) * 250
 
-        title = helpers.helper(
+        title = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 "Tame",
                 ru="Приручать",
                 uk="Приручати",
@@ -306,9 +305,9 @@ class Tame:
             f"$toTryToTameAMonkey, $youWillNeedToFeed `{fed}` $bananas"
         )
 
-        description = helpers.helper(
+        description = locales.of(
             locale,
-            localesBuilder=locales.LocaleBuilder(
+            locale_builder=locales.LocaleBuilder(
                 f"To try to tame a monkey, you will need to feed `{fed}` bananas",
                 ru=template.substitute(
                     {

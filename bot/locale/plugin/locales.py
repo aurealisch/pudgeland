@@ -43,3 +43,13 @@ class LocaleBuilder(crescent.LocaleBuilder):
     @property
     def fallback(self: typing.Self) -> str:
         return self._fallback
+
+
+def of(locale: hikari.Locale, locale_builder: LocaleBuilder) -> None:
+    # Builds the locales for a command.
+    built = locale_builder.build()
+
+    try:
+        return built[locale]
+    except KeyError:
+        return locale_builder.fallback
