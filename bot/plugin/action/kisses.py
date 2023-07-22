@@ -26,6 +26,7 @@ import collei
 import crescent
 import hikari
 
+from bot.exception import exceptions
 from bot.locale.plugin import locales
 from bot.plugin import _plugins
 
@@ -69,16 +70,7 @@ class Kiss:
         contextual = context.user.id
 
         if optional == contextual:
-            raise ValueError(
-                locales.of(
-                    locale,
-                    locale_builder=locales.LocaleBuilder(
-                        "You can't do that",
-                        ru="Так нельзя",
-                        uk="Так не можна",
-                    ),
-                )
-            )
+            raise exceptions.YouCantDoThat(locale)
 
         title = locales.of(
             locale,

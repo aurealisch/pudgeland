@@ -80,7 +80,16 @@ class Remove:
         _contextual = str(context.user.id)
 
         if _optional == _contextual:
-            raise ValueError("Выбранный пользователь является автором взаимодействия")
+            raise ValueError(
+                locales.of(
+                    locale,
+                    locale_builder=locales.LocaleBuilder(
+                        "You can't do that",
+                        ru="Так нельзя",
+                        uk="Так не можна",
+                    ),
+                )
+            )
 
         optional = await plugin.model.database.find_first(_optional)
 

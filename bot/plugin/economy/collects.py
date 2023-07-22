@@ -72,6 +72,8 @@ class Collect:
 
         # Choose a random element from a non-empty sequence.
         collecting = random.choice(
+            # Return an object that produces a sequence of integers from start
+            # (inclusive) to stop (exclusive) by step
             range(
                 plugin.model.configuration.plugins.collect.minimal,
                 plugin.model.configuration.plugins.collect.maximum,
@@ -104,7 +106,14 @@ class Collect:
 
         if monkey != 0:
             # Choose a random element from a non-empty sequence.
-            ratio = random.choice(range(1, 50))
+            ratio = random.choice(
+                # Return an object that produces a sequence of integers from start
+                # (inclusive) to stop (exclusive) by step
+                range(
+                    plugin.model.configuration.plugins.collect.ratio.minimal,
+                    plugin.model.configuration.plugins.collect.ratio.maximum,
+                )
+            )
 
             monkeyish = monkey * (50 + ratio)
 

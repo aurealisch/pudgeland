@@ -36,9 +36,22 @@ class Api(msgspec.Struct):
     port: int
 
 
-class Collect(msgspec.Struct):
+class Range(msgspec.Struct):
     minimal: int
     maximum: int
+
+
+class Collecting(Range):
+    pass
+
+
+class Ratio(Range):
+    pass
+
+
+class Collect(msgspec.Struct):
+    collecting: Collecting
+    ratio: Ratio
 
 
 class Plugins(msgspec.Struct):
