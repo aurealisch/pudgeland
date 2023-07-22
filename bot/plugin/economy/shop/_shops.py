@@ -30,15 +30,15 @@ shop = Shop(
             ),
             description=locales.LocaleBuilder(
                 (
-                    "Releases a hook that attracts +5% bananas instead of the next"
-                    " SFA on the MFA!"
+                    "Releases a hook that attracts +5% bananas instead of the next SFA"
+                    " in the center!"
                 ),
                 ru=(
-                    "Выпускает крюк, который вместо очередного СФа на мид"
+                    "Выпускает крюк, который вместо очередного СФа на центре"
                     " притягивает +5% бананов!"
                 ),
                 uk=(
-                    "Випускає гак, який замість чергового СФа на мид притягує +5%"
+                    "Випускає гак, який замість чергового СФа на центрі притягує + 5%"
                     " бананів!"
                 ),
             ),
