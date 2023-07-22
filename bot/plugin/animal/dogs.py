@@ -59,6 +59,7 @@ class Dog:
                 uk="Пес",
             ),
         )
+
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(

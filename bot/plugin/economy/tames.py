@@ -243,6 +243,7 @@ class View(miru.View):
                 uk="Відмінивши",
             ),
         )
+
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(

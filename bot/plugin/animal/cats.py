@@ -59,6 +59,7 @@ class Cat:
                 uk="Кiт",
             ),
         )
+
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
