@@ -1,4 +1,3 @@
-import string
 import typing
 import attrs
 
@@ -11,7 +10,7 @@ _ID = typing.TypeVar("_ID")
 @attrs.define
 class Item:
     name: str | locales.LocaleBuilder
-    description: str
+    description: str | locales.LocaleBuilder
 
     price: int
 
@@ -29,11 +28,19 @@ shop = Shop(
                 ru="Крюк",
                 uk="Гак",
             ),
-            description=string.whitespace.join(
+            description=locales.LocaleBuilder(
                 (
-                    "Выпускает крюк, который вместо очередного СФа на миде притягивает",
-                    "+5% бананов!",
-                )
+                    "Releases a hook that attracts +5% bananas instead of the next"
+                    " SFA on the MFA!"
+                ),
+                ru=(
+                    "Выпускает крюк, который вместо очередного СФа на мид"
+                    " притягивает +5% бананов!"
+                ),
+                uk=(
+                    "Випускає гак, який замість чергового СФа на мид притягує +5%"
+                    " бананів!"
+                ),
             ),
             price=500,
         ),
@@ -43,11 +50,19 @@ shop = Shop(
                 ru="Затерянный Топор Администратора",
                 uk="Загублена Сокира Адміністратора",
             ),
-            description=string.whitespace.join(
+            description=locales.LocaleBuilder(
                 (
-                    "Затерянный топор админа позволяет полностью сетнуть дерево, что"
-                    "дает +10% бананов!"
-                )
+                    "The admin's lost axe allows you to completely set the tree,"
+                    " which gives +10% bananas!"
+                ),
+                ru=(
+                    "Затерянный топор админа позволяет полностью сетнуть дерево,"
+                    " что дает +10% бананов!"
+                ),
+                uk=(
+                    "Загублена сокира адміна дозволяє повністю нарікати дерево,"
+                    " що дає + 10% бананів!"
+                ),
             ),
             price=1000,
         ),

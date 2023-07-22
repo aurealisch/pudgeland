@@ -21,13 +21,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 import typing
+import string
 
 import crescent
+import hikari
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale.plugin import locales
-
 from bot.plugin import _plugins
+from bot.plugin.economy.shop import _shops
 
 plugin = _plugins.Plugin()
 
@@ -57,13 +59,62 @@ class Shop:
     async def callback(self: typing.Self, context: crescent.Context) -> None:
         locale = context.locale
 
-        await context.respond(
-            locales.of(
+        title = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                "Shop",
+                ru="Магазин",
+                uk="Магазин",
+            ),
+        )
+
+        description = string.whitespace
+
+        for _, item in _shops.shop.items.items():
+            _name = locales.of(
                 locale,
-                locales.LocaleBuilder(
-                    "Hello, World!",
-                    ru="Привет, Мир!",
-                    uk="Привіт, Світ!",
+                locale_builder=item.name,
+            )
+            _description = locales.of(locale, locale_builder=item.description)
+
+            template = string.Template(
+                f"""
+                # {_name}
+
+                $price: 🍌 `{item.price}` $bananas
+
+                $description:\n> {_description}
+                """
+            )
+
+            description += locales.of(
+                locale,
+                locale_builder=locales.LocaleBuilder(
+                    f"""
+                        # {_name}
+
+                        Price: 🍌 `{item.price}` bananas
+
+                        Description:\n> {_description}
+                    """,
+                    ru=template.substitute(
+                        {
+                            "price": "Цена",
+                            "bananas": "банан",
+                            "description": "Описание",
+                        }
+                    ),
+                    uk=template.substitute(
+                        {
+                            "price": "Ціна",
+                            "bananas": "банан",
+                            "description": "Описание",
+                        }
+                    ),
                 ),
             )
-        )
+
+        embed = hikari.Embed(title=title, description=description)
+
+        # Respond to an interaction.
+        await context.respond(embed=embed)
