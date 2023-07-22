@@ -293,6 +293,8 @@ class Tame:
 
         fed = (monkey + 1) * 250
 
+        view = View(timeout=60)
+
         title = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
@@ -329,10 +331,7 @@ class Tame:
 
         embed = hikari.Embed(title=title, description=description)
 
-        view = View(timeout=60)
-
         # Respond to an interaction.
-        # This function can be used multiple times for one interaction.
         message = await context.respond(
             ensure_message=True, ephemeral=True, components=view, embed=embed
         )

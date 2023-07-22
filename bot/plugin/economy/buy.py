@@ -20,18 +20,66 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import string
 import typing
 
 import crescent
+import hikari
+import miru
 
 from bot.cooldown.plugin import cooldowns
 from bot.locale import locales
 from bot.plugin import _plugins
+from bot.plugin.economy.shop import _shops
 
 plugin = _plugins.Plugin()
 
 # 5 seconds
 period = 5
+
+
+class View(miru.View):
+    # A decorator to transform a coroutine function into a Discord UI Button's callback.
+    # This must be inside a subclass of View.
+    @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
+    async def ok(self, _: miru.Button, view_context: miru.ViewContext) -> None:
+        pass
+
+    # A decorator to transform a coroutine function into a Discord UI Button's callback.
+    # This must be inside a subclass of View.
+    @miru.button(label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌")
+    async def cancel(self, _: miru.Button, view_context: miru.ViewContext) -> None:
+        locale = view_context.locale
+
+        view = view_context.view
+
+        title = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                "Cancel",
+                ru="Отменить",
+                uk="Відмінивши",
+            ),
+        )
+
+        description = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                "Cancelled",
+                ru="Отменено",
+                uk="Скасований",
+            ),
+        )
+
+        embed = hikari.Embed(title=title, description=description)
+
+        # Short-hand method to create a new message response via the interaction this
+        # context represents.
+        await view_context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+        if view is not None:
+            # Stop listening for interactions.
+            view.stop()
 
 
 @plugin.include
@@ -63,8 +111,58 @@ class Buy:
             ru="Предмет",
             uk="Предмет",
         ),
+        choices=[(item.name, id__) for id__, item in _shops.shop.items.items()],
     )
 
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
-        await context.respond("Hello, World!")
+        locale = context.locale
+
+        item = _shops.shop.items[self.item]
+
+        price = item.price
+
+        view = View(timeout=60)
+
+        title = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                "Buy",
+                ru="Купить",
+                uk="Купити",
+            ),
+        )
+
+        template = string.Template(f"$toBuyThisItemYouWillNeed `{price}` $bananas")
+
+        description = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                f"To buy this item you will need `{price}` bananas",
+                ru=template.substitute(
+                    dict(
+                        toBuyThisItemYouWillNeed=(
+                            "Чтобы купить этот предмет потребуется"
+                        ),
+                        bananas="бананов",
+                    ),
+                ),
+                uk=template.substitute(
+                    dict(
+                        toBuyThisItemYouWillNeed="Щоб купити цей предмет потрібно",
+                        bananas="бананів",
+                    ),
+                ),
+            ),
+        )
+
+        embed = hikari.Embed(title=title, description=description)
+
+        # Respond to an interaction.
+        message = await context.respond(
+            ensure_message=True, ephemeral=True, components=view, embed=embed
+        )
+
+        if message is not None:
+            # Start up the view and begin listening for interactions.
+            await view.start(message)
