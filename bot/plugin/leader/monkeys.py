@@ -20,8 +20,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import typing
 import string
+import typing
 
 import crescent
 import hikari
@@ -29,85 +29,64 @@ import hikari
 from bot.cooldown.plugin import cooldowns
 from bot.locale import locales
 from bot.plugin import _plugins
-from bot.plugin.economy.shop import _shops
+from bot.plugin.leader import _groups
 
 plugin = _plugins.Plugin()
 
+# 25 seconds
+period = 25
 
-# 5 seconds
-period = 5
 
-
+# Add a command to this command group.
+@_groups.group.child
 @plugin.include
 # Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(
     name=locales.LocaleBuilder(
-        "shop",
-        ru="магазин",
-        uk="магазин",
+        "monkeys",
+        ru="обезьяны",
+        uk="мавпи",
     ),
     description=locales.LocaleBuilder(
-        "Shop",
-        ru="Магазин",
-        uk="Магазин",
+        "Monkeys",
+        ru="Обезьяны",
+        uk="Мавпи",
     ),
 )
-class Shop:
+class Monkeys:
     # noinspection PyMethodMayBeStatic
     async def callback(self: typing.Self, context: crescent.Context) -> None:
         locale = context.locale
 
+        users = await plugin.model.database.monkeys()
+
         title = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                "Shop",
-                ru="Магазин",
-                uk="Магазин",
+                "Monkeys",
+                ru="Обезьяны",
+                uk="Мавпи",
             ),
         )
 
         description = string.whitespace
 
-        for id__, item in _shops.shop.items.items():
-            _name = locales.of(locale, locale_builder=item.name)
-            _description = locales.of(locale, locale_builder=item.description)
+        # Return an enumerate object.
+        for index, user in enumerate(users):
+            position = index + 1
 
             template = string.Template(
-                f"""
-                # {id__}. {_name}
-
-                $price: 🍌 `{item.price}` $bananas
-
-                $description:\n> {_description}
-                """
+                f"*{position}*. <@{user.id}> $monkeys: `{user.monkey}`\n"
             )
 
             description += locales.of(
                 locale,
                 locale_builder=locales.LocaleBuilder(
-                    f"""
-                        # {id__}. {_name}
-
-                        Price: 🍌 `{item.price}` bananas
-
-                        Description:\n> {_description}
-                    """,
-                    ru=template.substitute(
-                        dict(
-                            price="Цена",
-                            bananas="бананов",
-                            description="Описание",
-                        ),
-                    ),
-                    uk=template.substitute(
-                        dict(
-                            price="Ціна",
-                            bananas="бананів",
-                            description="Опис",
-                        ),
-                    ),
+                    f"*{position}*. <@{user.id}> Monkeys: `{user.banana}`\n",
+                    ru=template.substitute(dict(monkeys="Обезьяны")),
+                    uk=template.substitute(dict(monkeys="Мавпи")),
                 ),
             )
 

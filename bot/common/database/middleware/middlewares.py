@@ -20,6 +20,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import typing
+
 import attrs
 
 import prisma as _prisma
@@ -37,6 +39,17 @@ class Middleware:
         return await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
+
+    # noinspection PyMethodMayBeStatic
+    async def find_many(
+        self,
+        take: int,
+        user_keys: _prisma.types.UserKeys,
+        sort_order: _prisma.types.SortOrder,
+    ) -> typing.List[_prisma.models.User]:
+        order = {user_keys: sort_order}
+
+        return await self.prisma.user.find_many(take, order=order)
 
     # noinspection PyMethodMayBeStatic
     async def create(

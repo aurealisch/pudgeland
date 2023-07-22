@@ -99,6 +99,7 @@ class View(miru.View):
     ),
 )
 class Buy:
+    # An option when declaring a command using class syntax.
     item = crescent.option(
         int,
         name=locales.LocaleBuilder(
