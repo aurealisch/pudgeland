@@ -37,8 +37,8 @@ class Api(msgspec.Struct):
 
 
 class Range(msgspec.Struct):
-    minimal: int
-    maximum: int
+    start: int
+    stop: int
 
 
 class Collecting(Range):

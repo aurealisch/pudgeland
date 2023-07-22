@@ -75,8 +75,8 @@ class Collect:
             # Return an object that produces a sequence of integers from start
             # (inclusive) to stop (exclusive) by step
             range(
-                plugin.model.configuration.plugins.collect.minimal,
-                plugin.model.configuration.plugins.collect.maximum,
+                plugin.model.configuration.plugins.collect.collecting.start,
+                plugin.model.configuration.plugins.collect.collecting.stop,
             )
         )
 
@@ -110,8 +110,8 @@ class Collect:
                 # Return an object that produces a sequence of integers from start
                 # (inclusive) to stop (exclusive) by step
                 range(
-                    plugin.model.configuration.plugins.collect.ratio.minimal,
-                    plugin.model.configuration.plugins.collect.ratio.maximum,
+                    plugin.model.configuration.plugins.collect.ratio.start,
+                    plugin.model.configuration.plugins.collect.ratio.stop,
                 )
             )
 

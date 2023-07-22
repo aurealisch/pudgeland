@@ -1,0 +1,29 @@
+{
+  "gateway": {
+    "bot": {
+      "banner": "bot"
+    }
+  },
+  "api": {
+    "host": "0.0.0.0",
+    "port": 8080
+  },
+  "plugins": {
+    "collect": {
+      "collecting": {
+        "start": 25,
+        "stop": 75
+      },
+      "ratio": {
+        "start": 1,
+        "stop" : 50
+      }
+    }
+  },
+  "java": {
+    "server": {
+      "host": "galaxy.minecraft.rent",
+      "port": 25615
+    }
+  }
+}
