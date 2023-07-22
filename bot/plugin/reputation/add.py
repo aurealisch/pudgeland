@@ -29,6 +29,7 @@ import hikari
 from bot.cooldown.plugin import cooldowns
 from bot.locale import locales
 from bot.plugin import _plugins
+from bot.plugin.reputation import _groups
 
 plugin = _plugins.Plugin()
 
@@ -36,6 +37,8 @@ plugin = _plugins.Plugin()
 period = 6 * 60 * 60
 
 
+# Add a command to this command group.
+@_groups.group.child
 @plugin.include
 # Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
