@@ -33,7 +33,6 @@ from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
-
 # 2 hours
 period = 2 * 60 * 60
 

@@ -30,7 +30,6 @@ from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
 
-
 # 5 seconds
 period = 5
 

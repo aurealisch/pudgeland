@@ -20,10 +20,13 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+import string
 import time as _time
 import typing
 
 import crescent
+
+from bot.locale.plugin import locales
 
 _K = typing.TypeVar("_K")
 
@@ -38,6 +41,7 @@ class SlidingWindow:
 
     def get_tokens(self, current: float | None = None) -> int:
         if not current:
+            # Return the current time in seconds since the Epoch.
             current = _time.time()
 
         tokens = self._tokens
@@ -49,7 +53,9 @@ class SlidingWindow:
 
     @property
     def remained(self) -> float:
+        # Return the current time in seconds since the Epoch.
         current = _time.time()
+
         tokens = self.get_tokens(current)
 
         if tokens == 0:
@@ -58,7 +64,9 @@ class SlidingWindow:
         return 0.0
 
     def trigger(self) -> float | None:
+        # Return the current time in seconds since the Epoch.
         current = _time.time()
+
         self._last = current
 
         self._tokens = self.get_tokens(current)
@@ -86,6 +94,7 @@ class Cooldown(typing.Generic[_K]):
         self._old: dict[_K, SlidingWindow] = {}
         self._current: dict[_K, SlidingWindow] = {}
 
+        # Return the current time in seconds since the Epoch.
         self.last_cycle = _time.time()
 
     def __getitem__(self, key: _K) -> SlidingWindow:
@@ -136,18 +145,49 @@ def cooldown(
         if remained is None:
             return None
 
-        now = _time.time()
+        locale = context.locale
 
-        timestamp = f"<t:{int(round(now + remained))}:R>"
+        # Return the current time in seconds since the Epoch.
+        current = _time.time()
+
+        timestamp = f"<t:{int(round(current + remained))}:R>"
+
+        template = string.Template(
+            f"""\
+                $youUseThisCommandTooOften!
+
+                $tryAgain {timestamp}
+            """
+        )
 
         # Respond to an interaction.
-        # This function can be used multiple times for one interaction
         await context.respond(
-            f"""\
-                Ты слишком часто используешь эту команду!
+            locales.of(
+                locale,
+                locale_builder=locales.LocaleBuilder(
+                    f"""\
+                        You use this command too often!
 
-                Попробуйте еще раз {timestamp}
-            """
+                        Try again {timestamp}
+                    """,
+                    ru=template.substitute(
+                        {
+                            "youUseThisCommandTooOften": (
+                                "Ты слишком часто используешь эту команду"
+                            ),
+                            "tryAgain": "Попробуйте еще раз",
+                        }
+                    ),
+                    uk=template.substitute(
+                        {
+                            "youUseThisCommandTooOften": (
+                                "Ти занадто часто використовуєш цю команду"
+                            ),
+                            "tryAgain": "Спробуйте ще раз",
+                        }
+                    ),
+                ),
+            ),
         )
 
         return crescent.HookResult(exit=True)
