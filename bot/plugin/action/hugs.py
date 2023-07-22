@@ -100,5 +100,4 @@ class Hug:
         embed.set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
 
         # Respond to an interaction.
-        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)

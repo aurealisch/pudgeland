@@ -98,5 +98,4 @@ class Kiss:
         embed.set_image(collei.Client().sfw.get(collei.SfwCategory.KISS).url)
 
         # Respond to an interaction.
-        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)

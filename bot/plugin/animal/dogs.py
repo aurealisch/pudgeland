@@ -75,5 +75,4 @@ class Dog:
         embed.set_image(woofy.Client().images.search()[0].url)
 
         # Respond to an interaction.
-        # This function can be used multiple times for one interaction.
         await context.respond(embed=embed)
