@@ -71,10 +71,7 @@ class Shop:
         description = string.whitespace
 
         for _, item in _shops.shop.items.items():
-            _name = locales.of(
-                locale,
-                locale_builder=item.name,
-            )
+            _name = locales.of(locale, locale_builder=item.name)
             _description = locales.of(locale, locale_builder=item.description)
 
             template = string.Template(
@@ -100,16 +97,16 @@ class Shop:
                     ru=template.substitute(
                         {
                             "price": "Цена",
-                            "bananas": "банан",
+                            "bananas": "бананов",
                             "description": "Описание",
-                        }
+                        },
                     ),
                     uk=template.substitute(
                         {
                             "price": "Ціна",
-                            "bananas": "банан",
-                            "description": "Описание",
-                        }
+                            "bananas": "бананів",
+                            "description": "Опис",
+                        },
                     ),
                 ),
             )
