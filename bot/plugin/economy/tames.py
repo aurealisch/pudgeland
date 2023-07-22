@@ -95,7 +95,7 @@ class View(miru.View):
                     $you $fed 🍌 `{fed}` $bananas1
                     $and__...
 
-                    ❌ $failedToTameTheMonkey...
+                    ❌ $failed_to_tame_the_monkey...
 
                     ```diff\n- {fed} $bananas1 🍌```
 
@@ -124,7 +124,9 @@ class View(miru.View):
                             fed="скормили",
                             bananas1="бананов",
                             and__="и",
-                            failedToTameTheMonkey="Не получилось приручить обезьяну",
+                            failed_to_tame_the_monkey=(
+                                "Не получилось приручить обезьяну"
+                            ),
                             bananas2="Бананы",
                             monkeys="Обезьян",
                         ),
@@ -135,7 +137,7 @@ class View(miru.View):
                             fed="нагодували",
                             bananas1="бананів",
                             and__="і",
-                            failedToTameTheMonkey="Не вийшло приручити мавпу",
+                            failed_to_tame_the_monkey="Не вийшло приручити мавпу",
                             bananas2="Банан",
                             monkeys="Мавпа",
                         ),
@@ -167,7 +169,7 @@ class View(miru.View):
                 $you $fed 🍌 `{fed}` $bananas1
                 $and...
 
-                ✅ $itTurnedOutToTameAMonkey!!!
+                ✅ $it_turned_out_to_tame_a_monkey!!!
 
                 ```diff\n- {fed} $bananas1 🍌```
                 ```diff\n+ 1 $monkey 🐒```
@@ -198,7 +200,7 @@ class View(miru.View):
                         fed="скормили",
                         bananas1="бананов",
                         and__="и",
-                        itTurnedOutToTameAMonkey="Получилось приручить обезьяну",
+                        it_turned_out_to_tame_a_monkey="Получилось приручить обезьяну",
                         bananas2="Бананы",
                         monkeys="Обезьян",
                     ),
@@ -209,7 +211,7 @@ class View(miru.View):
                         fed="нагодували",
                         bananas1="бананів",
                         and__="і",
-                        itTurnedOutToTameAMonkey="Вийшло приручити мавпу",
+                        it_turned_out_to_tame_a_monkey="Вийшло приручити мавпу",
                         bananas2="Банан",
                         monkeys="Мавпа",
                     ),
@@ -305,7 +307,7 @@ class Tame:
         )
 
         template = string.Template(
-            f"$toTryToTameAMonkey, $youWillNeedToFeed `{fed}` $bananas"
+            f"$to_try_to_tame_a_monkey, $you_will_need_to_feed `{fed}` $bananas"
         )
 
         description = locales.of(
@@ -314,15 +316,15 @@ class Tame:
                 f"To try to tame a monkey, you will need to feed `{fed}` bananas",
                 ru=template.substitute(
                     dict(
-                        toTryToTameAMonkey="Чтобы попробовать приручить обезьяну",
-                        youWillNeedToFeed="потребуется скормить",
+                        to_try_to_tame_a_monkey="Чтобы попробовать приручить обезьяну",
+                        you_will_need_to_feed="потребуется скормить",
                         bananas="бананов",
                     ),
                 ),
                 uk=template.substitute(
                     dict(
-                        toTryToTameAMonkey="Щоб спробувати приручити мавпу",
-                        youWillNeedToFeed="потрібно згодувати ",
+                        to_try_to_tame_a_monkey="Щоб спробувати приручити мавпу",
+                        you_will_need_to_feed="потрібно згодувати ",
                         bananas="бананів",
                     ),
                 ),
@@ -333,7 +335,10 @@ class Tame:
 
         # Respond to an interaction.
         message = await context.respond(
-            ensure_message=True, ephemeral=True, components=view, embed=embed
+            ensure_message=True,
+            ephemeral=True,
+            components=view,
+            embed=embed,
         )
 
         if message is not None:

@@ -133,7 +133,9 @@ class Buy:
             ),
         )
 
-        template = string.Template(f"$toBuyThisItemYouWillNeed `{price}` $bananas")
+        template = string.Template(
+            f"$to_buy_this_item_you_will_need `{price}` $bananas"
+        )
 
         description = locales.of(
             locale,
@@ -141,7 +143,7 @@ class Buy:
                 f"To buy this item you will need `{price}` bananas",
                 ru=template.substitute(
                     dict(
-                        toBuyThisItemYouWillNeed=(
+                        to_buy_this_item_you_will_need=(
                             "Чтобы купить этот предмет потребуется"
                         ),
                         bananas="бананов",
@@ -149,7 +151,9 @@ class Buy:
                 ),
                 uk=template.substitute(
                     dict(
-                        toBuyThisItemYouWillNeed="Щоб купити цей предмет потрібно",
+                        to_buy_this_item_you_will_need=(
+                            "Щоб купити цей предмет потрібно"
+                        ),
                         bananas="бананів",
                     ),
                 ),
@@ -160,7 +164,10 @@ class Buy:
 
         # Respond to an interaction.
         message = await context.respond(
-            ensure_message=True, ephemeral=True, components=view, embed=embed
+            ensure_message=True,
+            ephemeral=True,
+            components=view,
+            embed=embed,
         )
 
         if message is not None:
