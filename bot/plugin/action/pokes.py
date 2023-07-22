@@ -28,7 +28,7 @@ import crescent
 import hikari
 
 from bot.exception import exceptions
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -88,9 +88,9 @@ class Poke:
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                template.substitute({"action": "pokes"}),
-                ru=template.substitute({"action": "тыкает"}),
-                uk=template.substitute({"action": "тикати"}),
+                template.substitute(dict(action="pokes")),
+                ru=template.substitute(dict(action="тыкает")),
+                uk=template.substitute(dict(action="тикати")),
             ),
         )
 

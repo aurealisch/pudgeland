@@ -28,7 +28,7 @@ import crescent
 import hikari
 
 from bot.exception import exceptions
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -87,9 +87,9 @@ class Lick:
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                template.substitute({"action": "licks"}),
-                ru=template.substitute({"action": "лижет"}),
-                uk=template.substitute({"action": "лизати"}),
+                template.substitute(dict(action="licks")),
+                ru=template.substitute(dict(action="лижет")),
+                uk=template.substitute(dict(action="лизати")),
             ),
         )
 

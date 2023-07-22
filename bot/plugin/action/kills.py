@@ -28,7 +28,7 @@ import crescent
 import hikari
 
 from bot.exception import exceptions
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -88,9 +88,9 @@ class Kill:
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                template.substitute({"action": "kills"}),
-                ru=template.substitute({"action": "убивает"}),
-                uk=template.substitute({"action": "вбивати"}),
+                template.substitute(dict(action="kills")),
+                ru=template.substitute(dict(action="убивает")),
+                uk=template.substitute(dict(action="вбивати")),
             ),
         )
 

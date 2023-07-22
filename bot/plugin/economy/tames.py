@@ -29,7 +29,7 @@ import hikari
 import miru
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -93,7 +93,7 @@ class View(miru.View):
             template = string.Template(
                 f"""\
                     $you $fed 🍌 `{fed}` $bananas1
-                    $and...
+                    $and__...
 
                     ❌ $failedToTameTheMonkey...
 
@@ -119,26 +119,26 @@ class View(miru.View):
                         🐒 Monkeys: `{monkey}`
                     """,
                     ru=template.substitute(
-                        {
-                            "you": "Вы",
-                            "fed": "скормили",
-                            "bananas1": "бананов",
-                            "and": "и",
-                            "failedToTameTheMonkey": "Не получилось приручить обезьяну",
-                            "bananas2": "Бананы",
-                            "monkeys": "Обезьян",
-                        },
+                        dict(
+                            you="Вы",
+                            fed="скормили",
+                            bananas1="бананов",
+                            and__="и",
+                            failedToTameTheMonkey="Не получилось приручить обезьяну",
+                            bananas2="Бананы",
+                            monkeys="Обезьян",
+                        ),
                     ),
                     uk=template.substitute(
-                        {
-                            "you": "Ви",
-                            "fed": "нагодували",
-                            "bananas1": "бананів",
-                            "and": "і",
-                            "failedToTameTheMonkey": "Не вийшло приручити мавпу",
-                            "bananas2": "Банан",
-                            "monkeys": "Мавпа",
-                        },
+                        dict(
+                            you="Ви",
+                            fed="нагодували",
+                            bananas1="бананів",
+                            and__="і",
+                            failedToTameTheMonkey="Не вийшло приручити мавпу",
+                            bananas2="Банан",
+                            monkeys="Мавпа",
+                        ),
                     ),
                 ),
             )
@@ -193,26 +193,26 @@ class View(miru.View):
                     🐒 Monkeys: `{monkey + 1}`
                 """,
                 ru=template.substitute(
-                    {
-                        "you": "Вы",
-                        "fed": "скормили",
-                        "bananas1": "бананов",
-                        "and": "и",
-                        "itTurnedOutToTameAMonkey": "Получилось приручить обезьяну",
-                        "bananas2": "Бананы",
-                        "monkeys": "Обезьян",
-                    },
+                    dict(
+                        you="Вы",
+                        fed="скормили",
+                        bananas1="бананов",
+                        and__="и",
+                        itTurnedOutToTameAMonkey="Получилось приручить обезьяну",
+                        bananas2="Бананы",
+                        monkeys="Обезьян",
+                    ),
                 ),
                 uk=template.substitute(
-                    {
-                        "you": "Ви",
-                        "fed": "нагодували",
-                        "bananas1": "бананів",
-                        "and": "і",
-                        "itTurnedOutToTameAMonkey": "Вийшло приручити мавпу",
-                        "bananas2": "Банан",
-                        "monkeys": "Мавпа",
-                    },
+                    dict(
+                        you="Ви",
+                        fed="нагодували",
+                        bananas1="бананів",
+                        and__="і",
+                        itTurnedOutToTameAMonkey="Вийшло приручити мавпу",
+                        bananas2="Банан",
+                        monkeys="Мавпа",
+                    ),
                 ),
             ),
         )
@@ -311,18 +311,18 @@ class Tame:
             locale_builder=locales.LocaleBuilder(
                 f"To try to tame a monkey, you will need to feed `{fed}` bananas",
                 ru=template.substitute(
-                    {
-                        "toTryToTameAMonkey": "Чтобы попробовать приручить обезьяну",
-                        "youWillNeedToFeed": "потребуется скормить",
-                        "bananas": "бананов",
-                    }
+                    dict(
+                        toTryToTameAMonkey="Чтобы попробовать приручить обезьяну",
+                        youWillNeedToFeed="потребуется скормить",
+                        bananas="бананов",
+                    ),
                 ),
                 uk=template.substitute(
-                    {
-                        "toTryToTameAMonkey": "Щоб спробувати приручити мавпу",
-                        "youWillNeedToFeed": "потрібно згодувати ",
-                        "bananas": "бананів",
-                    }
+                    dict(
+                        toTryToTameAMonkey="Щоб спробувати приручити мавпу",
+                        youWillNeedToFeed="потрібно згодувати ",
+                        bananas="бананів",
+                    ),
                 ),
             ),
         )

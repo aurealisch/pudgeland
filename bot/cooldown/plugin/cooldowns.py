@@ -26,7 +26,7 @@ import typing
 
 import crescent
 
-from bot.locale.plugin import locales
+from bot.locale import locales
 
 _K = typing.TypeVar("_K")
 
@@ -171,20 +171,20 @@ def cooldown(
                         Try again {timestamp}
                     """,
                     ru=template.substitute(
-                        {
-                            "youUseThisCommandTooOften": (
+                        dict(
+                            youUseThisCommandTooOften=(
                                 "Ты слишком часто используешь эту команду"
                             ),
-                            "tryAgain": "Попробуйте еще раз",
-                        }
+                            tryAgain="Попробуйте еще раз",
+                        ),
                     ),
                     uk=template.substitute(
-                        {
-                            "youUseThisCommandTooOften": (
+                        dict(
+                            youUseThisCommandTooOften=(
                                 "Ти занадто часто використовуєш цю команду"
                             ),
-                            "tryAgain": "Спробуйте ще раз",
-                        }
+                            tryAgain="Спробуйте ще раз",
+                        ),
                     ),
                 ),
             ),

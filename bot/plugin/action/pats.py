@@ -28,7 +28,7 @@ import crescent
 import hikari
 
 from bot.exception import exceptions
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -88,9 +88,9 @@ class Pat:
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                template.substitute({"action": "pats"}),
-                ru=template.substitute({"action": "похлопывает"}),
-                uk=template.substitute({"action": "поплескувавши"}),
+                template.substitute(dict(action="pats")),
+                ru=template.substitute(dict(action="похлопывает")),
+                uk=template.substitute(dict(action="поплескувавши")),
             ),
         )
 

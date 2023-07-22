@@ -28,7 +28,7 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -99,8 +99,8 @@ class Collect:
             locale,
             locale_builder=locales.LocaleBuilder(
                 f"<@{contextual} collected `{collecting}` bananas",
-                ru=template.substitute({"collected": "собрал", "bananas": "бананов"}),
-                uk=template.substitute({"collected": "зібрав", "bananas": "бананів"}),
+                ru=template.substitute(dict(collected="собрал", bananas="бананов")),
+                uk=template.substitute(dict(collected="зібрав", bananas="бананів")),
             ),
         )
 
@@ -120,7 +120,7 @@ class Collect:
             banana += monkeyish
 
             template = string.Template(
-                f"\n+ `{monkeyish}` $bananas $from `{monkey}` $monkeys"
+                f"\n+ `{monkeyish}` $bananas $from__ `{monkey}` $monkeys"
             )
 
             description += locales.of(
@@ -128,18 +128,18 @@ class Collect:
                 locale_builder=locales.LocaleBuilder(
                     f"\n+ `{monkeyish}` bananas from `{monkey}` monkeys",
                     ru=template.substitute(
-                        {
-                            "bananas": "бананов",
-                            "from": "от",
-                            "monkeys": "обезьян",
-                        }
+                        dict(
+                            bananas="бананов",
+                            from__="от",
+                            monkeys="обезьян",
+                        ),
                     ),
                     uk=template.substitute(
-                        {
-                            "bananas": "бананів",
-                            "from": "від",
-                            "monkeys": "мавп",
-                        }
+                        dict(
+                            bananas="бананів",
+                            from__="від",
+                            monkeys="мавп",
+                        ),
                     ),
                 ),
             )
@@ -159,8 +159,8 @@ class Collect:
             locale,
             locale_builder=locales.LocaleBuilder(
                 f"\n\n🍌 Bananas: `{banana}`\n🐒 Monkeys: `{monkey}`",
-                ru=template.substitute({"bananas": "Бананы", "monkeys": "Обезьяны"}),
-                uk=template.substitute({"bananas": "Банан", "monkeys": "Мавпа"}),
+                ru=template.substitute(dict(bananas="Бананы", monkeys="Обезьяны")),
+                uk=template.substitute(dict(bananas="Банан", monkeys="Мавпа")),
             ),
         )
 

@@ -27,7 +27,7 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -91,18 +91,18 @@ class Profile:
                     📊 Reputation: `{user.reputation}`
                 """,
                 ru=template.substitute(
-                    {
-                        "bananas": "Бананы",
-                        "monkeys": "Обезьян",
-                        "reputation": "Репутация",
-                    }
+                    dict(
+                        bananas="Бананы",
+                        monkeys="Обезьян",
+                        reputation="Репутация",
+                    ),
                 ),
                 uk=template.substitute(
-                    {
-                        "bananas": "Банан",
-                        "monkeys": "Мавпа",
-                        "reputation": "Репутація",
-                    }
+                    dict(
+                        bananas="Банан",
+                        monkeys="Мавпа",
+                        reputation="Репутація",
+                    ),
                 ),
             ),
         )

@@ -27,7 +27,7 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -120,23 +120,22 @@ class Add:
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                template.substitute(
-                    {
-                        "action": "added a reputation",
-                        "reputation": "Reputation",
-                    },
-                ),
+                f"""
+                    <@{_contextual} added a reputation <@{_optional}>
+
+                    📈 Reputation: `{optional.reputation + 1}`
+                """,
                 ru=template.substitute(
-                    {
-                        "action": "добавил репутацию",
-                        "reputation": "Репутация",
-                    },
+                    dict(
+                        action="добавил репутацию",
+                        reputation="Репутация",
+                    ),
                 ),
                 uk=template.substitute(
-                    {
-                        "action": "додав репутацію",
-                        "reputation": "Репутація",
-                    },
+                    dict(
+                        action="додав репутацію",
+                        reputation="Репутація",
+                    ),
                 ),
             ),
         )

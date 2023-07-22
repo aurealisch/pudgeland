@@ -1,6 +1,6 @@
 import hikari
 
-from bot.locale.plugin import locales
+from bot.locale import locales
 
 
 class YouCantDoThat(Exception):

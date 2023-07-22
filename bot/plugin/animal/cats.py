@@ -26,7 +26,7 @@ import crescent
 import hikari
 import meowy
 
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()

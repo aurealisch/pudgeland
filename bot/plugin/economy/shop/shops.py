@@ -27,7 +27,7 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
 
@@ -95,18 +95,18 @@ class Shop:
                         Description:\n> {_description}
                     """,
                     ru=template.substitute(
-                        {
-                            "price": "Цена",
-                            "bananas": "бананов",
-                            "description": "Описание",
-                        },
+                        dict(
+                            price="Цена",
+                            bananas="бананов",
+                            description="Описание",
+                        ),
                     ),
                     uk=template.substitute(
-                        {
-                            "price": "Ціна",
-                            "bananas": "бананів",
-                            "description": "Опис",
-                        },
+                        dict(
+                            price="Ціна",
+                            bananas="бананів",
+                            description="Опис",
+                        ),
                     ),
                 ),
             )

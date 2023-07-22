@@ -1,7 +1,7 @@
 import typing
 import attrs
 
-from bot.locale.plugin import locales
+from bot.locale import locales
 
 
 _ID = typing.TypeVar("_ID")

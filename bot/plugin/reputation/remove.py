@@ -27,7 +27,7 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale.plugin import locales
+from bot.locale import locales
 from bot.plugin import _plugins
 
 plugin = _plugins.Plugin()
@@ -120,23 +120,22 @@ class Remove:
         description = locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                template.substitute(
-                    {
-                        "action": "removed the reputation",
-                        "reputation": "Reputation",
-                    },
-                ),
+                f"""
+                    <@{_contextual} removed the reputation <@{_optional}>
+
+                    📉 Reputation: `{optional.reputation - 1}`
+                """,
                 ru=template.substitute(
-                    {
-                        "action": "убрал репутацию",
-                        "reputation": "Репутация",
-                    },
+                    dict(
+                        action="убрал репутацию",
+                        reputation="Репутация",
+                    ),
                 ),
                 uk=template.substitute(
-                    {
-                        "action": "прибрав репутацію",
-                        "reputation": "Репутація",
-                    },
+                    dict(
+                        action="прибрав репутацію",
+                        reputation="Репутація",
+                    ),
                 ),
             ),
         )
