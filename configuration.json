@@ -19,11 +19,5 @@
         "stop" : 50
       }
     }
-  },
-  "java": {
-    "server": {
-      "host": "galaxy.minecraft.rent",
-      "port": 25615
-    }
   }
 }
