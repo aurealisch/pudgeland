@@ -41,5 +41,5 @@ class Model:
 
     # noinspection PyMethodMayBeStatic
     async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
-        # Connect to the Prisma query engine.
+        # Disconnect the Prisma query engine.
         await self.database.middleware.prisma.disconnect()
