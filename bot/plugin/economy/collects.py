@@ -22,7 +22,6 @@
 # SOFTWARE.
 import random
 import string
-import typing
 
 import crescent
 import hikari
@@ -55,7 +54,7 @@ period = 2 * 60 * 60
 )
 class Collect:
     # noinspection PyMethodMayBeStatic
-    async def callback(self: typing.Self, context: crescent.Context) -> None:
+    async def callback(self, context: crescent.Context) -> None:
         locale = context.locale
 
         # Defer this interaction response,

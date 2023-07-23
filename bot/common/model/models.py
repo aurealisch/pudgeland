@@ -20,8 +20,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import typing
-
 import attrs
 import hikari
 
@@ -37,11 +35,11 @@ class Model:
     environment: environments.Environment
 
     # noinspection PyMethodMayBeStatic
-    async def on_started_event(self: typing.Self, _: hikari.StartedEvent) -> None:
+    async def on_started_event(self, _: hikari.StartedEvent) -> None:
         # Connect to the Prisma query engine.
         await self.database.middleware.prisma.connect()
 
     # noinspection PyMethodMayBeStatic
-    async def on_stopped_event(self: typing.Self, _: hikari.StoppedEvent) -> None:
+    async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
         # Connect to the Prisma query engine.
         await self.database.middleware.prisma.disconnect()

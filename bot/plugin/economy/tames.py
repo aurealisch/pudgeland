@@ -22,7 +22,6 @@
 # SOFTWARE.
 import random
 import string
-import typing
 
 import crescent
 import hikari
@@ -284,7 +283,7 @@ class View(miru.View):
 )
 class Tame:
     # noinspection PyMethodMayBeStatic
-    async def callback(self: typing.Self, context: crescent.Context) -> None:
+    async def callback(self, context: crescent.Context) -> None:
         locale = context.locale
 
         contextual = str(context.user.id)

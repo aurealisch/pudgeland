@@ -20,7 +20,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import typing
 import string
 
 import crescent
@@ -54,7 +53,7 @@ period = 5
 )
 class Profile:
     # noinspection PyMethodMayBeStatic
-    async def callback(self: typing.Self, context: crescent.Context) -> None:
+    async def callback(self, context: crescent.Context) -> None:
         locale = context.locale
 
         # Defer this interaction response,

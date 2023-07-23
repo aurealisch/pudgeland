@@ -34,14 +34,14 @@ class LocaleBuilder(crescent.LocaleBuilder):
     ru: str
     uk: str
 
-    def build(self: typing.Self) -> typing.Mapping[str, str]:
+    def build(self) -> typing.Mapping[str, str]:
         return {
             hikari.Locale.RU: self.ru,
             hikari.Locale.UK: self.uk,
         }
 
     @property
-    def fallback(self: typing.Self) -> str:
+    def fallback(self) -> str:
         return self._fallback
 
 
