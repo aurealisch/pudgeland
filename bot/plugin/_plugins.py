@@ -1,4 +1,13 @@
-# -*- coding: utf-8 -*-
+import crescent
+import hikari
+
+from bot.common.model import models
+
+
+class Plugin(crescent.Plugin[hikari.GatewayBot, models.Model]):
+    pass
+
+
 # MIT License
 #
 # Copyright (c) 2023 pudgeland
@@ -20,11 +29,3 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-import crescent
-import hikari
-
-from bot.common.model import models
-
-
-class Plugin(crescent.Plugin[hikari.GatewayBot, models.Model]):
-    pass
