@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "pudgeland"
+name = "bot"
 version = "0.1.0"
-description = "Pudgeland"
+description = "Bot"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]
 maintainers = ["elaresai <elaresai@gmail.com>"]
