@@ -89,14 +89,14 @@ class Buy:
             ru="Предмет",
             uk="Предмет",
         ),
-        choices=[(item.name, id__) for id__, item in _shops.shop.items.items()],
+        choices=[(item.name, id__) for id__, item in _shops.shop.items()],
     )
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         locale = context.locale
 
-        item = _shops.shop.items[self.item]
+        item = _shops.shop.get(self.item)
 
         price = item.price
 

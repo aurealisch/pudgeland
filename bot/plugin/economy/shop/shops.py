@@ -47,7 +47,7 @@ class Shop:
 
         description = string.whitespace
 
-        for id__, item in _shops.shop.items.items():
+        for id__, item in _shops.shop.items():
             _name = locales.of(locale, locale_builder=item.name)
             _description = locales.of(locale, locale_builder=item.description)
 
