@@ -6,6 +6,7 @@ import hikari
 from bot.cooldown.plugin import cooldowns
 from bot.locale import locales
 from bot.plugin import _plugins
+from bot.plugin.economy.shop import _shops
 
 plugin = _plugins.Plugin()
 
@@ -83,6 +84,22 @@ class Profile:
                 ),
             ),
         )
+
+        if user.item:
+            item = _shops.shop.get(str(user.item))
+
+            _name = locales.of(locale, locale_builder=item.name)
+
+            template = string.Template(f"\n📦 $item: `{_name}`")
+
+            description += locales.of(
+                locale,
+                locale_builder=locales.LocaleBuilder(
+                    f"\n📦 Item: `{_name}`",
+                    ru=template.substitute(dict(item="Предмет")),
+                    uk=template.substitute(dict(item="Предмет")),
+                ),
+            )
 
         embed = hikari.Embed(title=title, description=description)
 

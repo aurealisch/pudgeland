@@ -78,6 +78,7 @@ class Remove:
             banana=optional.banana,
             monkey=optional.monkey,
             reputation=optional.reputation - 1,
+            item=optional.item,
         )
 
         title = locales.of(

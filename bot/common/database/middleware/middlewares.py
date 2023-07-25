@@ -27,30 +27,28 @@ class Middleware:
     ) -> typing.List[_prisma.models.User]:
         order = {user_keys: sort_order}
 
+        # Find multiple User records.
         return await self.prisma.user.find_many(take, order=order)
 
     # noinspection PyMethodMayBeStatic
-    async def create(
-        self, id__: str | _prisma.types.StringFilter
-    ) -> _prisma.models.User:
+    async def create(self, id__: str) -> _prisma.models.User:
         # Create a new User record.
         return await self.prisma.user.create(_prisma.types.UserCreateInput(id=id__))
 
     # noinspection PyMethodMayBeStatic
     async def update(
         self,
-        id__: str | _prisma.types.StringFilter,
+        id__: str,
         *,
         banana: _prisma.types.AtomicIntInput | int,
         monkey: _prisma.types.AtomicIntInput | int,
         reputation: _prisma.types.AtomicIntInput | int,
+        item: _prisma.types.AtomicIntInput | int
     ) -> _prisma.models.User | None:
         # Update a single User record.
         return await self.prisma.user.update(
             _prisma.types.UserUpdateInput(
-                banana=banana,
-                monkey=monkey,
-                reputation=reputation,
+                banana=banana, monkey=monkey, reputation=reputation, item=item
             ),
             where=_prisma.types.UserWhereUniqueInput(id=id__),
         )

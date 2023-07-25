@@ -6,6 +6,7 @@ import hikari
 import miru
 
 from bot.cooldown.plugin import cooldowns
+from bot.exception import exceptions
 from bot.locale import locales
 from bot.plugin import _plugins
 
@@ -35,20 +36,12 @@ class View(miru.View):
         banana = user.banana
         monkey = user.monkey
         reputation = user.reputation
+        item = user.item
 
         fed = (monkey + 1) * 250
 
         if fed > banana:
-            raise ValueError(
-                locales.of(
-                    locale,
-                    locale_builder=locales.LocaleBuilder(
-                        "Not enough bananas",
-                        ru="Недостаточно бананов",
-                        uk="Недостатньо бананів",
-                    ),
-                )
-            )
+            raise exceptions.NotEnoughBanana(locale)
 
         title = locales.of(
             locale,
@@ -65,6 +58,7 @@ class View(miru.View):
                 banana=banana - fed,
                 monkey=monkey,
                 reputation=reputation,
+                items=item,
             )
 
             template = string.Template(
@@ -139,6 +133,7 @@ class View(miru.View):
             banana=banana - fed,
             monkey=monkey + 1,
             reputation=reputation,
+            items=item,
         )
 
         template = string.Template(

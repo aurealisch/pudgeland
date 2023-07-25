@@ -3,11 +3,17 @@ import msgspec
 from bot.locale import locales
 
 
+class Bonus(msgspec.Struct):
+    banana: float
+
+
 class Item(msgspec.Struct):
     name: str | locales.LocaleBuilder
     description: str | locales.LocaleBuilder
 
     price: int
+
+    bonus: Bonus
 
 
 with open("./bot/plugin/economy/shop/_shops.json", encoding="utf-8") as stream:

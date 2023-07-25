@@ -1,3 +1,4 @@
+import datetime
 import string
 
 import crescent
@@ -5,6 +6,7 @@ import hikari
 import miru
 
 from bot.cooldown.plugin import cooldowns
+from bot.exception import exceptions
 from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
@@ -16,11 +18,103 @@ period = 5
 
 
 class View(miru.View):
+    def __init__(
+        self,
+        item: str,
+        *,
+        timeout: float | int | datetime.timedelta | None = 120,
+        autodefer: bool = True,
+    ) -> None:
+        self.item = item
+
+        super().__init__(timeout=timeout, autodefer=autodefer)
+
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
     # This must be inside a subclass of View.
     @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
     async def ok(self, _: miru.Button, view_context: miru.ViewContext) -> None:
-        pass
+        locale = view_context.locale
+
+        view = view_context.view
+
+        # Short-hand method to defer an interaction response.
+        # Raises RuntimeError if the interaction was already responded to.
+        await view_context.defer(ephemeral=False)
+
+        id__ = str(view_context.user.id)
+
+        user = await plugin.model.database.find_first(id__)
+
+        # Return the value for key if key is in the dictionary, else default.
+        item = _shops.shop.get(self.item)
+
+        if item.price > user.banana:
+            raise exceptions.NotEnoughBanana(locale)
+
+        if int(self.item) == user.item:
+            raise ValueError
+
+        await plugin.model.database.middleware.update(
+            id__,
+            banana=user.banana - item.price,
+            monkey=user.monkey,
+            reputation=user.reputation,
+            item=int(self.item),
+        )
+
+        title = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                "Buy",
+                ru="Купить",
+                uk="Купити",
+            ),
+        )
+
+        _name = locales.of(locale, locale_builder=item.name)
+
+        template = string.Template(
+            f"""
+                <@{user.id}> $bought `{_name}` $for__ `{item.price}` $bananas
+
+                ```diff\n- {item.price} $bananas 🍌```
+                ```diff\n+ {_name}```
+            """
+        )
+
+        description = locales.of(
+            locale,
+            locale_builder=locales.LocaleBuilder(
+                f"""
+                    <@{user.id}> bought `{item.name}` for `{item.price}` bananas
+
+                    ```diff\n- {item.price} bananas 🍌```
+                    ```diff\n+ {item.name}```
+                """,
+                ru=template.substitute(
+                    dict(
+                        bought="купил",
+                        for__="за",
+                        bananas="бананов",
+                    )
+                ),
+                uk=template.substitute(
+                    dict(
+                        bought="купив",
+                        for__="за",
+                        bananas="бананів",
+                    )
+                ),
+            ),
+        )
+
+        embed = hikari.Embed(title=title, description=description)
+
+        await view_context.respond(embed=embed)
+
+        if view is not None:
+            # Stop listening for interactions.
+            view.stop()
 
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
     # This must be inside a subclass of View.
@@ -96,11 +190,11 @@ class Buy:
     async def callback(self, context: crescent.Context) -> None:
         locale = context.locale
 
-        item = _shops.shop.get(self.item)
+        item = _shops.shop[str(self.item)]
 
         price = item.price
 
-        view = View(timeout=60)
+        view = View(str(self.item), timeout=60)
 
         title = locales.of(
             locale,

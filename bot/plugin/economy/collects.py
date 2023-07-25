@@ -7,6 +7,7 @@ import hikari
 from bot.cooldown.plugin import cooldowns
 from bot.locale import locales
 from bot.plugin import _plugins
+from bot.plugin.economy.shop import _shops
 
 plugin = _plugins.Plugin()
 
@@ -43,10 +44,6 @@ class Collect:
 
         user = await plugin.model.database.find_first(contextual)
 
-        banana = user.banana
-        monkey = user.monkey
-        reputation = user.reputation
-
         # Choose a random element from a non-empty sequence.
         collecting = random.choice(
             # Return an object that produces a sequence of integers from start
@@ -57,7 +54,12 @@ class Collect:
             )
         )
 
-        banana += collecting
+        # Return the value for key if key is in the dictionary, else default.
+        item = _shops.shop.get(str(user.item))
+
+        collecting += int(round(collecting * item.bonus.banana))
+
+        user.banana += collecting
 
         title = locales.of(
             locale,
@@ -81,7 +83,7 @@ class Collect:
             ),
         )
 
-        if monkey != 0:
+        if user.monkey:
             # Choose a random element from a non-empty sequence.
             ratio = random.choice(
                 # Return an object that produces a sequence of integers from start
@@ -92,18 +94,18 @@ class Collect:
                 )
             )
 
-            monkeyish = monkey * (50 + ratio)
+            monkeyish = user.monkey * (50 + ratio)
 
-            banana += monkeyish
+            user.banana += monkeyish
 
             template = string.Template(
-                f"\n+ `{monkeyish}` $bananas $from__ `{monkey}` $monkeys"
+                f"\n+ `{monkeyish}` $bananas $from__ `{user.monkey}` $monkeys"
             )
 
             description += locales.of(
                 locale,
                 locale_builder=locales.LocaleBuilder(
-                    f"\n+ `{monkeyish}` bananas from `{monkey}` monkeys",
+                    f"\n+ `{monkeyish}` bananas from `{user.monkey}` monkeys",
                     ru=template.substitute(
                         dict(
                             bananas="бананов",
@@ -123,19 +125,20 @@ class Collect:
 
         await plugin.model.database.middleware.update(
             contextual,
-            banana=banana,
-            monkey=monkey,
-            reputation=reputation,
+            banana=user.banana,
+            monkey=user.monkey,
+            reputation=user.reputation,
+            item=user.item,
         )
 
         template = string.Template(
-            f"\n\n🍌 $bananas: `{banana}`\n🐒 $monkeys: `{monkey}`"
+            f"\n\n🍌 $bananas: `{user.banana}`\n🐒 $monkeys: `{user.monkey}`"
         )
 
         description += locales.of(
             locale,
             locale_builder=locales.LocaleBuilder(
-                f"\n\n🍌 Bananas: `{banana}`\n🐒 Monkeys: `{monkey}`",
+                f"\n\n🍌 Bananas: `{user.banana}`\n🐒 Monkeys: `{user.monkey}`",
                 ru=template.substitute(dict(bananas="Бананы", monkeys="Обезьяны")),
                 uk=template.substitute(dict(bananas="Банан", monkeys="Мавпа")),
             ),

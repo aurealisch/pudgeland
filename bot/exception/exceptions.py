@@ -17,6 +17,20 @@ class YouCantDoThat(Exception):
         )
 
 
+class NotEnoughBanana(Exception):
+    def __init__(self, locale: hikari.Locale) -> None:
+        super().__init__(
+            locales.of(
+                locale,
+                locale_builder=locales.LocaleBuilder(
+                    "Not enough bananas",
+                    ru="Недостаточно бананов",
+                    uk="Недостатньо бананів",
+                ),
+            )
+        )
+
+
 # MIT License
 #
 # Copyright (c) 2023 elaresai
