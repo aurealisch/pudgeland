@@ -1,0 +1,8 @@
+[phases.install]
+cmd = "./cmd/nixpacks/install.sh"
+
+[phases.build]
+cmd = "./cmd/nixpacks/build.sh"
+
+[start]
+cmd = "./cmd/nixpacks/start.sh"
