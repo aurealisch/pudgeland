@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+attrs = "*"
+python-dotenv = "*"
+prisma = "*"
+fastapi = "*"
+uvicorn = "*"
+meowy = "*"
+woofy = "*"
+collei = "*"
+msgspec = "*"
+hikari = "*"
+hikari-crescent = "*"
+hikari-miru = "*"
+
+[dev-packages]
+pre-commit = "*"
+ruff = "*"
+black = "*"
+
+[requires]
+python_version = "3.11"
