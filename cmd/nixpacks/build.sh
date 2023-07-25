@@ -1,3 +1,1 @@
-prisma generate
-
-chmod start.sh +x
+prisma generate && chmod start.sh +x
