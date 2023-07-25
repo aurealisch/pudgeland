@@ -1,1 +1,1 @@
-release: python -OO -m bot
+start: python -OO -m bot
