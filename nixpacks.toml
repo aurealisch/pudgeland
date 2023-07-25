@@ -1,8 +1,10 @@
-[phases.install]
-cmd = "./cmd/nixpacks/install.sh"
-
 [phases.build]
-cmd = "./cmd/nixpacks/build.sh"
+dependsOn = ["install"]
+cmd = ["./cmd/nixpacks/build.sh"]
+
+[phases.install]
+dependsOn = ["setup"]
+cmd = "./cmd/nixpacks/install.sh"
 
 [start]
 cmd = "python -OO -m bot"
