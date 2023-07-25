@@ -1,8 +1,10 @@
 [phases.build]
-cmds = ["./cmd/nixpacks/build.sh"]
+cmds = [".//cmd/nixpacks/build.sh"]
 
 [phases.install]
 cmds = ["./cmd/nixpacks/install.sh"]
+
+paths = ["/opt/venv/bin"]
 
 [start]
 cmd = "python -OO -m bot"
