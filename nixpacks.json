@@ -26,6 +26,6 @@
     }
   },
   "start": {
-    "cmds": ["python -OO -m bot"]
+    "cmd": "python -OO -m bot"
   }
 }
