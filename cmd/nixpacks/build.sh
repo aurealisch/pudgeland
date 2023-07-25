@@ -1,1 +1,1 @@
-prisma generate && chmod start.sh +x
+prisma generate && chmod ./cmd/nixpacks/start.sh +x
