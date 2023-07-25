@@ -92,7 +92,7 @@ class Remove:
 
         template = string.Template(
             f"""
-                <@{_contextual} $action <@{_optional}>
+                <@{_contextual}> $action <@{_optional}>
 
                 📉 $reputation: `{optional.reputation - 1}`
             """
@@ -102,7 +102,7 @@ class Remove:
             locale,
             locale_builder=locales.LocaleBuilder(
                 f"""
-                    <@{_contextual} removed the reputation <@{_optional}>
+                    <@{_contextual}> removed the reputation <@{_optional}>
 
                     📉 Reputation: `{optional.reputation - 1}`
                 """,

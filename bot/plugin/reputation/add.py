@@ -92,7 +92,7 @@ class Add:
 
         template = string.Template(
             f"""
-                <@{_contextual} $action <@{_optional}>
+                <@{_contextual}> $action <@{_optional}>
 
                 📈 $reputation: `{optional.reputation + 1}`
             """
@@ -102,7 +102,7 @@ class Add:
             locale,
             locale_builder=locales.LocaleBuilder(
                 f"""
-                    <@{_contextual} added a reputation <@{_optional}>
+                    <@{_contextual}> added a reputation <@{_optional}>
 
                     📈 Reputation: `{optional.reputation + 1}`
                 """,
