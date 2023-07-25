@@ -54,10 +54,11 @@ class Collect:
             )
         )
 
-        # Return the value for key if key is in the dictionary, else default.
-        item = _shops.shop.get(str(user.item))
+        if user.item:
+            # Return the value for key if key is in the dictionary, else default.
+            item = _shops.shop.get(str(user.item))
 
-        collecting += int(round(collecting * item.bonus.banana))
+            collecting += int(round(collecting * item.bonus.banana))
 
         user.banana += collecting
 
