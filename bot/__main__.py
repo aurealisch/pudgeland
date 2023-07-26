@@ -1,23 +1,4 @@
-import threading
-
-import uvicorn
-
-from bot.api.app import apps
 from bot.common import commons
-
-
-def target() -> None:
-    return uvicorn.run(
-        apps.app,
-        host=commons.configuration.api.host,
-        port=commons.configuration.api.port,
-    )
-
-
-thread = threading.Thread(target=target)
-
-# Start the thread's activity.
-thread.start()
 
 # Start the application and block until it's finished running.
 commons.bot.run()
