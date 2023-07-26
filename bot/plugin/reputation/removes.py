@@ -4,6 +4,7 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
+from bot.exception import exceptions
 from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.reputation import _groups
@@ -60,16 +61,7 @@ class Remove:
         _contextual = str(context.user.id)
 
         if _optional == _contextual:
-            raise ValueError(
-                locales.of(
-                    locale,
-                    locale_builder=locales.LocaleBuilder(
-                        "You can't do that",
-                        ru="Так нельзя",
-                        uk="Так не можна",
-                    ),
-                )
-            )
+            raise exceptions.YouCantDoThat(locale)
 
         optional = await plugin.model.database.find_first(_optional)
 

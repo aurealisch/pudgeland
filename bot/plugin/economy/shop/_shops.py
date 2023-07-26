@@ -16,6 +16,7 @@ class Item(msgspec.Struct):
     bonus: Bonus
 
 
+# Open file and return a stream.
 with open("./bot/plugin/economy/shop/_shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 

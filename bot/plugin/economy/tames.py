@@ -18,7 +18,6 @@ period = 5
 
 class View(miru.View):
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
-    # This must be inside a subclass of View.
     @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
     async def ok(self, _: miru.Button, view_context: miru.ViewContext) -> None:
         locale = view_context.locale
@@ -26,7 +25,6 @@ class View(miru.View):
         view = view_context.view
 
         # Short-hand method to defer an interaction response.
-        # Raises RuntimeError if the interaction was already responded to.
         await view_context.defer(ephemeral=False)
 
         contextual = str(view_context.user.id)
@@ -202,7 +200,6 @@ class View(miru.View):
             view.stop()
 
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
-    # This must be inside a subclass of View.
     @miru.button(label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌")
     async def cancel(self, _: miru.Button, view_context: miru.ViewContext) -> None:
         locale = view_context.locale

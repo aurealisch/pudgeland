@@ -86,6 +86,7 @@ class Profile:
         )
 
         if user.item:
+            # Return the value for key if key is in the dictionary, else default.
             item = _shops.shop.get(str(user.item))
 
             _name = locales.of(locale, locale_builder=item.name)

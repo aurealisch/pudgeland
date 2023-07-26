@@ -47,7 +47,7 @@ class Collect:
         # Choose a random element from a non-empty sequence.
         collecting = random.choice(
             # Return an object that produces a sequence of integers from start
-            # (inclusive) to stop (exclusive) by step
+            # (inclusive) to stop (exclusive) by step.
             range(
                 plugin.model.configuration.plugins.collect.collecting.start,
                 plugin.model.configuration.plugins.collect.collecting.stop,
@@ -58,7 +58,12 @@ class Collect:
             # Return the value for key if key is in the dictionary, else default.
             item = _shops.shop.get(str(user.item))
 
-            collecting += int(round(collecting * item.bonus.banana))
+            # Convert a number or string to an integer,
+            # or return 0 if no arguments are given.
+            collecting += int(
+                # Round a number to a given precision in decimal digits.
+                round(collecting * item.bonus.banana)
+            )
 
         user.banana += collecting
 
@@ -88,7 +93,7 @@ class Collect:
             # Choose a random element from a non-empty sequence.
             ratio = random.choice(
                 # Return an object that produces a sequence of integers from start
-                # (inclusive) to stop (exclusive) by step
+                # (inclusive) to stop (exclusive) by step.
                 range(
                     plugin.model.configuration.plugins.collect.ratio.start,
                     plugin.model.configuration.plugins.collect.ratio.stop,

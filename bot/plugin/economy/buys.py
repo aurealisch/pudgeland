@@ -38,7 +38,6 @@ class View(miru.View):
         view = view_context.view
 
         # Short-hand method to defer an interaction response.
-        # Raises RuntimeError if the interaction was already responded to.
         await view_context.defer(ephemeral=False)
 
         id__ = str(view_context.user.id)
@@ -110,6 +109,8 @@ class View(miru.View):
 
         embed = hikari.Embed(title=title, description=description)
 
+        # Short-hand method to create a new message response via the interaction
+        # this context represents.
         await view_context.respond(embed=embed)
 
         if view is not None:
@@ -144,8 +145,8 @@ class View(miru.View):
 
         embed = hikari.Embed(title=title, description=description)
 
-        # Short-hand method to create a new message response via the interaction this
-        # context represents.
+        # Short-hand method to create a new message response via the interaction
+        # this context represents.
         await view_context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
 
         if view is not None:
@@ -190,7 +191,8 @@ class Buy:
     async def callback(self, context: crescent.Context) -> None:
         locale = context.locale
 
-        item = _shops.shop[str(self.item)]
+        # Return the value for key if key is in the dictionary, else default.
+        item = _shops.shop.get(str(self.item))
 
         price = item.price
 

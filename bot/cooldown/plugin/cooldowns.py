@@ -85,6 +85,7 @@ class Cooldown(typing.Generic[_K]):
         self._current[key] = value
 
     def get_bucket(self, key: _K) -> SlidingWindow:
+        # Return the current time in seconds since the Epoch.
         now = _time.time()
 
         if now > self.last_cycle + self.period:
@@ -128,13 +129,20 @@ def cooldown(
         # Return the current time in seconds since the Epoch.
         current = _time.time()
 
-        timestamp = f"<t:{int(round(current + remained))}:R>"
+        # Convert a number or string to an integer, or return 0 if no arguments are
+        # given.
+        future = int(
+            # Round a number to a given precision in decimal digits.
+            round(current + remained)
+        )
+
+        timestamp = f"<t:{future}:R>"
 
         template = string.Template(
             f"""\
-                $youUseThisCommandTooOften!
+                $you_use_this_command_too_often!
 
-                $tryAgain {timestamp}
+                $try_again {timestamp}
             """
         )
 
@@ -150,18 +158,18 @@ def cooldown(
                     """,
                     ru=template.substitute(
                         dict(
-                            youUseThisCommandTooOften=(
+                            you_use_this_command_too_often=(
                                 "Ты слишком часто используешь эту команду"
                             ),
-                            tryAgain="Попробуйте еще раз",
+                            try_again="Попробуйте еще раз",
                         ),
                     ),
                     uk=template.substitute(
                         dict(
-                            youUseThisCommandTooOften=(
+                            you_use_this_command_too_often=(
                                 "Ти занадто часто використовуєш цю команду"
                             ),
-                            tryAgain="Спробуйте ще раз",
+                            try_again="Спробуйте ще раз",
                         ),
                     ),
                 ),
