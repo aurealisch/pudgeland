@@ -22,7 +22,8 @@ class Period:
         return (
             self.weeks * 7 * 24 * 60 * 60
             + self.days * 24 * 60 * 60
-            + self.hours * 60
+            + self.hours * 60 * 60
+            + self.minutes * 60
             + self.seconds
             + self.milliseconds / 1000
             + self.microseconds / 1000000
