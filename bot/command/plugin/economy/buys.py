@@ -1,12 +1,13 @@
-import attrs
+import datetime
+
 import crescent
 import hikari
 import miru
 
-from bot.command.plugin import _plugins
 from bot.command.cooldown import cooldowns
 from bot.command.error import errors
 from bot.command.middleware import middlewares
+from bot.command.plugin import _plugins
 from bot.command.plugin.economy.shop import _items, _shops
 from bot.utility import embeds
 
@@ -18,11 +19,19 @@ name = "купить"
 description = "Купить"
 
 
-@attrs.define
 class View(miru.View):
-    plugin: _plugins.Plugin
+    def __init__(
+        self,
+        plugin: _plugins.Plugin,
+        item: _items.Id,
+        *,
+        timeout: float | int | datetime.timedelta | None = 120,
+        autodefer: bool = True,
+    ) -> None:
+        self.plugin = plugin
+        self.item = item
 
-    item: _items.Id
+        super().__init__(timeout=timeout, autodefer=autodefer)
 
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
     @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")

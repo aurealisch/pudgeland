@@ -1,6 +1,6 @@
+import datetime
 import random
 
-import attrs
 import crescent
 import hikari
 import miru
@@ -19,10 +19,17 @@ name = "приручать"
 description = "Приручать"
 
 
-# Define an *attrs* class.
-@attrs.define
 class View(miru.View):
-    plugin: _plugins.Plugin
+    def __init__(
+        self,
+        plugin: _plugins.Plugin,
+        *,
+        timeout: float | int | datetime.timedelta | None = 120,
+        autodefer: bool = True,
+    ) -> None:
+        self.plugin = plugin
+
+        super().__init__(timeout=timeout, autodefer=autodefer)
 
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
     @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
