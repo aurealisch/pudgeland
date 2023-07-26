@@ -2,48 +2,19 @@ import crescent
 import hikari
 import meowy
 
-from bot.locale import locales
 from bot.plugin import _plugins
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
+name = "кошка"
+description = "Случайное изображение кошки"
 
-@plugin.include
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "cat",
-        ru="кот",
-        uk="кiт",
-    ),
-    description=locales.LocaleBuilder(
-        "Random cat image",
-        ru="Случайное изображение кота",
-        uk="Випадкове зображення кота",
-    ),
-)
-class Cat:
-    # noinspection PyMethodMayBeStatic
+
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Cat",
-                ru="Кот",
-                uk="Кiт",
-            ),
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Random cat image",
-                ru="Случайное изображение кота",
-                uk="Випадкове зображення кота",
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -52,6 +23,15 @@ class Cat:
 
         # Respond to an interaction.
         await context.respond(embed=embed)
+
+
+@plugin.include
+# Register a slash command.
+@crescent.command(name=name, description=description)
+class Cat:
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin).callback(context)
 
 
 # MIT License

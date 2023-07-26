@@ -1,74 +1,28 @@
-import string
-
 import collei
 import crescent
 import hikari
 
-from bot.exception import exceptions
-from bot.locale import locales
+from bot.plugin.exception import _exceptions
 from bot.plugin import _plugins
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
+name = "поцеловать"
+description = "Поцеловать пользователя"
 
-@plugin.include
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "kiss",
-        ru="поцеловать",
-        uk="поцілувати",
-    ),
-    description=locales.LocaleBuilder(
-        "Kiss the user",
-        ru="Поцеловать пользователя",
-        uk="Поцілувати користувача",
-    ),
-)
-class Kiss:
-    # An option when declaring a command using class syntax.
-    user = crescent.option(
-        hikari.User,
-        name=locales.LocaleBuilder(
-            "user",
-            ru="пользователь",
-            uk="користувач",
-        ),
-        description=locales.LocaleBuilder(
-            "User",
-            ru="Пользователь",
-            uk="Користувач",
-        ),
-    )
 
-    # noinspection PyMethodMayBeStatic
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        optional = self.user.id
+        optional = str(self.options.get("user").id)
         contextual = context.user.id
 
         if optional == contextual:
-            raise exceptions.YouCantDoThat(locale)
+            raise _exceptions.YouCantDoThat
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Kiss",
-                ru="Поцеловать",
-                uk="Поцілувати",
-            ),
-        )
-
-        template = string.Template(f"<@{contextual}> $action <@{optional}>")
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                template.substitute(dict(action="kisses")),
-                ru=template.substitute(dict(action="целует")),
-                uk=template.substitute(dict(action="цілувати")),
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+        description = f"<@{contextual}> целует <@{optional}>"
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -77,6 +31,18 @@ class Kiss:
 
         # Respond to an interaction.
         await context.respond(embed=embed)
+
+
+@plugin.include
+# Register a slash command.
+@crescent.command(name=name, description=description)
+class Kiss:
+    # An option when declaring a command using class syntax.
+    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
+
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin, options={"user": self.user}).callback(context)
 
 
 # MIT License

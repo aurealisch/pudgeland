@@ -1,34 +1,18 @@
 {
   "1": {
-    "name": {
-      "_fallback": "Hook",
-      "ru": "Крючок",
-      "uk": "Гачок"
-    },
-    "description": {
-      "_fallback": "Releases a hook that attracts +5% bananas instead of another Shadow Fiend on the center!",
-      "ru": "Выпускает крючок, который вместо очередного Shadow Fiend на центре притягивает +5% бананов!",
-      "uk": "Випускає гачок, який замість чергового Shadow Fiend на центрі притягує +5% бананів!"
-    },
+    "name": "Крючок",
+    "description": "Выпускает крючок, который вместо очередного Shadow Fiend на центре притягивает +5% бананов!",
     "price": 500,
     "bonus": {
       "banana": 0.05
     }
   },
   "2": {
-    "name": {
-      "_fallback": "The Administrator's Lost Axe",
-      "ru": "Затерянный Топор Администратора",
-      "uk": "Загублена Сокира Адміністратора"
-    },
-    "description": {
-      "_fallback": "Lost admin axe allows you to completely cut down a tree, which gives +10% bananas!",
-      "ru": "Затерянный топор админа позволяет полностью срубить дерево, что дает +10% бананов!",
-      "uk": "Загублена сокира адміна дає змогу повністю зрубати дерево, що дає +10% бананів!"
-    },
+    "name": "Затерянный Топор Администратора",
+    "description": "Затерянный топор админа позволяет полностью срубить дерево, что дает +10% бананов!",
     "price": 1000,
     "bonus": {
-      "banana": 0.10
+      "banana": 0.1
     }
   }
 }

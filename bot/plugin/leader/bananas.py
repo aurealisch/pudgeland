@@ -4,14 +4,37 @@ import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.leader import _groups
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
-# 25 seconds
-period = 25
+period = cooldowns.Period(seconds=25)
+
+name = "бананы"
+description = "Бананы"
+
+
+class Middleware(_middlewares.Middleware):
+    async def callback(self, context: crescent.Context) -> None:
+        users = await self.plugin.model.database.bananas()
+
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+
+        description = string.whitespace
+
+        # Return an enumerate object.
+        for index, user in enumerate(users):
+            position = index + 1
+
+            description += f"*{position}*. <@{user.id}> Бананы: `{user.banana}`\n"
+
+        embed = hikari.Embed(title=title, description=description)
+
+        # Respond to an interaction.
+        await context.respond(embed=embed)
 
 
 # Add a command to this command group.
@@ -20,57 +43,11 @@ period = 25
 # Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "bananas",
-        ru="бананы",
-        uk="банани",
-    ),
-    description=locales.LocaleBuilder(
-        "Bananas",
-        ru="Бананы",
-        uk="Банани",
-    ),
-)
+@crescent.command(name=name, description=description)
 class Bananas:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        users = await plugin.model.database.bananas()
-
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Bananas",
-                ru="Бананы",
-                uk="Банани",
-            ),
-        )
-
-        description = string.whitespace
-
-        # Return an enumerate object.
-        for index, user in enumerate(users):
-            position = index + 1
-
-            template = string.Template(
-                f"*{position}*. <@{user.id}> $bananas: `{user.banana}`\n"
-            )
-
-            description += locales.of(
-                locale,
-                locale_builder=locales.LocaleBuilder(
-                    f"*{position}*. <@{user.id}> Bananas: `{user.banana}`\n",
-                    ru=template.substitute(dict(bananas="Бананы")),
-                    uk=template.substitute(dict(bananas="Банани")),
-                ),
-            )
-
-        embed = hikari.Embed(title=title, description=description)
-
-        # Respond to an interaction.
-        await context.respond(embed=embed)
+        return await Middleware(plugin).callback(context)
 
 
 # MIT License

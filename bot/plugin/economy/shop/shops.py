@@ -3,95 +3,45 @@ import string
 import crescent
 import hikari
 
-from bot.cooldown.plugin import cooldowns
-from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
+name = "магазин"
+description = "Магазин"
 
-# 5 seconds
-period = 5
 
-
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "shop",
-        ru="магазин",
-        uk="магазин",
-    ),
-    description=locales.LocaleBuilder(
-        "Shop",
-        ru="Магазин",
-        uk="Магазин",
-    ),
-)
-class Shop:
-    # noinspection PyMethodMayBeStatic
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Shop",
-                ru="Магазин",
-                uk="Магазин",
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
 
         description = string.whitespace
 
         for id__, item in _shops.shop.items():
-            _name = locales.of(locale, locale_builder=item.name)
-            _description = locales.of(locale, locale_builder=item.description)
+            description += f"""
+                # {id__}. {item.name}
 
-            template = string.Template(
-                f"""
-                # {id__}. {_name}
+                Цена: 🍌 `{item.price}` бананов
 
-                $price: 🍌 `{item.price}` $bananas
-
-                $description:\n> {_description}
-                """
-            )
-
-            description += locales.of(
-                locale,
-                locale_builder=locales.LocaleBuilder(
-                    f"""
-                        # {id__}. {_name}
-
-                        Price: 🍌 `{item.price}` bananas
-
-                        Description:\n> {_description}
-                    """,
-                    ru=template.substitute(
-                        dict(
-                            price="Цена",
-                            bananas="бананов",
-                            description="Описание",
-                        ),
-                    ),
-                    uk=template.substitute(
-                        dict(
-                            price="Ціна",
-                            bananas="бананів",
-                            description="Опис",
-                        ),
-                    ),
-                ),
-            )
+                Описание:\n> {item.description}
+            """
 
         embed = hikari.Embed(title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
+
+
+@plugin.include
+# Register a slash command.
+@crescent.command(name=name, description=description)
+class Shop:
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin).callback(context)
 
 
 # MIT License

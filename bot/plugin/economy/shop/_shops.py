@@ -1,26 +1,13 @@
 import msgspec
 
-from bot.locale import locales
-
-
-class Bonus(msgspec.Struct):
-    banana: float
-
-
-class Item(msgspec.Struct):
-    name: str | locales.LocaleBuilder
-    description: str | locales.LocaleBuilder
-
-    price: int
-
-    bonus: Bonus
+from bot.plugin.economy.shop import _items
 
 
 # Open file and return a stream.
 with open("./bot/plugin/economy/shop/_shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 
-shop = msgspec.json.decode(buf, type=dict[str, Item])
+shop = msgspec.json.decode(buf, type=dict[_items.Id, _items.Item])
 
 # MIT License
 #

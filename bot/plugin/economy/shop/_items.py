@@ -1,16 +1,21 @@
-import attrs
-import crescent
+import typing
 
-from bot.plugin import _plugins
+import msgspec
+
+Id = typing.TypeVar("Id")
 
 
-# Define an *attrs* class.
-@attrs.define
-class Middleware:
-    plugin: _plugins.Plugin
+class Bonus(msgspec.Struct):
+    banana: float
 
-    async def callback(self, context: crescent.Context) -> None:
-        pass
+
+class Item(msgspec.Struct):
+    name: str
+    description: str
+
+    price: int
+
+    bonus: Bonus
 
 
 # MIT License

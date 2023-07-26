@@ -1,40 +1,31 @@
-import datetime
-import string
-
+import attrs
 import crescent
 import hikari
 import miru
 
 from bot.cooldown.plugin import cooldowns
-from bot.exception import exceptions
-from bot.locale import locales
+from bot.plugin.exception import _exceptions
 from bot.plugin import _plugins
-from bot.plugin.economy.shop import _shops
+from bot.plugin.economy.shop import _items, _shops
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
-# 5 seconds
-period = 5
+period = cooldowns.Period(seconds=5)
+
+name = "купить"
+description = "Купить"
 
 
+@attrs.define
 class View(miru.View):
-    def __init__(
-        self,
-        item: str,
-        *,
-        timeout: float | int | datetime.timedelta | None = 120,
-        autodefer: bool = True,
-    ) -> None:
-        self.item = item
+    plugin: _plugins.Plugin
 
-        super().__init__(timeout=timeout, autodefer=autodefer)
+    item: _items.Id
 
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
-    # This must be inside a subclass of View.
     @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
     async def ok(self, _: miru.Button, view_context: miru.ViewContext) -> None:
-        locale = view_context.locale
-
         view = view_context.view
 
         # Short-hand method to defer an interaction response.
@@ -42,18 +33,18 @@ class View(miru.View):
 
         id__ = str(view_context.user.id)
 
-        user = await plugin.model.database.find_first(id__)
+        user = await self.plugin.model.database.find_first(id__)
 
         # Return the value for key if key is in the dictionary, else default.
         item = _shops.shop.get(self.item)
 
         if item.price > user.banana:
-            raise exceptions.NotEnoughBanana(locale)
+            raise _exceptions.NotEnoughBanana
 
         if int(self.item) == user.item:
             raise ValueError
 
-        await plugin.model.database.middleware.update(
+        await self.plugin.model.database.middleware.update(
             id__,
             banana=user.banana - item.price,
             monkey=user.monkey,
@@ -61,51 +52,14 @@ class View(miru.View):
             item=int(self.item),
         )
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Buy",
-                ru="Купить",
-                uk="Купити",
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+        description = f"""\
+            <@{user.id}> купил `{item.name}` за `{item.price}` бананов
 
-        _name = locales.of(locale, locale_builder=item.name)
-
-        template = string.Template(
-            f"""
-                <@{user.id}> $bought `{_name}` $for__ `{item.price}` $bananas
-
-                ```diff\n- {item.price} $bananas 🍌```
-                ```diff\n+ {_name}```
-            """
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                f"""
-                    <@{user.id}> bought `{item.name}` for `{item.price}` bananas
-
-                    ```diff\n- {item.price} bananas 🍌```
-                    ```diff\n+ {item.name}```
-                """,
-                ru=template.substitute(
-                    dict(
-                        bought="купил",
-                        for__="за",
-                        bananas="бананов",
-                    )
-                ),
-                uk=template.substitute(
-                    dict(
-                        bought="купив",
-                        for__="за",
-                        bananas="бананів",
-                    )
-                ),
-            ),
-        )
+            ```diff\n- {item.price} бананов 🍌```
+            ```diff\n+ {item.name}```
+        """
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -121,27 +75,10 @@ class View(miru.View):
     # This must be inside a subclass of View.
     @miru.button(label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌")
     async def cancel(self, _: miru.Button, view_context: miru.ViewContext) -> None:
-        locale = view_context.locale
-
         view = view_context.view
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Cancel",
-                ru="Отменить",
-                uk="Відмінивши",
-            ),
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Cancelled",
-                ru="Отменено",
-                uk="Скасований",
-            ),
-        )
+        title = "Отменить"
+        description = "Отменено"
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -154,43 +91,8 @@ class View(miru.View):
             view.stop()
 
 
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "buy",
-        ru="купить",
-        uk="купити",
-    ),
-    description=locales.LocaleBuilder(
-        "Buy",
-        ru="Купить",
-        uk="Купити",
-    ),
-)
-class Buy:
-    # An option when declaring a command using class syntax.
-    item = crescent.option(
-        int,
-        name=locales.LocaleBuilder(
-            "item",
-            ru="предмет",
-            uk="предмет",
-        ),
-        description=locales.LocaleBuilder(
-            "Item",
-            ru="Предмет",
-            uk="Предмет",
-        ),
-        choices=[(item.name, id__) for id__, item in _shops.shop.items()],
-    )
-
-    # noinspection PyMethodMayBeStatic
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
         # Return the value for key if key is in the dictionary, else default.
         item = _shops.shop.get(str(self.item))
 
@@ -198,41 +100,8 @@ class Buy:
 
         view = View(str(self.item), timeout=60)
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Buy",
-                ru="Купить",
-                uk="Купити",
-            ),
-        )
-
-        template = string.Template(
-            f"$to_buy_this_item_you_will_need `{price}` $bananas"
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                f"To buy this item you will need `{price}` bananas",
-                ru=template.substitute(
-                    dict(
-                        to_buy_this_item_you_will_need=(
-                            "Чтобы купить этот предмет потребуется"
-                        ),
-                        bananas="бананов",
-                    ),
-                ),
-                uk=template.substitute(
-                    dict(
-                        to_buy_this_item_you_will_need=(
-                            "Щоб купити цей предмет потрібно"
-                        ),
-                        bananas="бананів",
-                    ),
-                ),
-            ),
-        )
+        title = "Купить"
+        description = f"$Чтобы купить этот предмет потребуется `{price}` бананов"
 
         embed = hikari.Embed(title=title, description=description)
 
@@ -245,8 +114,30 @@ class Buy:
         )
 
         if message is not None:
-            # Start up the view and begin listening for interactions.
-            await view.start(message)
+            try:
+                # Start up the view and begin listening for interactions.
+                await view.start(message)
+            except Exception:
+                raise
+
+
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name=name, description=description)
+class Buy:
+    # An option when declaring a command using class syntax.
+    item = crescent.option(
+        int,
+        name="предмет",
+        description="Предмет",
+        choices=[(item.name, id__) for id__, item in _shops.shop.items()],
+    )
+
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin, {"item": self.item}).callback(context)
 
 
 # MIT License

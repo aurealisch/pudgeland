@@ -1,83 +1,48 @@
-import string
-
 import collei
 import crescent
 import hikari
 
-from bot.exception import exceptions
-from bot.locale import locales
+from bot.plugin.exception import _exceptions
 from bot.plugin import _plugins
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
+name = "убить"
+description = "Убить пользователя"
 
-@plugin.include
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "kill",
-        ru="убить",
-        uk="вбивати",
-    ),
-    description=locales.LocaleBuilder(
-        "Kill",
-        ru="Убить пользователя",
-        uk="Вбивати користувача",
-    ),
-)
-class Kill:
-    # An option when declaring a command using class syntax.
-    user = crescent.option(
-        hikari.User,
-        name=locales.LocaleBuilder(
-            "user",
-            ru="пользователь",
-            uk="користувач",
-        ),
-        description=locales.LocaleBuilder(
-            "User",
-            ru="Пользователь",
-            uk="Користувач",
-        ),
-    )
 
-    # noinspection PyMethodMayBeStatic
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        optional = self.user.id
+        optional = str(self.options.get("user").id)
         contextual = context.user.id
 
         if optional == contextual:
-            raise exceptions.YouCantDoThat(locale)
+            raise _exceptions.YouCantDoThat
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Kill",
-                ru="Убить",
-                uk="Вбивати",
-            ),
-        )
-
-        template = string.Template(f"<@{contextual}> $action <@{optional}>")
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                template.substitute(dict(action="kills")),
-                ru=template.substitute(dict(action="убивает")),
-                uk=template.substitute(dict(action="вбивати")),
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+        description = f"<@{contextual}> убивает <@{optional}>"
 
         embed = hikari.Embed(title=title, description=description)
 
         # Set the image on this embed.
-        embed.set_image(collei.Client().sfw.get(collei.SfwCategory.BITE).url)
+        embed.set_image(collei.Client().sfw.get(collei.SfwCategory.KILL).url)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
+
+
+@plugin.include
+# Register a slash command.
+@crescent.command(name=name, description=description)
+class Kill:
+    # An option when declaring a command using class syntax.
+    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
+
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin, options={"user": self.user}).callback(context)
 
 
 # MIT License

@@ -1,12 +1,32 @@
-import string
 import time as _time
 import typing
 
+import attrs
 import crescent
 
-from bot.locale import locales
-
 _K = typing.TypeVar("_K")
+
+
+@attrs.define
+class Period:
+    weeks: float = 0.0
+    days: float = 0.0
+    hours: float = 0.0
+    minutes: float = 0.0
+    seconds: float = 0.0
+    milliseconds: float = 0.0
+    microseconds: float = 0.0
+
+    @property
+    def total(self) -> float:
+        return (
+            self.weeks * 7 * 24 * 60 * 60
+            + self.days * 24 * 60 * 60
+            + self.hours * 60
+            + self.seconds
+            + self.milliseconds / 1000
+            + self.microseconds / 1000000
+        )
 
 
 class SlidingWindow:
@@ -114,17 +134,15 @@ class Cooldown(typing.Generic[_K]):
 
 
 def cooldown(
-    capacity: float, period: float
+    capacity: float, period: Period
 ) -> typing.Callable[[crescent.Context], typing.Awaitable[crescent.HookResult | None]]:
-    _cooldown = Cooldown(capacity, period=period)
+    _cooldown = Cooldown(capacity, period=period.total)
 
     async def inner(context: crescent.Context) -> crescent.HookResult | None:
         remained = _cooldown.trigger(context.user.id)
 
         if remained is None:
             return None
-
-        locale = context.locale
 
         # Return the current time in seconds since the Epoch.
         current = _time.time()
@@ -138,42 +156,14 @@ def cooldown(
 
         timestamp = f"<t:{future}:R>"
 
-        template = string.Template(
-            f"""\
-                $you_use_this_command_too_often!
-
-                $try_again {timestamp}
-            """
-        )
-
         # Respond to an interaction.
         await context.respond(
-            locales.of(
-                locale,
-                locale_builder=locales.LocaleBuilder(
-                    f"""\
-                        You use this command too often!
+            f"""\
+                Ты слишком часто используешь эту команду!
 
-                        Try again {timestamp}
-                    """,
-                    ru=template.substitute(
-                        dict(
-                            you_use_this_command_too_often=(
-                                "Ты слишком часто используешь эту команду"
-                            ),
-                            try_again="Попробуйте еще раз",
-                        ),
-                    ),
-                    uk=template.substitute(
-                        dict(
-                            you_use_this_command_too_often=(
-                                "Ти занадто часто використовуєш цю команду"
-                            ),
-                            try_again="Спробуйте ще раз",
-                        ),
-                    ),
-                ),
-            ),
+                Попробуйте еще раз {timestamp}
+            """,
+            ephemeral=True,
         )
 
         return crescent.HookResult(exit=True)

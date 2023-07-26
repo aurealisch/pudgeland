@@ -1,111 +1,57 @@
-import string
-
 import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
-# 5 seconds
-period = 5
+period = cooldowns.Period(seconds=5)
+
+name = "профиль"
+description = "Профиль"
+
+
+class Middleware(_middlewares.Middleware):
+    async def callback(self, context: crescent.Context) -> None:
+        # Defer this interaction response,
+        # allowing you to respond within the next 15 minutes.
+        await context.defer(ephemeral=False)
+
+        user = await self.plugin.model.database.find_first(str(context.user.id))
+
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+        description = f"""\
+            🍌 Бананы: `{user.banana}`
+            🐒 Обезьян: `{user.monkey}`
+
+            📊 Репутация: `{user.reputation}`
+        """
+
+        if user.item:
+            # Return the value for key if key is in the dictionary, else default.
+            item = _shops.shop.get(str(user.item))
+
+            description += f"\n📦 Предмет: `{item.name}`"
+
+        embed = hikari.Embed(title=title, description=description)
+
+        # Respond to an interaction.
+        await context.respond(embed=embed)
 
 
 @plugin.include
 # Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "profile",
-        ru="профиль",
-        uk="профіль",
-    ),
-    description=locales.LocaleBuilder(
-        "Profile",
-        ru="Профиль",
-        uk="Профіль",
-    ),
-)
+@crescent.command(name=name, description=description)
 class Profile:
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
-        # Defer this interaction response,
-        # allowing you to respond within the next 15 minutes.
-        await context.defer(ephemeral=False)
-
-        user = await plugin.model.database.find_first(str(context.user.id))
-
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Profile",
-                ru="Профиль",
-                uk="Профіль",
-            ),
-        )
-
-        template = string.Template(
-            f"""\
-                🍌 $bananas: `{user.banana}`
-                🐒 $monkeys: `{user.monkey}`
-
-                📊 $reputation: `{user.reputation}`
-            """,
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                f"""\
-                    🍌 Bananas: `{user.banana}`
-                    🐒 Monkeys: `{user.monkey}`
-
-                    📊 Reputation: `{user.reputation}`
-                """,
-                ru=template.substitute(
-                    dict(
-                        bananas="Бананы",
-                        monkeys="Обезьян",
-                        reputation="Репутация",
-                    ),
-                ),
-                uk=template.substitute(
-                    dict(
-                        bananas="Банан",
-                        monkeys="Мавпа",
-                        reputation="Репутація",
-                    ),
-                ),
-            ),
-        )
-
-        if user.item:
-            # Return the value for key if key is in the dictionary, else default.
-            item = _shops.shop.get(str(user.item))
-
-            _name = locales.of(locale, locale_builder=item.name)
-
-            template = string.Template(f"\n📦 $item: `{_name}`")
-
-            description += locales.of(
-                locale,
-                locale_builder=locales.LocaleBuilder(
-                    f"\n📦 Item: `{_name}`",
-                    ru=template.substitute(dict(item="Предмет")),
-                    uk=template.substitute(dict(item="Предмет")),
-                ),
-            )
-
-        embed = hikari.Embed(title=title, description=description)
-
-        # Respond to an interaction.
-        await context.respond(embed=embed)
+        return await Middleware(plugin).callback(context)
 
 
 # MIT License

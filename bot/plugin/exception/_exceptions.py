@@ -1,4 +1,12 @@
-pass
+class YouCantDoThat(Exception):
+    def __init__(self) -> None:
+        super().__init__("Так нельзя")
+
+
+class NotEnoughBanana(Exception):
+    def __init__(self) -> None:
+        super().__init__("Недостаточно бананов")
+
 
 # MIT License
 #

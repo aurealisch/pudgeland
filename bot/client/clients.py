@@ -3,8 +3,6 @@ import traceback
 import crescent
 import hikari
 
-from bot.locale import locales
-
 
 class Client(crescent.Client):
     async def on_crescent_command_error(
@@ -13,19 +11,10 @@ class Client(crescent.Client):
         if was_handled:
             return
 
-        locale = context.locale
+        exception_class = exception.__class__
+        exception_traceback = exception.__traceback__
 
-        exc_class = exception.__class__
-        exc_traceback = exception.__traceback__
-
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Exception",
-                ru="Исключение",
-                uk="Виняток",
-            ),
-        )
+        title = "Исключение"
         description = f"`{exception}`"
 
         embed = hikari.Embed(title=title, description=description)
@@ -35,7 +24,9 @@ class Client(crescent.Client):
         await context.respond(embed=embed)
 
         # Print exception up to 'limit' stack trace entries from 'tb' to 'file'.
-        traceback.print_exception(exc_class, value=exception, tb=exc_traceback)
+        traceback.print_exception(
+            exception_class, value=exception, tb=exception_traceback
+        )
 
 
 # MIT License

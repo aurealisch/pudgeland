@@ -2,35 +2,19 @@ import typing
 
 import attrs
 import crescent
-import hikari
+
+from bot.plugin import _plugins
 
 
+# Define an *attrs* class.
 @attrs.define
-class LocaleBuilder(crescent.LocaleBuilder):
-    _fallback: str
+class Middleware:
+    plugin: _plugins.Plugin
 
-    ru: str
-    uk: str
+    options: typing.Mapping[str, typing.Any]
 
-    def build(self) -> typing.Mapping[str, str]:
-        return {
-            hikari.Locale.RU: self.ru,
-            hikari.Locale.UK: self.uk,
-        }
-
-    @property
-    def fallback(self) -> str:
-        return self._fallback
-
-
-def of(locale: hikari.Locale, locale_builder: LocaleBuilder) -> None:
-    # Builds the locales for a command.
-    built = locale_builder.build()
-
-    try:
-        return built[locale]
-    except KeyError:
-        return locale_builder.fallback
+    async def callback(self, context: crescent.Context) -> None:
+        pass
 
 
 # MIT License

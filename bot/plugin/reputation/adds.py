@@ -1,67 +1,31 @@
-import string
-
 import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.exception import exceptions
-from bot.locale import locales
+from bot.plugin.exception import _exceptions
 from bot.plugin import _plugins
+from bot.plugin.middleware import _middlewares
 from bot.plugin.reputation import _groups
 
 plugin = _plugins.Plugin()
 
-# 6 hours
-period = 6 * 60 * 60
+period = cooldowns.Period(hours=6)
+
+name = "добавить"
+description = "Добавить"
 
 
-# Add a command to this command group.
-@_groups.group.child
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "add",
-        ru="добавить",
-        uk="додавши",
-    ),
-    description=locales.LocaleBuilder(
-        "Add",
-        ru="Добавить",
-        uk="Додавши",
-    ),
-)
-class Add:
-    # An option when declaring a command using class syntax.
-    user = crescent.option(
-        hikari.User,
-        name=locales.LocaleBuilder(
-            "user",
-            ru="пользователь",
-            uk="користувач",
-        ),
-        description=locales.LocaleBuilder(
-            "User",
-            ru="Пользователь",
-            uk="Користувач",
-        ),
-    )
-
-    # noinspection PyMethodMayBeStatic
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
         # Defer this interaction response,
         # allowing you to respond within the next 15 minutes.
         await context.defer(ephemeral=False)
 
-        _optional = str(self.user.id)
+        _optional = str(self.options.get("user").id)
         _contextual = str(context.user.id)
 
         if _optional == _contextual:
-            raise exceptions.YouCantDoThat(locale)
+            raise _exceptions.YouCantDoThat
 
         optional = await plugin.model.database.find_first(_optional)
 
@@ -73,50 +37,34 @@ class Add:
             item=optional.item,
         )
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Add",
-                ru="Добавить",
-                uk="Додавши",
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+        description = f"""\
+            <@{_contextual}> добавил репутацию <@{_optional}>
 
-        template = string.Template(
-            f"""
-                <@{_contextual}> $action <@{_optional}>
-
-                📈 $reputation: `{optional.reputation + 1}`
-            """
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                f"""
-                    <@{_contextual}> added a reputation <@{_optional}>
-
-                    📈 Reputation: `{optional.reputation + 1}`
-                """,
-                ru=template.substitute(
-                    dict(
-                        action="добавил репутацию",
-                        reputation="Репутация",
-                    ),
-                ),
-                uk=template.substitute(
-                    dict(
-                        action="додав репутацію",
-                        reputation="Репутація",
-                    ),
-                ),
-            ),
-        )
+            📈 Репутация: `{optional.reputation + 1}`
+        """
 
         embed = hikari.Embed(title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
+
+
+# Add a command to this command group.
+@_groups.group.child
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name=name, description=description)
+class Add:
+    # An option when declaring a command using class syntax.
+    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
+
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin, options={"user": self.user}).callback(context)
 
 
 # MIT License

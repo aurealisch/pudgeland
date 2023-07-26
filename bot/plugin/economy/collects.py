@@ -1,56 +1,38 @@
 import random
-import string
 
 import crescent
 import hikari
 
 from bot.cooldown.plugin import cooldowns
-from bot.locale import locales
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
+from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
-# 2 hours
-period = 2 * 60 * 60
+period = cooldowns.Period(hours=2)
+
+name = "собирать"
+deescription = "Cобирать"
 
 
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "collect",
-        ru="собирать",
-        uk="збирати",
-    ),
-    description=locales.LocaleBuilder(
-        "Сollect",
-        ru="Cобирать",
-        uk="Збирати",
-    ),
-)
-class Collect:
-    # noinspection PyMethodMayBeStatic
+class Middleware(_middlewares.Middleware):
     async def callback(self, context: crescent.Context) -> None:
-        locale = context.locale
-
         # Defer this interaction response,
         # allowing you to respond within the next 15 minutes.
         await context.defer(ephemeral=False)
 
         contextual = str(context.user.id)
 
-        user = await plugin.model.database.find_first(contextual)
+        user = await self.plugin.model.database.find_first(contextual)
 
         # Choose a random element from a non-empty sequence.
         collecting = random.choice(
             # Return an object that produces a sequence of integers from start
             # (inclusive) to stop (exclusive) by step.
             range(
-                plugin.model.configuration.plugins.collect.collecting.start,
-                plugin.model.configuration.plugins.collect.collecting.stop,
+                self.plugin.model.configuration.plugins.collect.collecting.start,
+                self.plugin.model.configuration.plugins.collect.collecting.stop,
             )
         )
 
@@ -67,27 +49,9 @@ class Collect:
 
         user.banana += collecting
 
-        title = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                "Collect",
-                ru="Собирать",
-                uk="Збирати",
-            ),
-        )
-
-        template = string.Template(
-            f"<@{contextual}> $collected `{collecting}` $bananas"
-        )
-
-        description = locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                f"<@{contextual} collected `{collecting}` bananas",
-                ru=template.substitute(dict(collected="собрал", bananas="бананов")),
-                uk=template.substitute(dict(collected="зібрав", bananas="бананів")),
-            ),
-        )
+        # Return a capitalized version of the string.
+        title = name.capitalize()
+        description = f"<@{contextual}> собрал `{collecting}` бананов"
 
         if user.monkey:
             # Choose a random element from a non-empty sequence.
@@ -95,8 +59,8 @@ class Collect:
                 # Return an object that produces a sequence of integers from start
                 # (inclusive) to stop (exclusive) by step.
                 range(
-                    plugin.model.configuration.plugins.collect.ratio.start,
-                    plugin.model.configuration.plugins.collect.ratio.stop,
+                    self.plugin.model.configuration.plugins.collect.ratio.start,
+                    self.plugin.model.configuration.plugins.collect.ratio.stop,
                 )
             )
 
@@ -104,32 +68,9 @@ class Collect:
 
             user.banana += monkeyish
 
-            template = string.Template(
-                f"\n+ `{monkeyish}` $bananas $from__ `{user.monkey}` $monkeys"
-            )
+            description += f"\n+ `{monkeyish}` бананов от `{user.monkey}` обезьян"
 
-            description += locales.of(
-                locale,
-                locale_builder=locales.LocaleBuilder(
-                    f"\n+ `{monkeyish}` bananas from `{user.monkey}` monkeys",
-                    ru=template.substitute(
-                        dict(
-                            bananas="бананов",
-                            from__="от",
-                            monkeys="обезьян",
-                        ),
-                    ),
-                    uk=template.substitute(
-                        dict(
-                            bananas="бананів",
-                            from__="від",
-                            monkeys="мавп",
-                        ),
-                    ),
-                ),
-            )
-
-        await plugin.model.database.middleware.update(
+        await self.plugin.model.database.middleware.update(
             contextual,
             banana=user.banana,
             monkey=user.monkey,
@@ -137,23 +78,23 @@ class Collect:
             item=user.item,
         )
 
-        template = string.Template(
-            f"\n\n🍌 $bananas: `{user.banana}`\n🐒 $monkeys: `{user.monkey}`"
-        )
-
-        description += locales.of(
-            locale,
-            locale_builder=locales.LocaleBuilder(
-                f"\n\n🍌 Bananas: `{user.banana}`\n🐒 Monkeys: `{user.monkey}`",
-                ru=template.substitute(dict(bananas="Бананы", monkeys="Обезьяны")),
-                uk=template.substitute(dict(bananas="Банан", monkeys="Мавпа")),
-            ),
-        )
+        description += f"\n\n🍌 Бананы: `{user.banana}`\n🐒 Обезьяны: `{user.monkey}`"
 
         embed = hikari.Embed(title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
+
+
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name=name, description=deescription)
+class Collect:
+    # noinspection PyMethodMayBeStatic
+    async def callback(self, context: crescent.Context) -> None:
+        return await Middleware(plugin).callback(context)
 
 
 # MIT License
