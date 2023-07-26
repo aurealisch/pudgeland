@@ -3,7 +3,7 @@ import hikari
 import meowy
 
 from bot.plugin import _plugins
-from bot.plugin.middleware import _middlewares
+from bot.plugin._middleware import _middlewares
 
 plugin = _plugins.Plugin()
 

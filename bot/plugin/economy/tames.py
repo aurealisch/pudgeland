@@ -5,14 +5,14 @@ import crescent
 import hikari
 import miru
 
-from bot.cooldown.plugin import cooldowns
+from bot.plugin._cooldown import _cooldowns
 from bot.plugin import _plugins
-from bot.plugin.exception import _exceptions
-from bot.plugin.middleware import _middlewares
+from bot.plugin._exception import _exceptions
+from bot.plugin._middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
-period = cooldowns.Period(seconds=5)
+period = _cooldowns.Period(seconds=5)
 
 name = "приручать"
 description = "Приручать"
@@ -169,7 +169,7 @@ class Middleware(_middlewares.Middleware):
 
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(_cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(name=name, description="Приручать")
 class Tame:

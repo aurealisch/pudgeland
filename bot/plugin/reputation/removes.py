@@ -1,15 +1,15 @@
 import crescent
 import hikari
 
-from bot.cooldown.plugin import cooldowns
+from bot.plugin._cooldown import _cooldowns
 from bot.plugin import _plugins
-from bot.plugin.exception import _exceptions
-from bot.plugin.middleware import _middlewares
+from bot.plugin._exception import _exceptions
+from bot.plugin._middleware import _middlewares
 from bot.plugin.reputation import _groups
 
 plugin = _plugins.Plugin()
 
-period = cooldowns.Period(hours=6)
+period = _cooldowns.Period(hours=6)
 
 name = "убрать"
 description = "Убрать"
@@ -55,7 +55,7 @@ class Middleware(_middlewares.Middleware):
 @_groups.group.child
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(_cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(name=name, description=description)
 class Remove:

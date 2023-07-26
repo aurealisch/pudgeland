@@ -3,14 +3,14 @@ import random
 import crescent
 import hikari
 
-from bot.cooldown.plugin import cooldowns
+from bot.plugin._cooldown import _cooldowns
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
-from bot.plugin.middleware import _middlewares
+from bot.plugin._middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
-period = cooldowns.Period(hours=2)
+period = _cooldowns.Period(hours=2)
 
 name = "собирать"
 deescription = "Cобирать"
@@ -88,7 +88,7 @@ class Middleware(_middlewares.Middleware):
 
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(_cooldowns.cooldown(1, period=period))
 # Register a slash command.
 @crescent.command(name=name, description=deescription)
 class Collect:

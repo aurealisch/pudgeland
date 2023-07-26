@@ -5,7 +5,7 @@ import hikari
 
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _shops
-from bot.plugin.middleware import _middlewares
+from bot.plugin._middleware import _middlewares
 
 plugin = _plugins.Plugin()
 
