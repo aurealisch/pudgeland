@@ -3,7 +3,7 @@ import msgspec
 from bot.command.plugin.economy.shop import _items
 
 # Open file and return a stream.
-with open("./bot/plugin/economy/shop/_shops.json", encoding="utf-8") as stream:
+with open("./bot/command/plugin/economy/shop/_shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 
 shop = msgspec.json.decode(buf, type=dict[_items.Id, _items.Item])
