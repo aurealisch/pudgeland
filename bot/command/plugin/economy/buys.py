@@ -5,7 +5,7 @@ import miru
 
 from bot.command.cooldown import cooldowns
 from bot.command import _plugins
-from bot.command.economy.shop import _items, _shops
+from bot.command.plugin.economy.shop import _items, _shops
 from bot.command.error import errors
 from bot.command.middleware import middlewares
 

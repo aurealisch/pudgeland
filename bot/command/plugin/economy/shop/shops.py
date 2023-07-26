@@ -4,7 +4,7 @@ import crescent
 import hikari
 
 from bot.command import _plugins
-from bot.command.economy.shop import _shops
+from bot.command.plugin.economy.shop import _shops
 from bot.command.middleware import middlewares
 
 plugin = _plugins.Plugin()
