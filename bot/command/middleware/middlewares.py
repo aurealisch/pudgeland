@@ -3,7 +3,7 @@ import typing
 import attrs
 import crescent
 
-from bot.command import _plugins
+from bot.command.plugin import _plugins
 
 
 # Define an *attrs* class.
