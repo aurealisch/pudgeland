@@ -11,7 +11,7 @@ from bot.plugin import _plugins
 class Middleware:
     plugin: _plugins.Plugin
 
-    options: typing.Mapping[str, typing.Any]
+    options: typing.Mapping[str, typing.Any] | None = None
 
     async def callback(self, context: crescent.Context) -> None:
         pass
