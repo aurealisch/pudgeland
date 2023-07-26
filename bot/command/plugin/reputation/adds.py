@@ -1,11 +1,12 @@
 import crescent
 import hikari
 
-from bot.command.cooldown import cooldowns
 from bot.command import _plugins
+from bot.command.cooldown import cooldowns
 from bot.command.error import errors
 from bot.command.middleware import middlewares
-from bot.command.reputation import _groups
+from bot.command.plugin.reputation import _groups
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -45,7 +46,7 @@ class Middleware(middlewares.Middleware):
             📈 Репутация: `{optional.reputation + 1}`
         """
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)

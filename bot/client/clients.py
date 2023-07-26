@@ -1,7 +1,8 @@
 import traceback
 
 import crescent
-import hikari
+
+from bot.utility import embeds
 
 
 class Client(crescent.Client):
@@ -14,10 +15,10 @@ class Client(crescent.Client):
         exception_class = exception.__class__
         exception_traceback = exception.__traceback__
 
-        title = "Исключение"
+        title = "Ошибка"
         description = f"`{exception}`"
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("error", title=title, description=description)
 
         # Respond to an interaction.
         # This function can be used multiple times for one interaction

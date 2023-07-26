@@ -5,6 +5,7 @@ import hikari
 from bot.command import _plugins
 from bot.command.error import errors
 from bot.command.middleware import middlewares
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -24,7 +25,7 @@ class Middleware(middlewares.Middleware):
         title = name.capitalize()
         description = f"<@{contextual}> шлёпает <@{optional}>"
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Set the image on this embed.
         embed.set_image(collei.Client().sfw.get(collei.SfwCategory.SLAP).url)

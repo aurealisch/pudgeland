@@ -1,12 +1,12 @@
 import random
 
 import crescent
-import hikari
 
-from bot.command.cooldown import cooldowns
 from bot.command import _plugins
-from bot.command.plugin.economy.shop import _shops
+from bot.command.cooldown import cooldowns
 from bot.command.middleware import middlewares
+from bot.command.plugin.economy.shop import _shops
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -80,7 +80,7 @@ class Middleware(middlewares.Middleware):
 
         description += f"\n\n🍌 Бананы: `{user.banana}`\n🐒 Обезьяны: `{user.monkey}`"
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)

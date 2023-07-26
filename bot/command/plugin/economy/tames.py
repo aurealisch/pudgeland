@@ -5,10 +5,11 @@ import crescent
 import hikari
 import miru
 
-from bot.command.cooldown import cooldowns
 from bot.command import _plugins
+from bot.command.cooldown import cooldowns
 from bot.command.error import errors
 from bot.command.middleware import middlewares
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -69,7 +70,7 @@ class View(miru.View):
                 🐒 Обезьяны: `{monkey}`
             """
 
-            embed = hikari.Embed(title=title, description=description)
+            embed = embeds.embed("default", title=title, description=description)
 
             # Short-hand method to create a new message response via the interaction
             # this context represents.
@@ -102,7 +103,7 @@ class View(miru.View):
             🐒 Обезьяны: `{monkey + 1}`
         """
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Short-hand method to create a new message response via the interaction
         # this context represents.
@@ -120,7 +121,7 @@ class View(miru.View):
         title = "Отменить"
         description = "Отменено"
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Short-hand method to create a new message response via the interaction this
         # context represents.
@@ -143,13 +144,14 @@ class Middleware(middlewares.Middleware):
 
         view = View(timeout=60)
 
-        title = "Приручать"
+        # Return a capitalized version of the string.
+        title = name.capitalize()
         description = (
             "Чтобы попробовать приручить обезьяну"
             f", потребуется скормить `{fed}` бананов"
         )
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         message = await context.respond(

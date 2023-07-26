@@ -1,12 +1,12 @@
 import string
 
 import crescent
-import hikari
 
-from bot.command.cooldown import cooldowns
 from bot.command import _plugins
-from bot.command.leader import _groups
+from bot.command.cooldown import cooldowns
 from bot.command.middleware import middlewares
+from bot.command.plugin.leader import _groups
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -31,7 +31,7 @@ class Middleware(middlewares.Middleware):
 
             description += f"*{position}*. <@{user.id}> Обезьяны: `{user.monkey}`\n"
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)

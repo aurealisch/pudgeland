@@ -1,9 +1,9 @@
 import crescent
-import hikari
 import meowy
 
 from bot.command import _plugins
 from bot.command.middleware import middlewares
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -16,7 +16,7 @@ class Middleware(middlewares.Middleware):
         # Return a capitalized version of the string.
         title = name.capitalize()
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Set the image on this embed.
         embed.set_image(meowy.Client().images.search()[0].url)

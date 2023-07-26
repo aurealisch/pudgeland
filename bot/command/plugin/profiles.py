@@ -1,10 +1,10 @@
 import crescent
-import hikari
 
 from bot.command.cooldown import cooldowns
+from bot.command.middleware import middlewares
 from bot.command.plugin import _plugins
 from bot.command.plugin.economy.shop import _shops
-from bot.command.middleware import middlewares
+from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
@@ -37,7 +37,7 @@ class Middleware(middlewares.Middleware):
 
             description += f"\n📦 Предмет: `{item.name}`"
 
-        embed = hikari.Embed(title=title, description=description)
+        embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
