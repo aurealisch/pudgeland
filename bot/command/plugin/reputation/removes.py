@@ -3,7 +3,7 @@ import hikari
 
 from bot.command.cooldown import cooldowns
 from bot.command import _plugins
-from bot.command.exception import exceptions
+from bot.command.error import errors
 from bot.command.middleware import middlewares
 from bot.command.reputation import _groups
 
@@ -25,7 +25,7 @@ class Middleware(middlewares.Middleware):
         _contextual = str(context.user.id)
 
         if _optional == _contextual:
-            raise exceptions.YouCantDoThat
+            raise errors.YouCantDoThat
 
         optional = await plugin.model.database.find_first(_optional)
 

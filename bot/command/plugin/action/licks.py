@@ -3,7 +3,7 @@ import crescent
 import hikari
 
 from bot.command import _plugins
-from bot.command.exception import exceptions
+from bot.command.error import errors
 from bot.command.middleware import middlewares
 
 plugin = _plugins.Plugin()
@@ -18,7 +18,7 @@ class Middleware(middlewares.Middleware):
         contextual = context.user.id
 
         if optional == contextual:
-            raise exceptions.YouCantDoThat
+            raise errors.YouCantDoThat
 
         # Return a capitalized version of the string.
         title = name.capitalize()

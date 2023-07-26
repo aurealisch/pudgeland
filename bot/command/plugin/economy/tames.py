@@ -7,7 +7,7 @@ import miru
 
 from bot.command.cooldown import cooldowns
 from bot.command import _plugins
-from bot.command.exception import exceptions
+from bot.command.error import errors
 from bot.command.middleware import middlewares
 
 plugin = _plugins.Plugin()
@@ -43,7 +43,7 @@ class View(miru.View):
         fed = (monkey + 1) * 250
 
         if fed > banana:
-            raise exceptions.NotEnoughBanana
+            raise errors.NotEnoughBanana
 
         # Return a capitalized version of the string.
         title = name.capitalize()

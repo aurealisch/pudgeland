@@ -6,7 +6,7 @@ import miru
 from bot.command.cooldown import cooldowns
 from bot.command import _plugins
 from bot.command.economy.shop import _items, _shops
-from bot.command.exception import exceptions
+from bot.command.error import errors
 from bot.command.middleware import middlewares
 
 plugin = _plugins.Plugin()
@@ -39,7 +39,7 @@ class View(miru.View):
         item = _shops.shop.get(self.item)
 
         if item.price > user.banana:
-            raise exceptions.NotEnoughBanana
+            raise errors.NotEnoughBanana
 
         if int(self.item) == user.item:
             raise ValueError
