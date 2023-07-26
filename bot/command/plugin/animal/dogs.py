@@ -1,7 +1,7 @@
 import crescent
 import woofy
 
-from bot.command import _plugins
+from bot.command.plugin import _plugins
 from bot.command.middleware import middlewares
 from bot.utility import embeds
 

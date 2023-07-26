@@ -2,7 +2,7 @@ import string
 
 import crescent
 
-from bot.command import _plugins
+from bot.command.plugin import _plugins
 from bot.command.middleware import middlewares
 from bot.command.plugin.economy.shop import _shops
 from bot.utility import embeds

@@ -1,7 +1,7 @@
 import crescent
 import hikari
 
-from bot.command import _plugins
+from bot.command.plugin import _plugins
 from bot.command.cooldown import cooldowns
 from bot.command.error import errors
 from bot.command.middleware import middlewares
