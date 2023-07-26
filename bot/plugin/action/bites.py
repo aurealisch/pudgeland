@@ -2,8 +2,8 @@ import collei
 import crescent
 import hikari
 
-from bot.plugin.exception import _exceptions
 from bot.plugin import _plugins
+from bot.plugin.exception import _exceptions
 from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
@@ -20,8 +20,7 @@ class Middleware(_middlewares.Middleware):
         if optional == contextual:
             raise _exceptions.YouCantDoThat
 
-        # Return a capitalized version of the string.
-        title = name.capitalize()
+        title = "Укусить"
         description = f"<@{contextual}> кусает <@{optional}>"
 
         embed = hikari.Embed(title=title, description=description)

@@ -2,7 +2,6 @@ import msgspec
 
 from bot.plugin.economy.shop import _items
 
-
 # Open file and return a stream.
 with open("./bot/plugin/economy/shop/_shops.json", encoding="utf-8") as stream:
     buf = stream.read()

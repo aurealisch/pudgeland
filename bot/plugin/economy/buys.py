@@ -4,9 +4,9 @@ import hikari
 import miru
 
 from bot.cooldown.plugin import cooldowns
-from bot.plugin.exception import _exceptions
 from bot.plugin import _plugins
 from bot.plugin.economy.shop import _items, _shops
+from bot.plugin.exception import _exceptions
 from bot.plugin.middleware import _middlewares
 
 plugin = _plugins.Plugin()
