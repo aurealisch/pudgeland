@@ -5,10 +5,10 @@ import crescent
 import hikari
 import miru
 
-from bot.command.plugin import _plugins
 from bot.command.cooldown import cooldowns
 from bot.command.error import errors
 from bot.command.middleware import middlewares
+from bot.command.plugin import _plugins
 from bot.utility import embeds
 
 plugin = _plugins.Plugin()
@@ -142,7 +142,7 @@ class Middleware(middlewares.Middleware):
 
         fed = (monkey + 1) * 250
 
-        view = View(timeout=60)
+        view = View(plugin)
 
         # Return a capitalized version of the string.
         title = name.capitalize()

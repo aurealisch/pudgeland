@@ -99,7 +99,7 @@ class Middleware(middlewares.Middleware):
 
         price = item.price
 
-        view = View(str(self.item), timeout=60)
+        view = View(plugin, str(self.item))
 
         # Return a capitalized version of the string.
         title = name.capitalize()
