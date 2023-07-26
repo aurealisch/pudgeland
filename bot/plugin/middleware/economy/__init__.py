@@ -1,37 +1,4 @@
-import crescent
-
-from bot.cooldown.plugin import cooldowns
-from bot.locale import locales
-from bot.plugin import _plugins
-from bot.plugin.middleware.economy import tames
-
-plugin = _plugins.Plugin()
-
-# 5 seconds
-period = 5
-
-
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(
-    name=locales.LocaleBuilder(
-        "tame",
-        ru="приручать",
-        uk="приручати",
-    ),
-    description=locales.LocaleBuilder(
-        "Tame",
-        ru="Приручать",
-        uk="Приручати",
-    ),
-)
-class Tame:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        await tames.Tame(plugin).callback(context)
-
+pass
 
 # MIT License
 #
