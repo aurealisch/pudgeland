@@ -47,7 +47,7 @@ bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 client = clients.Client(bot, model=model)
 
 # Loads plugins from a folder.
-client.plugins.load_folder("bot.plugin")
+client.plugins.load_folder("bot.command.plugin")
 
 # MIT License
 #
