@@ -3,45 +3,40 @@ import string
 import crescent
 
 from bot.command.plugin import _plugins
-from bot.command.middleware import middlewares
-from bot.command.plugin.economy.shop import _shops
+from bot.shop import shops
 from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
-name = "магазин"
-description = "Магазин"
 
-
-class Middleware(middlewares.Middleware):
+@plugin.include
+# Register a slash command.
+@crescent.command(name="магазин", description="Магазин")
+class Shop:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        # Return a capitalized version of the string.
-        title = name.capitalize()
+        title = "Магазин"
 
         description = string.whitespace
 
-        for id__, item in _shops.shop.items():
-            description += f"""
-                # {id__}. {item.name}
+        for id__, item in shops.shop.items():
+            name = item.name
+            description = item.description
 
-                Цена: 🍌 `{item.price}` бананов
+            price = item.price
+
+            description += f"""
+                # {id__}. {name}
 
                 Описание:\n> {item.description}
+
+                Цена: 🍌 `{price}` бананов
             """
 
         embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
-
-
-@plugin.include
-# Register a slash command.
-@crescent.command(name=name, description=description)
-class Shop:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin).callback(context)
 
 
 # MIT License

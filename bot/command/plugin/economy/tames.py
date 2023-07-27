@@ -7,9 +7,10 @@ import miru
 
 from bot.command.cooldown import cooldowns
 from bot.command.error import errors
-from bot.command.middleware import middlewares
 from bot.command.plugin import _plugins
 from bot.utility import embeds
+
+# TODO: Use `hikari-flare` instead of `hikari-miru`
 
 plugin = _plugins.Plugin()
 
@@ -37,11 +38,11 @@ class View(miru.View):
         view = view_context.view
 
         # Short-hand method to defer an interaction response.
-        await view_context.defer(ephemeral=False)
+        await view_context.defer(flags=hikari.MessageFlag.EPHEMERAL)
 
-        contextual = str(view_context.user.id)
+        contextish = str(view_context.user.id)
 
-        user = await self.plugin.model.database.find_first(contextual)
+        user = await self.plugin.model.database.find_first(contextish)
 
         banana = user.banana
         monkey = user.monkey
@@ -53,17 +54,22 @@ class View(miru.View):
         if fed > banana:
             raise errors.NotEnoughBanana
 
+        banana -= fed
+
         # Return a capitalized version of the string.
         title = name.capitalize()
 
         if random.choice(range(1, 10)) != 1:
-            await self.plugin.model.database.middleware.update(
-                contextual,
-                banana=banana - fed,
+            contextish = await plugin.model.database.middleware.update(
+                contextish,
+                banana=banana,
                 monkey=monkey,
                 reputation=reputation,
-                items=item,
+                item=item,
             )
+
+            banana = contextish.banana
+            monkey = contextish.monkey
 
             description = f"""\
                 Вы скормили 🍌 `{fed}` бананов
@@ -73,7 +79,7 @@ class View(miru.View):
 
                 ```diff\n- {fed} бананов 🍌```
 
-                🍌 Бананы: `{banana - fed}`
+                🍌 Бананы: `{banana}`
                 🐒 Обезьяны: `{monkey}`
             """
 
@@ -89,13 +95,18 @@ class View(miru.View):
 
             return
 
-        await self.plugin.model.database.middleware.update(
-            contextual,
-            banana=banana - fed,
-            monkey=monkey + 1,
+        monkey += 1
+
+        contextish = await self.plugin.model.database.middleware.update(
+            contextish,
+            banana=banana,
+            monkey=monkey,
             reputation=reputation,
-            items=item,
+            item=item,
         )
+
+        banana = contextish.banana
+        monkey = contextish.monkey
 
         description = f"""\
             Вы скормили 🍌 `{fed}` бананов
@@ -106,8 +117,8 @@ class View(miru.View):
             ```diff\n- {fed} бананов 🍌```
             ```diff\n+ 1 обезьяна 🐒```
 
-            🍌 Бананы: `{banana - fed}`
-            🐒 Обезьяны: `{monkey + 1}`
+            🍌 Бананы: `{banana}`
+            🐒 Обезьяны: `{monkey}`
         """
 
         embed = embeds.embed("default", title=title, description=description)
@@ -139,11 +150,17 @@ class View(miru.View):
             view.stop()
 
 
-class Middleware(middlewares.Middleware):
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name=name, description="Приручать")
+class Tame:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        contextual = str(context.user.id)
+        contextish = str(context.user.id)
 
-        user = await self.plugin.model.database.find_first(contextual)
+        user = await plugin.model.database.find_first(contextish)
 
         monkey = user.monkey
 
@@ -169,22 +186,8 @@ class Middleware(middlewares.Middleware):
         )
 
         if message is not None:
-            try:
-                # Start up the view and begin listening for interactions.
-                await view.start(message)
-            except Exception:
-                raise
-
-
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(name=name, description="Приручать")
-class Tame:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin).callback(context)
+            # Start up the view and begin listening for interactions.
+            await view.start(message)
 
 
 # MIT License

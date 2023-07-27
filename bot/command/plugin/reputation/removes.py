@@ -1,55 +1,15 @@
 import crescent
 import hikari
 
-from bot.command.plugin import _plugins
 from bot.command.cooldown import cooldowns
 from bot.command.error import errors
-from bot.command.middleware import middlewares
+from bot.command.plugin import _plugins
 from bot.command.plugin.reputation import _groups
 from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
 period = cooldowns.Period(hours=6)
-
-name = "убрать"
-description = "Убрать"
-
-
-class Middleware(middlewares.Middleware):
-    async def callback(self, context: crescent.Context) -> None:
-        # Defer this interaction response,
-        # allowing you to respond within the next 15 minutes.
-        await context.defer(ephemeral=False)
-
-        _optional = str(self.options.get("user").id)
-        _contextual = str(context.user.id)
-
-        if _optional == _contextual:
-            raise errors.YouCantDoThat
-
-        optional = await plugin.model.database.find_first(_optional)
-
-        await plugin.model.database.middleware.update(
-            _optional,
-            banana=optional.banana,
-            monkey=optional.monkey,
-            reputation=optional.reputation - 1,
-            item=optional.item,
-        )
-
-        # Return a capitalized version of the string.
-        title = name.capitalize()
-        description = f"""\
-            <@{_contextual}> убрал репутацию <@{_optional}>
-
-            📉 Репутация: `{optional.reputation - 1}`
-        """
-
-        embed = embeds.embed("default", title=title, description=description)
-
-        # Respond to an interaction.
-        await context.respond(embed=embed)
 
 
 # Add a command to this command group.
@@ -58,14 +18,54 @@ class Middleware(middlewares.Middleware):
 # Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
-@crescent.command(name=name, description=description)
+@crescent.command(name="убрать", description="Убрать")
 class Remove:
     # An option when declaring a command using class syntax.
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
     # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin, options={"user": self.user}).callback(context)
+        # Defer this interaction response,
+        # allowing you to respond within the next 15 minutes.
+        await context.defer()
+
+        # Create a new string object from the given object.
+        _selfish = str(self.user.id)
+        _contextish = str(context.user.id)
+
+        if _selfish == _contextish:
+            raise errors.YouCantDoThat
+
+        selfish = await plugin.model.database.find_first(_selfish)
+
+        banana = selfish.banana
+        monkey = selfish.monkey
+        reputation = selfish.reputation
+        item = selfish.item
+
+        reputation -= 1
+
+        selfish = await plugin.model.database.middleware.update(
+            _selfish,
+            banana=banana,
+            monkey=monkey,
+            reputation=reputation,
+            item=item,
+        )
+
+        reputation = selfish.reputation
+
+        title = "Убрать"
+        description = f"""\
+            <@{_contextish}> убрал репутацию <@{_selfish}>
+
+            📉 Репутация: `{reputation}`
+        """
+
+        embed = embeds.embed("default", title=title, description=description)
+
+        # Respond to an interaction.
+        await context.respond(embed=embed)
 
 
 # MIT License

@@ -6,30 +6,26 @@ import miru
 
 from bot.command.cooldown import cooldowns
 from bot.command.error import errors
-from bot.command.middleware import middlewares
 from bot.command.plugin import _plugins
-from bot.command.plugin.economy.shop import _items, _shops
+from bot.shop import items, shops
 from bot.utility import embeds
+
+# TODO: Use `hikari-flare` instead of `hikari-miru`
 
 plugin = _plugins.Plugin()
 
 period = cooldowns.Period(seconds=5)
 
-name = "купить"
-description = "Купить"
-
 
 class View(miru.View):
     def __init__(
         self,
-        plugin: _plugins.Plugin,
-        item: _items.Id,
+        itemId: items.Id,
         *,
         timeout: float | int | datetime.timedelta | None = 120,
         autodefer: bool = True,
     ) -> None:
-        self.plugin = plugin
-        self.item = item
+        self.itemId = itemId
 
         super().__init__(timeout=timeout, autodefer=autodefer)
 
@@ -39,36 +35,45 @@ class View(miru.View):
         view = view_context.view
 
         # Short-hand method to defer an interaction response.
-        await view_context.defer(ephemeral=False)
+        await view_context.defer(flags=hikari.MessageFlag.EPHEMERAL)
 
-        id__ = str(view_context.user.id)
+        _contextish = str(view_context.user.id)
 
-        user = await self.plugin.model.database.find_first(id__)
+        contextish = await plugin.model.database.find_first(_contextish)
 
-        # Return the value for key if key is in the dictionary, else default.
-        item = _shops.shop.get(self.item)
+        banana = contextish.banana
+        monkey = contextish.monkey
+        reputation = contextish.reputation
+        item = contextish.item
 
-        if item.price > user.banana:
-            raise errors.NotEnoughBanana
-
-        if int(self.item) == user.item:
+        if int(self.itemId) == item:
             raise ValueError
 
-        await self.plugin.model.database.middleware.update(
-            id__,
-            banana=user.banana - item.price,
-            monkey=user.monkey,
-            reputation=user.reputation,
-            item=int(self.item),
+        # Return the value for key if key is in the dictionary, else default.
+        item = shops.shop.get(self.itemId)
+
+        price = item.price
+        name = item.name
+
+        if price > banana:
+            raise errors.NotEnoughBanana
+
+        banana -= price
+
+        await plugin.model.database.middleware.update(
+            _contextish,
+            banana=banana,
+            monkey=monkey,
+            reputation=reputation,
+            item=int(self.itemId),
         )
 
-        # Return a capitalized version of the string.
-        title = name.capitalize()
+        title = "Купить"
         description = f"""\
-            <@{user.id}> купил `{item.name}` за `{item.price}` бананов
+            <@{_contextish}> купил `{name}` за `{price}` бананов
 
-            ```diff\n- {item.price} бананов 🍌```
-            ```diff\n+ {item.name}```
+            ```diff\n- {price} бананов 🍌```
+            ```diff\n+ {name}```
         """
 
         embed = embeds.embed("default", title=title, description=description)
@@ -101,17 +106,32 @@ class View(miru.View):
             view.stop()
 
 
-class Middleware(middlewares.Middleware):
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name="купить", description="Купить")
+class Buy:
+    # An option when declaring a command using class syntax.
+    item = crescent.option(
+        int,
+        name="предмет",
+        description="Предмет",
+        choices=[(item.name, id__) for id__, item in shops.shop.items()],
+    )
+
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         # Return the value for key if key is in the dictionary, else default.
-        item = _shops.shop.get(str(self.item))
+        _item = str(self.item)
+
+        item = shops.shop.get(_item)
 
         price = item.price
 
-        view = View(plugin, str(self.item))
+        view = View(_item)
 
-        # Return a capitalized version of the string.
-        title = name.capitalize()
+        title = "Купить"
         description = f"Чтобы купить этот предмет потребуется `{price}` бананов"
 
         embed = embeds.embed("default", title=title, description=description)
@@ -130,25 +150,6 @@ class Middleware(middlewares.Middleware):
                 await view.start(message)
             except Exception:
                 raise
-
-
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(name=name, description=description)
-class Buy:
-    # An option when declaring a command using class syntax.
-    item = crescent.option(
-        int,
-        name="предмет",
-        description="Предмет",
-        choices=[(item.name, id__) for id__, item in _shops.shop.items()],
-    )
-
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin, {"item": self.item}).callback(context)
 
 
 # MIT License

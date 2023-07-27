@@ -2,9 +2,8 @@ import string
 
 import crescent
 
-from bot.command.plugin import _plugins
 from bot.command.cooldown import cooldowns
-from bot.command.middleware import middlewares
+from bot.command.plugin import _plugins
 from bot.command.plugin.leader import _groups
 from bot.utility import embeds
 
@@ -12,16 +11,20 @@ plugin = _plugins.Plugin()
 
 period = cooldowns.Period(seconds=25)
 
-name = "обезьяна"
-description = "Обезьяны"
 
-
-class Middleware(middlewares.Middleware):
+# Add a command to this command group.
+@_groups.group.child
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name="обезьяна", description="Обезьяны")
+class Monkeys:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        users = await self.plugin.model.database.monkeys()
+        users = await plugin.model.database.monkeys()
 
-        # Return a capitalized version of the string.
-        title = name.capitalize()
+        title = "Обезьяны"
 
         description = string.whitespace
 
@@ -35,19 +38,6 @@ class Middleware(middlewares.Middleware):
 
         # Respond to an interaction.
         await context.respond(embed=embed)
-
-
-# Add a command to this command group.
-@_groups.group.child
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(name=name, description=description)
-class Monkeys:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin).callback(context)
 
 
 # MIT License

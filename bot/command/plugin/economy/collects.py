@@ -2,10 +2,9 @@ import random
 
 import crescent
 
-from bot.command.plugin import _plugins
 from bot.command.cooldown import cooldowns
-from bot.command.middleware import middlewares
-from bot.command.plugin.economy.shop import _shops
+from bot.command.plugin import _plugins
+from bot.shop import shops
 from bot.utility import embeds
 
 plugin = _plugins.Plugin()
@@ -16,15 +15,28 @@ name = "собирать"
 deescription = "Cобирать"
 
 
-class Middleware(middlewares.Middleware):
+@plugin.include
+# Register a hook to a command.
+@crescent.hook(cooldowns.cooldown(1, period=period))
+# Register a slash command.
+@crescent.command(name=name, description=deescription)
+class Collect:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
         # Defer this interaction response,
         # allowing you to respond within the next 15 minutes.
-        await context.defer(ephemeral=False)
+        await context.defer()
 
-        contextual = str(context.user.id)
+        _contextish = str(context.user.id)
 
-        user = await self.plugin.model.database.find_first(contextual)
+        contextish = await self.plugin.model.database.find_first(_contextish)
+
+        banana = contextish.banana
+        monkey = contextish.monkey
+        reputation = contextish.reputation
+        item = contextish.item
+
+        total = 0
 
         # Choose a random element from a non-empty sequence.
         collecting = random.choice(
@@ -36,24 +48,24 @@ class Middleware(middlewares.Middleware):
             )
         )
 
-        if user.item:
+        if item:
             # Return the value for key if key is in the dictionary, else default.
-            item = _shops.shop.get(str(user.item))
+            _item = shops.shop.get(str(item))
 
             # Convert a number or string to an integer,
             # or return 0 if no arguments are given.
             collecting += int(
                 # Round a number to a given precision in decimal digits.
-                round(collecting * item.bonus.banana)
+                round(collecting * _item.bonus.banana)
             )
 
-        user.banana += collecting
+        total += collecting
 
         # Return a capitalized version of the string.
         title = name.capitalize()
-        description = f"<@{contextual}> собрал `{collecting}` бананов"
+        description = f"<@{_contextish}> собрал `{collecting}` бананов"
 
-        if user.monkey:
+        if monkey:
             # Choose a random element from a non-empty sequence.
             ratio = random.choice(
                 # Return an object that produces a sequence of integers from start
@@ -64,37 +76,28 @@ class Middleware(middlewares.Middleware):
                 )
             )
 
-            monkeyish = user.monkey * (50 + ratio)
+            monkeyish = monkey * (50 + ratio)
 
-            user.banana += monkeyish
+            total += monkeyish
 
-            description += f"\n+ `{monkeyish}` бананов от `{user.monkey}` обезьян"
+            description += f"\n+ `{monkeyish}` бананов от `{monkey}` обезьян"
+
+        banana += total
 
         await self.plugin.model.database.middleware.update(
-            contextual,
-            banana=user.banana,
-            monkey=user.monkey,
-            reputation=user.reputation,
-            item=user.item,
+            contextish,
+            banana=banana,
+            monkey=monkey,
+            reputation=reputation,
+            item=item,
         )
 
-        description += f"\n\n🍌 Бананы: `{user.banana}`\n🐒 Обезьяны: `{user.monkey}`"
+        description += f"\n\n```diff\n+ {total} бананов 🍌```"
 
         embed = embeds.embed("default", title=title, description=description)
 
         # Respond to an interaction.
         await context.respond(embed=embed)
-
-
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
-# Register a slash command.
-@crescent.command(name=name, description=deescription)
-class Collect:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin).callback(context)
 
 
 # MIT License

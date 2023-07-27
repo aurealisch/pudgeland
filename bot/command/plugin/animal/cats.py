@@ -2,19 +2,19 @@ import crescent
 import meowy
 
 from bot.command.plugin import _plugins
-from bot.command.middleware import middlewares
 from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
-name = "кошка"
-description = "Случайное изображение кошки"
 
-
-class Middleware(middlewares.Middleware):
+@plugin.include
+# Register a slash command.
+@crescent.command(name="кошка", description="Случайное изображение кошки")
+class Cat:
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        # Return a capitalized version of the string.
-        title = name.capitalize()
+        title = "Кошка"
+        description = "Случайное изображение кошки"
 
         embed = embeds.embed("default", title=title, description=description)
 
@@ -23,15 +23,6 @@ class Middleware(middlewares.Middleware):
 
         # Respond to an interaction.
         await context.respond(embed=embed)
-
-
-@plugin.include
-# Register a slash command.
-@crescent.command(name=name, description=description)
-class Cat:
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin).callback(context)
 
 
 # MIT License

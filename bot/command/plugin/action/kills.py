@@ -2,28 +2,30 @@ import collei
 import crescent
 import hikari
 
-from bot.command.plugin import _plugins
 from bot.command.error import errors
-from bot.command.middleware import middlewares
+from bot.command.plugin import _plugins
 from bot.utility import embeds
 
 plugin = _plugins.Plugin()
 
-name = "убить"
-description = "Убить пользователя"
 
+@plugin.include
+# Register a slash command.
+@crescent.command(name="убить", description="Убить пользователя")
+class Kill:
+    # An option when declaring a command using class syntax.
+    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
-class Middleware(middlewares.Middleware):
+    # noinspection PyMethodMayBeStatic
     async def callback(self, context: crescent.Context) -> None:
-        optional = str(self.options.get("user").id)
-        contextual = context.user.id
+        selfish = str(self.user.id)
+        contextish = str(context.user.id)
 
-        if optional == contextual:
+        if selfish == contextish:
             raise errors.YouCantDoThat
 
-        # Return a capitalized version of the string.
-        title = name.capitalize()
-        description = f"<@{contextual}> убивает <@{optional}>"
+        title = "Убить"
+        description = f"<@{contextish}> убивает <@{selfish}>"
 
         embed = embeds.embed("default", title=title, description=description)
 
@@ -32,18 +34,6 @@ class Middleware(middlewares.Middleware):
 
         # Respond to an interaction.
         await context.respond(embed=embed)
-
-
-@plugin.include
-# Register a slash command.
-@crescent.command(name=name, description=description)
-class Kill:
-    # An option when declaring a command using class syntax.
-    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
-
-    # noinspection PyMethodMayBeStatic
-    async def callback(self, context: crescent.Context) -> None:
-        return await Middleware(plugin, options={"user": self.user}).callback(context)
 
 
 # MIT License
