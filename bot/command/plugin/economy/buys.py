@@ -19,12 +19,12 @@ period = cooldowns.Period(seconds=5)
 class View(miru.View):
     def __init__(
         self,
-        itemId: items.Id,
+        item_id: items.Id,
         *,
         timeout: float | int | datetime.timedelta | None = 120,
         autodefer: bool = True,
     ) -> None:
-        self.itemId = itemId
+        self.item_id = item_id
 
         super().__init__(timeout=timeout, autodefer=autodefer)
 
@@ -45,11 +45,11 @@ class View(miru.View):
         reputation = contextish.reputation
         item = contextish.item
 
-        if int(self.itemId) == item:
+        if int(self.item_id) == item:
             raise ValueError
 
         # Return the value for key if key is in the dictionary, else default.
-        item = shops.shop.get(self.itemId)
+        item = shops.shop.get(self.item_id)
 
         price = item.price
         name = item.name

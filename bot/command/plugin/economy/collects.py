@@ -29,7 +29,7 @@ class Collect:
 
         _contextish = str(context.user.id)
 
-        contextish = await self.plugin.model.database.find_first(_contextish)
+        contextish = await plugin.model.database.find_first(_contextish)
 
         banana = contextish.banana
         monkey = contextish.monkey
@@ -43,8 +43,8 @@ class Collect:
             # Return an object that produces a sequence of integers from start
             # (inclusive) to stop (exclusive) by step.
             range(
-                self.plugin.model.configuration.plugins.collect.collecting.start,
-                self.plugin.model.configuration.plugins.collect.collecting.stop,
+                plugin.model.configuration.plugins.collect.collecting.start,
+                plugin.model.configuration.plugins.collect.collecting.stop,
             )
         )
 
@@ -71,8 +71,8 @@ class Collect:
                 # Return an object that produces a sequence of integers from start
                 # (inclusive) to stop (exclusive) by step.
                 range(
-                    self.plugin.model.configuration.plugins.collect.ratio.start,
-                    self.plugin.model.configuration.plugins.collect.ratio.stop,
+                    plugin.model.configuration.plugins.collect.ratio.start,
+                    plugin.model.configuration.plugins.collect.ratio.stop,
                 )
             )
 
@@ -84,8 +84,8 @@ class Collect:
 
         banana += total
 
-        await self.plugin.model.database.middleware.update(
-            contextish,
+        await plugin.model.database.middleware.update(
+            _contextish,
             banana=banana,
             monkey=monkey,
             reputation=reputation,

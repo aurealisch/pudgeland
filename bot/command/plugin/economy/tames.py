@@ -23,13 +23,10 @@ description = "Приручать"
 class View(miru.View):
     def __init__(
         self,
-        plugin: _plugins.Plugin,
         *,
         timeout: float | int | datetime.timedelta | None = 120,
         autodefer: bool = True,
     ) -> None:
-        self.plugin = plugin
-
         super().__init__(timeout=timeout, autodefer=autodefer)
 
     # A decorator to transform a coroutine function into a Discord UI Button's callback.
@@ -42,7 +39,7 @@ class View(miru.View):
 
         contextish = str(view_context.user.id)
 
-        user = await self.plugin.model.database.find_first(contextish)
+        user = await plugin.model.database.find_first(contextish)
 
         banana = user.banana
         monkey = user.monkey
@@ -97,7 +94,7 @@ class View(miru.View):
 
         monkey += 1
 
-        contextish = await self.plugin.model.database.middleware.update(
+        contextish = await plugin.model.database.middleware.update(
             contextish,
             banana=banana,
             monkey=monkey,
@@ -166,7 +163,7 @@ class Tame:
 
         fed = (monkey + 1) * 250
 
-        view = View(plugin)
+        view = View()
 
         # Return a capitalized version of the string.
         title = name.capitalize()

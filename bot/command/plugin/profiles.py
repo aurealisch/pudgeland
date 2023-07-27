@@ -25,7 +25,7 @@ class Profile:
         # Create a new string object from the given object.
         _contextish = str(context.user.id)
 
-        contextish = await self.plugin.model.database.find_first(_contextish)
+        contextish = await plugin.model.database.find_first(_contextish)
 
         title = "Профиль"
         description = f"""\
