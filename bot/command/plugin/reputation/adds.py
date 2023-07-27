@@ -18,7 +18,7 @@ period = cooldowns.Period(hours=6)
 # Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
 # Register a slash command.
-@crescent.command(name="добавить", description="Добавить")
+@crescent.command(name="добавить", description="Добавить репутацию пользователю")
 class Add:
     # An option when declaring a command using class syntax.
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
