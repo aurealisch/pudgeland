@@ -5,8 +5,8 @@ import crescent
 import hikari
 import miru
 
-from bot.command.cooldown import cooldowns
-from bot.command.error import errors
+from bot.command import cooldowns
+from bot.command import exceptions
 from bot.command.plugin import _plugins
 from bot.utility import embeds
 
@@ -52,7 +52,7 @@ class View(miru.View):
         fed = (monkey + 1) * 250
 
         if fed > banana:
-            raise errors.NotEnoughBanana
+            raise exceptions.NotEnoughBanana
 
         banana -= fed
 

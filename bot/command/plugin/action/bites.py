@@ -2,7 +2,7 @@ import collei
 import crescent
 import hikari
 
-from bot.command.error import errors
+from bot.command import exceptions
 from bot.command.plugin import _plugins
 from bot.utility import embeds
 
@@ -22,7 +22,7 @@ class Bite:
         contextish = str(context.user.id)
 
         if selfish == contextish:
-            raise errors.YouCantDoThat
+            raise exceptions.YouCantDoThat
 
         title = "Укусить"
         description = f"<@{selfish}> кусает <@{contextish}>"

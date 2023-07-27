@@ -4,8 +4,7 @@ import crescent
 import hikari
 import miru
 
-from bot.command.cooldown import cooldowns
-from bot.command.error import errors
+from bot.command import cooldowns, exceptions
 from bot.command.plugin import _plugins
 from bot.shop import items, shops
 from bot.utility import embeds
@@ -56,7 +55,7 @@ class View(miru.View):
         name = item.name
 
         if price > banana:
-            raise errors.NotEnoughBanana
+            raise exceptions.NotEnoughBanana
 
         banana -= price
 

@@ -1,8 +1,8 @@
 import crescent
 import hikari
 
-from bot.command.cooldown import cooldowns
-from bot.command.error import errors
+from bot.command import cooldowns
+from bot.command import exceptions
 from bot.command.plugin import _plugins
 from bot.command.plugin.reputation import _groups
 from bot.utility import embeds
@@ -33,7 +33,7 @@ class Add:
         _contextish = str(context.user.id)
 
         if _selfish == _contextish:
-            raise errors.YouCantDoThat
+            raise exceptions.YouCantDoThat
 
         selfish = await plugin.model.database.find_first(_selfish)
 

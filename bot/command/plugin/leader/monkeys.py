@@ -2,7 +2,7 @@ import string
 
 import crescent
 
-from bot.command.cooldown import cooldowns
+from bot.command import cooldowns
 from bot.command.plugin import _plugins
 from bot.command.plugin.leader import _groups
 from bot.utility import embeds

@@ -2,7 +2,7 @@ import random
 
 import crescent
 
-from bot.command.cooldown import cooldowns
+from bot.command import cooldowns
 from bot.command.plugin import _plugins
 from bot.shop import shops
 from bot.utility import embeds

@@ -6,7 +6,7 @@ import miru
 import msgspec
 
 import prisma as _prisma
-from bot.client import clients
+from bot.common.client import clients
 from bot.common.configuration import configurations
 from bot.common.database import databases
 from bot.common.database.middleware import middlewares
