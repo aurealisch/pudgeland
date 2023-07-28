@@ -9,11 +9,6 @@ class Gateway(msgspec.Struct):
     bot: Bot
 
 
-class Api(msgspec.Struct):
-    host: str
-    port: int
-
-
 class Range(msgspec.Struct):
     start: int
     stop: int
@@ -38,8 +33,6 @@ class Plugins(msgspec.Struct):
 
 class Configuration(msgspec.Struct):
     gateway: Gateway
-
-    api: Api
 
     plugins: Plugins
 
