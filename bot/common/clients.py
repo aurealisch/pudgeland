@@ -2,7 +2,7 @@ import traceback
 
 import crescent
 
-from bot.utility import embeds
+from bot.common import embeds
 
 
 class Client(crescent.Client):
