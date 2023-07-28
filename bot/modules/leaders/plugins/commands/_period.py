@@ -1,4 +1,4 @@
-from bot.common.command import cooldowns
+from bot.common import cooldowns
 
 period = cooldowns.Period(seconds=10)
 

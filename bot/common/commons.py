@@ -7,8 +7,8 @@ import msgspec
 
 import prisma as _prisma
 from bot.common import clients, configurations, environments, models
-from bot.common.database import databases
-from bot.common.database import middlewares
+from bot.common import databases
+from bot.common import middlewares
 
 # Parse a .env file and then load all the variables found as environment variables.
 dotenv.load_dotenv()

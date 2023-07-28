@@ -1,7 +1,6 @@
 import crescent
 
-from bot.common.command import commands, cooldowns
-from bot.common import plugins
+from bot.common import commands, cooldowns, plugins
 
 plugin = plugins.Plugin()
 

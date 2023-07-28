@@ -2,7 +2,7 @@ import attrs
 import hikari
 
 from bot.common import configurations
-from bot.common.database import databases
+from bot.common import databases
 from bot.common import environments
 
 
