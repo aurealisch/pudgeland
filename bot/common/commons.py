@@ -6,12 +6,9 @@ import miru
 import msgspec
 
 import prisma as _prisma
-from bot.common.client import clients
-from bot.common.configuration import configurations
+from bot.common import clients, configurations, environments, models
 from bot.common.database import databases
 from bot.common.database.middleware import middlewares
-from bot.common.environment import environments
-from bot.common.model import models
 
 # Parse a .env file and then load all the variables found as environment variables.
 dotenv.load_dotenv()

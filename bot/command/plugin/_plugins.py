@@ -1,7 +1,7 @@
 import crescent
 import hikari
 
-from bot.common.model import models
+from bot.common import models
 
 
 class Plugin(crescent.Plugin[hikari.GatewayBot, models.Model]):
