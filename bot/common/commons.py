@@ -6,9 +6,14 @@ import miru
 import msgspec
 
 import prisma as _prisma
-from bot.common import clients, configurations, environments, models
-from bot.common import databases
-from bot.common import middlewares
+from bot.common.client import clients
+from bot.common.configuration import configurations
+from bot.common.database import databases
+from bot.common.database.middleware import middlewares
+from bot.common.environment import (
+    environments,
+)
+from bot.common.model import models
 
 # Parse a .env file and then load all the variables found as environment variables.
 dotenv.load_dotenv()
@@ -24,7 +29,7 @@ prisma = _prisma.Prisma()
 _prisma.register(prisma)
 
 database = databases.Database(middlewares.Middleware(prisma))
-
+1
 token = os.environ.get("TOKEN")
 url = os.environ.get("URL")
 
@@ -34,7 +39,7 @@ model = models.Model(configuration, database=database, environment=environment)
 
 bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
 
-# Install flare under the given bot instance.
+# Install miru and pass the current running application to it.
 miru.install(bot)
 
 # Subscribe a given callback to a given event type.
@@ -43,8 +48,15 @@ bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
 client = clients.Client(bot, model=model)
 
-# Loads plugins from a folder.
-client.plugins.load_folder("bot.command.plugin")
+for module in (
+    "actions",
+    "economics",
+    "leaders",
+    "miscellaneous",
+    "reputation",
+):
+    # Loads plugins from a folder.
+    client.plugins.load_folder(f"bot.modules.{module}.plugins")
 
 # MIT License
 #
