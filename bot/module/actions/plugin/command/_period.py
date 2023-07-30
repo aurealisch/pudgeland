@@ -1,27 +1,6 @@
-import crescent
-
-from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.actions.api import clients
-from bot.module.actions.api.enum.category import sfw
-from bot.module.actions.plugin.command import _period
 
-plugin = plugins.Plugin()
-
-name = ""
-description = ""
-
-
-@plugin.include
-# Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=_period.period))
-#  Register a slash command
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def callback(self, context: crescent.Context) -> None:
-        _image = clients.Client().sfw.search(sfw.SfwCategory.POKE)
-
+period = cooldowns.Period(seconds=2.5)
 
 # MIT License
 #

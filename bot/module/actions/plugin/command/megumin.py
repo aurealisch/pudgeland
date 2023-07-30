@@ -5,10 +5,9 @@ from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
 from bot.module.actions.api import clients
 from bot.module.actions.api.enum.category import sfw
+from bot.module.actions.plugin.command import _period
 
 plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
 
 name = ""
 description = ""
@@ -16,7 +15,7 @@ description = ""
 
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(cooldowns.cooldown(1, period=_period.period))
 #  Register a slash command
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
