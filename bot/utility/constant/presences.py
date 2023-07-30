@@ -1,10 +1,10 @@
+import hikari
+
 from bot.common import commons
-from bot.utility.constant import presences
 
-activity = presences.activity
+name = commons.configuration.activity.name
 
-# Start the application and block until it's finished running.
-commons.bot.run(activity=activity)
+activity = hikari.Activity(name=name)
 
 # MIT License
 #

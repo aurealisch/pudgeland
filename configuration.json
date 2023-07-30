@@ -4,10 +4,6 @@
       "banner": "bot"
     }
   },
-  "api": {
-    "host": "0.0.0.0",
-    "port": 8080
-  },
   "plugins": {
     "collect": {
       "collecting": {
@@ -19,5 +15,8 @@
         "stop" : 50
       }
     }
+  },
+  "activity": {
+    "name": "гг сервер умер"
   }
 }

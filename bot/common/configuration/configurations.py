@@ -31,10 +31,14 @@ class Plugins(msgspec.Struct):
     collect: Collect
 
 
+class Activity(msgspec.Struct):
+    name: str
+
+
 class Configuration(msgspec.Struct):
     gateway: Gateway
-
     plugins: Plugins
+    activity: Activity
 
 
 # MIT License
