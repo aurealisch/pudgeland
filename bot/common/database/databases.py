@@ -6,6 +6,7 @@ import prisma as _prisma
 from bot.common.database.middleware import middlewares
 
 
+# Define an *attrs* class.
 @attrs.define
 class Database:
     middleware: middlewares.Middleware

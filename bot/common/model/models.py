@@ -6,6 +6,7 @@ from bot.common.database import databases
 from bot.common.environment import environments
 
 
+# Define an *attrs* class.
 @attrs.define
 class Model:
     configuration: configurations.Configuration

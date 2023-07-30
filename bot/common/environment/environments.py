@@ -1,6 +1,7 @@
 import attrs
 
 
+# Define an *attrs* class.
 @attrs.define
 class Environment:
     token: str | None

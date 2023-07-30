@@ -5,6 +5,7 @@ import attrs
 import prisma as _prisma
 
 
+# Define an *attrs* class.
 @attrs.define
 class Middleware:
     prisma: _prisma.Prisma
