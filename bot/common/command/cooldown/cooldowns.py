@@ -17,6 +17,7 @@ class Period:
     milliseconds: float = 0.0
     microseconds: float = 0.0
 
+    # Property attribute.
     @property
     def total(self) -> float:
         return (

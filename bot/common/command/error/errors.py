@@ -1,10 +1,12 @@
 class YouCantDoThatError(Exception):
     def __init__(self) -> None:
+        # Common base class for all exceptions
         super().__init__("Так нельзя")
 
 
 class NotEnoughBananaError(Exception):
     def __init__(self) -> None:
+        # Common base class for all exceptions
         super().__init__("Недостаточно бананов")
 
 

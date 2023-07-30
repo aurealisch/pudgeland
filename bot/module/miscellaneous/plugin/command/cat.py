@@ -1,4 +1,5 @@
 import crescent
+import yarl
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
@@ -21,7 +22,7 @@ description = "Случайное изображение кошки"
 class CatCommand(commands.Command):
     async def callback(self, context: crescent.Context) -> None:
         _image = clients.Client(
-            "https://api.thecatapi.com/v1/images/search"
+            yarl.URL("https://api.thecatapi.com/v1/images/search")
         ).image.search()
 
 

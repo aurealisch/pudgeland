@@ -29,18 +29,18 @@ prisma = _prisma.Prisma()
 _prisma.register(prisma)
 
 database = databases.Database(middlewares.Middleware(prisma))
-1
+
 token = os.environ.get("TOKEN")
 url = os.environ.get("URL")
 
 environment = environments.Environment(token, url=url)
 
-model = models.Model(configuration, database=database, environment=environment)
-
 bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
 
 # Install miru and pass the current running application to it.
 miru.install(bot)
+
+model = models.Model(configuration, database=database, environment=environment)
 
 # Subscribe a given callback to a given event type.
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
