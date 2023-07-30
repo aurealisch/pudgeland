@@ -18,7 +18,7 @@ description = "Бананы"
 @crescent.hook(cooldowns.cooldown(1, period=_period))
 #  Register a slash command
 @crescent.command(name=name, description=description)
-class BananasCommand(commands.Command):
+class Command(commands.Command):
     async def callback(self, context: crescent.Context) -> None:
         pass
 
