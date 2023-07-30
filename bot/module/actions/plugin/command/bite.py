@@ -1,15 +1,17 @@
 import crescent
 
-from bot.common.plugin import plugins
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.plugin import plugins
+from bot.module.actions.api import clients
+from bot.module.actions.api.enum.category import sfw
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "укусить"
-description = "Укусить пользователя"
+name = ""
+description = ""
 
 
 @plugin.include
@@ -17,9 +19,9 @@ description = "Укусить пользователя"
 @crescent.hook(cooldowns.cooldown(1, period=period))
 #  Register a slash command
 @crescent.command(name=name, description=description)
-class BiteCommand(commands.Command):
+class Command(commands.Command):
     async def callback(self, context: crescent.Context) -> None:
-        pass
+        _image = clients.Client().sfw.search(sfw.SfwCategory.BITE)
 
 
 # MIT License

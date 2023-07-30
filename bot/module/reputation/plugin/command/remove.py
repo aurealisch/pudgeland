@@ -1,9 +1,9 @@
 import crescent
 
-from bot.common.plugin import plugins
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
-from bot.module.reputation.plugins.commands import _group, _period
+from bot.common.plugin import plugins
+from bot.module.reputation.plugin.command import _group, _period
 
 plugin = plugins.Plugin()
 

@@ -3,24 +3,25 @@ import crescent
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
-from bot.module.reputation.plugin.command import _group, _period
+from bot.module.actions.api import clients
+from bot.module.actions.api.enum.category import sfw
 
 plugin = plugins.Plugin()
 
-name = "добавить"
-description = "Добавить репутацию пользователю"
+period = cooldowns.Period(seconds=2.5)
+
+name = ""
+description = ""
 
 
-# Add a command to this command group.
-@_group.group.child
 @plugin.include
 # Register a hook to a command.
-@crescent.hook(cooldowns.cooldown(1, period=_period))
+@crescent.hook(cooldowns.cooldown(1, period=period))
 #  Register a slash command
 @crescent.command(name=name, description=description)
-class AddCommand(commands.Command):
+class Command(commands.Command):
     async def callback(self, context: crescent.Context) -> None:
-        pass
+        _image = clients.Client().sfw.search(sfw.SfwCategory.NEKO)
 
 
 # MIT License

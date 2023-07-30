@@ -1,8 +1,9 @@
 import crescent
 
-from bot.common.plugin import plugins
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.plugin import plugins
+from bot.module.miscellaneous.api import clients
 
 plugin = plugins.Plugin()
 
@@ -19,7 +20,9 @@ description = "Случайное изображение собаки"
 @crescent.command(name=name, description=description)
 class DogCommand(commands.Command):
     async def callback(self, context: crescent.Context) -> None:
-        pass
+        _image = clients.Client(
+            "https://api.thedogapi.com/v1/images/search"
+        ).image.search()
 
 
 # MIT License
