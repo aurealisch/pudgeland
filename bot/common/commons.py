@@ -1,12 +1,12 @@
 import os
 
+import crescent
 import dotenv
 import hikari
 import miru
 import msgspec
 
 import prisma as _prisma
-from bot.common.client import clients
 from bot.common.configuration import configurations
 from bot.common.database import databases
 from bot.common.database.middleware import middlewares
@@ -46,7 +46,7 @@ model = models.Model(configuration, database=database, environment=environment)
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
-client = clients.Client(bot, model=model)
+client = crescent.Client(bot, model=model)
 
 for module in (
     "actions",

@@ -2,9 +2,9 @@ import typing
 
 import hikari
 
-Mode = typing.Literal["default", "exception", "success"]
+Mode = typing.Literal["default", "error", "success"]
 
-modes_and_colors = {"default": "#4f686d", "exception": "#ff4b4b", "success": "#77b35a"}
+modes_and_colors = {"default": "#4f686d", "error": "#ff4b4b", "success": "#77b35a"}
 
 
 def embed(

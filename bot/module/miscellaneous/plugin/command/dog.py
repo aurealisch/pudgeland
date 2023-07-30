@@ -20,7 +20,7 @@ description = "Случайное изображение собаки"
 #  Register a slash command
 @crescent.command(name=name, description=description)
 class DogCommand(commands.Command):
-    async def callback(self, context: crescent.Context) -> None:
+    async def run(self, context: crescent.Context) -> None:
         _image = clients.Client(
             yarl.URL("https://api.thedogapi.com/v1/images/search")
         ).image.search()

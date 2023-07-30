@@ -19,7 +19,7 @@ description = "Репутация"
 #  Register a slash command
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
-    async def callback(self, context: crescent.Context) -> None:
+    async def run(self, context: crescent.Context) -> None:
         pass
 
 

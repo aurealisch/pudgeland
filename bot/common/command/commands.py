@@ -2,10 +2,24 @@ import typing
 
 import crescent
 
+from bot.common.command.embed import embeds
+
 
 class Command(typing.Protocol):
-    async def callback(self, context: crescent.Context) -> None:
+    async def run(self, context: crescent.Context) -> None:
         ...
+
+    async def callback(self, context: crescent.Context) -> None:
+        try:
+            await self.run(context)
+        except Exception as error:
+            title = "Ошибка"
+            description = f"```{error}```"
+
+            embed = embeds.embed("error", title=title, description=description)
+
+            # Respond to an interaction.
+            await context.respond(embed=embed)
 
 
 # MIT License

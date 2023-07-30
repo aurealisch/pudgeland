@@ -20,7 +20,7 @@ description = "Случайное изображение кошки"
 #  Register a slash command
 @crescent.command(name=name, description=description)
 class CatCommand(commands.Command):
-    async def callback(self, context: crescent.Context) -> None:
+    async def run(self, context: crescent.Context) -> None:
         _image = clients.Client(
             yarl.URL("https://api.thecatapi.com/v1/images/search")
         ).image.search()
