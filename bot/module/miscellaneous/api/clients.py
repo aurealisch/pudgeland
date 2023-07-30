@@ -1,11 +1,12 @@
 import attrs
+import yarl
 
 from bot.module.miscellaneous.api.manager import images
 
 
 @attrs.define
 class Client:
-    url: str = attrs.field()
+    url: yarl.URL = attrs.field()
 
     _image_manager = images.ImageManager(url)
 

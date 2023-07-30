@@ -1,20 +1,21 @@
 import typing
 
 import attrs
+import httpx
 import msgspec
-import requests
+import yarl
 
 from bot.module.miscellaneous.api.model import images
 
 
 @attrs.define
 class ImageManager:
-    url: str
+    url: yarl.URL
 
     def search(self) -> images.Image:
         url = self.url
 
-        with requests.get(url) as response:
+        with httpx.get(url) as response:
             content = response.content
 
             image = msgspec.json.decode(content, type=typing.Sequence[images.Image])
