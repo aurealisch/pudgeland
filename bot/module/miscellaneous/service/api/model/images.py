@@ -1,24 +1,14 @@
-import crescent
-
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.economics.service import economics
-
-plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
-
-name = "приручать"
-description = "Приручать"
+import msgspec
+import yarl
 
 
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.tame()
+class Image(msgspec.Struct):
+    id: str
+
+    url: yarl.URL
+
+    width: int
+    height: int
 
 
 # MIT License

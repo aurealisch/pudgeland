@@ -1,25 +1,5 @@
-import crescent
-
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.economics.service import economics
-
-plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
-
-name = "приручать"
-description = "Приручать"
-
-
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.tame()
-
+TAKE = 5
+SORT_ORDER = "desc"
 
 # MIT License
 #

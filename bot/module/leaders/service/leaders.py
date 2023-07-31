@@ -1,24 +1,21 @@
-import crescent
+import typing
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.economics.service import economics
+import prisma as _prisma
+from bot.common import commons
 
-plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
-
-name = "приручать"
-description = "Приручать"
+from .utility.constant import _leaders
 
 
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.tame()
+class LeadersService:
+    @staticmethod
+    async def leaders(
+        user_keys: _prisma.types.UserKeys,
+    ) -> typing.List[_prisma.models.User]:
+        return await commons.database.middleware.find_many(
+            _leaders.TAKE,
+            user_keys=user_keys,
+            sort_order=_leaders.SORT_ORDER,
+        )
 
 
 # MIT License

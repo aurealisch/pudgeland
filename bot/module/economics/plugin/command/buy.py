@@ -3,6 +3,7 @@ import crescent
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
+from bot.module.economics.service import economics
 
 # TODO: Rename module name
 
@@ -19,7 +20,7 @@ description = "Покупка"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        pass
+        await economics.EconomicsService.buy()
 
 
 # MIT License

@@ -1,19 +1,18 @@
 import attrs
 import yarl
 
-from bot.module.actions.api.configuration import configurations as _configuration
-from bot.module.actions.api.types import categories as _category
+from .resource import images
 
 
 @attrs.define
-class Urls:
-    configuration: _configuration.Configuration
+class Client:
+    url: yarl.URL = attrs.field()
 
-    def nsfw(self, category: _category.NsfwCategory) -> yarl.URL:
-        return self.configuration.url / "nsfw" / category.value
+    _image_resource = images.ImageResource(url)
 
-    def sfw(self, category: _category.SfwCategory) -> yarl.URL:
-        return self.configuration.url / "sfw" / category.value
+    @property
+    def image(self) -> images.ImageResource:
+        return self._image_resource
 
 
 # MIT License

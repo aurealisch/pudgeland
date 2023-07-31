@@ -3,9 +3,10 @@ import crescent
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
-from bot.module.actions.api import clients
-from bot.module.actions.api.types import categories
-from bot.module.actions.plugin.command import _periods
+from bot.module.actions.service.api import clients
+from bot.module.actions.service.api.types import categories
+
+from . import _periods
 
 plugin = plugins.Plugin()
 

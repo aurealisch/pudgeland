@@ -1,24 +1,26 @@
-import crescent
+import typing
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.economics.service import economics
+import attrs
+import httpx
+import msgspec
+import yarl
 
-plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
-
-name = "приручать"
-description = "Приручать"
+from ..model import images
 
 
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.tame()
+@attrs.define
+class ImageResource:
+    url: yarl.URL
+
+    def search(self) -> images.Image:
+        url = self.url
+
+        with httpx.get(url) as response:
+            content = response.content
+
+            image = msgspec.json.decode(content, type=typing.Sequence[images.Image])
+
+        return image
 
 
 # MIT License

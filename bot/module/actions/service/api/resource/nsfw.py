@@ -1,20 +1,20 @@
 import attrs
 import httpx
 
-from bot.module.actions.api.model import images as _image
-from bot.module.actions.api.types import categories as _category
-from bot.module.actions.api.helper import urls as _urls
+from ..helper import urls as _urls
+from ..model import images
+from ..types import categories
 
 
 @attrs.define
 class NsfwResource:
     urls: _urls.Urls
 
-    def search(self, category: _category.NsfwCategory) -> _image.Image:
+    def search(self, category: categories.NsfwCategory) -> images.Image:
         url = self.urls.nsfw(category)
 
         with httpx.get(url) as response:
-            image = _image.Image(**response.json())
+            image = images.Image(**response.json())
 
         return image
 

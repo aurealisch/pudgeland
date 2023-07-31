@@ -1,5 +1,5 @@
-from bot.common import commons
-from bot.utility.constant import presences
+from .common import commons
+from .utility.constant import presences
 
 activity = presences.activity
 

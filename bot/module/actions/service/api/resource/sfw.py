@@ -1,24 +1,22 @@
-import crescent
+import attrs
+import httpx
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.economics.service import economics
-
-plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
-
-name = "приручать"
-description = "Приручать"
+from ..helper import urls as _urls
+from ..model import images
+from ..types import categories
 
 
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.tame()
+@attrs.define
+class SfwResource:
+    urls: _urls.Urls
+
+    def search(self, category: categories.SfwCategory) -> images.Image:
+        url = self.urls.sfw(category)
+
+        with httpx.get(url) as response:
+            image = images.Image(**response.json())
+
+        return image
 
 
 # MIT License

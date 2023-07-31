@@ -3,7 +3,8 @@ import crescent
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
-from bot.module.reputation.plugin.command import _groups, _periods
+
+from . import _groups, _periods
 
 plugin = plugins.Plugin()
 

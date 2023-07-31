@@ -1,24 +1,29 @@
-import crescent
+import attrs
+import yarl
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.economics.service import economics
-
-plugin = plugins.Plugin()
-
-period = cooldowns.Period(seconds=2.5)
-
-name = "приручать"
-description = "Приручать"
+from .configuration import configurations
+from .helper import urls
+from .resource import nsfw, sfw
 
 
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.tame()
+@attrs.define
+class Client:
+    _url = yarl.URL("https://api.waifu.pics")
+
+    _configuration = configurations.Configuration(_url)
+
+    _urls = urls.Urls(_configuration)
+
+    _nsfw_resource = nsfw.NsfwResource(_urls)
+    _sfw_resource = sfw.SfwResource(_urls)
+
+    @property
+    def nsfw(self) -> nsfw.NsfwResource:
+        return self._nsfw_resource
+
+    @property
+    def sfw(self) -> sfw.SfwResource:
+        return self._sfw_resource
 
 
 # MIT License

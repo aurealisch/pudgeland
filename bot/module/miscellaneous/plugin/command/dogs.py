@@ -4,7 +4,7 @@ import yarl
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
-from bot.module.miscellaneous.api import clients
+from bot.module.miscellaneous.service.api import clients
 
 plugin = plugins.Plugin()
 

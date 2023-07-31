@@ -3,7 +3,9 @@ import crescent
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
-from bot.module.leaders.plugin.command import _groups, _periods
+from bot.module.leaders.service import leaders
+
+from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
@@ -17,7 +19,7 @@ description = "Бананы"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        pass
+        _users = await leaders.LeadersService.leaders("banana")
 
 
 # MIT License

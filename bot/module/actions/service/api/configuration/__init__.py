@@ -1,23 +1,4 @@
-import attrs
-import httpx
-
-from bot.module.actions.api.model import images as _image
-from bot.module.actions.api.types import categories as _category
-from bot.module.actions.api.helper import urls as _urls
-
-
-@attrs.define
-class SfwResource:
-    urls: _urls.Urls
-
-    def search(self, category: _category.SfwCategory) -> _image.Image:
-        url = self.urls.sfw(category)
-
-        with httpx.get(url) as response:
-            image = _image.Image(**response.json())
-
-        return image
-
+pass
 
 # MIT License
 #

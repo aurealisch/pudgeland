@@ -7,35 +7,36 @@ import miru
 import msgspec
 
 import prisma as _prisma
-from bot.core.configuration import configurations
-from bot.core.database import databases
-from bot.core.database.middleware import middlewares
-from bot.core.environment import environments
-from bot.common.model import models
+from .model import models
+
+from ..core.configuration import configurations
+from ..core.database import databases
+from ..core.database.middleware import middlewares
+from ..core.environment import environments
 
 dotenv.load_dotenv()
 
 with open("configuration.json") as stream:
     buffer = stream.read()
 
-    configurations = msgspec.json.decode(buffer, type=configurations.Configuration)
+    configuration = msgspec.json.decode(buffer, type=configurations.Configuration)
 
 prisma = _prisma.Prisma()
 
 _prisma.register(prisma)
 
-databases = databases.Database(middlewares.Middleware(prisma))
+database = databases.Database(middlewares.Middleware(prisma))
 
 token = os.environ.get("TOKEN")
 url = os.environ.get("URL")
 
-environments = environments.Environment(token, url=url)
+environment = environments.Environment(token, url=url)
 
 bot = hikari.GatewayBot(environments.token, banner=configurations.gateway.bot.banner)
 
 miru.install(bot)
 
-models = models.Model(configurations, database=databases, environment=environments)
+model = models.Model(configuration, database=database, environment=environment)
 
 bot.subscribe(hikari.StartedEvent, callback=models.on_started_event)
 bot.subscribe(hikari.StoppedEvent, callback=models.on_stopped_event)

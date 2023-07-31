@@ -1,29 +1,15 @@
-import attrs
-import yarl
+class EconomicsService:
+    @staticmethod
+    async def buy() -> None:
+        pass
 
-from bot.module.actions.api.configuration import configurations
-from bot.module.actions.api.helper import urls
-from bot.module.actions.api.resource import nsfw, sfw
+    @staticmethod
+    async def collect() -> None:
+        pass
 
-
-@attrs.define
-class Client:
-    _url = yarl.URL("https://api.waifu.pics")
-
-    _configuration = configurations.Configuration(_url)
-
-    _urls = urls.Urls(_configuration)
-
-    _nsfw_resource = nsfw.NsfwResource(_urls)
-    _sfw_resource = sfw.SfwResource(_urls)
-
-    @property
-    def nsfw(self) -> nsfw.NsfwResource:
-        return self._nsfw_resource
-
-    @property
-    def sfw(self) -> sfw.SfwResource:
-        return self._sfw_resource
+    @staticmethod
+    async def tame() -> None:
+        pass
 
 
 # MIT License

@@ -2,7 +2,7 @@ import typing
 
 import crescent
 
-from bot.common.command.embed import embeds
+from .embed import embeds
 
 
 class Command(typing.Protocol):

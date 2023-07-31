@@ -1,9 +1,8 @@
-import typing
-
 import attrs
 
 import prisma as _prisma
-from bot.core.database.middleware import middlewares
+
+from .middleware import middlewares
 
 
 @attrs.define
@@ -20,30 +19,6 @@ class Database:
             return await self.middleware.create(id__)
 
         return user
-
-    # noinspection PyMethodMayBeStatic
-    async def bananas(self) -> typing.List[_prisma.models.User]:
-        return await self.middleware.find_many(
-            5,
-            user_keys="banana",
-            sort_order="desc",
-        )
-
-    # noinspection PyMethodMayBeStatic
-    async def monkeys(self) -> typing.List[_prisma.models.User]:
-        return await self.middleware.find_many(
-            5,
-            user_keys="monkey",
-            sort_order="desc",
-        )
-
-    # noinspection PyMethodMayBeStatic
-    async def reputations(self) -> typing.List[_prisma.models.User]:
-        return await self.middleware.find_many(
-            5,
-            user_keys="reputation",
-            sort_order="desc",
-        )
 
 
 # MIT License
