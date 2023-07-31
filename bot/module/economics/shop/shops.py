@@ -20,7 +20,7 @@ class Category(msgspec.Struct):
 
 
 # Open file and return a stream.
-with open("./static/json/shop/shops.json", encoding="utf-8") as stream:
+with open("./resource/json/shop/shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 
 shop = msgspec.json.decode(buf, type=typing.Mapping[str, Category])
