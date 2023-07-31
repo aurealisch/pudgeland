@@ -3,7 +3,7 @@ import crescent
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
-from bot.module.leaders.plugin.command import _group, _period
+from bot.module.leaders.plugin.command import _groups, _periods
 
 plugin = plugins.Plugin()
 
@@ -11,9 +11,9 @@ name = "бананы"
 description = "Бананы"
 
 
-@_group.group.child
+@_groups.group.child
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=_period.period))
+@crescent.hook(cooldowns.cooldown(1, period=_periods.period))
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:

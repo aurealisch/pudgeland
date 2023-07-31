@@ -5,7 +5,7 @@ from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
 from bot.module.actions.api import clients
 from bot.module.actions.api.types import categories
-from bot.module.actions.plugin.command import _period
+from bot.module.actions.plugin.command import _periods
 
 plugin = plugins.Plugin()
 
@@ -14,7 +14,7 @@ description = ""
 
 
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=_period.period))
+@crescent.hook(cooldowns.cooldown(1, period=_periods.period))
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
