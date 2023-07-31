@@ -7,12 +7,10 @@ import miru
 import msgspec
 
 import prisma as _prisma
-from bot.common.configuration import configurations
-from bot.common.database import databases
-from bot.common.database.middleware import middlewares
-from bot.common.environment import (
-    environments,
-)
+from bot.core.configuration import configurations
+from bot.core.database import databases
+from bot.core.database.middleware import middlewares
+from bot.core.environment import environments
 from bot.common.model import models
 
 dotenv.load_dotenv()
@@ -20,29 +18,29 @@ dotenv.load_dotenv()
 with open("configuration.json") as stream:
     buffer = stream.read()
 
-    configuration = msgspec.json.decode(buffer, type=configurations.Configuration)
+    configurations = msgspec.json.decode(buffer, type=configurations.Configuration)
 
 prisma = _prisma.Prisma()
 
 _prisma.register(prisma)
 
-database = databases.Database(middlewares.Middleware(prisma))
+databases = databases.Database(middlewares.Middleware(prisma))
 
 token = os.environ.get("TOKEN")
 url = os.environ.get("URL")
 
-environment = environments.Environment(token, url=url)
+environments = environments.Environment(token, url=url)
 
-bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
+bot = hikari.GatewayBot(environments.token, banner=configurations.gateway.bot.banner)
 
 miru.install(bot)
 
-model = models.Model(configuration, database=database, environment=environment)
+models = models.Model(configurations, database=databases, environment=environments)
 
-bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
-bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
+bot.subscribe(hikari.StartedEvent, callback=models.on_started_event)
+bot.subscribe(hikari.StoppedEvent, callback=models.on_stopped_event)
 
-client = crescent.Client(bot, model=model)
+client = crescent.Client(bot, model=models)
 
 for module in (
     "actions",

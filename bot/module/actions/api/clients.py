@@ -2,8 +2,8 @@ import attrs
 import yarl
 
 from bot.module.actions.api.configuration import configurations
-from bot.module.actions.api.manager import nsfw, sfw
-from bot.module.actions.api.url import urls
+from bot.module.actions.api.helper import urls
+from bot.module.actions.api.resource import nsfw, sfw
 
 
 @attrs.define
@@ -14,16 +14,16 @@ class Client:
 
     _urls = urls.Urls(_configuration)
 
-    _nsfw_manager = nsfw.NsfwManager(_urls)
-    _sfw_manager = sfw.SfwManager(_urls)
+    _nsfw_resource = nsfw.NsfwResource(_urls)
+    _sfw_resource = sfw.SfwResource(_urls)
 
     @property
-    def nsfw(self) -> nsfw.NsfwManager:
-        return self._nsfw_manager
+    def nsfw(self) -> nsfw.NsfwResource:
+        return self._nsfw_resource
 
     @property
-    def sfw(self) -> sfw.SfwManager:
-        return self._sfw_manager
+    def sfw(self) -> sfw.SfwResource:
+        return self._sfw_resource
 
 
 # MIT License

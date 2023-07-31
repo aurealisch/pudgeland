@@ -1,22 +1,48 @@
-import attrs
-import httpx
-
-from bot.module.actions.api.enum.category import sfw
-from bot.module.actions.api.url import urls as _urls
-from bot.module.actions.api.model import images
+import enum
+import typing
 
 
-@attrs.define
-class SfwManager:
-    urls: _urls.Urls
+@typing.final
+class NsfwCategory(str, enum.Enum):
+    WAIFU = "waifu"
+    NEKO = "neko"
+    TRAP = "trap"
+    BLOWJOB = "blowjob"
 
-    def search(self, category: sfw.SfwCategory) -> images.Image:
-        url = self.urls.sfw(category)
 
-        with httpx.get(url) as response:
-            image = images.Image(**response.json())
-
-        return image
+@typing.final
+class SfwCategory(str, enum.Enum):
+    WAIFU = "waifu"
+    NEKO = "neko"
+    SHINOBU = "shinobu"
+    MEGUMIN = "megumin"
+    BULLY = "bully"
+    CUDDLE = "cuddle"
+    CRY = "cry"
+    HUG = "hug"
+    AWOO = "awoo"
+    KISS = "kiss"
+    LICK = "lick"
+    PAT = "pat"
+    SMUG = "smug"
+    BONK = "bonk"
+    YEET = "yeet"
+    BLUSH = "blush"
+    SMILE = "smile"
+    WAVE = "wave"
+    HIGHFIVE = "highfive"
+    HANDHOLD = "handhold"
+    NOM = "nom"
+    BITE = "bite"
+    GLOMP = "glomp"
+    SLAP = "slap"
+    KILL = "kill"
+    KICK = "kick"
+    HAPPY = "happy"
+    WINK = "wink"
+    POKE = "poke"
+    DANCE = "dance"
+    CRINGE = "cringe"
 
 
 # MIT License

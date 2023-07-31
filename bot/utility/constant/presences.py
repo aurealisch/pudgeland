@@ -2,7 +2,7 @@ import hikari
 
 from bot.common import commons
 
-name = commons.configuration.activity.name
+name = commons.configurations.activity.name
 
 activity = hikari.Activity(name=name)
 

@@ -1,40 +1,19 @@
-import enum
-import typing
+import attrs
+import yarl
+
+from bot.module.actions.api.configuration import configurations as _configuration
+from bot.module.actions.api.types import categories as _category
 
 
-@typing.final
-class SfwCategory(str, enum.Enum):
-    WAIFU = "waifu"
-    NEKO = "neko"
-    SHINOBU = "shinobu"
-    MEGUMIN = "megumin"
-    BULLY = "bully"
-    CUDDLE = "cuddle"
-    CRY = "cry"
-    HUG = "hug"
-    AWOO = "awoo"
-    KISS = "kiss"
-    LICK = "lick"
-    PAT = "pat"
-    SMUG = "smug"
-    BONK = "bonk"
-    YEET = "yeet"
-    BLUSH = "blush"
-    SMILE = "smile"
-    WAVE = "wave"
-    HIGHFIVE = "highfive"
-    HANDHOLD = "handhold"
-    NOM = "nom"
-    BITE = "bite"
-    GLOMP = "glomp"
-    SLAP = "slap"
-    KILL = "kill"
-    KICK = "kick"
-    HAPPY = "happy"
-    WINK = "wink"
-    POKE = "poke"
-    DANCE = "dance"
-    CRINGE = "cringe"
+@attrs.define
+class Urls:
+    configuration: _configuration.Configuration
+
+    def nsfw(self, category: _category.NsfwCategory) -> yarl.URL:
+        return self.configuration.url / "nsfw" / category.value
+
+    def sfw(self, category: _category.SfwCategory) -> yarl.URL:
+        return self.configuration.url / "sfw" / category.value
 
 
 # MIT License

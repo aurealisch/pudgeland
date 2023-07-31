@@ -1,19 +1,22 @@
 import attrs
-import yarl
+import httpx
 
-from bot.module.actions.api.configuration import configurations
-from bot.module.actions.api.enum.category import nsfw, sfw
+from bot.module.actions.api.model import images as _image
+from bot.module.actions.api.types import categories as _category
+from bot.module.actions.api.helper import urls as _urls
 
 
 @attrs.define
-class Urls:
-    configuration: configurations.Configuration
+class SfwResource:
+    urls: _urls.Urls
 
-    def nsfw(self, category: nsfw.NsfwCategory) -> yarl.URL:
-        return self.configuration.url / "nsfw" / category.value
+    def search(self, category: _category.SfwCategory) -> _image.Image:
+        url = self.urls.sfw(category)
 
-    def sfw(self, category: sfw.SfwCategory) -> yarl.URL:
-        return self.configuration.url / "sfw" / category.value
+        with httpx.get(url) as response:
+            image = _image.Image(**response.json())
+
+        return image
 
 
 # MIT License

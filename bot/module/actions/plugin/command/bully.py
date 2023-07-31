@@ -4,7 +4,7 @@ from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
 from bot.module.actions.api import clients
-from bot.module.actions.api.enum.category import sfw
+from bot.module.actions.api.types import categories
 from bot.module.actions.plugin.command import _period
 
 plugin = plugins.Plugin()
@@ -18,7 +18,7 @@ description = ""
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        _image = clients.Client().sfw.search(sfw.SfwCategory.BULLY)
+        _image = clients.Client().sfw.search(categories.SfwCategory.BULLY)
 
 
 # MIT License

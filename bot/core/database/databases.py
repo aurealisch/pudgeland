@@ -3,7 +3,7 @@ import typing
 import attrs
 
 import prisma as _prisma
-from bot.common.database.middleware import middlewares
+from bot.core.database.middleware import middlewares
 
 
 @attrs.define

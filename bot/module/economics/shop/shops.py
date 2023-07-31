@@ -2,9 +2,6 @@ import typing
 
 import msgspec
 
-_ItemValue = typing.TypeVar("_ItemValue", int)
-_CategoryValue = typing.TypeVar("_CategoryValue", int)
-
 
 class Item(msgspec.Struct):
     label: str
@@ -19,14 +16,14 @@ class Category(msgspec.Struct):
     label: str
     description: str
 
-    mapping: typing.Mapping[_ItemValue, Item]
+    mapping: typing.Mapping[str, Item]
 
 
 # Open file and return a stream.
 with open("./static/json/shop/shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 
-shop = msgspec.json.decode(buf, type=typing.Mapping[_CategoryValue, Category])
+shop = msgspec.json.decode(buf, type=typing.Mapping[str, Category])
 
 # MIT License
 #
