@@ -8,7 +8,6 @@ import yarl
 from bot.module.miscellaneous.api.model import images
 
 
-# Define an *attrs* class.
 @attrs.define
 class ImageManager:
     url: yarl.URL
@@ -16,7 +15,6 @@ class ImageManager:
     def search(self) -> images.Image:
         url = self.url
 
-        # Sends a `GET` request.
         with httpx.get(url) as response:
             content = response.content
 

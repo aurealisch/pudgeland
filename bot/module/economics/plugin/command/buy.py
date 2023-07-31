@@ -1,25 +1,44 @@
 import crescent
+import hikari
+import miru
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
 from bot.common.plugin import plugins
+from bot.module.economics.shop import shops
+
+# TODO: Rename module name
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "купить"
-description = "Купить"
+name = "покупка"
+description = "Покупка"
+
+
+class View(miru.View):
+    @miru.text_select(
+        options=[
+            hikari.SelectMenuOption(
+                label=item.label,
+                value=value,
+                description=item.description,
+            )
+            for (value, item) in shops.shop.items()
+        ]
+    )
+    async def main(self, textSelect: miru.TextSelect, viewContext: miru.ViewContext):
+        pass
 
 
 @plugin.include
-# Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=period))
-#  Register a slash command
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        pass
+        class View(miru.View):
+            pass
 
 
 # MIT License

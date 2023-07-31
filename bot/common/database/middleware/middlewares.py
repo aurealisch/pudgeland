@@ -5,7 +5,6 @@ import attrs
 import prisma as _prisma
 
 
-# Define an *attrs* class.
 @attrs.define
 class Middleware:
     prisma: _prisma.Prisma
@@ -14,7 +13,6 @@ class Middleware:
     async def find_first(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User | None:
-        # Find a single User record.
         return await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
@@ -28,12 +26,10 @@ class Middleware:
     ) -> typing.List[_prisma.models.User]:
         order = {user_keys: sort_order}
 
-        # Find multiple User records.
         return await self.prisma.user.find_many(take, order=order)
 
     # noinspection PyMethodMayBeStatic
     async def create(self, id__: str) -> _prisma.models.User:
-        # Create a new User record.
         return await self.prisma.user.create(_prisma.types.UserCreateInput(id=id__))
 
     # noinspection PyMethodMayBeStatic
@@ -46,7 +42,6 @@ class Middleware:
         reputation: _prisma.types.AtomicIntInput | int,
         item: _prisma.types.AtomicIntInput | int
     ) -> _prisma.models.User | None:
-        # Update a single User record.
         return await self.prisma.user.update(
             _prisma.types.UserUpdateInput(
                 banana=banana, monkey=monkey, reputation=reputation, item=item

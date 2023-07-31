@@ -18,7 +18,6 @@ class Command(typing.Protocol):
 
             embed = embeds.embed("error", title=title, description=description)
 
-            # Respond to an interaction.
             await context.respond(embed=embed)
 
 

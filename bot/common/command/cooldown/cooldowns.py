@@ -17,7 +17,6 @@ class Period:
     milliseconds: float = 0.0
     microseconds: float = 0.0
 
-    # Property attribute.
     @property
     def total(self) -> float:
         return (
@@ -33,10 +32,7 @@ class Period:
 
 class SlidingWindow:
     def __init__(self, capacity: float, period: float) -> None:
-        # int([x]) -> integer int(x, base=10) -> integer
         self.capacity: int = int(capacity)
-
-        # Convert a string or number to a floating point number, if possible.
         self.period: float = float(period)
         self._window: float = 0.0
         self._tokens: int = self.capacity
@@ -44,7 +40,6 @@ class SlidingWindow:
 
     def get_tokens(self, current: float | None = None) -> int:
         if not current:
-            # time() -> floating point number
             current = _time.time()
 
         tokens = self._tokens
@@ -56,7 +51,6 @@ class SlidingWindow:
 
     @property
     def remained(self) -> float:
-        # time() -> floating point number
         current = _time.time()
 
         tokens = self.get_tokens(current)
@@ -67,7 +61,6 @@ class SlidingWindow:
         return 0.0
 
     def trigger(self) -> float | None:
-        # time() -> floating point number
         current = _time.time()
 
         self._last = current
@@ -97,13 +90,11 @@ class Cooldown(typing.Generic[_K]):
         self._old: dict[_K, SlidingWindow] = {}
         self._current: dict[_K, SlidingWindow] = {}
 
-        # time() -> floating point number
         self.last_cycle = _time.time()
 
     def __getitem__(self, key: _K) -> SlidingWindow:
-        # D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
-        if v := self._old.pop(key, None):
-            self._current[key] = v
+        if value := self._old.pop(key, None):
+            self._current[key] = value
 
         return self._current[key]
 
@@ -111,7 +102,6 @@ class Cooldown(typing.Generic[_K]):
         self._current[key] = value
 
     def get_bucket(self, key: _K) -> SlidingWindow:
-        # time() -> floating point number
         now = _time.time()
 
         if now > self.last_cycle + self.period:
@@ -150,18 +140,12 @@ def cooldown(
         if remained is None:
             return None
 
-        # time() -> floating point number
         current = _time.time()
 
-        # int([x]) -> integer int(x, base=10) -> integer
-        future = int(
-            # Round a number to a given precision in decimal digits.
-            round(current + remained)
-        )
+        future = int(round(current + remained))
 
         timestamp = f"<t:{future}:R>"
 
-        # Respond to an interaction.
         await context.respond(
             f"""\
                 Ты слишком часто используешь эту команду!

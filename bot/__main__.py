@@ -3,7 +3,6 @@ from bot.utility.constant import presences
 
 activity = presences.activity
 
-# Start the application and block until it's finished running.
 commons.bot.run(activity=activity)
 
 # MIT License

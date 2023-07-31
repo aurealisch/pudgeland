@@ -6,7 +6,6 @@ from bot.common.database import databases
 from bot.common.environment import environments
 
 
-# Define an *attrs* class.
 @attrs.define
 class Model:
     configuration: configurations.Configuration
@@ -15,12 +14,10 @@ class Model:
 
     # noinspection PyMethodMayBeStatic
     async def on_started_event(self, _: hikari.StartedEvent) -> None:
-        # Connect to the Prisma query engine.
         await self.database.middleware.prisma.connect()
 
     # noinspection PyMethodMayBeStatic
     async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
-        # Disconnect the Prisma query engine.
         await self.database.middleware.prisma.disconnect()
 
 

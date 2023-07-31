@@ -15,7 +15,6 @@ from bot.common.environment import (
 )
 from bot.common.model import models
 
-# Parse a .env file and then load all the variables found as environment variables.
 dotenv.load_dotenv()
 
 with open("configuration.json") as stream:
@@ -25,7 +24,6 @@ with open("configuration.json") as stream:
 
 prisma = _prisma.Prisma()
 
-# Register a client instance to be retrieved by `get_client()`.
 _prisma.register(prisma)
 
 database = databases.Database(middlewares.Middleware(prisma))
@@ -37,12 +35,10 @@ environment = environments.Environment(token, url=url)
 
 bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
 
-# Install miru and pass the current running application to it.
 miru.install(bot)
 
 model = models.Model(configuration, database=database, environment=environment)
 
-# Subscribe a given callback to a given event type.
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
@@ -55,7 +51,6 @@ for module in (
     "miscellaneous",
     "reputation",
 ):
-    # Loads plugins from a folder.
     client.plugins.load_folder(f"bot.modules.{module}.plugins")
 
 # MIT License

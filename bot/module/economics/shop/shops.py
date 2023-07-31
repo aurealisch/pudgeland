@@ -1,12 +1,32 @@
+import typing
+
 import msgspec
 
-from bot.module.economics.shop import items
+_ItemValue = typing.TypeVar("_ItemValue", int)
+_CategoryValue = typing.TypeVar("_CategoryValue", int)
+
+
+class Item(msgspec.Struct):
+    label: str
+    description: str
+
+    price: int
+
+    bonus: float
+
+
+class Category(msgspec.Struct):
+    label: str
+    description: str
+
+    mapping: typing.Mapping[_ItemValue, Item]
+
 
 # Open file and return a stream.
 with open("./static/json/shop/shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 
-shop = msgspec.json.decode(buf, type=dict[items.Id, items.Item])
+shop = msgspec.json.decode(buf, type=typing.Mapping[_CategoryValue, Category])
 
 # MIT License
 #

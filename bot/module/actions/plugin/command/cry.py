@@ -14,9 +14,7 @@ description = ""
 
 
 @plugin.include
-# Register a hook to a command.
 @crescent.hook(cooldowns.cooldown(1, period=_period.period))
-#  Register a slash command
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:

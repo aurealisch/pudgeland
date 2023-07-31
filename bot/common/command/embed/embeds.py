@@ -10,7 +10,6 @@ modes_and_colors = {"default": "#4f686d", "error": "#ff4b4b", "success": "#77b35
 def embed(
     __mode: Mode, /, *, title: str | None, description: str | None
 ) -> hikari.Embed:
-    # Convert the value to a `Color`.
     color = hikari.Color.of(modes_and_colors[__mode])
 
     return hikari.Embed(title=title, description=description, color=color)
