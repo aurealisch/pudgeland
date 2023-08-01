@@ -43,15 +43,6 @@ bot.subscribe(hikari.StoppedEvent, callback=models.on_stopped_event)
 
 client = crescent.Client(bot, model=models)
 
-for module in (
-    "actions",
-    "economics",
-    "leaders",
-    "miscellaneous",
-    "reputation",
-):
-    client.plugins.load_folder(f"bot.modules.{module}.plugins")
-
 # MIT License
 #
 # Copyright (c) 2023 elaresai

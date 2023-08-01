@@ -1,7 +1,10 @@
 import crescent
+import hikari
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
+from bot.common.command.error import errors
 from bot.common.plugin import plugins
 from bot.module.actions.service.api import clients
 from bot.module.actions.service.api.types import categories
@@ -10,16 +13,35 @@ from . import _periods
 
 plugin = plugins.Plugin()
 
-name = ""
-description = ""
+name = "лизнуть"
+description = "Лизнуть пользователя"
 
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
+    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
+
     async def run(self, context: crescent.Context) -> None:
-        _image = clients.Client().sfw.search(categories.SfwCategory.LICK)
+        contextual = str(context.user.id)
+        optional = str(self.user.id)
+
+        if contextual.__eq__(optional):
+            raise errors.YouCantDoThatError
+
+        description = f"{contextual} лижет {optional}"
+
+        image = clients.Client().sfw.search(categories.SfwCategory.LICK).url
+
+        embed = embeds.embed(
+            "default",
+            context=context,
+            description=description,
+            image=image,
+        )
+
+        await context.respond(embed=embed)
 
 
 # MIT License

@@ -1,25 +1,39 @@
-import crescent
-
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.plugin import plugins
-from bot.module.actions.service.api import clients
-from bot.module.actions.service.api.types import categories
-
-from . import _periods
-
-plugin = plugins.Plugin()
-
-name = ""
-description = ""
+import prisma as _prisma
+from bot.common import commons
 
 
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name=name, description=description)
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        _image = clients.Client().sfw.search(categories.SfwCategory.BULLY)
+class ReputationService:
+    @staticmethod
+    async def add(id__: str | _prisma.types.StringFilter) -> None:
+        user = await commons.database.find_first(id__)
+
+        reputation = user.reputation
+
+        reputation += 1
+
+        await commons.database.middleware.update(
+            id__,
+            banana=user.banana,
+            monkey=user.monkey,
+            reputation=reputation,
+            item=user.item,
+        )
+
+    @staticmethod
+    async def remove(id__: str | _prisma.types.StringFilter) -> None:
+        user = await commons.database.find_first(id__)
+
+        reputation = user.reputation
+
+        reputation -= 1
+
+        await commons.database.middleware.update(
+            id__,
+            banana=user.banana,
+            monkey=user.monkey,
+            reputation=reputation,
+            item=user.item,
+        )
 
 
 # MIT License

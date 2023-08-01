@@ -1,8 +1,12 @@
 import crescent
+import hikari
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
+from bot.common.command.error import errors
 from bot.common.plugin import plugins
+from bot.module.reputation.service import reputation
 
 from . import _groups, _periods
 
@@ -17,8 +21,24 @@ description = "Добавить репутацию пользователю"
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
+    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
+
     async def run(self, context: crescent.Context) -> None:
-        pass
+        contextual = str(context.user.id)
+        optional = str(self.user.id)
+
+        if contextual.__eq__(optional):
+            raise errors.YouCantDoThatError
+
+        await reputation.ReputationService.add(optional)
+
+        title = name.capitalize()
+
+        description = f"{contextual} добавил репутацию {optional}"
+
+        embed = embeds.embed("default", title=title, description=description)
+
+        await context.respond(embed=embed)
 
 
 # MIT License

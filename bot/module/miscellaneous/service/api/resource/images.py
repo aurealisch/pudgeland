@@ -3,14 +3,13 @@ import typing
 import attrs
 import httpx
 import msgspec
-import yarl
 
-from ..model import images
+from .model import images
 
 
 @attrs.define
 class ImageResource:
-    url: yarl.URL
+    url: httpx.URL
 
     def search(self) -> images.Image:
         url = self.url

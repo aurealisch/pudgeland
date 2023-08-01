@@ -3,46 +3,12 @@ import typing
 
 
 @typing.final
-class NsfwCategory(str, enum.Enum):
-    WAIFU = "waifu"
-    NEKO = "neko"
-    TRAP = "trap"
-    BLOWJOB = "blowjob"
-
-
-@typing.final
 class SfwCategory(str, enum.Enum):
-    WAIFU = "waifu"
-    NEKO = "neko"
-    SHINOBU = "shinobu"
-    MEGUMIN = "megumin"
-    BULLY = "bully"
-    CUDDLE = "cuddle"
-    CRY = "cry"
+    BITE = "bite"
     HUG = "hug"
-    AWOO = "awoo"
     KISS = "kiss"
     LICK = "lick"
-    PAT = "pat"
-    SMUG = "smug"
-    BONK = "bonk"
-    YEET = "yeet"
-    BLUSH = "blush"
-    SMILE = "smile"
-    WAVE = "wave"
-    HIGHFIVE = "highfive"
-    HANDHOLD = "handhold"
-    NOM = "nom"
-    BITE = "bite"
-    GLOMP = "glomp"
-    SLAP = "slap"
-    KILL = "kill"
-    KICK = "kick"
-    HAPPY = "happy"
-    WINK = "wink"
     POKE = "poke"
-    DANCE = "dance"
-    CRINGE = "cringe"
 
 
 # MIT License

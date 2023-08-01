@@ -3,6 +3,7 @@ import yarl
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
 from bot.common.plugin import plugins
 from bot.module.miscellaneous.service.api import clients
 
@@ -17,11 +18,15 @@ description = "Случайное изображение собаки"
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
 @crescent.command(name=name, description=description)
-class DogCommand(commands.Command):
+class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        _image = clients.Client(
-            yarl.URL("https://api.thedogapi.com/v1/images/search")
-        ).image.search()
+        url = yarl.URL("https://api.thedogapi.com/v1/images/search")
+
+        image = clients.Client(url).image.search().url
+
+        embed = embeds.embed("default", context=context, image=image)
+
+        await context.respond(embed=embed)
 
 
 # MIT License

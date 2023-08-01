@@ -1,5 +1,6 @@
 import typing
 
+import crescent
 import hikari
 
 Mode = typing.Literal["default", "error", "success"]
@@ -8,11 +9,29 @@ modes_and_colors = {"default": "#4f686d", "error": "#ff4b4b", "success": "#77b35
 
 
 def embed(
-    __mode: Mode, /, *, title: str | None, description: str | None
+    mode: Mode,
+    context: crescent.Context,
+    title: str | None = None,
+    description: str | None = None,
+    image: hikari.files.Resourceish | None = None,
 ) -> hikari.Embed:
-    color = hikari.Color.of(modes_and_colors[__mode])
+    color = hikari.Color.of(modes_and_colors[mode])
 
-    return hikari.Embed(title=title, description=description, color=color)
+    user = context.user
+
+    username = user.username
+    avatar_url = user.avatar_url
+
+    name = username
+    icon = avatar_url
+
+    embed = (
+        hikari.Embed(title=title, description=description, color=color)
+        .set_author(name=name, icon=icon)
+        .set_image(image)
+    )
+
+    return embed
 
 
 # MIT License

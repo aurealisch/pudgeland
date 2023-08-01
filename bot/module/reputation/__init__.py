@@ -1,23 +1,4 @@
-import attrs
-import httpx
-
-from ..helper import urls as _urls
-from ..model import images
-from ..types import categories
-
-
-@attrs.define
-class NsfwResource:
-    urls: _urls.Urls
-
-    def search(self, category: categories.NsfwCategory) -> images.Image:
-        url = self.urls.nsfw(category)
-
-        with httpx.get(url) as response:
-            image = images.Image(**response.json())
-
-        return image
-
+pass
 
 # MIT License
 #

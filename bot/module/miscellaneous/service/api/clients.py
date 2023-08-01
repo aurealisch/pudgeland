@@ -1,12 +1,12 @@
 import attrs
-import yarl
+import httpx
 
 from .resource import images
 
 
 @attrs.define
 class Client:
-    url: yarl.URL = attrs.field()
+    url: httpx.URL = attrs.field()
 
     _image_resource = images.ImageResource(url)
 

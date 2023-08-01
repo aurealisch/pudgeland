@@ -1,5 +1,5 @@
 import attrs
-import yarl
+import httpx
 
 from .configuration import configurations
 from .helper import urls
@@ -8,7 +8,7 @@ from .resource import nsfw, sfw
 
 @attrs.define
 class Client:
-    _url = yarl.URL("https://api.waifu.pics")
+    _url = httpx.URL("https://api.waifu.pics")
 
     _configuration = configurations.Configuration(_url)
 

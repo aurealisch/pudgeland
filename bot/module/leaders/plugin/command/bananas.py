@@ -1,7 +1,10 @@
+import string
+
 import crescent
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
 from bot.common.plugin import plugins
 from bot.module.leaders.service import leaders
 
@@ -19,7 +22,23 @@ description = "Бананы"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        _users = await leaders.LeadersService.leaders("banana")
+        await context.defer()
+
+        users = await leaders.LeadersService.leaders("banana")
+
+        description = string.whitespace
+
+        for index, user in enumerate(users):
+            position = index + 1
+
+            id = user.id
+            banana = user.banana
+
+            description += f"*{position}*. <@{id}> Бананы: `{banana}`"
+
+        embed = embeds.embed("default", context=context, description=description)
+
+        await context.respond(embed=embed)
 
 
 # MIT License

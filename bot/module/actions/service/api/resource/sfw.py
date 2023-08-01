@@ -2,8 +2,8 @@ import attrs
 import httpx
 
 from ..helper import urls as _urls
-from ..model import images
 from ..types import categories
+from .model import images
 
 
 @attrs.define

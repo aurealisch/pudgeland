@@ -1,10 +1,10 @@
 import attrs
-import yarl
+import httpx
 
 
 @attrs.define
 class Configuration:
-    url: yarl.URL
+    url: httpx.URL
 
 
 # MIT License

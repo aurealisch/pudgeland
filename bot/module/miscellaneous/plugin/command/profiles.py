@@ -2,7 +2,9 @@ import crescent
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
 from bot.common.plugin import plugins
+from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
@@ -15,9 +17,41 @@ description = "Профиль"
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
 @crescent.command(name=name, description=description)
-class ProfileCommand(commands.Command):
+class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        pass
+        _contextual = str(context.user.id)
+
+        contextual = await plugin.model.database.find_first(_contextual)
+
+        banana = contextual.banana
+        monkey = contextual.monkey
+
+        reputation = contextual.reputation
+
+        _item = contextual.item
+
+        description = f"""\
+            🍌 Бананы: `{banana}`
+            🐒 Обезьяны: `{monkey}`
+
+            📊 Репутация: `{reputation}`
+        """
+
+        if _item:
+            item = shops.shop[str(_item)]
+
+            label = item.label
+            _description = item.description
+
+            description = f"""
+                ✨ Предмет: `{label}`
+
+                > {_description}
+            """
+
+        embed = embeds.embed("default", context=context, description=description)
+
+        await context.respond(embed=embed)
 
 
 # MIT License

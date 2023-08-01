@@ -7,8 +7,9 @@ from .embed import embeds
 
 class Command(typing.Protocol):
     async def run(self, context: crescent.Context) -> None:
-        ...
+        raise NotImplementedError
 
+    @typing.final
     async def callback(self, context: crescent.Context) -> None:
         try:
             await self.run(context)
