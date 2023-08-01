@@ -1,9 +1,12 @@
+import random
+
 import crescent
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
 from bot.common.plugin import plugins
-from bot.module.economics.service import economics
+from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
@@ -18,7 +21,67 @@ description = "Cобирать"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        await economics.EconomicsService.collect()
+        _contextual = str(context.user.id)
+
+        contextual = await plugin.model.database.find_first(_contextual)
+
+        monkey = contextual.monkey
+
+        _item = contextual.item
+
+        if _item:
+            item = shops.shop.get(str(_item))
+
+            bonus = item.bonus
+
+        collect = plugin.model.configuration.plugins.collect
+
+        total = 0
+
+        collecting = random.randint(
+            collect.collecting.a,
+            b=collect.collecting.b,
+        )
+
+        try:
+            if bonus.monkey:
+                collecting += collecting * bonus.monkey
+        except Exception:
+            pass
+
+        total += collecting
+
+        description = f"{_contextual} собрал 🍌 `{collecting}` бананов"
+
+        if monkey:
+            monkeying = monkey * random.randint(
+                collect.monkeying.a,
+                b=collect.monkeying.b,
+            )
+
+            try:
+                if bonus.monkey:
+                    monkeying += monkeying * bonus.monkey
+            except Exception:
+                pass
+
+            total += monkeying
+
+            description += f"\n+ 🍌 `{monkeying}` бананов от 🐒 `{monkey}` обезьян"
+
+        description += f"\n\n✨ Всего: 🍌 `{total}` бананов"
+
+        await plugin.model.database.middleware.update(
+            _contextual,
+            banana=contextual.banana + total,
+            monkey=monkey,
+            reputation=contextual.reputation,
+            item=contextual.item,
+        )
+
+        embed = embeds.embed("default", context=context, description=description)
+
+        await context.respond(embed=embed)
 
 
 # MIT License

@@ -7,13 +7,17 @@
   "plugins": {
     "collect": {
       "collecting": {
+        "a": 50,
+        "b": 150
+      },
+      "monkeying": {
         "start": 25,
         "stop": 75
-      },
-      "ratio": {
-        "start": 1,
-        "stop" : 50
       }
+    },
+    "tame": {
+      "price": 500,
+      "edge": 10
     }
   },
   "activity": {

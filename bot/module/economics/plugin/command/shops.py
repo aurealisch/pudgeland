@@ -1,8 +1,12 @@
+import string
+
 import crescent
 
 from bot.common.command import commands
 from bot.common.command.cooldown import cooldowns
+from bot.common.command.embed import embeds
 from bot.common.plugin import plugins
+from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
@@ -17,7 +21,25 @@ description = "Магазин"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        pass
+        description = string.whitespace
+
+        for value, item in shops.shop.items():
+            label = item.label
+            description = item.description
+
+            emoji = item.emoji
+
+            price = item.price
+
+            description += f"""\
+                {value}. {emoji} **{label}**\n> {description}
+
+                🏷 Цена: 🍌 Бананы: `{price}`
+            """
+
+        embed = embeds.embed("default", context=context, description=description)
+
+        await context.respond(embed=embed)
 
 
 # MIT License

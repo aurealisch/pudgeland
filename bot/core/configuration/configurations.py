@@ -10,25 +10,23 @@ class Gateway(msgspec.Struct):
 
 
 class Range(msgspec.Struct):
-    start: int
-    stop: int
-
-
-class Collecting(Range):
-    pass
-
-
-class Ratio(Range):
-    pass
+    a: int
+    b: int
 
 
 class Collect(msgspec.Struct):
-    collecting: Collecting
-    ratio: Ratio
+    collecting: Range
+    monkeying: Range
+
+
+class Tame(msgspec.Struct):
+    price: int
+    edge: int
 
 
 class Plugins(msgspec.Struct):
     collect: Collect
+    tame: Tame
 
 
 class Activity(msgspec.Struct):

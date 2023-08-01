@@ -1,5 +1,3 @@
-import random
-
 import crescent
 import hikari
 import miru
@@ -10,13 +8,14 @@ from bot.common.command.embed import embeds
 from bot.common.command.error import errors
 from bot.common.command.view import views
 from bot.common.plugin import plugins
+from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "приручать"
-description = "Приручать"
+name = "покупка"
+description = "Покупка"
 
 
 @plugin.include
@@ -24,73 +23,50 @@ description = "Приручать"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        tame = plugin.model.configuration.plugins.tame
-
-        _contextual = str(context.user.id)
-
-        contextual = await plugin.model.database.find_first(_contextual)
-
-        banana = contextual.banana
-        monkey = contextual.monkey
-
-        fed = (contextual.monkey + 1) * tame
-
         class View(views.View):
-            @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
-            async def ok(self, _: miru.Button, context: miru.ViewContext) -> None:
-                if banana < fed:
-                    raise errors.YouCantDoThatError
-
-                banana -= fed
-
-                if random.randint(1, tame.edge) != 1:
-                    await plugin.model.database.middleware.update(
-                        _contextual,
-                        banana=banana,
-                        monkey=monkey,
-                        reputation=contextual.reputation,
-                        item=contextual.item,
+            @miru.text_select(
+                options=[
+                    hikari.SelectMenuOption(
+                        label=item.label,
+                        value=value,
+                        description=item.description,
+                        emoji=item.emoji,
                     )
+                    for value, item in shops.shop.items()
+                ]
+            )
+            async def _(
+                self, text_select: miru.TextSelect, context: miru.ViewContext
+            ) -> None:
+                _item = text_select.values[0]
 
-                    description = f"""\
-                        <@{_contextual}> скормил 🍌 `{fed}` бананов
-                        и...
+                item = shops.shop[_item]
 
-                        ❌ Не получилось приручить обезьяну...
-                    """
+                label = item.label
+                price = item.price
 
-                    embed = embeds.embed("default", description=description)
+                _contextual = str(context.user.id)
 
-                    await context.respond(embed=embed)
+                contextual = await plugin.model.database.find_first(_contextual)
 
-                    self.stop()
+                banana = contextual.banana
+
+                if banana < price:
+                    raise errors.NotEnoughBananaError
 
                 await plugin.model.database.middleware.update(
                     _contextual,
                     banana=banana,
-                    monkey=monkey + 1,
+                    monkey=contextual.monkey,
                     reputation=contextual.reputation,
-                    item=contextual.item,
+                    item=int(_item),
                 )
 
-                description = f"""\
-                    <@{_contextual}> скормил 🍌 `{fed}` бананов
-                    и...
-
-                    ✅ Получилось приручить обезьяну!!!
-                """
-
-                embed = embeds.embed("default", description=description)
-
-                await context.respond(embed=embed)
-
-                self.stop()
-
-            @miru.button(
-                label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌"
-            )
-            async def cancel(self, _: miru.Button, context: miru.ViewContext) -> None:
-                description = "Отменено"
+                # fmt: off
+                description = (
+                    f"<@{_contextual}> купил `{label}` за 🍌 `{price}` бананов"
+                )
+                # fmt: on
 
                 embed = embeds.embed(
                     "default", context=context, description=description
@@ -98,15 +74,11 @@ class Command(commands.Command):
 
                 await context.respond(embed=embed)
 
-                self.stop()
-
         view = View()
 
         components = view
 
-        description = (
-            f"Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{fed}`"
-        )
+        description = "✨ Выберите предмет для покупки"
 
         embed = embeds.embed("default", context=context, description=description)
 

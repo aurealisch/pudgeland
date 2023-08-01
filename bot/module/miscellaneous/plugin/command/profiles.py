@@ -41,13 +41,8 @@ class Command(commands.Command):
             item = shops.shop[str(_item)]
 
             label = item.label
-            _description = item.description
 
-            description = f"""
-                ✨ Предмет: `{label}`
-
-                > {_description}
-            """
+            description += f"\n✨ Предмет: `{label}`"
 
         embed = embeds.embed("default", context=context, description=description)
 
