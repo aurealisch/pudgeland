@@ -17,7 +17,12 @@ class Command(typing.Protocol):
             title = "Ошибка"
             description = f"```{error}```"
 
-            embed = embeds.embed("error", title=title, description=description)
+            embed = embeds.embed(
+                "error",
+                context=context,
+                title=title,
+                description=description,
+            )
 
             await context.respond(embed=embed)
 

@@ -21,23 +21,23 @@ description = "Магазин"
 @crescent.command(name=name, description=description)
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        description = string.whitespace
+        _description = string.whitespace
 
         for value, item in shops.shop.items():
             label = item.label
-            description = item.description
+            description_ = item.description
 
             emoji = item.emoji
 
             price = item.price
 
-            description += f"""\
-                {value}. {emoji} **{label}**\n> {description}
+            _description += f"""\
+                {value}. {emoji} **{label}**\n> {description_}
 
                 🏷 Цена: 🍌 Бананы: `{price}`
             """
 
-        embed = embeds.embed("default", context=context, description=description)
+        embed = embeds.embed("default", context=context, description=_description)
 
         await context.respond(embed=embed)
 

@@ -31,10 +31,10 @@ class Command(commands.Command):
         for index, user in enumerate(users):
             position = index + 1
 
-            id = user.id
+            id__ = user.id
             banana = user.banana
 
-            description += f"*{position}*. <@{id}> Бананы: `{banana}`"
+            description += f"*{position}*. <@{id__}> Бананы: `{banana}`"
 
         embed = embeds.embed("default", context=context, description=description)
 

@@ -33,11 +33,11 @@ class Command(commands.Command):
         banana = contextual.banana
         monkey = contextual.monkey
 
-        fed = (contextual.monkey + 1) * tame
+        fed = (monkey + 1) * tame.price
 
         class View(views.View):
             @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
-            async def ok(self, _: miru.Button, context: miru.ViewContext) -> None:
+            async def ok(self, _: miru.Button, _context: miru.ViewContext) -> None:
                 if banana < fed:
                     raise errors.YouCantDoThatError
 
@@ -52,16 +52,20 @@ class Command(commands.Command):
                         item=contextual.item,
                     )
 
-                    description = f"""\
+                    __description_ = f"""\
                         <@{_contextual}> скормил 🍌 `{fed}` бананов
                         и...
 
                         ❌ Не получилось приручить обезьяну...
                     """
 
-                    embed = embeds.embed("default", description=description)
+                    embed_ = embeds.embed(
+                        "default",
+                        context=_context,
+                        description=__description_,
+                    )
 
-                    await context.respond(embed=embed)
+                    await context.respond(embed=embed_)
 
                     self.stop()
 
@@ -73,30 +77,32 @@ class Command(commands.Command):
                     item=contextual.item,
                 )
 
-                description = f"""\
+                _description_ = f"""\
                     <@{_contextual}> скормил 🍌 `{fed}` бананов
                     и...
 
                     ✅ Получилось приручить обезьяну!!!
                 """
 
-                embed = embeds.embed("default", description=description)
+                embed_ = embeds.embed(
+                    "default", context=_context, description=_description_
+                )
 
-                await context.respond(embed=embed)
+                await context.respond(embed=embed_)
 
                 self.stop()
 
             @miru.button(
                 label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌"
             )
-            async def cancel(self, _: miru.Button, context: miru.ViewContext) -> None:
-                description = "Отменено"
+            async def cancel(self, _: miru.Button, _context: miru.ViewContext) -> None:
+                description_ = "Отменено"
 
-                embed = embeds.embed(
-                    "default", context=context, description=description
+                _embed = embeds.embed(
+                    "default", context=_context, description=description_
                 )
 
-                await context.respond(embed=embed)
+                await _context.respond(embed=_embed)
 
                 self.stop()
 
@@ -104,11 +110,11 @@ class Command(commands.Command):
 
         components = view
 
-        description = (
+        _description = (
             f"Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{fed}`"
         )
 
-        embed = embeds.embed("default", context=context, description=description)
+        embed = embeds.embed("default", context=context, description=_description)
 
         message = await context.respond(
             ensure_message=True,

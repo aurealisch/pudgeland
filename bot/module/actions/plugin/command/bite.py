@@ -30,14 +30,14 @@ class Command(commands.Command):
         if contextual.__eq__(optional):
             raise errors.YouCantDoThatError
 
-        description = f"{contextual} кусает {optional}"
+        _description = f"{contextual} кусает {optional}"
 
         image = clients.Client().sfw.search(categories.SfwCategory.BITE).url
 
         embed = embeds.embed(
             "default",
             context=context,
-            description=description,
+            description=_description,
             image=image,
         )
 

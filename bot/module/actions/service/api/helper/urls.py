@@ -9,9 +9,6 @@ from ..types import categories
 class Urls:
     configuration: configurations.Configuration
 
-    def nsfw(self, category: categories.NsfwCategory) -> httpx.URL:
-        return self.configuration.url / "nsfw" / category.value
-
     def sfw(self, category: categories.SfwCategory) -> httpx.URL:
         return self.configuration.url / "sfw" / category.value
 

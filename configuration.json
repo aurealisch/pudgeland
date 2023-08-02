@@ -7,12 +7,12 @@
   "plugins": {
     "collect": {
       "collecting": {
-        "a": 50,
+        "a": 75,
         "b": 150
       },
       "monkeying": {
-        "start": 25,
-        "stop": 75
+        "a": 50,
+        "b": 75
       }
     },
     "tame": {

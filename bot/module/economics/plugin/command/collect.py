@@ -46,7 +46,7 @@ class Command(commands.Command):
         try:
             if bonus.monkey:
                 collecting += collecting * bonus.monkey
-        except Exception:
+        except TypeError:
             pass
 
         total += collecting
@@ -62,7 +62,7 @@ class Command(commands.Command):
             try:
                 if bonus.monkey:
                     monkeying += monkeying * bonus.monkey
-            except Exception:
+            except TypeError:
                 pass
 
             total += monkeying

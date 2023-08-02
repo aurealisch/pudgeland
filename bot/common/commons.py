@@ -32,14 +32,14 @@ url = os.environ.get("URL")
 
 environment = environments.Environment(token, url=url)
 
-bot = hikari.GatewayBot(environments.token, banner=configurations.gateway.bot.banner)
+bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
 
 miru.install(bot)
 
 model = models.Model(configuration, database=database, environment=environment)
 
-bot.subscribe(hikari.StartedEvent, callback=models.on_started_event)
-bot.subscribe(hikari.StoppedEvent, callback=models.on_stopped_event)
+bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
+bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
 client = crescent.Client(bot, model=models)
 

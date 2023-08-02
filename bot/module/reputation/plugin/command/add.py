@@ -34,9 +34,14 @@ class Command(commands.Command):
 
         title = name.capitalize()
 
-        description = f"{contextual} добавил репутацию {optional}"
+        _description = f"{contextual} добавил репутацию {optional}"
 
-        embed = embeds.embed("default", title=title, description=description)
+        embed = embeds.embed(
+            "default",
+            context=context,
+            title=title,
+            description=_description,
+        )
 
         await context.respond(embed=embed)
 

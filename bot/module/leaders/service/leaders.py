@@ -3,7 +3,7 @@ import typing
 import prisma as _prisma
 from bot.common import commons
 
-from .utility.constant import _leaders
+from .utility.constant import leaders as _leaders
 
 
 class LeadersService:

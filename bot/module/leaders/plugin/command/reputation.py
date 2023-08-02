@@ -26,17 +26,17 @@ class Command(commands.Command):
 
         users = await leaders.LeadersService.leaders("reputation")
 
-        description = string.whitespace
+        _description = string.whitespace
 
         for index, user in enumerate(users):
             position = index + 1
 
-            id = user.id
+            id__ = user.id
             reputation = user.reputation
 
-            description += f"*{position}*. <@{id}> Репутация: `{reputation}`"
+            _description += f"*{position}*. <@{id__}> Репутация: `{reputation}`"
 
-        embed = embeds.embed("default", context=context, description=description)
+        embed = embeds.embed("default", context=context, description=_description)
 
         await context.respond(embed=embed)
 

@@ -31,12 +31,13 @@ class Command(commands.Command):
                         value=value,
                         description=item.description,
                         emoji=item.emoji,
+                        is_default=False,
                     )
                     for value, item in shops.shop.items()
                 ]
             )
             async def _(
-                self, text_select: miru.TextSelect, context: miru.ViewContext
+                self, text_select: miru.TextSelect, _context: miru.ViewContext
             ) -> None:
                 _item = text_select.values[0]
 
@@ -45,7 +46,7 @@ class Command(commands.Command):
                 label = item.label
                 price = item.price
 
-                _contextual = str(context.user.id)
+                _contextual = str(_context.user.id)
 
                 contextual = await plugin.model.database.find_first(_contextual)
 
@@ -63,24 +64,24 @@ class Command(commands.Command):
                 )
 
                 # fmt: off
-                description = (
+                _description = (
                     f"<@{_contextual}> купил `{label}` за 🍌 `{price}` бананов"
                 )
                 # fmt: on
 
-                embed = embeds.embed(
-                    "default", context=context, description=description
+                _embed = embeds.embed(
+                    "default", context=_context, description=_description
                 )
 
-                await context.respond(embed=embed)
+                await _context.respond(embed=_embed)
 
         view = View()
 
         components = view
 
-        description = "✨ Выберите предмет для покупки"
+        _description = "✨ Выберите предмет для покупки"
 
-        embed = embeds.embed("default", context=context, description=description)
+        embed = embeds.embed("default", context=context, description=_description)
 
         message = await context.respond(
             ensure_message=True,

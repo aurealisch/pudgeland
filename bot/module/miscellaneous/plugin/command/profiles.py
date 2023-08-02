@@ -30,7 +30,7 @@ class Command(commands.Command):
 
         _item = contextual.item
 
-        description = f"""\
+        _description = f"""\
             🍌 Бананы: `{banana}`
             🐒 Обезьяны: `{monkey}`
 
@@ -42,9 +42,9 @@ class Command(commands.Command):
 
             label = item.label
 
-            description += f"\n✨ Предмет: `{label}`"
+            _description += f"\n✨ Предмет: `{label}`"
 
-        embed = embeds.embed("default", context=context, description=description)
+        embed = embeds.embed("default", context=context, description=_description)
 
         await context.respond(embed=embed)
 

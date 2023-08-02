@@ -3,7 +3,7 @@ import httpx
 
 from .configuration import configurations
 from .helper import urls
-from .resource import nsfw, sfw
+from .resource import sfw
 
 
 @attrs.define
@@ -14,12 +14,7 @@ class Client:
 
     _urls = urls.Urls(_configuration)
 
-    _nsfw_resource = nsfw.NsfwResource(_urls)
     _sfw_resource = sfw.SfwResource(_urls)
-
-    @property
-    def nsfw(self) -> nsfw.NsfwResource:
-        return self._nsfw_resource
 
     @property
     def sfw(self) -> sfw.SfwResource:
