@@ -1,3 +1,5 @@
+import typing
+
 import attrs
 import hikari
 
@@ -6,6 +8,7 @@ from bot.core.database import databases
 from bot.core.environment import environments
 
 
+@typing.final
 @attrs.define
 class Model:
     configuration: configurations.Configuration

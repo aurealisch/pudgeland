@@ -12,21 +12,18 @@ from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
-name = "репутация"
-description = "Репутация"
-
 
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="репутация", description="Репутация")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         await context.defer()
 
         users = await leaders.LeadersService.leaders("reputation")
 
-        _description = string.whitespace
+        description = string.whitespace
 
         for index, user in enumerate(users):
             position = index + 1
@@ -34,9 +31,9 @@ class Command(commands.Command):
             id__ = user.id
             reputation = user.reputation
 
-            _description += f"*{position}*. <@{id__}> Репутация: `{reputation}`"
+            description += f"*{position}*. <@{id__}> Репутация: `{reputation}`"
 
-        embed = embeds.embed("default", context=context, description=_description)
+        embed = embeds.embed("default", context=context, description=description)
 
         await context.respond(embed=embed)
 

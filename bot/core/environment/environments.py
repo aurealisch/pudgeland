@@ -1,6 +1,9 @@
+import typing
+
 import attrs
 
 
+@typing.final
 @attrs.define
 class Environment:
     token: str | None

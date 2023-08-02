@@ -1,38 +1,48 @@
+import typing
+
 import msgspec
 
 
+@typing.final
 class Bot(msgspec.Struct):
     banner: str
 
 
+@typing.final
 class Gateway(msgspec.Struct):
     bot: Bot
 
 
+@typing.final
 class Range(msgspec.Struct):
     a: int
     b: int
 
 
+@typing.final
 class Collect(msgspec.Struct):
     collecting: Range
     monkeying: Range
 
 
+@typing.final
 class Tame(msgspec.Struct):
     price: int
     edge: int
 
 
+@typing.final
 class Plugins(msgspec.Struct):
     collect: Collect
     tame: Tame
 
 
+@typing.final
 class Activity(msgspec.Struct):
     name: str
 
 
+@typing.final
 class Configuration(msgspec.Struct):
     gateway: Gateway
     plugins: Plugins

@@ -7,6 +7,7 @@ import crescent
 _K = typing.TypeVar("_K")
 
 
+@typing.final
 @attrs.define
 class Period:
     weeks: float = 0.0
@@ -30,6 +31,7 @@ class Period:
         )
 
 
+@typing.final
 class SlidingWindow:
     def __init__(self, capacity: float, period: float) -> None:
         self.capacity: int = int(capacity)
@@ -82,6 +84,7 @@ class SlidingWindow:
         self._last = 0.0
 
 
+@typing.final
 class Cooldown(typing.Generic[_K]):
     def __init__(self, capacity: float, period: float) -> None:
         self.period = period

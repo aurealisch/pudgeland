@@ -13,13 +13,10 @@ from . import _periods
 
 plugin = plugins.Plugin()
 
-name = "обнять"
-description = "Обнять пользователя"
-
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="обнять", description="Обнять пользователя")
 class Command(commands.Command):
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
@@ -32,7 +29,9 @@ class Command(commands.Command):
 
         description = f"{contextual} обнимает {optional}"
 
-        image = clients.Client().sfw.search(categories.SfwCategory.HUG).url
+        url = clients.Client().sfw.search(categories.SfwCategory.HUG).url
+
+        image = url
 
         embed = embeds.embed(
             "default",

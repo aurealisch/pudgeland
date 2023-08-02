@@ -10,13 +10,10 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "профиль"
-description = "Профиль"
-
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="профиль", description="Профиль")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         _contextual = str(context.user.id)
@@ -30,7 +27,7 @@ class Command(commands.Command):
 
         _item = contextual.item
 
-        _description = f"""\
+        description = f"""\
             🍌 Бананы: `{banana}`
             🐒 Обезьяны: `{monkey}`
 
@@ -42,9 +39,9 @@ class Command(commands.Command):
 
             label = item.label
 
-            _description += f"\n✨ Предмет: `{label}`"
+            description += f"\n✨ Предмет: `{label}`"
 
-        embed = embeds.embed("default", context=context, description=_description)
+        embed = embeds.embed("default", context=context, description=description)
 
         await context.respond(embed=embed)
 

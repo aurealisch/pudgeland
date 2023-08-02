@@ -1,8 +1,11 @@
+import typing
+
 import miru
 import miru.abc
 
 
 class View(miru.View):
+    @typing.final
     def on_error(
         self,
         error: Exception,

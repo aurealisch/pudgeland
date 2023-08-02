@@ -1,9 +1,12 @@
+import typing
+
 import crescent
 import hikari
 
 from ..model import models
 
 
+@typing.final
 class Plugin(crescent.Plugin[hikari.GatewayBot, models.Model]):
     pass
 

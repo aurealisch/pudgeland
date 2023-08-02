@@ -11,18 +11,17 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "собака"
-description = "Случайное изображение собаки"
-
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="собака", description="Случайное изображение собаки")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        url = yarl.URL("https://api.thedogapi.com/v1/images/search")
+        _url = yarl.URL("https://api.thedogapi.com/v1/images/search")
 
-        image = clients.Client(url).image.search().url
+        url = clients.Client(_url).image.search().url
+
+        image = url
 
         embed = embeds.embed("default", context=context, image=image)
 

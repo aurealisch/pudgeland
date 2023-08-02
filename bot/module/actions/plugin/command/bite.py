@@ -13,13 +13,10 @@ from . import _periods
 
 plugin = plugins.Plugin()
 
-name = "укусить"
-description = "Укусить пользователя"
-
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="укусить", description="Укусить пользователя")
 class Command(commands.Command):
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
@@ -30,14 +27,16 @@ class Command(commands.Command):
         if contextual.__eq__(optional):
             raise errors.YouCantDoThatError
 
-        _description = f"{contextual} кусает {optional}"
+        description = f"{contextual} кусает {optional}"
 
-        image = clients.Client().sfw.search(categories.SfwCategory.BITE).url
+        url = clients.Client().sfw.search(categories.SfwCategory.BITE).url
+
+        image = url
 
         embed = embeds.embed(
             "default",
             context=context,
-            description=_description,
+            description=description,
             image=image,
         )
 

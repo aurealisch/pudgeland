@@ -12,14 +12,11 @@ from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
-name = "бананы"
-description = "Бананы"
-
 
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="бананы", description="Бананы")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         await context.defer()

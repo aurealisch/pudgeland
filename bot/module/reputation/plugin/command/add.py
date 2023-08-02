@@ -12,14 +12,11 @@ from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
-name = "добавить"
-description = "Добавить репутацию пользователю"
-
 
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="добавить", description="Добавить репутацию пользователю")
 class Command(commands.Command):
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
@@ -32,16 +29,9 @@ class Command(commands.Command):
 
         await reputation.ReputationService.add(optional)
 
-        title = name.capitalize()
+        description = f"{contextual} добавил репутацию {optional}"
 
-        _description = f"{contextual} добавил репутацию {optional}"
-
-        embed = embeds.embed(
-            "default",
-            context=context,
-            title=title,
-            description=_description,
-        )
+        embed = embeds.embed("default", context=context, description=description)
 
         await context.respond(embed=embed)
 

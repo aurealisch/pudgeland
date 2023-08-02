@@ -1,3 +1,5 @@
+import typing
+
 import attrs
 
 import prisma as _prisma
@@ -5,6 +7,7 @@ import prisma as _prisma
 from .middleware import middlewares
 
 
+@typing.final
 @attrs.define
 class Database:
     middleware: middlewares.Middleware

@@ -12,13 +12,10 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(hours=2)
 
-name = "собирать"
-description = "Cобирать"
-
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="собирать", description="Cобирать")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         _contextual = str(context.user.id)
@@ -79,7 +76,11 @@ class Command(commands.Command):
             item=contextual.item,
         )
 
-        embed = embeds.embed("default", context=context, description=description)
+        embed = embeds.embed(
+            "default",
+            context=context,
+            description=description,
+        )
 
         await context.respond(embed=embed)
 

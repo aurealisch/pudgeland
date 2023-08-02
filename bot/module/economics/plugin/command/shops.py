@@ -12,32 +12,33 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "магазин"
-description = "Магазин"
-
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="магазин", description="Магазин")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        _description = string.whitespace
+        description = string.whitespace
 
         for value, item in shops.shop.items():
             label = item.label
-            description_ = item.description
+            _description = item.description
 
             emoji = item.emoji
 
             price = item.price
 
-            _description += f"""\
-                {value}. {emoji} **{label}**\n> {description_}
+            description += f"""\
+                {value}. {emoji} **{label}**\n> {_description}
 
                 🏷 Цена: 🍌 Бананы: `{price}`
             """
 
-        embed = embeds.embed("default", context=context, description=_description)
+        embed = embeds.embed(
+            "default",
+            context=context,
+            description=description,
+        )
 
         await context.respond(embed=embed)
 
