@@ -7,16 +7,21 @@ import prisma as _prisma
 
 @typing.final
 @attrs.define
-class Middleware:
+class Database:
     prisma: _prisma.Prisma
 
     # noinspection PyMethodMayBeStatic
     async def find_first(
         self, id__: str | _prisma.types.StringFilter
     ) -> _prisma.models.User | None:
-        return await self.prisma.user.find_first(
+        user = await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
+
+        if user is None:
+            return await self.middleware.create(id__)
+
+        return user
 
     # noinspection PyMethodMayBeStatic
     async def find_many(

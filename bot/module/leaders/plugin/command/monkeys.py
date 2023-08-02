@@ -2,11 +2,9 @@ import string
 
 import crescent
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.command.embed import embeds
-from bot.common.plugin import plugins
-from bot.module.leaders.service import leaders
+from bot.common import plugins
+from bot.common.command import commands, cooldowns, embeds
+from bot.module.leaders import service
 
 from . import _groups, _periods
 
@@ -21,7 +19,7 @@ class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         await context.defer()
 
-        users = await leaders.LeadersService.leaders("monkey")
+        users = await service.LeadersService.leaders("monkey")
 
         description = string.whitespace
 

@@ -2,15 +2,13 @@ import random
 
 import crescent
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.command.embed import embeds
-from bot.common.plugin import plugins
-from bot.module.economics.shop import shops
+from bot.common import plugins
+from bot.common.command import commands, cooldowns, embeds
+from bot.module.economics import shops
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(hours=2)
+period = cooldowns.Period(hours=4)
 
 
 @plugin.include

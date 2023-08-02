@@ -4,7 +4,7 @@ import typing
 import attrs
 import crescent
 
-_K = typing.TypeVar("_K")
+_KEY = typing.TypeVar("_KEY")
 
 
 @typing.final
@@ -85,26 +85,26 @@ class SlidingWindow:
 
 
 @typing.final
-class Cooldown(typing.Generic[_K]):
+class Cooldown(typing.Generic[_KEY]):
     def __init__(self, capacity: float, period: float) -> None:
         self.period = period
         self.capacity = capacity
 
-        self._old: dict[_K, SlidingWindow] = {}
-        self._current: dict[_K, SlidingWindow] = {}
+        self._old: dict[_KEY, SlidingWindow] = {}
+        self._current: dict[_KEY, SlidingWindow] = {}
 
         self.last_cycle = _time.time()
 
-    def __getitem__(self, key: _K) -> SlidingWindow:
+    def __getitem__(self, key: _KEY) -> SlidingWindow:
         if value := self._old.pop(key, None):
             self._current[key] = value
 
         return self._current[key]
 
-    def __setitem__(self, key: _K, value: SlidingWindow) -> None:
+    def __setitem__(self, key: _KEY, value: SlidingWindow) -> None:
         self._current[key] = value
 
-    def get_bucket(self, key: _K) -> SlidingWindow:
+    def get_bucket(self, key: _KEY) -> SlidingWindow:
         now = _time.time()
 
         if now > self.last_cycle + self.period:
@@ -125,10 +125,10 @@ class Cooldown(typing.Generic[_K]):
 
             return sliding_windows
 
-    def remained(self, key: _K) -> float:
+    def remained(self, key: _KEY) -> float:
         return self.get_bucket(key).remained
 
-    def trigger(self, key: _K) -> float | None:
+    def trigger(self, key: _KEY) -> float | None:
         return self.get_bucket(key).trigger()
 
 

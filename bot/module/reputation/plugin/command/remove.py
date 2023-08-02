@@ -1,12 +1,9 @@
 import crescent
 import hikari
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.command.embed import embeds
-from bot.common.command.error import errors
-from bot.common.plugin import plugins
-from bot.module.reputation.service import reputation
+from bot.common import plugins
+from bot.common.command import commands, cooldowns, embeds, errors
+from bot.module.reputation import service
 
 from . import _groups, _periods
 
@@ -27,7 +24,7 @@ class Command(commands.Command):
         if contextual.__eq__(optional):
             raise errors.YouCantDoThatError
 
-        await reputation.ReputationService.add(optional)
+        await service.ReputationService.add(optional)
 
         description = f"{contextual} убрал репутацию {optional}"
 

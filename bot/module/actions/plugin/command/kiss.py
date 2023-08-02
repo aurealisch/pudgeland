@@ -1,11 +1,8 @@
 import crescent
 import hikari
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.command.embed import embeds
-from bot.common.command.error import errors
-from bot.common.plugin import plugins
+from bot.common import plugins
+from bot.common.command import commands, cooldowns, embeds, errors
 from bot.module.actions.service.api import clients
 from bot.module.actions.service.api.types import categories
 

@@ -7,12 +7,9 @@ import miru
 import msgspec
 
 import prisma as _prisma
-from .model import models
 
-from ..core.configuration import configurations
-from ..core.database import databases
-from ..core.database.middleware import middlewares
-from ..core.environment import environments
+from ..core import configurations, databases, environments
+from . import models
 
 dotenv.load_dotenv()
 
@@ -25,7 +22,7 @@ prisma = _prisma.Prisma()
 
 _prisma.register(prisma)
 
-database = databases.Database(middlewares.Middleware(prisma))
+database = databases.Database(prisma)
 
 token = os.environ.get("TOKEN")
 url = os.environ.get("URL")

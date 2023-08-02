@@ -1,10 +1,8 @@
 import crescent
 import yarl
 
-from bot.common.command import commands
-from bot.common.command.cooldown import cooldowns
-from bot.common.command.embed import embeds
-from bot.common.plugin import plugins
+from bot.common import plugins
+from bot.common.command import commands, cooldowns, embeds
 from bot.module.miscellaneous.service.api import clients
 
 plugin = plugins.Plugin()

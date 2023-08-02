@@ -1,28 +1,25 @@
 import typing
 
-import attrs
-
-import prisma as _prisma
-
-from .middleware import middlewares
+import msgspec
 
 
-@typing.final
-@attrs.define
-class Database:
-    middleware: middlewares.Middleware
+class Bonus(msgspec.Struct):
+    banana: float = 0.0
+    monkey: float = 0.0
 
-    # noinspection PyMethodMayBeStatic
-    async def find_first(
-        self, id__: str | _prisma.types.StringFilter
-    ) -> _prisma.models.User:
-        user = await self.middleware.find_first(id__)
 
-        if user is None:
-            return await self.middleware.create(id__)
+class Item(msgspec.Struct):
+    label: str
+    description: str
+    emoji: str
+    price: int
+    bonus: Bonus
 
-        return user
 
+with open("./resource/json/shops.json", encoding="utf-8") as stream:
+    buf = stream.read()
+
+shop = msgspec.json.decode(buf, type=typing.Mapping[str, Item])
 
 # MIT License
 #
