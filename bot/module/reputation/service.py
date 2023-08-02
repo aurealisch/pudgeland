@@ -1,10 +1,13 @@
+import typing
+
 import prisma as _prisma
 from bot.common import commons
 
 
+@typing.final
 class ReputationService:
     @staticmethod
-    async def add(id__: str | _prisma.types.StringFilter) -> None:
+    async def add(id__: typing.Union[str, _prisma.types.StringFilter]) -> None:
         user = await commons.database.find_first(id__)
 
         reputation = user.reputation
@@ -20,7 +23,7 @@ class ReputationService:
         )
 
     @staticmethod
-    async def remove(id__: str | _prisma.types.StringFilter) -> None:
+    async def remove(id__: typing.Union[str, _prisma.types.StringFilter]) -> None:
         user = await commons.database.find_first(id__)
 
         reputation = user.reputation

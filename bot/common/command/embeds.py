@@ -11,10 +11,10 @@ modes_and_colors = {"default": "#4f686d", "error": "#ff4b4b", "success": "#77b35
 
 def embed(
     mode: Mode,
-    context: crescent.Context | miru.context.view.ViewContext,
-    title: str | None = None,
-    description: str | None = None,
-    image: hikari.files.Resourceish | None = None,
+    context: typing.Union[crescent.Context, miru.context.view.ViewContext],
+    title: typing.Optional[str] = None,
+    description: typing.Optional[str] = None,
+    image: typing.Optional[hikari.files.Resourceish] = None,
 ) -> hikari.Embed:
     color = hikari.Color.of(modes_and_colors[mode])
 

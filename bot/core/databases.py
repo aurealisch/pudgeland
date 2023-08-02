@@ -12,8 +12,8 @@ class Database:
 
     # noinspection PyMethodMayBeStatic
     async def find_first(
-        self, id__: str | _prisma.types.StringFilter
-    ) -> _prisma.models.User | None:
+        self, id__: typing.Union[str, _prisma.types.StringFilter]
+    ) -> typing.Optional[_prisma.models.User]:
         user = await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(id=id__)
         )
@@ -43,11 +43,11 @@ class Database:
         self,
         id__: str,
         *,
-        banana: _prisma.types.AtomicIntInput | int,
-        monkey: _prisma.types.AtomicIntInput | int,
-        reputation: _prisma.types.AtomicIntInput | int,
-        item: _prisma.types.AtomicIntInput | int
-    ) -> _prisma.models.User | None:
+        banana: typing.Union[_prisma.types.AtomicIntInput, int],
+        monkey: typing.Union[_prisma.types.AtomicIntInput, int],
+        reputation: typing.Union[_prisma.types.AtomicIntInput, int],
+        item: typing.Union[_prisma.types.AtomicIntInput, int]
+    ) -> typing.Optional[_prisma.models.User]:
         return await self.prisma.user.update(
             _prisma.types.UserUpdateInput(
                 banana=banana, monkey=monkey, reputation=reputation, item=item

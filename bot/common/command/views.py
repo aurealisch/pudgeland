@@ -9,8 +9,8 @@ class View(miru.View):
     def on_error(
         self,
         error: Exception,
-        _: miru.abc.item.ViewItem | None = None,
-        _context: miru.context.view.ViewContext | None = None,
+        _: typing.Optional[miru.abc.item.ViewItem] = None,
+        _context: typing.Optional[miru.context.view.ViewContext] = None,
     ) -> None:
         raise error
 

@@ -40,7 +40,7 @@ class SlidingWindow:
         self._tokens: int = self.capacity
         self._last: float = 0.0
 
-    def get_tokens(self, current: float | None = None) -> int:
+    def get_tokens(self, current: typing.Optional[float] = None) -> int:
         if not current:
             current = _time.time()
 
@@ -62,7 +62,7 @@ class SlidingWindow:
 
         return 0.0
 
-    def trigger(self) -> float | None:
+    def trigger(self) -> typing.Optional[float]:
         current = _time.time()
 
         self._last = current
@@ -128,16 +128,18 @@ class Cooldown(typing.Generic[_KEY]):
     def remained(self, key: _KEY) -> float:
         return self.get_bucket(key).remained
 
-    def trigger(self, key: _KEY) -> float | None:
+    def trigger(self, key: _KEY) -> typing.Optional[float]:
         return self.get_bucket(key).trigger()
 
 
 def cooldown(
     capacity: float, period: Period
-) -> typing.Callable[[crescent.Context], typing.Awaitable[crescent.HookResult | None]]:
+) -> typing.Callable[
+    [crescent.Context], typing.Awaitable[typing.Optional[crescent.HookResult]]
+]:
     _cooldown = Cooldown(capacity, period=period.total)
 
-    async def inner(context: crescent.Context) -> crescent.HookResult | None:
+    async def inner(context: crescent.Context) -> typing.Optional[crescent.HookResult]:
         remained = _cooldown.trigger(context.user.id)
 
         if remained is None:

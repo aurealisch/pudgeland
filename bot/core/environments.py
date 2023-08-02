@@ -6,8 +6,8 @@ import attrs
 @typing.final
 @attrs.define
 class Environment:
-    token: str | None
-    url: str | None
+    token: typing.Optional[str]
+    url: typing.Optional[str]
 
 
 # MIT License
