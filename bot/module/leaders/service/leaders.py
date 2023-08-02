@@ -1,19 +1,22 @@
 import typing
 
-import attrs
-import httpx
+import prisma as _prisma
+from bot.common import commons
 
-from ..configuration import configurations
-from ..types import categories
+from .utility.constant import leaders as _leaders
 
 
 @typing.final
-@attrs.define
-class Urls:
-    configuration: configurations.Configuration
-
-    def sfw(self, category: categories.SfwCategory) -> httpx.URL:
-        return self.configuration.url / "sfw" / category.value
+class LeadersService:
+    @staticmethod
+    async def leaders(
+        user_keys: _prisma.types.UserKeys,
+    ) -> typing.List[_prisma.models.User]:
+        return await commons.database.middleware.find_many(
+            _leaders.TAKE,
+            user_keys=user_keys,
+            sort_order=_leaders.SORT_ORDER,
+        )
 
 
 # MIT License

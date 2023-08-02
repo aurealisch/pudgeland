@@ -1,19 +1,4 @@
-import attrs
-import httpx
-
-from .resource import images
-
-
-@attrs.define
-class Client:
-    url: httpx.URL = attrs.field()
-
-    _image_resource = images.ImageResource(url)
-
-    @property
-    def image(self) -> images.ImageResource:
-        return self._image_resource
-
+pass
 
 # MIT License
 #

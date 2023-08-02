@@ -4,16 +4,24 @@ import attrs
 import httpx
 
 from ..configuration import configurations
-from ..types import categories
+from ..helper import urls
+from ..resource import sfw
 
 
 @typing.final
 @attrs.define
-class Urls:
-    configuration: configurations.Configuration
+class Client:
+    _url = httpx.URL("https://api.waifu.pics")
 
-    def sfw(self, category: categories.SfwCategory) -> httpx.URL:
-        return self.configuration.url / "sfw" / category.value
+    _configuration = configurations.Configuration(_url)
+
+    _urls = urls.Urls(_configuration)
+
+    _sfw_resource = sfw.SfwResource(_urls)
+
+    @property
+    def sfw(self) -> sfw.SfwResource:
+        return self._sfw_resource
 
 
 # MIT License

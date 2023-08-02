@@ -3,17 +3,19 @@ import typing
 import attrs
 import httpx
 
-from ..configuration import configurations
-from ..types import categories
+from ..resource import images
 
 
 @typing.final
 @attrs.define
-class Urls:
-    configuration: configurations.Configuration
+class Client:
+    url: httpx.URL = attrs.field()
 
-    def sfw(self, category: categories.SfwCategory) -> httpx.URL:
-        return self.configuration.url / "sfw" / category.value
+    _image_resource = images.ImageResource(url)
+
+    @property
+    def image(self) -> images.ImageResource:
+        return self._image_resource
 
 
 # MIT License

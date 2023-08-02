@@ -1,28 +1,4 @@
-import typing
-
-import attrs
-import hikari
-
-from bot.core import configurations
-from bot.core import databases
-from bot.core import environments
-
-
-@typing.final
-@attrs.define
-class Model:
-    configuration: configurations.Configuration
-    database: databases.Database
-    environment: environments.Environment
-
-    # noinspection PyMethodMayBeStatic
-    async def on_started_event(self, _: hikari.StartedEvent) -> None:
-        await self.database.middleware.prisma.connect()
-
-    # noinspection PyMethodMayBeStatic
-    async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
-        await self.database.middleware.prisma.disconnect()
-
+pass
 
 # MIT License
 #

@@ -1,19 +1,27 @@
 import typing
 
 import attrs
-import httpx
+import hikari
 
-from ..configuration import configurations
-from ..types import categories
+from bot.core.configuration import configurations
+from bot.core.database import databases
+from bot.core.environment import environments
 
 
 @typing.final
 @attrs.define
-class Urls:
+class Model:
     configuration: configurations.Configuration
+    database: databases.Database
+    environment: environments.Environment
 
-    def sfw(self, category: categories.SfwCategory) -> httpx.URL:
-        return self.configuration.url / "sfw" / category.value
+    # noinspection PyMethodMayBeStatic
+    async def on_started_event(self, _: hikari.StartedEvent) -> None:
+        await self.database.middleware.prisma.connect()
+
+    # noinspection PyMethodMayBeStatic
+    async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
+        await self.database.middleware.prisma.disconnect()
 
 
 # MIT License

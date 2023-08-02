@@ -1,19 +1,14 @@
 import typing
 
-import attrs
-import httpx
+import crescent
+import hikari
 
-from ..configuration import configurations
-from ..types import categories
+from ..model import models
 
 
 @typing.final
-@attrs.define
-class Urls:
-    configuration: configurations.Configuration
-
-    def sfw(self, category: categories.SfwCategory) -> httpx.URL:
-        return self.configuration.url / "sfw" / category.value
+class Plugin(crescent.Plugin[hikari.GatewayBot, models.Model]):
+    pass
 
 
 # MIT License

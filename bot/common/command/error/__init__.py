@@ -1,25 +1,4 @@
-import attrs
-import httpx
-
-from .configuration import configurations
-from .helper import urls
-from .resource import sfw
-
-
-@attrs.define
-class Client:
-    _url = httpx.URL("https://api.waifu.pics")
-
-    _configuration = configurations.Configuration(_url)
-
-    _urls = urls.Urls(_configuration)
-
-    _sfw_resource = sfw.SfwResource(_urls)
-
-    @property
-    def sfw(self) -> sfw.SfwResource:
-        return self._sfw_resource
-
+pass
 
 # MIT License
 #
