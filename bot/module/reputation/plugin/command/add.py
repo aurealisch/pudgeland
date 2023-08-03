@@ -1,10 +1,10 @@
 import crescent
 import hikari
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
-from bot.module.reputation import service
+from bot.common.plugin import plugins
+from bot.module.reputation.service import reputation
 
 from . import _groups, _periods
 
@@ -25,7 +25,7 @@ class Command(commands.Command):
         if contextual.__eq__(optional):
             raise errors.YouCantDoThatError
 
-        await service.ReputationService.add(optional)
+        await reputation.ReputationService.add(optional)
 
         description = f"{contextual} добавил репутацию {optional}"
 
