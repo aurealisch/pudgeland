@@ -1,3 +1,4 @@
+import traceback
 import typing
 
 import crescent
@@ -14,6 +15,11 @@ class Command(typing.Protocol):
         try:
             await self.run(context)
         except Exception as error:
+            value = error
+            tb = error.__traceback__
+
+            traceback.print_exception(error.__class__, value=value, tb=tb)
+
             title = "Ошибка"
             description = f"```{error}```"
 
