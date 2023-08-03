@@ -1,12 +1,11 @@
 import attrs
-import httpx
 
 from ..resource.image import images
 
 
 @attrs.define
 class Client:
-    url: httpx.URL = attrs.field()
+    url: str = attrs.field()
 
     _image_resource = images.ImageResource(url)
 
