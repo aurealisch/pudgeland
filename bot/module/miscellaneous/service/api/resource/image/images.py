@@ -9,7 +9,7 @@ from .model.image import images
 
 @attrs.define
 class ImageResource:
-    url: httpx.URL
+    url: str
 
     def search(self) -> images.Image:
         url = self.url
