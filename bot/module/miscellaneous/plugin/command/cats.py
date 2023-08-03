@@ -1,5 +1,4 @@
 import crescent
-import yarl
 
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.plugin import plugins
@@ -15,7 +14,9 @@ period = cooldowns.Period(seconds=2.5)
 @crescent.command(name="кошка", description="Случайное изображение кошки")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        _url = yarl.URL("https://api.thecatapi.com/v1/images/search")
+        await context.defer()
+
+        _url = "https://api.thecatapi.com/v1/images/search"
 
         url = clients.Client(_url).image.search().url
 

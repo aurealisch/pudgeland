@@ -19,6 +19,8 @@ class Command(commands.Command):
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
     async def run(self, context: crescent.Context) -> None:
+        await context.defer()
+
         contextual = str(context.user.id)
         optional = str(self.user.id)
 

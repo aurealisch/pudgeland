@@ -13,8 +13,9 @@ class SfwResource:
     def search(self, category: categories.SfwCategory) -> images.Image:
         url = self.urls.sfw(category)
 
-        with httpx.get(url) as response:
-            image = images.Image(**response.json())
+        response = httpx.get(url)
+
+        image = images.Image(**response.json())
 
         return image
 

@@ -14,10 +14,11 @@ class ImageResource:
     def search(self) -> images.Image:
         url = self.url
 
-        with httpx.get(url) as response:
-            content = response.content
+        response = httpx.get(url)
 
-            image = msgspec.json.decode(content, type=typing.Sequence[images.Image])
+        content = response.content
+
+        image = msgspec.json.decode(content, type=typing.Sequence[images.Image])
 
         return image
 
