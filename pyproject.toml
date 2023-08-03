@@ -29,6 +29,7 @@ hikari-crescent = "^0.6.2"
 hikari-miru = "^3.1.2"
 prisma = "^0.9.1"
 msgspec = "^0.17.0"
+httpx = "^0.24.1"
 
 [build-system]
 requires = ["poetry-core"]

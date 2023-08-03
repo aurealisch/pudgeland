@@ -18,7 +18,7 @@ class Command(commands.Command):
 
         _url = "https://api.thecatapi.com/v1/images/search"
 
-        url = clients.Client(_url).image.search().url
+        url = clients.Client(_url).image.search()[0].url
 
         image = url
 

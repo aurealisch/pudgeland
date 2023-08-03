@@ -11,14 +11,13 @@ from .model.image import images
 class ImageResource:
     url: str
 
-    def search(self) -> images.Image:
-        url = self.url
-
-        response = httpx.get(url)
+    def search(self) -> typing.Sequence[images.Image]:
+        response = httpx.get(self.url)
 
         content = response.content
+        buf = content
 
-        image = msgspec.json.decode(content, type=typing.Sequence[images.Image])
+        image = msgspec.json.decode(buf, type=typing.Sequence[images.Image])
 
         return image
 
