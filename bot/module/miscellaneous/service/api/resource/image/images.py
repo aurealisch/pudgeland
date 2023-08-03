@@ -12,6 +12,7 @@ class ImageResource:
     url: str
 
     def search(self) -> typing.Sequence[images.Image]:
+        print(self.url)
         response = httpx.get(self.url)
 
         content = response.content
