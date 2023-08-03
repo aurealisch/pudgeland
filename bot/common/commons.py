@@ -42,7 +42,7 @@ model = models.Model(configuration, database=database, environment=environment)
 bot.subscribe(hikari.StartedEvent, callback=model.on_started_event)
 bot.subscribe(hikari.StoppedEvent, callback=model.on_stopped_event)
 
-client = crescent.Client(bot, model=models)
+client = crescent.Client(bot, model=model)
 
 # MIT License
 #
