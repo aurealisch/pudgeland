@@ -1,26 +1,44 @@
-import typing
+import string
 
-import attrs
-import httpx
-import msgspec
+import crescent
 
-from .model import images
+from bot.common.plugin import plugins
+from bot.common.command import commands, cooldowns, embeds
+from bot.module.economics.shop import shops
+
+plugin = plugins.Plugin()
+
+period = cooldowns.Period(seconds=2.5)
 
 
-@typing.final
-@attrs.define
-class ImageResource:
-    url: httpx.URL
+@plugin.include
+@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.command(name="магазин", description="Магазин")
+class Command(commands.Command):
+    async def run(self, context: crescent.Context) -> None:
+        description = string.whitespace
 
-    def search(self) -> images.Image:
-        url = self.url
+        for value, item in shops.shop.items():
+            label = item.label
+            _description = item.description
 
-        with httpx.get(url) as response:
-            content = response.content
+            emoji = item.emoji
 
-            image = msgspec.json.decode(content, type=typing.Sequence[images.Image])
+            price = item.price
 
-        return image
+            description += f"""\
+                {value}. {emoji} **{label}**\n> {_description}
+
+                🏷 Цена: 🍌 Бананы: `{price}`
+            """
+
+        embed = embeds.embed(
+            "default",
+            context=context,
+            description=description,
+        )
+
+        await context.respond(embed=embed)
 
 
 # MIT License
