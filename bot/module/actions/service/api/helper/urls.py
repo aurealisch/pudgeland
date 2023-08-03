@@ -1,5 +1,4 @@
 import attrs
-import httpx
 
 from ..configuration import configurations
 from ..types import categories
@@ -9,8 +8,8 @@ from ..types import categories
 class Urls:
     configuration: configurations.Configuration
 
-    def sfw(self, category: categories.SfwCategory) -> httpx.URL:
-        return self.configuration.url / "sfw" / category.value
+    def sfw(self, category: categories.SfwCategory) -> str:
+        return f"{self.configuration.url}/sfw/{category.value}"
 
 
 # MIT License

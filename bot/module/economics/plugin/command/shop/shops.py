@@ -27,7 +27,7 @@ class Command(commands.Command):
             price = item.price
 
             description += f"""\
-                {value}. {emoji} **{label}**\n> {_description}
+                # {value}. {emoji} **{label}**\n> {_description}
 
                 🏷 Цена: 🍌 Бананы: `{price}`
             """

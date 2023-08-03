@@ -29,7 +29,7 @@ class Command(commands.Command):
             id__ = user.id
             banana = user.banana
 
-            description += f"*{position}*. <@{id__}> Бананы: `{banana}`"
+            description += f"*{position}*. <@{id__}> Бананы: `{banana}`\n"
 
         embed = embeds.embed("default", context=context, description=description)
 

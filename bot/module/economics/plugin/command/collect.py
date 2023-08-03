@@ -24,11 +24,6 @@ class Command(commands.Command):
 
         _item = contextual.item
 
-        if _item:
-            item = shops.shop.get(str(_item))
-
-            bonus = item.bonus
-
         collect = plugin.model.configuration.plugins.collect
 
         total = 0
@@ -38,11 +33,13 @@ class Command(commands.Command):
             b=collect.collecting.b,
         )
 
-        try:
-            if bonus.monkey:
-                collecting += collecting * bonus.monkey
-        except TypeError:
-            pass
+        if _item:
+            item = shops.shop.get(str(_item))
+
+            bonus = item.bonus
+
+            if bonus.banana:
+                collecting += collecting * bonus.banana
 
         total += collecting
 
@@ -54,11 +51,13 @@ class Command(commands.Command):
                 b=collect.monkeying.b,
             )
 
-            try:
+            if _item:
+                item = shops.shop.get(str(_item))
+
+                bonus = item.bonus
+
                 if bonus.monkey:
                     monkeying += monkeying * bonus.monkey
-            except TypeError:
-                pass
 
             total += monkeying
 

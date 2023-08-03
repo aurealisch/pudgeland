@@ -29,7 +29,7 @@ class Command(commands.Command):
             id__ = user.id
             reputation = user.reputation
 
-            description += f"*{position}*. <@{id__}> Репутация: `{reputation}`"
+            description += f"*{position}*. <@{id__}> Репутация: `{reputation}`\n"
 
         embed = embeds.embed("default", context=context, description=description)
 

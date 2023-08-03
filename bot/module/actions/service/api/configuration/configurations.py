@@ -1,11 +1,9 @@
 import attrs
 
-import httpx
-
 
 @attrs.define
 class Configuration:
-    url: httpx.URL
+    url: str
 
 
 # MIT License

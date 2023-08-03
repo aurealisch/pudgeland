@@ -1,10 +1,9 @@
 import attrs
-import yarl
 
 
 @attrs.define
 class Image:
-    url: yarl.URL
+    url: str
 
 
 # MIT License
