@@ -8,8 +8,10 @@ import msgspec
 
 import prisma as _prisma
 
-from ..core import configurations, databases, environments
-from . import models
+from ..core.configuration import configurations
+from ..core.database import databases
+from ..core.environment import environments
+from .model import models
 
 dotenv.load_dotenv()
 
@@ -29,7 +31,9 @@ url = os.environ.get("URL")
 
 environment = environments.Environment(token, url=url)
 
-bot = hikari.GatewayBot(environment.token, banner=configuration.gateway.bot.banner)
+banner = "bot"
+
+bot = hikari.GatewayBot(environment.token, banner=banner)
 
 miru.install(bot)
 

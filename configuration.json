@@ -1,18 +1,13 @@
 {
-  "gateway": {
-    "bot": {
-      "banner": "bot"
-    }
-  },
   "plugins": {
     "collect": {
       "collecting": {
         "a": 75,
-        "b": 150
+        "b": 200
       },
       "monkeying": {
         "a": 50,
-        "b": 75
+        "b": 135
       }
     },
     "tame": {

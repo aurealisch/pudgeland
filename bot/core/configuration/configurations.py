@@ -4,16 +4,6 @@ import msgspec
 
 
 @typing.final
-class Bot(msgspec.Struct):
-    banner: str
-
-
-@typing.final
-class Gateway(msgspec.Struct):
-    bot: Bot
-
-
-@typing.final
 class Range(msgspec.Struct):
     a: int
     b: int
@@ -44,7 +34,6 @@ class Activity(msgspec.Struct):
 
 @typing.final
 class Configuration(msgspec.Struct):
-    gateway: Gateway
     plugins: Plugins
     activity: Activity
 
