@@ -27,7 +27,7 @@ class Command(commands.Command):
         if contextual.__eq__(optional):
             raise errors.YouCantDoThatError
 
-        description = f"{contextual} тыкает {optional}"
+        description = f"<@{contextual}> тыкает <@{optional}>"
 
         url = clients.Client().sfw.search(categories.SfwCategory.POKE).url
 

@@ -27,7 +27,7 @@ class Command(commands.Command):
         if contextual.__eq__(optional):
             raise errors.YouCantDoThatError
 
-        description = f"{contextual} кусает {optional}"
+        description = f"<@{contextual}> кусает <@{optional}>"
 
         url = clients.Client().sfw.search(categories.SfwCategory.BITE).url
 

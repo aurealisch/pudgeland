@@ -1,11 +1,10 @@
 import msgspec
-import yarl
 
 
 class Image(msgspec.Struct):
     id: str
 
-    url: yarl.URL
+    url: str
 
     width: int
     height: int
