@@ -1,8 +1,9 @@
 import crescent
 import hikari
 
-from bot.common import plugins
-from bot.common.command import commands, cooldowns, embeds, errors
+from bot.common.plugin import plugins
+from bot.common.command import commands, cooldowns, embeds
+from bot.common.command.error import errors
 from bot.module.reputation import service
 
 from . import _groups, _periods

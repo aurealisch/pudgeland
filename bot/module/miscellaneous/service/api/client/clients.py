@@ -3,7 +3,7 @@ import typing
 import attrs
 import httpx
 
-from ..resource import images
+from ..resource.image import images
 
 
 @typing.final

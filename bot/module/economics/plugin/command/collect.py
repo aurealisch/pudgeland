@@ -2,9 +2,9 @@ import random
 
 import crescent
 
-from bot.common import plugins
+from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
-from bot.module.economics import shops
+from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
@@ -66,7 +66,7 @@ class Command(commands.Command):
 
         description += f"\n\n✨ Всего: 🍌 `{total}` бананов"
 
-        await plugin.model.database.middleware.update(
+        await plugin.model.database.update(
             _contextual,
             banana=contextual.banana + total,
             monkey=monkey,

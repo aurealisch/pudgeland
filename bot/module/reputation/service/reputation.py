@@ -14,7 +14,7 @@ class ReputationService:
 
         reputation += 1
 
-        await commons.database.middleware.update(
+        await commons.database.update(
             id__,
             banana=user.banana,
             monkey=user.monkey,
@@ -30,7 +30,7 @@ class ReputationService:
 
         reputation -= 1
 
-        await commons.database.middleware.update(
+        await commons.database.update(
             id__,
             banana=user.banana,
             monkey=user.monkey,

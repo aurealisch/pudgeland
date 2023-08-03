@@ -1,8 +1,8 @@
 import crescent
 
-from bot.common import plugins
+from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
-from bot.module.economics import shops
+from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 

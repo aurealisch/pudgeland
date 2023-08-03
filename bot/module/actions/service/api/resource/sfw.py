@@ -5,7 +5,7 @@ import httpx
 
 from ..helper import urls as _urls
 from ..types import categories
-from .model import images
+from .model.image import images
 
 
 @typing.final

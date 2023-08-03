@@ -19,7 +19,7 @@ class Database:
         )
 
         if user is None:
-            return await self.middleware.create(id__)
+            return await self.create(id__)
 
         return user
 

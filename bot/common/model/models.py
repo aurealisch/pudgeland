@@ -17,11 +17,11 @@ class Model:
 
     # noinspection PyMethodMayBeStatic
     async def on_started_event(self, _: hikari.StartedEvent) -> None:
-        await self.database.middleware.prisma.connect()
+        await self.database.prisma.connect()
 
     # noinspection PyMethodMayBeStatic
     async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
-        await self.database.middleware.prisma.disconnect()
+        await self.database.prisma.disconnect()
 
 
 # MIT License

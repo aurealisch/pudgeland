@@ -12,7 +12,7 @@ class LeadersService:
     async def leaders(
         user_keys: _prisma.types.UserKeys,
     ) -> typing.List[_prisma.models.User]:
-        return await commons.database.middleware.find_many(
+        return await commons.database.find_many(
             _leaders.TAKE,
             user_keys=user_keys,
             sort_order=_leaders.SORT_ORDER,

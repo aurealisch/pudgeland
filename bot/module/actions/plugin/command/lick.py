@@ -1,9 +1,10 @@
 import crescent
 import hikari
 
-from bot.common import plugins
-from bot.common.command import commands, cooldowns, embeds, errors
-from bot.module.actions.service.api import clients
+from bot.common.plugin import plugins
+from bot.common.command import commands, cooldowns, embeds
+from bot.common.command.error import errors
+from bot.module.actions.service.api.client import clients
 from bot.module.actions.service.api.types import categories
 
 from . import _periods
