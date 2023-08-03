@@ -1,38 +1,30 @@
-import typing
-
 import msgspec
 
 
-@typing.final
 class Range(msgspec.Struct):
     a: int
     b: int
 
 
-@typing.final
 class Collect(msgspec.Struct):
     collecting: Range
     monkeying: Range
 
 
-@typing.final
 class Tame(msgspec.Struct):
     price: int
     edge: int
 
 
-@typing.final
 class Plugins(msgspec.Struct):
     collect: Collect
     tame: Tame
 
 
-@typing.final
 class Activity(msgspec.Struct):
     name: str
 
 
-@typing.final
 class Configuration(msgspec.Struct):
     plugins: Plugins
     activity: Activity

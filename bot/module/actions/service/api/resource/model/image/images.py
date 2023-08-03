@@ -1,10 +1,7 @@
-import typing
-
 import attrs
 import yarl
 
 
-@typing.final
 @attrs.define
 class Image:
     url: yarl.URL

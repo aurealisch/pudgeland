@@ -1,5 +1,3 @@
-import typing
-
 import attrs
 import httpx
 
@@ -7,7 +5,6 @@ from ..configuration import configurations
 from ..types import categories
 
 
-@typing.final
 @attrs.define
 class Urls:
     configuration: configurations.Configuration

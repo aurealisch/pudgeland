@@ -1,5 +1,3 @@
-import typing
-
 import attrs
 import httpx
 
@@ -8,7 +6,6 @@ from ..types import categories
 from .model.image import images
 
 
-@typing.final
 @attrs.define
 class SfwResource:
     urls: _urls.Urls

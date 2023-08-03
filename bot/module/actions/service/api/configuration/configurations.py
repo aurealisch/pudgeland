@@ -1,10 +1,8 @@
 import attrs
-import typing
 
 import httpx
 
 
-@typing.final
 @attrs.define
 class Configuration:
     url: httpx.URL

@@ -1,12 +1,9 @@
-import typing
-
 import attrs
 import httpx
 
 from ..resource.image import images
 
 
-@typing.final
 @attrs.define
 class Client:
     url: httpx.URL = attrs.field()

@@ -4,7 +4,6 @@ import prisma as _prisma
 from bot.common import commons
 
 
-@typing.final
 class ReputationService:
     @staticmethod
     async def add(id__: typing.Union[str, _prisma.types.StringFilter]) -> None:

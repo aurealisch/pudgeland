@@ -1,5 +1,3 @@
-import typing
-
 import attrs
 import httpx
 
@@ -8,7 +6,6 @@ from ..helper import urls
 from ..resource import sfw
 
 
-@typing.final
 @attrs.define
 class Client:
     _url = httpx.URL("https://api.waifu.pics")

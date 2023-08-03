@@ -6,7 +6,6 @@ from bot.common import commons
 from .utility.constant import leaders as _leaders
 
 
-@typing.final
 class LeadersService:
     @staticmethod
     async def leaders(

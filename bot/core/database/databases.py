@@ -5,7 +5,6 @@ import attrs
 import prisma as _prisma
 
 
-@typing.final
 @attrs.define
 class Database:
     prisma: _prisma.Prisma

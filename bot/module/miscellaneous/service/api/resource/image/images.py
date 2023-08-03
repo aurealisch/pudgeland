@@ -7,7 +7,6 @@ import msgspec
 from .model.image import images
 
 
-@typing.final
 @attrs.define
 class ImageResource:
     url: httpx.URL

@@ -3,13 +3,11 @@ import typing
 import msgspec
 
 
-@typing.final
 class Bonus(msgspec.Struct):
     banana: float = 0.0
     monkey: float = 0.0
 
 
-@typing.final
 class Item(msgspec.Struct):
     label: str
     description: str
