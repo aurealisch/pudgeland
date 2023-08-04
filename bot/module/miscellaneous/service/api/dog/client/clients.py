@@ -1,23 +1,60 @@
+import typing
+
 import attrs
 import httpx
-
-from ..helper import urls as _urls
-from ..types import categories
-from .model.image import images
+import msgspec
 
 
 @attrs.define
-class SfwResource:
-    urls: _urls.Urls
+class Configuration:
+    url: str
 
-    def search(self, category: categories.SfwCategory) -> images.Image:
-        url = self.urls.sfw(category)
 
-        response = httpx.get(url)
+@attrs.define
+class Urls:
+    configuration: Configuration
 
-        image = images.Image(**response.json())
+    def search(self) -> str:
+        return f"{self.configuration.url}/images/search"
+
+
+class Image(msgspec.Struct):
+    id: str
+
+    url: str
+
+    width: int
+    height: int
+
+
+@attrs.define
+class ImageResource:
+    urls: Urls
+
+    def search(self) -> typing.Sequence[Image]:
+        response = httpx.get(self.urls.search())
+
+        content = response.content
+        buf = content
+
+        image = msgspec.json.decode(buf, type=typing.Sequence[Image])
 
         return image
+
+
+@attrs.define
+class Client:
+    _url = "https://api.thedogapi.com/v1"
+
+    _configuration = Configuration(_url)
+
+    _urls = Urls(_configuration)
+
+    _image_resource = ImageResource(_urls)
+
+    @property
+    def images(self) -> ImageResource:
+        return self._image_resource
 
 
 # MIT License

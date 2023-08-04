@@ -29,7 +29,7 @@ class Command(commands.Command):
             description += f"""\
                 # {value}. {emoji} **{label}**\n> {_description}
 
-                🏷 Цена: 🍌 Бананы: `{price}`
+                🏷 Цена: 🍌 Бананы: `{price}`\n
             """
 
         embed = embeds.embed(

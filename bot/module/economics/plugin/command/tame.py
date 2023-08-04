@@ -54,13 +54,13 @@ class Command(commands.Command):
                         ❌ Не получилось приручить обезьяну...
                     """
 
-                    embed_ = embeds.embed(
+                    embed = embeds.embed(
                         "default",
                         context=context,
                         description=description,
                     )
 
-                    await context.respond(embed=embed_)
+                    await context.respond(embed=embed)
 
                     self.stop()
 

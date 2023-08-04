@@ -1,23 +1,55 @@
+import typing
+
 import attrs
 import httpx
 
-from ..configuration import configurations
-from ..helper import urls
-from ..resource import sfw
+Category = typing.Literal["bite", "hug", "kiss", "lick", "poke"]
+
+
+@attrs.define
+class Configuration:
+    url: str
+
+
+@attrs.define
+class Urls:
+    configuration: Configuration
+
+    def sfw(self, category: Category) -> str:
+        return f"{self.configuration.url}/sfw/{category}"
+
+
+@attrs.define
+class Image:
+    url: str
+
+
+@attrs.define
+class SfwResource:
+    urls: Urls
+
+    def search(self, category: Category) -> Image:
+        url = self.urls.sfw(category)
+
+        response = httpx.get(url)
+
+        image = Image(**response.json())
+
+        return image
 
 
 @attrs.define
 class Client:
-    _url = httpx.URL("https://api.waifu.pics")
+    _url = "https://api.waifu.pics"
 
-    _configuration = configurations.Configuration(_url)
+    _configuration = Configuration(_url)
 
-    _urls = urls.Urls(_configuration)
+    _urls = Urls(_configuration)
 
-    _sfw_resource = sfw.SfwResource(_urls)
+    _sfw_resource = SfwResource(_urls)
 
     @property
-    def sfw(self) -> sfw.SfwResource:
+    def sfw(self) -> SfwResource:
         return self._sfw_resource
 
 

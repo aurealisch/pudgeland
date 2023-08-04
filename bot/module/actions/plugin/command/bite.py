@@ -5,7 +5,6 @@ from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
 from bot.module.actions.service.api.client import clients
-from bot.module.actions.service.api.types import categories
 
 from . import _periods
 
@@ -29,7 +28,7 @@ class Command(commands.Command):
 
         description = f"<@{contextual}> кусает <@{optional}>"
 
-        url = clients.Client().sfw.search(categories.SfwCategory.BITE).url
+        url = clients.Client().sfw.search("bite").url
 
         image = url
 

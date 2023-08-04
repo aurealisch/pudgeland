@@ -1,4 +1,21 @@
+import typing
+
+import attrs
+import httpx
 import msgspec
+
+
+@attrs.define
+class Configuration:
+    url: str
+
+
+@attrs.define
+class Urls:
+    configuration: Configuration
+
+    def search(self) -> str:
+        return f"{self.configuration.url}/images/search"
 
 
 class Image(msgspec.Struct):
@@ -8,6 +25,36 @@ class Image(msgspec.Struct):
 
     width: int
     height: int
+
+
+@attrs.define
+class ImageResource:
+    urls: Urls
+
+    def search(self) -> typing.Sequence[Image]:
+        response = httpx.get(self.urls.search())
+
+        content = response.content
+        buf = content
+
+        image = msgspec.json.decode(buf, type=typing.Sequence[Image])
+
+        return image
+
+
+@attrs.define
+class Client:
+    _url = "https://api.thecatapi.com/v1"
+
+    _configuration = Configuration(_url)
+
+    _urls = Urls(_configuration)
+
+    _image_resource = ImageResource(_urls)
+
+    @property
+    def images(self) -> ImageResource:
+        return self._image_resource
 
 
 # MIT License

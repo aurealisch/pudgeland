@@ -2,7 +2,7 @@ import crescent
 
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.plugin import plugins
-from bot.module.miscellaneous.service.api.client import clients
+from bot.module.miscellaneous.service.api.dog.client import clients
 
 plugin = plugins.Plugin()
 
@@ -16,9 +16,7 @@ class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         await context.defer()
 
-        _url = "https://api.thedogapi.com/v1/images/search"
-
-        url = clients.Client(_url).image.search()[0].url
+        url = clients.Client().images.search()[0].url
 
         image = url
 
