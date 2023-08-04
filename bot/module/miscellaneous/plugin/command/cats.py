@@ -1,8 +1,8 @@
 import crescent
+import tighnari
 
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.plugin import plugins
-from bot.module.miscellaneous.service.api.cat.client import clients
 
 plugin = plugins.Plugin()
 
@@ -16,7 +16,7 @@ class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         await context.defer()
 
-        url = clients.Client().images.search()[0].url
+        url = tighnari.Client().images.search()[0].url
 
         image = url
 

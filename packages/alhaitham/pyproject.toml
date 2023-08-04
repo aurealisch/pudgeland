@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "bot"
+name = "alhaitham"
 version = "0.1.0"
-description = "Bot"
+description = "An unofficial The Dog API wrapper for Python"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]
 maintainers = ["elaresai <elaresai@gmail.com>"]
 readme = "README.md"
-homepage = "https://github.com/elaresai/pudgeland"
-repository = "https://github.com/elaresai/pudgeland"
+homepage = "https://github.com/eleresai/pudgeland"
+repository = "https://github.com/eleresai/pudgeland"
 classifiers = [
     "License :: OSI Approved :: MIT License",
 
@@ -16,23 +16,11 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.8",
 ]
+packages = [{ include = "alhaitham", from = "src" }]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
-pre-commit = "^3.3.3"
-ruff = "^0.0.282"
-black = "^23.7.0"
-python-dotenv = "^1.0.0"
+python = ">=3.8,<3.12"
 attrs = "^23.1.0"
-hikari = "^2.0.0.dev120"
-hikari-crescent = "^0.6.2"
-hikari-miru = "^3.1.2"
-prisma = "^0.9.1"
-msgspec = "^0.17.0"
-httpx = "^0.24.1"
-alhaitham = "^0.1.0"
-nahida = "^0.1.0"
-tighnari = "^0.1.0"
 
 [build-system]
 requires = ["poetry-core"]

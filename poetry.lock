@@ -123,6 +123,20 @@ files = [
 frozenlist = ">=1.1.0"
 
 [[package]]
+name = "alhaitham"
+version = "0.1.0"
+description = "An unofficial The Dog API wrapper for Python"
+optional = false
+python-versions = ">=3.8,<3.12"
+files = [
+    {file = "alhaitham-0.1.0-py3-none-any.whl", hash = "sha256:4ccb8fa8474e7e00d27e2b1fb0a81af7d8a97503f5bf2fb5991a7dc50c84dcc4"},
+    {file = "alhaitham-0.1.0.tar.gz", hash = "sha256:04c816d731c5b34b9324beb539da08709a2ed6b825126262b03c782952b03eda"},
+]
+
+[package.dependencies]
+attrs = ">=23.1.0,<24.0.0"
+
+[[package]]
 name = "anyio"
 version = "3.7.1"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -830,6 +844,17 @@ files = [
 ]
 
 [[package]]
+name = "nahida"
+version = "0.1.0"
+description = "An unofficial Waifu.pics API wrapper for Python"
+optional = false
+python-versions = ">=3.8,<3.12"
+files = [
+    {file = "nahida-0.1.0-py3-none-any.whl", hash = "sha256:993068c5d0a84e41408c956e82e13747f8f20e94a26c393c8b04a9470ba69d40"},
+    {file = "nahida-0.1.0.tar.gz", hash = "sha256:ef87caff99647a3a049746ec495b7478eeca74e2792dcfeaa0e4356d338ef487"},
+]
+
+[[package]]
 name = "nodeenv"
 version = "1.8.0"
 description = "Node.js virtual environment builder"
@@ -1103,6 +1128,17 @@ files = [
 ]
 
 [[package]]
+name = "tighnari"
+version = "0.1.0"
+description = "An unofficial The Cat API wrapper for Python"
+optional = false
+python-versions = ">=3.8,<3.12"
+files = [
+    {file = "tighnari-0.1.0-py3-none-any.whl", hash = "sha256:04ff816a4255b2c5d2c0859a01a79b64ba6d5a4415e2b54e222bebc62672cc95"},
+    {file = "tighnari-0.1.0.tar.gz", hash = "sha256:7ed296058d2d35b81a0633c2964cde1995b72542c4bf9ceccd40ff1e47d1fbc7"},
+]
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -1245,4 +1281,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "e816b267716de5690ca5d700929debb897ebecd7aae538e0c045b09c12af2740"
+content-hash = "d5bc3757c3a3391dd707e36677cea1f627334e9844e25175db86cef18c384cbe"

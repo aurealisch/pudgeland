@@ -1,10 +1,10 @@
 import crescent
 import hikari
+import nahida
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
-from bot.module.actions.service.api.client import clients
+from bot.common.plugin import plugins
 
 from . import _periods
 
@@ -28,7 +28,7 @@ class Command(commands.Command):
 
         description = f"<@{contextual}> целует <@{optional}>"
 
-        url = clients.Client().sfw.search("kiss").url
+        url = nahida.Client().sfw.search("kiss").url
 
         image = url
 
