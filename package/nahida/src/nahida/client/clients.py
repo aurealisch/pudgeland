@@ -16,7 +16,8 @@ __all__: typing.Sequence[str] = (
 import typing
 
 import attrs
-import httpx
+import requests
+import yarl
 
 NSFWCategory = typing.Literal["waifu", "neko", "trap", "blowjob"]
 SFWCategory = typing.Literal[
@@ -58,7 +59,7 @@ SFWCategory = typing.Literal[
 class Configuration:
     """"""
 
-    url: httpx.URL
+    url: yarl.URL
 
 
 @attrs.define
@@ -93,7 +94,7 @@ class NSFWResource:
         """"""
         url = self.urls.nsfw(category)
 
-        response = httpx.get(url)
+        response = requests.get(url)
 
         image = Image(**response.json())
 
@@ -110,7 +111,7 @@ class SFWResource:
         """"""
         url = self.urls.sfw(category)
 
-        response = httpx.get(url)
+        response = requests.get(url)
 
         image = Image(**response.json())
 
@@ -121,7 +122,7 @@ class SFWResource:
 class Client:
     """"""
 
-    __url = httpx.URL("https://api.waifu.pics")
+    __url = yarl.URL("https://api.waifu.pics")
 
     __configuration = Configuration(__url)
 

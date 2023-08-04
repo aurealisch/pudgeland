@@ -13,15 +13,16 @@ __all__: typing.Sequence[str] = (
 import typing
 
 import attrs
-import httpx
 import msgspec
+import requests
+import yarl
 
 
 @attrs.define
 class Configuration:
     """"""
 
-    url: httpx.URL
+    url: yarl.URL
 
 
 @attrs.define
@@ -54,7 +55,7 @@ class ImageResource:
 
     def search(self) -> typing.Sequence[Image]:
         """"""
-        response = httpx.get(self.urls.search())
+        response = requests.get(self.urls.search())
 
         content = response.content
 
@@ -69,7 +70,7 @@ class ImageResource:
 class Client:
     """"""
 
-    __url = httpx.URL("https://api.thecatapi.com/v1")
+    __url = yarl.URL("https://api.thecatapi.com/v1")
 
     __configuration = Configuration(__url)
 

@@ -4,6 +4,11 @@
 
 Формат основан на [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), и этот проект придерживается [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.2 - 2023-08-04
+
+### Исправлено
+- Исправлена ошибка типов
+
 ## 0.1.1 - 2023-08-04
 
 ### Добавлено
