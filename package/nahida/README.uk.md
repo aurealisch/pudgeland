@@ -2,7 +2,7 @@
 
 > Це частина `Pudgeland 💖 Open Source` екосистема
 
-Неофіційний **[Waifu.pics]()** API оболонка для Python
+Неофіційний **[Waifu.pics](https://waifu.pics)** API оболонка для Python
 
 ## 📦 Пакети
 

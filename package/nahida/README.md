@@ -2,7 +2,7 @@
 
 > This is part of `Pudgeland 💖 Open Source` ecosystems
 
-An unofficial **[Waifu.pics]()** API wrapper for Python
+An unofficial **[Waifu.pics](https://waifu.pics)** API wrapper for Python
 
 ## 📦 Packages
 

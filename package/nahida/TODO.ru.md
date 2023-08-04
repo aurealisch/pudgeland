@@ -1,6 +1,6 @@
 # nahida
 
-Неофициальная **[Waifu.pics]()** API оболочка для Python
+Неофициальная **[Waifu.pics](https://waifu.pics)** API оболочка для Python
 
 ### Задачи
 

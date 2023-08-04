@@ -2,7 +2,7 @@
 
 > Це частина `Pudgeland 💖 Open Source` екосистема
 
-Неофіційний **[The Dog API]()** оболонка для Python
+Неофіційний **[The Dog API](https://thedogapi.com)** оболонка для Python
 
 ## 📦 Пакети
 

@@ -2,7 +2,7 @@
 
 > Це частина `Pudgeland 💖 Open Source` екосистема
 
-Неофіційний **[The Cat API]()** оболонка для Python
+Неофіційний **[The Cat API](https://thecatapi.com)** оболонка для Python
 
 ## 📦 Пакети
 

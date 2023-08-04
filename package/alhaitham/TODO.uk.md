@@ -1,6 +1,6 @@
 # alhaitham
 
-Неофіційний **[The Dog API]()** оболонка для Python
+Неофіційний **[The Dog API](https://thedogapi.com)** оболонка для Python
 
 ### Завдання
 

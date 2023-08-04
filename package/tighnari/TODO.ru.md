@@ -1,6 +1,6 @@
 # tighnari
 
-Неофициальная **[The Cat API]()** оболочка для Python
+Неофициальная **[The Cat API](https://thecatapi.com)** оболочка для Python
 
 ### Задачи
 

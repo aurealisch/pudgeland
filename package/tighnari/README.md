@@ -2,7 +2,7 @@
 
 > This is part of `Pudgeland 💖 Open Source` ecosystems
 
-An unofficial **[The Cat API]()** wrapper for Python
+An unofficial **[The Cat API](https://thecatapi.com)** wrapper for Python
 
 ## 📦 Packages
 
