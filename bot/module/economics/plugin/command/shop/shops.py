@@ -26,7 +26,7 @@ class Command(commands.Command):
 
             price = item.price
 
-            description += f"# {value}. {emoji} **{label}**\n> {_description}🏷 Цена: 🍌 Бананы: `{price}`\n"  # noqa: E501
+            description += f"# {value}. {emoji} **{label}**\n> {_description}\n🏷 Цена: 🍌 Бананы: `{price}`\n"  # noqa: E501
 
         embed = embeds.embed(
             "default",
