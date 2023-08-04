@@ -27,7 +27,7 @@ class Command(commands.Command):
 
         await reputation.ReputationService.add(optional)
 
-        description = f"{contextual} добавил репутацию {optional}"
+        description = f"<@{contextual}> добавил репутацию <@{optional}>"
 
         embed = embeds.embed("default", context=context, description=description)
 
