@@ -1,4 +1,4 @@
-# nahida
+# Nahida
 
 Неофициальная **[Waifu.pics](https://waifu.pics)** API оболочка для Python
 

@@ -1,4 +1,4 @@
-# tighnari
+# Tighnari
 
 > Это часть `Pudgeland 💖 Open Source` экосистемы
 

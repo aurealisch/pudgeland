@@ -1,6 +1,4 @@
-# pudgeland
-
-> Это часть `Pudgeland 💖 Open Source` экосистемы
+# Pudgeland
 
 Pudgeland
 

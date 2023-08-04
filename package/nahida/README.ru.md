@@ -1,4 +1,4 @@
-# nahida
+# Nahida
 
 > Это часть `Pudgeland 💖 Open Source` экосистемы
 

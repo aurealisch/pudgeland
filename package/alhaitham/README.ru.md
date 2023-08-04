@@ -1,4 +1,4 @@
-# alhaitham
+# Alhaitham
 
 > Это часть `Pudgeland 💖 Open Source` экосистемы
 

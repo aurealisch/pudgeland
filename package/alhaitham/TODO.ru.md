@@ -1,4 +1,4 @@
-# alhaitham
+# Alhaitham
 
 Неофициальная **[The Dog API](https://thedogapi.com)** оболочка для Python
 

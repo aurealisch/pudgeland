@@ -1,4 +1,4 @@
-# nahida
+# Nahida
 
 An unofficial **[Waifu.pics](https://waifu.pics)** API wrapper for Python
 
