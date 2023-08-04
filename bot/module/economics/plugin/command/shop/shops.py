@@ -2,13 +2,16 @@ import string
 
 import crescent
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
+from bot.common.command.utility import utilities
+from bot.common.plugin import plugins
 from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
+
+_ = utilities.humanize
 
 
 @plugin.include
@@ -26,7 +29,7 @@ class Command(commands.Command):
 
             price = item.price
 
-            description += f"# {value}. {emoji} **{label}**\n> {_description}\n🏷 Цена: 🍌 Бананы: `{price}`\n"  # noqa: E501
+            description += f"# {value}. {emoji} **{label}**\n> {_description}\n\n🏷 Цена: 🍌 Бананы: `{_(price)}`\n"  # noqa: E501
 
         embed = embeds.embed(
             "default",

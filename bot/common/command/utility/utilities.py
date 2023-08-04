@@ -1,42 +1,5 @@
-import string
-
-import crescent
-
-from bot.common.command import commands, cooldowns, embeds
-from bot.common.command.utility import utilities
-from bot.common.plugin import plugins
-from bot.module.leaders.service import leaders
-
-from . import _groups, _periods
-
-plugin = plugins.Plugin()
-
-_ = utilities.humanize
-
-
-@_groups.group.child
-@plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name="репутация", description="Репутация")
-class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        await context.defer()
-
-        users = await leaders.LeadersService.leaders("reputation")
-
-        description = string.whitespace
-
-        for index, user in enumerate(users):
-            position = index + 1
-
-            id__ = user.id
-            reputation = user.reputation
-
-            description += f"*{position}*. <@{id__}> Репутация: `{_(reputation)}`\n"
-
-        embed = embeds.embed("default", context=context, description=description)
-
-        await context.respond(embed=embed)
+def humanize(number: int) -> str:
+    return f"{number:,}"
 
 
 # MIT License

@@ -2,13 +2,16 @@ import string
 
 import crescent
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
+from bot.common.command.utility import utilities
+from bot.common.plugin import plugins
 from bot.module.leaders.service import leaders
 
 from . import _groups, _periods
 
 plugin = plugins.Plugin()
+
+_ = utilities.humanize
 
 
 @_groups.group.child
@@ -29,7 +32,7 @@ class Command(commands.Command):
             id__ = user.id
             banana = user.banana
 
-            description += f"*{position}*. <@{id__}> Бананы: `{banana}`\n"
+            description += f"*{position}*. <@{id__}> Бананы: `{_(banana)}`\n"
 
         embed = embeds.embed("default", context=context, description=description)
 

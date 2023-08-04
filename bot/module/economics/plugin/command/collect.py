@@ -3,12 +3,15 @@ import random
 import crescent
 
 from bot.common.command import commands, cooldowns, embeds
+from bot.common.command.utility import utilities
 from bot.common.plugin import plugins
 from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(hours=4)
+
+_ = utilities.humanize
 
 
 @plugin.include
@@ -43,7 +46,7 @@ class Command(commands.Command):
 
         total += collecting
 
-        description = f"<@{_contextual}> собрал 🍌 `{collecting}` бананов"
+        description = f"<@{_contextual}> собрал 🍌 `{_(collecting)}` бананов"
 
         if monkey:
             monkeying = monkey * random.randint(
@@ -61,8 +64,13 @@ class Command(commands.Command):
 
             total += monkeying
 
-            description += f"\n+ 🍌 `{monkeying}` бананов от 🐒 `{monkey}` обезьян"
-            description += f"\n\n✨ Всего: 🍌 `{total}` бананов"
+            # fmt: off
+            description += (
+                f"\n+ 🍌 `{_(monkeying)}` бананов от 🐒 `{_(monkey)}` обезьян"
+            )
+            # fmt: on
+
+            description += f"\n\n✨ Всего: 🍌 `{_(total)}` бананов"
 
         await plugin.model.database.update(
             _contextual,

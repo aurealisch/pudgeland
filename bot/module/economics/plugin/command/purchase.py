@@ -2,10 +2,11 @@ import crescent
 import hikari
 import miru
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
+from bot.common.command.utility import utilities
 from bot.common.command.view import views
+from bot.common.plugin import plugins
 from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
@@ -14,6 +15,8 @@ period = cooldowns.Period(seconds=2.5)
 
 name = "покупка"
 description = "Покупка"
+
+_ = utilities.humanize
 
 
 @plugin.include
@@ -32,7 +35,8 @@ class Command(commands.Command):
                         is_default=False,
                     )
                     for value, item in shops.shop.items()
-                ]
+                ],
+                placeholder="Предметы",
             )
             async def _(
                 self, text_select: miru.TextSelect, context: miru.ViewContext
@@ -63,7 +67,7 @@ class Command(commands.Command):
 
                 # fmt: off
                 description = (
-                    f"<@{_contextual}> купил `{label}` за 🍌 `{price}` бананов"
+                    f"<@{_contextual}> купил `{label}` за 🍌 `{_(price)}` бананов"
                 )
                 # fmt: on
 

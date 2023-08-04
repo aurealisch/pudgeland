@@ -4,14 +4,17 @@ import crescent
 import hikari
 import miru
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
+from bot.common.command.utility import utilities
 from bot.common.command.view import views
+from bot.common.plugin import plugins
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
+
+_ = utilities.humanize
 
 
 @plugin.include
@@ -48,7 +51,7 @@ class Command(commands.Command):
                     )
 
                     description = f"""\
-                        <@{_contextual}> скормил 🍌 `{fed}` бананов
+                        <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
                         и...
 
                         ❌ Не получилось приручить обезьяну...
@@ -73,7 +76,7 @@ class Command(commands.Command):
                 )
 
                 description = f"""\
-                    <@{_contextual}> скормил 🍌 `{fed}` бананов
+                    <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
                     и...
 
                     ✅ Получилось приручить обезьяну!!!
@@ -110,7 +113,7 @@ class Command(commands.Command):
         components = view
 
         description = (
-            f"Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{fed}`"
+            f"Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_(fed)}`"
         )
 
         embed = embeds.embed("default", context=context, description=description)

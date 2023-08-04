@@ -1,12 +1,15 @@
 import crescent
 
-from bot.common.plugin import plugins
 from bot.common.command import commands, cooldowns, embeds
+from bot.common.command.utility import utilities
+from bot.common.plugin import plugins
 from bot.module.economics.shop import shops
 
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
+
+_ = utilities.humanize
 
 
 @plugin.include
@@ -28,10 +31,10 @@ class Command(commands.Command):
         _item = contextual.item
 
         description = f"""\
-            🍌 Бананы: `{banana}`
-            🐒 Обезьяны: `{monkey}`
+            🍌 Бананы: `{_(banana)}`
+            🐒 Обезьяны: `{_(monkey)}`
 
-            📊 Репутация: `{reputation}`
+            📊 Репутация: `{_(reputation)}`
         """
 
         if _item:
