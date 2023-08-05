@@ -124,17 +124,19 @@ frozenlist = ">=1.1.0"
 
 [[package]]
 name = "alhaitham"
-version = "0.1.0"
+version = "0.1.3"
 description = "An unofficial The Dog API wrapper for Python"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "alhaitham-0.1.0-py3-none-any.whl", hash = "sha256:4ccb8fa8474e7e00d27e2b1fb0a81af7d8a97503f5bf2fb5991a7dc50c84dcc4"},
-    {file = "alhaitham-0.1.0.tar.gz", hash = "sha256:04c816d731c5b34b9324beb539da08709a2ed6b825126262b03c782952b03eda"},
+    {file = "alhaitham-0.1.3-py3-none-any.whl", hash = "sha256:0c7a8d084043cf28f1c877bb014138979cbf766eeaa875381f9c6838a0c98c4a"},
+    {file = "alhaitham-0.1.3.tar.gz", hash = "sha256:385af256bae73b75c25f90463bf36c72e05660984baca12df91852d8616bad12"},
 ]
 
 [package.dependencies]
 attrs = ">=23.1.0,<24.0.0"
+requests = ">=2.31.0,<3.0.0"
+yarl = ">=1.9.2,<2.0.0"
 
 [[package]]
 name = "anyio"
@@ -845,14 +847,18 @@ files = [
 
 [[package]]
 name = "nahida"
-version = "0.1.0"
+version = "0.1.3"
 description = "An unofficial Waifu.pics API wrapper for Python"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "nahida-0.1.0-py3-none-any.whl", hash = "sha256:993068c5d0a84e41408c956e82e13747f8f20e94a26c393c8b04a9470ba69d40"},
-    {file = "nahida-0.1.0.tar.gz", hash = "sha256:ef87caff99647a3a049746ec495b7478eeca74e2792dcfeaa0e4356d338ef487"},
+    {file = "nahida-0.1.3-py3-none-any.whl", hash = "sha256:5437860bcbedd6e26c8ca2bf7c8e4508b7ed7fc04d9dde03272005989955e27d"},
+    {file = "nahida-0.1.3.tar.gz", hash = "sha256:e59642b2fb9e1fd1fea493fffb538559490595d6e1760a89d10ee637eb54283f"},
 ]
+
+[package.dependencies]
+requests = ">=2.31.0,<3.0.0"
+yarl = ">=1.9.2,<2.0.0"
 
 [[package]]
 name = "nodeenv"
@@ -1064,6 +1070,27 @@ files = [
 ]
 
 [[package]]
+name = "requests"
+version = "2.31.0"
+description = "Python HTTP for Humans."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "requests-2.31.0-py3-none-any.whl", hash = "sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"},
+    {file = "requests-2.31.0.tar.gz", hash = "sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1"},
+]
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+charset-normalizer = ">=2,<4"
+idna = ">=2.5,<4"
+urllib3 = ">=1.21.1,<3"
+
+[package.extras]
+socks = ["PySocks (>=1.5.6,!=1.5.7)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
 name = "ruff"
 version = "0.0.282"
 description = "An extremely fast Python linter, written in Rust."
@@ -1129,14 +1156,18 @@ files = [
 
 [[package]]
 name = "tighnari"
-version = "0.1.0"
+version = "0.1.3"
 description = "An unofficial The Cat API wrapper for Python"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "tighnari-0.1.0-py3-none-any.whl", hash = "sha256:04ff816a4255b2c5d2c0859a01a79b64ba6d5a4415e2b54e222bebc62672cc95"},
-    {file = "tighnari-0.1.0.tar.gz", hash = "sha256:7ed296058d2d35b81a0633c2964cde1995b72542c4bf9ceccd40ff1e47d1fbc7"},
+    {file = "tighnari-0.1.3-py3-none-any.whl", hash = "sha256:d39c57e9cee406d6766ff28ddd53bb34af4f6e83ed6ba7111c1091b3560810fe"},
+    {file = "tighnari-0.1.3.tar.gz", hash = "sha256:602eb066e0b4598a17fd781d950eb6d120ea6e608f6bd993d10805531acc2c0a"},
 ]
+
+[package.dependencies]
+requests = ">=2.31.0,<3.0.0"
+yarl = ">=1.9.2,<2.0.0"
 
 [[package]]
 name = "tomli"
@@ -1170,6 +1201,23 @@ files = [
     {file = "typing_extensions-4.7.1-py3-none-any.whl", hash = "sha256:440d5dd3af93b060174bf433bccd69b0babc3b15b1a8dca43789fd7f61514b36"},
     {file = "typing_extensions-4.7.1.tar.gz", hash = "sha256:b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"},
 ]
+
+[[package]]
+name = "urllib3"
+version = "2.0.4"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "urllib3-2.0.4-py3-none-any.whl", hash = "sha256:de7df1803967d2c2a98e4b11bb7d6bd9210474c46e8a0401514e3a42a75ebde4"},
+    {file = "urllib3-2.0.4.tar.gz", hash = "sha256:8d22f86aae8ef5e410d4f539fde9ce6b2113a001bb4d189e0aed70642d602b11"},
+]
+
+[package.extras]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
+secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
+socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
+zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "virtualenv"
@@ -1281,4 +1329,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "99e861a846056e6e8573797e33577aa70f9d92a6739ffbd444d3377848922ab1"
+content-hash = "4556e9cde3027ed356544203de974eb4c4c3c53f0004be053d18e593fb907b37"
