@@ -7,17 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Released]
 
+## 1.78 - 2023-08-06
+
+### Added
+
+- Added API
+
 ## 1.77 - 2023-08-06
 
 ### Added
+
 - Added one error handler to replace multiply error handling in views and commands
 
 ## 1.76 - 2023-08-05
 
 ### Updated
+
 - Updated `alhaitham` (0.1.0 -> 0.1.3)
 - Updated `nahida` (0.1.0 -> 0.1.3)
 - Updated `tighnari` (0.1.0 -> 0.1.3)
 
 ### Removed
+
 - Removed `httpx` package from the dependencies

@@ -29,7 +29,11 @@ database = databases.Database(prisma)
 token = os.environ.get("TOKEN")
 url = os.environ.get("URL")
 
-environment = environments.Environment(token, url=url)
+default = configuration.api.port.default
+
+port = os.environ.get("PORT", default=default)
+
+environment = environments.Environment(token, url=url, port=port)
 
 banner = "bot"
 

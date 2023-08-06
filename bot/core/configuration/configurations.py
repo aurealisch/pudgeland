@@ -25,9 +25,19 @@ class Activity(msgspec.Struct):
     name: str
 
 
+class Port(msgspec.Struct):
+    default: int
+
+
+class API(msgspec.Struct):
+    host: str
+    port: Port
+
+
 class Configuration(msgspec.Struct):
     plugins: Plugins
     activity: Activity
+    api: API
 
 
 # MIT License
