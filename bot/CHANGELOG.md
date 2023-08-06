@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added API
 
+### Fixed
+
+- Fixed a real number required error
+
 ## 1.77 - 2023-08-06
 
 ### Added

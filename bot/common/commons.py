@@ -31,7 +31,7 @@ url = os.environ.get("URL")
 
 default = configuration.api.port.default
 
-port = os.environ.get("PORT", default=default)
+port = int(os.environ.get("PORT", default=default))
 
 environment = environments.Environment(token, url=url, port=port)
 
