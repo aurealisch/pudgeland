@@ -1,9 +1,8 @@
-import traceback
 import typing
 
 import crescent
 
-from . import embeds
+from .error.handler import handlers
 
 
 class Command(typing.Protocol):
@@ -15,22 +14,7 @@ class Command(typing.Protocol):
         try:
             await self.run(context)
         except Exception as error:
-            value = error
-            tb = error.__traceback__
-
-            traceback.print_exception(error.__class__, value=value, tb=tb)
-
-            title = "Ошибка"
-            description = f"```{error}```"
-
-            embed = embeds.embed(
-                "error",
-                context=context,
-                title=title,
-                description=description,
-            )
-
-            await context.respond(embed=embed)
+            await handlers.ErrorHandler.handle(error, context=context)
 
 
 # MIT License

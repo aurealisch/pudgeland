@@ -1,20 +1,36 @@
 import typing
+import traceback
 
+import crescent
 import miru
-import miru.abc
 
-from ..error.handler import handlers
+from bot.common.command import embeds
 
 
-class View(miru.View):
-    @typing.final
-    async def on_error(
-        self,
+class ErrorHandler:
+    @staticmethod
+    async def handle(
         error: Exception,
-        _: typing.Optional[miru.abc.item.ViewItem] = None,
-        context: typing.Optional[miru.context.view.ViewContext] = None,
+        context: typing.Union[
+            crescent.Context, typing.Optional[miru.context.view.ViewContext]
+        ],
     ) -> None:
-        await handlers.ErrorHandler.handle(error, context=context)
+        value = error
+        tb = error.__traceback__
+
+        traceback.print_exception(error.__class__, value=value, tb=tb)
+
+        title = "Ошибка"
+        description = f"```{error}```"
+
+        embed = embeds.embed(
+            "error",
+            context=context,
+            title=title,
+            description=description,
+        )
+
+        await context.respond(embed=embed)
 
 
 # MIT License
