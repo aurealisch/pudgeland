@@ -19,6 +19,8 @@ _ = utilities.humanize
 @crescent.command(name="собирать", description="Cобирать")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
+        await context.defer()
+
         _contextual = str(context.user.id)
 
         contextual = await plugin.model.database.find_first(_contextual)
@@ -42,7 +44,7 @@ class Command(commands.Command):
             bonus = item.bonus
 
             if bonus.banana:
-                collecting += collecting * bonus.banana
+                collecting += int(round(collecting * bonus.banana))
 
         total += collecting
 
@@ -60,7 +62,7 @@ class Command(commands.Command):
                 bonus = item.bonus
 
                 if bonus.monkey:
-                    monkeying += monkeying * bonus.monkey
+                    monkeying += int(round(monkeying * bonus.monkey))
 
             total += monkeying
 

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed a real number required error
 - Fixed incorrect work of the purchase command
+- Fixed incorrect work of the collect command
 
 ## 1.77 - 2023-08-06
 
