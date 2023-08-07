@@ -41,6 +41,8 @@ class Command(commands.Command):
             async def _(
                 self, text_select: miru.TextSelect, context: miru.ViewContext
             ) -> None:
+                await context.defer()
+
                 _item = text_select.values[0]
 
                 item = shops.shop[_item]
@@ -59,7 +61,7 @@ class Command(commands.Command):
 
                 await plugin.model.database.update(
                     _contextual,
-                    banana=banana,
+                    banana=banana - price,
                     monkey=contextual.monkey,
                     reputation=contextual.reputation,
                     item=int(_item),
@@ -71,13 +73,13 @@ class Command(commands.Command):
                 )
                 # fmt: on
 
-                _embed = embeds.embed(
+                embed = embeds.embed(
                     "default",
                     context=context,
                     description=description,
                 )
 
-                await context.respond(embed=_embed)
+                await context.respond(embed=embed)
 
         view = View()
 
