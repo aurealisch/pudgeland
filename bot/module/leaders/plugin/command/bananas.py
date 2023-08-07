@@ -6,7 +6,7 @@ from bot.common.command import commands, cooldowns, embeds, utilities
 from bot.common.plugin import plugins
 from bot.module.leaders.service import leaders
 
-from . import _groups, _periods
+from . import _emojis, _groups, _periods
 
 plugin = plugins.Plugin()
 
@@ -29,7 +29,10 @@ class Command(commands.Command):
             id__ = user.id
             banana = user.banana
 
-            description += f"*{position}*. <@{id__}> Бананы: `{_(banana)}`\n"
+            if position in _emojis.emoji:
+                description += _emojis.emoji[position]
+
+            description += f"#{position}. <@{id__}> Бананы: `{_(banana)}`\n"
 
         embed = embeds.embed("default", context=context, description=description)
 
