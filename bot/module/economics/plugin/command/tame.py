@@ -71,6 +71,8 @@ class Command(commands.Command):
 
                     self.stop()
 
+                    return
+
                 await plugin.model.database.update(
                     _contextual,
                     banana=banana,
