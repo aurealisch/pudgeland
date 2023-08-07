@@ -20,8 +20,6 @@ _ = utilities.humanize
 @crescent.command(name="бананы", description="Бананы")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        await context.defer()
-
         users = await leaders.LeadersService.leaders("banana")
 
         description = string.whitespace

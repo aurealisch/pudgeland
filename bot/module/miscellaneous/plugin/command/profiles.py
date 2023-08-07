@@ -17,8 +17,6 @@ _ = utilities.humanize
 @crescent.command(name="профиль", description="Профиль")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        await context.defer()
-
         _contextual = str(context.user.id)
 
         contextual = await plugin.model.database.find_first(_contextual)

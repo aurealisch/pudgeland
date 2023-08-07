@@ -14,8 +14,6 @@ period = cooldowns.Period(seconds=2.5)
 @crescent.command(name="собака", description="Случайное изображение собаки")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        await context.defer()
-
         url = alhaitham.Client().images.search()[0].url
 
         image = url

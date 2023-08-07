@@ -28,14 +28,20 @@ class Command(commands.Command):
 
         contextual = await plugin.model.database.find_first(_contextual)
 
-        banana = contextual.banana
         monkey = contextual.monkey
 
         fed = (monkey + 1) * tame.price
 
         class View(views.View):
             @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
-            async def ok(self, _: miru.Button, context: miru.ViewContext) -> None:
+            async def ok(self, button: miru.Button, context: miru.ViewContext) -> None:
+                await context.defer()
+
+                contextual = await plugin.model.database.find_first(_contextual)
+
+                banana = contextual.banana
+                monkey = contextual.monkey
+
                 if banana < fed:
                     raise errors.YouCantDoThatError
 
@@ -96,6 +102,8 @@ class Command(commands.Command):
                 label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌"
             )
             async def cancel(self, _: miru.Button, context: miru.ViewContext) -> None:
+                await context.defer()
+
                 description = "Отменено"
 
                 embed = embeds.embed(
@@ -104,7 +112,7 @@ class Command(commands.Command):
                     description=description,
                 )
 
-                await context.respond(embed=embed)
+                await context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
 
                 self.stop()
 

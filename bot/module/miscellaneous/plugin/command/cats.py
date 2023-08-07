@@ -14,8 +14,6 @@ period = cooldowns.Period(seconds=2.5)
 @crescent.command(name="кошка", description="Случайное изображение кошки")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        await context.defer()
-
         url = tighnari.Client().images.search()[0].url
 
         image = url
