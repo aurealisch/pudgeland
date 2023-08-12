@@ -16,7 +16,7 @@ class Item(msgspec.Struct):
     bonus: Bonus
 
 
-with open("./resource/json/shops.json", encoding="utf-8") as stream:
+with open("./asset/json/shops.json", encoding="utf-8") as stream:
     buf = stream.read()
 
 shop = msgspec.json.decode(buf, type=typing.Mapping[str, Item])
