@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "alhaitham"
-version = "0.1.4"
+name = "collei"
+version = "0.1.5"
 description = "An unofficial The Dog API wrapper for Python"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]
@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.8",
 ]
-packages = [{ include = "alhaitham", from = "src" }]
+packages = [{ include = "collei", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
