@@ -15,7 +15,7 @@ from .model import models
 
 dotenv.load_dotenv()
 
-with open("./deprecated/bot/configuration.json") as stream:
+with open("./bot/configuration.json") as stream:
     buffer = stream.read()
 
     configuration = msgspec.json.decode(buffer, type=configurations.Configuration)

@@ -3,5 +3,5 @@
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "python.formatting.provider": "none",
-    "dotnet.defaultSolution": "bot/Bot/Bot.sln"
+    "dotnet.defaultSolution": "future/bot/Bot/Bot.sln"
 }
