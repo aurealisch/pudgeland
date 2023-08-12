@@ -27,6 +27,6 @@
     }
   },
   "start": {
-    "cmd": "python -OO -m deprecated.bot.bot"
+    "cmd": "python -OO -m bot"
   }
 }
