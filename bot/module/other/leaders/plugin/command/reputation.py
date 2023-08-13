@@ -4,7 +4,7 @@ import crescent
 
 from bot.common.command import commands, cooldowns, embeds, utilities
 from bot.common.plugin import plugins
-from bot.module.leaders.service import leaders
+from bot.module.other.leaders.service import leaders
 
 from . import _emojis, _groups, _periods
 

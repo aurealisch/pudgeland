@@ -5,7 +5,7 @@ import crescent
 from .error.handler import handlers
 
 
-class Command(typing.Protocol):
+class Command:
     async def run(self, context: crescent.Context) -> None:
         raise NotImplementedError
 

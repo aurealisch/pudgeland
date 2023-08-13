@@ -6,6 +6,8 @@ from bot.common.command import commands, cooldowns, embeds, utilities
 from bot.common.plugin import plugins
 from bot.common.shop import shops
 
+from . import _groups
+
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
@@ -13,9 +15,10 @@ period = cooldowns.Period(seconds=2.5)
 _ = utilities.humanize
 
 
+@_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name="магазин", description="Магазин")
+@crescent.command(name="просмотр", description="Просмотр предметов магазина")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         description = string.whitespace

@@ -4,7 +4,7 @@ import crescent
 
 from bot.common.command import commands, cooldowns, embeds, utilities
 from bot.common.plugin import plugins
-from bot.module.leaders.service import leaders
+from bot.module.other.leaders.service import leaders
 
 from . import _emojis, _groups, _periods
 
@@ -16,10 +16,10 @@ _ = utilities.humanize
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name="обезьяны", description="Обезьяны")
+@crescent.command(name="бананы", description="Бананы")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        users = await leaders.LeadersService.leaders("monkey")
+        users = await leaders.LeadersService.leaders("banana")
 
         embed = embeds.embed("default", context=context)
 
@@ -37,7 +37,7 @@ class Command(commands.Command):
 
             name += f"#{position}"
 
-            value += f"<@{id__}>\nОбезьяны: `{_(banana)}`"
+            value += f"<@{id__}>\nБананы: `{_(banana)}`"
 
             embed.add_field(name=name, value=value)
 

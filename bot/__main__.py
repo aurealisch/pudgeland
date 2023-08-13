@@ -22,9 +22,11 @@ thread.start()
 modules = [
     "actions",
     "economics",
-    "leaders",
-    "miscellaneous",
-    "reputation",
+    "other",
+    "other.images.animals",
+    "other.leaders",
+    "other.reputation",
+    "other.shop",
 ]
 
 for module in modules:

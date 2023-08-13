@@ -7,19 +7,19 @@ from bot.common.command.error import errors
 from bot.common.plugin import plugins
 from bot.common.shop import shops
 
+from . import _groups
+
 plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-name = "покупка"
-description = "Покупка"
-
 _ = utilities.humanize
 
 
+@_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name=name, description=description)
+@crescent.command(name="покупка", description="Покупка")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         class View(views.View):

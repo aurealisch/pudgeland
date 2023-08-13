@@ -4,7 +4,7 @@ import hikari
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
-from bot.module.reputation.service import reputation
+from bot.module.other.reputation.service import reputation
 
 from . import _groups, _periods
 
@@ -14,7 +14,7 @@ plugin = plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name="добавить", description="Добавить репутацию пользователю")
+@crescent.command(name="убрать", description="Убрать репутацию пользователю")
 class Command(commands.Command):
     user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
 
@@ -27,7 +27,7 @@ class Command(commands.Command):
 
         await reputation.ReputationService.add(optional)
 
-        description = f"<@{contextual}> добавил репутацию <@{optional}>"
+        description = f"<@{contextual}> убрал репутацию <@{optional}>"
 
         embed = embeds.embed("default", context=context, description=description)
 
