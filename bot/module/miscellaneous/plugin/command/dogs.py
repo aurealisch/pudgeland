@@ -1,4 +1,4 @@
-import alhaitham
+import collei
 import crescent
 
 from bot.common.command import commands, cooldowns, embeds
@@ -14,7 +14,7 @@ period = cooldowns.Period(seconds=2.5)
 @crescent.command(name="собака", description="Случайное изображение собаки")
 class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
-        url = alhaitham.Client().images.search()[0].url
+        url = collei.Client().images.search()[0].url
 
         image = url
 
