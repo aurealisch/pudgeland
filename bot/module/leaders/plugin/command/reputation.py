@@ -21,19 +21,24 @@ class Command(commands.Command):
     async def run(self, context: crescent.Context) -> None:
         users = await leaders.LeadersService.leaders("reputation")
 
-        description = string.whitespace
+        embed = embeds.embed("default", context=context)
 
         for index, user in enumerate(users):
+            name = string.whitespace
+            value = string.whitespace
+
             position = index + 1
 
             id__ = user.id
-            reputation = user.reputation
+            banana = user.banana
 
             if position in _emojis.emoji:
-                description += _emojis.emoji[position]
+                name += _emojis.emoji[position]
 
-            description += f"#{position}. <@{id__}> Репутация: `{_(reputation)}`\n"
+            name += f"#{position}"
 
-        embed = embeds.embed("default", context=context, description=description)
+            value += f"<@{id__}>\Репутация: `{_(banana)}`"
+
+            embed.add_field(name=name, value=value)
 
         await context.respond(embed=embed)
