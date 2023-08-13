@@ -30,14 +30,14 @@ class Command(commands.Command):
             position = index + 1
 
             id__ = user.id
-            banana = user.banana
+            reputation = user.reputation
 
             if position in _emojis.emoji:
                 name += _emojis.emoji[position]
 
             name += f"#{position}"
 
-            value += f"<@{id__}>\Репутация: `{_(banana)}`"
+            value += f"<@{id__}>\nРепутация: `{_(reputation)}`"
 
             embed.add_field(name=name, value=value)
 
