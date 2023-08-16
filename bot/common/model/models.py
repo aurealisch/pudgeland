@@ -3,9 +3,9 @@
 import attrs
 import hikari
 
-from bot.core import configurations
-from bot.core import databases
-from bot.core import environments
+from bot.core.configuration import configurations
+from bot.core.database import databases
+from bot.core.environment import environments
 
 
 @attrs.define

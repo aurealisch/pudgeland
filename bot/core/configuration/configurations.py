@@ -1,9 +1,6 @@
 """."""
 
-import typing
-
 import msgspec
-import hikari
 
 
 class Range(msgspec.Struct):
