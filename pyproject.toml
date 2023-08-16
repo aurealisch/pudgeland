@@ -19,7 +19,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
-ruff = "^0.0.282"
+ruff = "^0.0.284"
 black = "^23.7.0"
 python-dotenv = "^1.0.0"
 attrs = "^23.1.0"
