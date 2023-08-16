@@ -1,3 +1,6 @@
 import crescent
 
-group = crescent.Group(name="лидеры", description="Лидеры")
+group = crescent.Group(
+  name='лидеры',
+  description='Лидеры',
+)

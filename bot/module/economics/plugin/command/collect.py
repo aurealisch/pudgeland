@@ -15,74 +15,77 @@ _ = utilities.humanize
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name="собирать", description="Cобирать")
+@crescent.command(
+  name='собирать',
+  description='Cобирать',
+)
 class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        _contextual = str(context.user.id)
+  async def run(self, context: crescent.Context) -> None:
+    _contextual = str(context.user.id)
 
-        contextual = await plugin.model.database.find_first(_contextual)
+    contextual = await plugin.model.database.find_first(_contextual)
 
-        monkey = contextual.monkey
+    monkey = contextual.monkey
 
-        _item = contextual.item
+    _item = contextual.item
 
-        collect = plugin.model.configuration.plugins.collect
+    collect = plugin.model.configuration.plugins.collect
 
-        total = 0
+    total = 0
 
-        collecting = random.randint(
-            collect.collecting.a,
-            b=collect.collecting.b,
-        )
+    collecting = random.randint(
+      collect.collecting.a,
+      b=collect.collecting.b,
+    )
 
-        if _item:
-            item = shops.shop.get(str(_item))
+    if _item:
+      item = shops.shop.get(str(_item))
 
-            bonus = item.bonus
+      bonus = item.bonus
 
-            if bonus.banana:
-                collecting += int(round(collecting * bonus.banana))
+      if bonus.banana:
+        collecting += int(round(collecting * bonus.banana))
 
-        total += collecting
+    total += collecting
 
-        description = f"<@{_contextual}> собрал 🍌 `{_(collecting)}` бананов"
+    description = f'<@{_contextual}> собрал 🍌 `{_(collecting)}` бананов'
 
-        if monkey:
-            monkeying = monkey * random.randint(
-                collect.monkeying.a,
-                b=collect.monkeying.b,
-            )
+    if monkey:
+      monkeying = monkey * random.randint(
+        collect.monkeying.a,
+        b=collect.monkeying.b,
+      )
 
-            if _item:
-                item = shops.shop.get(str(_item))
+      if _item:
+        item = shops.shop.get(str(_item))
 
-                bonus = item.bonus
+        bonus = item.bonus
 
-                if bonus.monkey:
-                    monkeying += int(round(monkeying * bonus.monkey))
+        if bonus.monkey:
+          monkeying += int(round(monkeying * bonus.monkey))
 
-            total += monkeying
+      total += monkeying
 
-            # fmt: off
-            description += (
-                f"\n+ 🍌 `{_(monkeying)}` бананов от 🐒 `{_(monkey)}` обезьян"
-            )
-            # fmt: on
+      # fmt: off
+      description += (
+        f'\n+ 🍌 `{_(monkeying)}` бананов от 🐒 `{_(monkey)}` обезьян'
+      )
+      # fmt: on
 
-            description += f"\n\n✨ Всего: 🍌 `{_(total)}` бананов"
+      description += f'\n\n✨ Всего: 🍌 `{_(total)}` бананов'
 
-        await plugin.model.database.update(
-            _contextual,
-            banana=contextual.banana + total,
-            monkey=monkey,
-            reputation=contextual.reputation,
-            item=contextual.item,
-        )
+    await plugin.model.database.update(
+      _contextual,
+      banana=contextual.banana + total,
+      monkey=monkey,
+      reputation=contextual.reputation,
+      item=contextual.item,
+    )
 
-        embed = embeds.embed(
-            "default",
-            context=context,
-            description=description,
-        )
+    embed = embeds.embed(
+      'default',
+      context=context,
+      description=description,
+    )
 
-        await context.respond(embed=embed)
+    await context.respond(embed=embed)

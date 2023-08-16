@@ -1,21 +1,22 @@
 import crescent
 import hikari
-import nahida
 
 from bot.common.command import commands, cooldowns, embeds
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
+from bot.module.other.reputation.service import reputation
 
-from . import _periods
+from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
 
+@_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
 @crescent.command(
-  name='обнять',
-  description='Обнять пользователя',
+  name='понизить',
+  description='Понизить репутацию пользователю',
 )
 class Command(commands.Command):
   user = crescent.option(
@@ -29,17 +30,14 @@ class Command(commands.Command):
     optional = str(self.user.id)
 
     if contextual != optional:
-      description = f'<@{contextual}> обнимает <@{optional}>'
+      await reputation.ReputationService.downgrade(optional)
 
-      url = nahida.Client().sfw.search('hug').url
-
-      image = url
+      description = f'<@{contextual}> убрал репутацию <@{optional}>'
 
       embed = embeds.embed(
         'default',
         context=context,
         description=description,
-        image=image,
       )
 
       await context.respond(embed=embed)

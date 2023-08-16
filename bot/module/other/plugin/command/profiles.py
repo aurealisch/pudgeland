@@ -13,34 +13,41 @@ _ = utilities.humanize
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name="профиль", description="Профиль")
+@crescent.command(
+  name="профиль",
+  description="Профиль",
+)
 class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        _contextual = str(context.user.id)
+  async def run(self, context: crescent.Context) -> None:
+    _contextual = str(context.user.id)
 
-        contextual = await plugin.model.database.find_first(_contextual)
+    contextual = await plugin.model.database.find_first(_contextual)
 
-        banana = contextual.banana
-        monkey = contextual.monkey
+    banana = contextual.banana
+    monkey = contextual.monkey
 
-        reputation = contextual.reputation
+    reputation = contextual.reputation
 
-        _item = contextual.item
+    _item = contextual.item
 
-        description = f"""\
-            🍌 Бананы: `{_(banana)}`
-            🐒 Обезьяны: `{_(monkey)}`
+    description = f"""\
+      🍌 Бананы: `{_(banana)}`
+      🐒 Обезьяны: `{_(monkey)}`
 
-            📊 Репутация: `{_(reputation)}`
-        """
+      📊 Репутация: `{_(reputation)}`
+    """
 
-        if _item:
-            item = shops.shop[str(_item)]
+    if _item:
+      item = shops.shop[str(_item)]
 
-            label = item.label
+      label = item.label
 
-            description += f"\n✨ Предмет: `{label}`"
+      description += f'\n✨ Предмет: `{label}`'
 
-        embed = embeds.embed("default", context=context, description=description)
+    embed = embeds.embed(
+      'default',
+      context=context,
+      description=description,
+    )
 
-        await context.respond(embed=embed)
+    await context.respond(embed=embed)

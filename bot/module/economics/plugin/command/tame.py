@@ -17,121 +17,128 @@ _ = utilities.humanize
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name="приручать", description="Приручать")
+@crescent.command(
+  name='приручать',
+  description='Приручать',
+)
 class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        tame = plugin.model.configuration.plugins.tame
+  async def run(self, context: crescent.Context) -> None:
+    tame = plugin.model.configuration.plugins.tame
 
-        _contextual = str(context.user.id)
+    _contextual = str(context.user.id)
+
+    contextual = await plugin.model.database.find_first(_contextual)
+
+    monkey = contextual.monkey
+
+    fed = (monkey + 1) * tame.price
+
+    class View(views.View):
+      @miru.button(label='ОК', style=hikari.ButtonStyle.SECONDARY, emoji='✅')
+      async def ok(self, _: miru.Button, context: miru.ViewContext) -> None:
+        await context.defer()
 
         contextual = await plugin.model.database.find_first(_contextual)
 
+        banana = contextual.banana
         monkey = contextual.monkey
 
-        fed = (monkey + 1) * tame.price
+        if banana < fed:
+          raise errors.YouCantDoThatError
 
-        class View(views.View):
-            @miru.button(label="ОК", style=hikari.ButtonStyle.SECONDARY, emoji="✅")
-            async def ok(self, button: miru.Button, context: miru.ViewContext) -> None:
-                await context.defer()
+        banana -= fed
 
-                contextual = await plugin.model.database.find_first(_contextual)
+        if random.randint(1, tame.edge) != 1:
+          await plugin.model.database.update(
+            _contextual,
+            banana=banana,
+            monkey=monkey,
+            reputation=contextual.reputation,
+            item=contextual.item,
+          )
 
-                banana = contextual.banana
-                monkey = contextual.monkey
+          description = f"""\
+            <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
+            и...
 
-                if banana < fed:
-                    raise errors.YouCantDoThatError
+            ❌ Не получилось приручить обезьяну...
+          """
 
-                banana -= fed
+          embed = embeds.embed(
+            'default',
+            context=context,
+            description=description,
+          )
 
-                if random.randint(1, tame.edge) != 1:
-                    await plugin.model.database.update(
-                        _contextual,
-                        banana=banana,
-                        monkey=monkey,
-                        reputation=contextual.reputation,
-                        item=contextual.item,
-                    )
+          await context.respond(embed=embed)
 
-                    description = f"""\
-                        <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
-                        и...
+          self.stop()
 
-                        ❌ Не получилось приручить обезьяну...
-                    """
+          return
 
-                    embed = embeds.embed(
-                        "default",
-                        context=context,
-                        description=description,
-                    )
-
-                    await context.respond(embed=embed)
-
-                    self.stop()
-
-                    return
-
-                await plugin.model.database.update(
-                    _contextual,
-                    banana=banana,
-                    monkey=monkey + 1,
-                    reputation=contextual.reputation,
-                    item=contextual.item,
-                )
-
-                description = f"""\
-                    <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
-                    и...
-
-                    ✅ Получилось приручить обезьяну!!!
-                """
-
-                embed = embeds.embed(
-                    "default",
-                    context=context,
-                    description=description,
-                )
-
-                await context.respond(embed=embed)
-
-                self.stop()
-
-            @miru.button(
-                label="Отменить", style=hikari.ButtonStyle.SECONDARY, emoji="❌"
-            )
-            async def cancel(self, _: miru.Button, context: miru.ViewContext) -> None:
-                await context.defer()
-
-                description = "Отменено"
-
-                embed = embeds.embed(
-                    "default",
-                    context=context,
-                    description=description,
-                )
-
-                await context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
-
-                self.stop()
-
-        view = View()
-
-        components = view
-
-        description = (
-            f"Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_(fed)}`"
+        await plugin.model.database.update(
+          _contextual,
+          banana=banana,
+          monkey=monkey + 1,
+          reputation=contextual.reputation,
+          item=contextual.item,
         )
 
-        embed = embeds.embed("default", context=context, description=description)
+        description = f"""\
+          <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
+          и...
 
-        message = await context.respond(
-            ensure_message=True,
-            ephemeral=True,
-            components=components,
-            embed=embed,
+          ✅ Получилось приручить обезьяну!!!
+        """
+
+        embed = embeds.embed(
+          'default',
+          context=context,
+          description=description,
         )
 
-        if message is not None:
-            await view.start(message)
+        await context.respond(embed=embed)
+
+        self.stop()
+
+      @miru.button(
+        label='Отменить', style=hikari.ButtonStyle.SECONDARY, emoji='❌'
+      )
+      async def cancel(self, _: miru.Button, context: miru.ViewContext) -> None:
+        await context.defer()
+
+        description = 'Отменено'
+
+        embed = embeds.embed(
+          'default',
+          context=context,
+          description=description,
+        )
+
+        await context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+
+        self.stop()
+
+    view = View()
+
+    components = view
+
+    description = (
+      f'Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_(fed)}`'
+    )
+
+    embed = embeds.embed(
+      'default',
+      context=context,
+      description=description,
+    )
+
+    message = await context.respond(
+      ensure_message=True,
+      ephemeral=True,
+      components=components,
+      embed=embed,
+    )
+
+    if message is not None:
+      await view.start(message)

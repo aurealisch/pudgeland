@@ -8,29 +8,33 @@ from .utility.constant import presences
 
 
 def target() -> None:
-    app = apps.app
+  app = apps.app
 
-    host = commons.configuration.api.host
-    port = commons.environment.port
+  host = commons.configuration.api.host
+  port = commons.environment.port
 
-    return uvicorn.run(app, host=host, port=port)
+  return uvicorn.run(
+    app,
+    host=host,
+    port=port,
+  )
 
 
 thread = threading.Thread(target=target)
 thread.start()
 
 modules = [
-    "actions",
-    "economics",
-    "other",
-    "other.images.animals",
-    "other.leaders",
-    "other.reputation",
-    "other.shop",
+  'actions',
+  'economics',
+  'other',
+  'other.images.animals',
+  'other.leaders',
+  'other.reputation',
+  'other.shop',
 ]
 
 for module in modules:
-    commons.client.plugins.load_folder(f"bot.module.{module}.plugin")
+  commons.client.plugins.load_folder(f'bot.module.{module}.plugin')
 
 activity = presences.activity
 

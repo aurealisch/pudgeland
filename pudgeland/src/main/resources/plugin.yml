@@ -1,9 +1,0 @@
-name: pudgeland
-version: '${project.version}'
-main: me.elaresai.pudgeland.Pudgeland
-api-version: '1.20'
-commands:
-  connect:
-    description: 'The connect command'
-  convert:
-    description: 'The convert command'

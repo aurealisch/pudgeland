@@ -13,28 +13,37 @@ plugin = plugins.Plugin()
 
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name="поцеловать", description="Поцеловать пользователя")
+@crescent.command(
+  name='поцеловать',
+  description='Поцеловать пользователя',
+)
 class Command(commands.Command):
-    user = crescent.option(hikari.User, name="пользователь", description="Пользователь")
+  user = crescent.option(
+    hikari.User,
+    name='пользователь',
+    description='Пользователь',
+  )
 
-    async def run(self, context: crescent.Context) -> None:
-        contextual = str(context.user.id)
-        optional = str(self.user.id)
+  async def run(self, context: crescent.Context) -> None:
+    contextual = str(context.user.id)
+    optional = str(self.user.id)
 
-        if contextual.__eq__(optional):
-            raise errors.YouCantDoThatError
+    if contextual != optional:
+      description = f'<@{contextual}> целует <@{optional}>'
 
-        description = f"<@{contextual}> целует <@{optional}>"
+      url = nahida.Client().sfw.search('kiss').url
 
-        url = nahida.Client().sfw.search("kiss").url
+      image = url
 
-        image = url
+      embed = embeds.embed(
+        'default',
+        context=context,
+        description=description,
+        image=image,
+      )
 
-        embed = embeds.embed(
-            "default",
-            context=context,
-            description=description,
-            image=image,
-        )
+      await context.respond(embed=embed)
 
-        await context.respond(embed=embed)
+      return
+
+    raise errors.YouCantDoThatError

@@ -1,2 +1,5 @@
 def humanize(number: int) -> str:
-    return f"{number:,}".replace(",", ".")
+  return f'{number:,}'.replace(
+    ',',
+    '.',
+  )

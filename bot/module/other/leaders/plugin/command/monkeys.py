@@ -16,29 +16,38 @@ _ = utilities.humanize
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
-@crescent.command(name="обезьяны", description="Обезьяны")
+@crescent.command(
+  name='обезьяны',
+  description='Обезьяны',
+)
 class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        users = await leaders.LeadersService.leaders("monkey")
+  async def run(self, context: crescent.Context) -> None:
+    users = await leaders.LeadersService.leaders('monkey')
 
-        embed = embeds.embed("default", context=context)
+    embed = embeds.embed(
+      'default',
+      context=context,
+    )
 
-        for index, user in enumerate(users):
-            name = string.whitespace
-            value = string.whitespace
+    for index, user in enumerate(users):
+      name = string.whitespace
+      value = string.whitespace
 
-            position = index + 1
+      position = index + 1
 
-            id__ = user.id
-            monkey = user.monkey
+      id__ = user.id
+      monkey = user.monkey
 
-            if position in _emojis.emoji:
-                name += _emojis.emoji[position]
+      if position in _emojis.emoji:
+        name += _emojis.emoji[position]
 
-            name += f"#{position}"
+      name += f'#{position}'
 
-            value += f"<@{id__}>\nОбезьяны: `{_(monkey)}`"
+      value += f'<@{id__}>\nОбезьяны: `{_(monkey)}`'
 
-            embed.add_field(name=name, value=value)
+      embed.add_field(
+        name=name,
+        value=value,
+      )
 
-        await context.respond(embed=embed)
+    await context.respond(embed=embed)

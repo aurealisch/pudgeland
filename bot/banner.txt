@@ -1,6 +1,0 @@
-${bold_red}                   .___  ____          ${bold_white}.__                       .___${reset}
-${bold_red}______   __ __   __| _/ / ___\   ____  ${bold_white}|  |  _____     ____    __| _/${reset}
-${bold_red}\____ \ |  |  \ / __ | / /_/  >_/ __ \ ${bold_white}|  |  \__  \   /    \  / __ | ${reset}
-${bold_red}|  |_> >|  |  // /_/ | \___  / \  ___/ ${bold_white}|  |__ / __ \_|   |  \/ /_/ | ${reset}
-${bold_red}|   __/ |____/ \____ |/_____/   \___  >${bold_white}|____/(____  /|___|  /\____ | ${reset}
-${bold_red}|__|                \/              \/ ${bold_white}           \/      \/      \/ ${reset}

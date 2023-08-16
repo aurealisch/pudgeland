@@ -18,25 +18,34 @@ _ = utilities.humanize
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
-@crescent.command(name="просмотр", description="Просмотр предметов магазина")
+@crescent.command(
+  name='просмотр',
+  description='Просмотр предметов магазина',
+)
 class Command(commands.Command):
-    async def run(self, context: crescent.Context) -> None:
-        description = string.whitespace
+  async def run(self, context: crescent.Context) -> None:
+    description = string.whitespace
 
-        for value, item in shops.shop.items():
-            label = item.label
-            _description = item.description
+    for value, item in shops.shop.items():
+      label = item.label
+      description_ = item.description
 
-            emoji = item.emoji
+      emoji = item.emoji
 
-            price = item.price
+      price = item.price
 
-            description += f"# {value}. {emoji} **{label}**\n> {_description}\n\n🏷 Цена: 🍌 Бананы: `{_(price)}`\n"  # noqa: E501
+      description += f"""
+        # {value}. {emoji} **{label}**"
 
-        embed = embeds.embed(
-            "default",
-            context=context,
-            description=description,
-        )
+        > {description_}
 
-        await context.respond(embed=embed)
+        🏷 Цена: 🍌 Бананы: `{_(price)}`
+      """
+
+    embed = embeds.embed(
+      'default',
+      context=context,
+      description=description,
+    )
+
+    await context.respond(embed=embed)
