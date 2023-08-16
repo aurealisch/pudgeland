@@ -1,3 +1,5 @@
+"""."""
+
 import crescent
 import hikari
 
@@ -19,6 +21,8 @@ plugin = plugins.Plugin()
   description='Понизить репутацию пользователю',
 )
 class Command(commands.Command):
+  """."""
+
   user = crescent.option(
     hikari.User,
     name='пользователь',
@@ -26,6 +30,7 @@ class Command(commands.Command):
   )
 
   async def run(self, context: crescent.Context) -> None:
+    """."""
     contextual = str(context.user.id)
     optional = str(self.user.id)
 

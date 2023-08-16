@@ -1,6 +1,13 @@
+"""."""
+
 import crescent
 
-from bot.common.command import commands, cooldowns, embeds, utilities
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+)
 from bot.common.plugin import plugins
 from bot.common.shop import shops
 
@@ -18,7 +25,10 @@ _humanize = utilities.humanize
   description="Профиль",
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     _contextual = str(context.user.id)
 
     contextual = await plugin.model.database.find_first(_contextual)

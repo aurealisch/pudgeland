@@ -1,3 +1,5 @@
+"""."""
+
 import string
 
 import crescent
@@ -21,7 +23,10 @@ _humanize = utilities.humanize
   description='Обезьяны',
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     users = await leaders.LeadersService.leaders('monkey')
 
     embed = embeds.embed(

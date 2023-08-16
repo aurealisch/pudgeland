@@ -1,3 +1,8 @@
+"""."""
+
 import crescent
 
-group = crescent.Group(name="магазин", description="Магазин")
+group = crescent.Group(
+  'магазин',
+  description='Магазин',
+)

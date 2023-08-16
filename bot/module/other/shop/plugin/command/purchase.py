@@ -1,8 +1,16 @@
+"""."""
+
 import crescent
 import hikari
 import miru
 
-from bot.common.command import commands, cooldowns, embeds, utilities, views
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+  views,
+)
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
 from bot.common.shop import shops
@@ -24,8 +32,13 @@ _humanize = utilities.humanize
   description='Покупка',
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     class View(views.View):
+      """."""
+
       @miru.text_select(
         options=[
           hikari.SelectMenuOption(
@@ -42,6 +55,7 @@ class Command(commands.Command):
       async def _(
         self, text_select: miru.TextSelect, context: miru.ViewContext
       ) -> None:
+        """."""
         await context.defer()
 
         _item = text_select.values[0]

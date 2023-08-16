@@ -1,12 +1,22 @@
+"""."""
+
 import random
 
 import crescent
 import hikari
 import miru
 
-from bot.common.command import commands, cooldowns, embeds, utilities, views
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+  views,
+)
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
+
+from . import _groups
 
 plugin = plugins.Plugin()
 
@@ -15,6 +25,7 @@ period = cooldowns.Period(seconds=2.5)
 _humanize = utilities.humanize
 
 
+@_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
 @crescent.command(
@@ -22,7 +33,10 @@ _humanize = utilities.humanize
   description='Приручать',
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     tame = plugin.model.configuration.plugins.tame
 
     _contextual = str(context.user.id)
@@ -48,7 +62,12 @@ class Command(commands.Command):
 
         banana -= fed
 
-        if random.randint(1, tame.edge) != 1:
+        if random.choice(
+          range(
+            1,
+            tame.edge,
+          )
+         ) != 1:
           await plugin.model.database.update(
             _contextual,
             banana=banana,

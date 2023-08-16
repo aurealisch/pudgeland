@@ -1,8 +1,15 @@
+"""."""
+
 import string
 
 import crescent
 
-from bot.common.command import commands, cooldowns, embeds, utilities
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+)
 from bot.common.plugin import plugins
 from bot.common.shop import shops
 
@@ -23,7 +30,10 @@ _humanize = utilities.humanize
   description='Просмотр предметов магазина',
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     description = string.whitespace
 
     for value, item in shops.shop.items():

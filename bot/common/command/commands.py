@@ -1,3 +1,5 @@
+"""."""
+
 import typing
 
 import crescent
@@ -6,11 +8,15 @@ from .error.handler import handlers
 
 
 class Command:
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     raise NotImplementedError
 
   @typing.final
   async def callback(self, context: crescent.Context) -> None:
+    """."""
     try:
       await context.defer()
 

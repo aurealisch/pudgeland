@@ -1,8 +1,14 @@
+"""."""
+
 import crescent
 import hikari
 import nahida
 
-from bot.common.command import commands, cooldowns, embeds
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+)
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
 
@@ -18,6 +24,8 @@ plugin = plugins.Plugin()
   description='Тыкнуть пользователя',
 )
 class Command(commands.Command):
+  """."""
+
   user = crescent.option(
     hikari.User,
     name='пользователь',
@@ -25,6 +33,7 @@ class Command(commands.Command):
   )
 
   async def run(self, context: crescent.Context) -> None:
+    """."""
     contextual = str(context.user.id)
     optional = str(self.user.id)
 

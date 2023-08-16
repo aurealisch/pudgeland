@@ -1,10 +1,19 @@
+"""."""
+
 import random
 
 import crescent
 
-from bot.common.command import commands, cooldowns, embeds, utilities
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+)
 from bot.common.plugin import plugins
 from bot.common.shop import shops
+
+from . import _groups
 
 plugin = plugins.Plugin()
 
@@ -13,14 +22,18 @@ period = cooldowns.Period(hours=4)
 _humanize = utilities.humanize
 
 
+@_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=period))
 @crescent.command(
-  name='собирать',
-  description='Cобирать',
+  name='собрать',
+  description='Cобрать бананы',
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     _contextual = str(context.user.id)
 
     contextual = await plugin.model.database.find_first(_contextual)

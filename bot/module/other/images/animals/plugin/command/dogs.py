@@ -1,3 +1,5 @@
+"""."""
+
 import collei
 import crescent
 
@@ -16,7 +18,10 @@ period = cooldowns.Period(seconds=2.5)
   description='Случайное изображение собаки',
 )
 class Command(commands.Command):
+  """."""
+
   async def run(self, context: crescent.Context) -> None:
+    """."""
     url = collei.Client().images.search()[0].url
 
     image = url
