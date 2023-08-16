@@ -13,7 +13,7 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-_ = utilities.humanize
+_humanize = utilities.humanize
 
 
 @_groups.group.child
@@ -70,7 +70,7 @@ class Command(commands.Command):
 
         # fmt: off
         description = (
-          f'<@{_contextual}> купил `{label}` за 🍌 `{_(price)}` бананов'
+          f'<@{_contextual}> купил `{label}` за 🍌 `{_humanize(price)}` бананов'
         )
         # fmt: on
 

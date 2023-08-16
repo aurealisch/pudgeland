@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tighnari"
-version = "0.1.5"
+version = "0.1.6"
 description = "An unofficial The Cat API wrapper for Python"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]

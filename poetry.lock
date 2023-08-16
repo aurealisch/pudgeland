@@ -328,13 +328,13 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
 name = "collei"
-version = "0.1.5"
+version = "0.1.6"
 description = "An unofficial The Dog API wrapper for Python"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "collei-0.1.5-py3-none-any.whl", hash = "sha256:4420f6caf577d3c40889adf3f414727c5175ac543105fcc29dd7a4e3d90fcf59"},
-    {file = "collei-0.1.5.tar.gz", hash = "sha256:fe74bd48693355ee7e7cfc4b2d3cb2e0940d6f4aaa49e19bc1e7164590ed9100"},
+    {file = "collei-0.1.6-py3-none-any.whl", hash = "sha256:9f4a26952669037f4a780902829f615d0ff5cf568b085e7d6474f99dbdffabb8"},
+    {file = "collei-0.1.6.tar.gz", hash = "sha256:87b1df7cf4adf83d31dcd686f824165f4c602c5d734810a17c24fab899c46fff"},
 ]
 
 [package.dependencies]
@@ -815,13 +815,13 @@ files = [
 
 [[package]]
 name = "nahida"
-version = "0.1.5"
+version = "0.1.6"
 description = "An unofficial Waifu.pics API wrapper for Python"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "nahida-0.1.5-py3-none-any.whl", hash = "sha256:b800efdeca6662f3336d794a5d70fdd93ddfc44fde8e88185c4afc8ad3e1c00e"},
-    {file = "nahida-0.1.5.tar.gz", hash = "sha256:c918947366affb651419cb8030de073354b4ec1a4ade52b81d4b4a139e73d79f"},
+    {file = "nahida-0.1.6-py3-none-any.whl", hash = "sha256:0ca7a0faac4d60e024f77164ab5262c999c1a9fc1ead0ea9bd444885c7f288d9"},
+    {file = "nahida-0.1.6.tar.gz", hash = "sha256:dedabf3e377c199725ffdb943dcc57c71f4cea750c7356bd4838f32e99cc8bcc"},
 ]
 
 [package.dependencies]
@@ -1074,13 +1074,13 @@ full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyam
 
 [[package]]
 name = "tighnari"
-version = "0.1.5"
+version = "0.1.6"
 description = "An unofficial The Cat API wrapper for Python"
 optional = false
 python-versions = ">=3.8,<3.12"
 files = [
-    {file = "tighnari-0.1.5-py3-none-any.whl", hash = "sha256:fde033048516bf54786f7f6f1ca0ae7c520a18b9fb1f9ec31700ade76c997853"},
-    {file = "tighnari-0.1.5.tar.gz", hash = "sha256:3f8d1dab83bb36b47a225425d063fa45e811889396d76453d6885e4477d1adf6"},
+    {file = "tighnari-0.1.6-py3-none-any.whl", hash = "sha256:cf3b1ccf04d2ec75a557ad03dbf50306ceb4a33c759c8610fc3efd0efbc109fe"},
+    {file = "tighnari-0.1.6.tar.gz", hash = "sha256:86c44ca3e15fd7346e03369fc23a709e301d0a8ed5d505ebc5af7c54b2dee139"},
 ]
 
 [package.dependencies]
@@ -1246,4 +1246,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "9d1998c9478d06d15029fcb5cb5ec270dc36f22723ac9c2da3867932b6716171"
+content-hash = "783758790246f6dce820d8c3377c563013256ad9900bb7fb29609c6a2fb011ad"

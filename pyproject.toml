@@ -28,11 +28,11 @@ hikari-crescent = "^0.6.2"
 hikari-miru = "^3.1.2"
 prisma = "^0.9.1"
 msgspec = "^0.17.0"
-nahida = "^0.1.5"
-tighnari = "^0.1.5"
 fastapi = "^0.101.0"
 uvicorn = "^0.23.2"
-collei = "^0.1.5"
+collei = "^0.1.6"
+nahida = "^0.1.6"
+tighnari = "^0.1.6"
 
 [build-system]
 requires = ["poetry-core"]

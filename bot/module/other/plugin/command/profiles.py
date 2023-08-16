@@ -8,7 +8,7 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-_ = utilities.humanize
+_humanize = utilities.humanize
 
 
 @plugin.include
@@ -31,10 +31,10 @@ class Command(commands.Command):
     _item = contextual.item
 
     description = f"""\
-      🍌 Бананы: `{_(banana)}`
-      🐒 Обезьяны: `{_(monkey)}`
+      🍌 Бананы: `{_humanize(banana)}`
+      🐒 Обезьяны: `{_humanize(monkey)}`
 
-      📊 Репутация: `{_(reputation)}`
+      📊 Репутация: `{_humanize(reputation)}`
     """
 
     if _item:

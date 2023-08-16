@@ -12,7 +12,7 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-_ = utilities.humanize
+_humanize = utilities.humanize
 
 
 @_groups.group.child
@@ -39,7 +39,7 @@ class Command(commands.Command):
 
         > {description_}
 
-        🏷 Цена: 🍌 Бананы: `{_(price)}`
+        🏷 Цена: 🍌 Бананы: `{_humanize(price)}`
       """
 
     embed = embeds.embed(

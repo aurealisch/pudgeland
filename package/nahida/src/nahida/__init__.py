@@ -86,7 +86,7 @@ class NSFWResource:
   def search(self, category: NSFWCategory) -> Image:
     url = self.urls.nsfw(category)
 
-    response = requests.get(url)
+    response = requests.get(url) # pylint: disable=missing-timeout
 
     image = Image(**response.json())
 
@@ -100,7 +100,7 @@ class SFWResource:
   def search(self, category: SFWCategory) -> Image:
     url = self.urls.sfw(category)
 
-    response = requests.get(url)
+    response = requests.get(url) # pylint: disable=missing-timeout
 
     image = Image(**response.json())
 

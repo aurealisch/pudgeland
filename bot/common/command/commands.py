@@ -15,7 +15,7 @@ class Command:
       await context.defer()
 
       await self.run(context)
-    except Exception as error:
+    except Exception as error: # pylint: disable=broad-exception-caught
       await handlers.ErrorHandler.handle(
         error,
         context=context,

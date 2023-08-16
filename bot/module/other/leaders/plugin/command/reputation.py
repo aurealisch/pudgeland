@@ -10,7 +10,7 @@ from . import _emojis, _groups, _periods
 
 plugin = plugins.Plugin()
 
-_ = utilities.humanize
+_humanize = utilities.humanize
 
 
 @_groups.group.child
@@ -43,7 +43,7 @@ class Command(commands.Command):
 
       name += f'#{position}'
 
-      value += f'<@{id__}>\nРепутация: `{_(reputation)}`'
+      value += f'<@{id__}>\nРепутация: `{_humanize(reputation)}`'
 
       embed.add_field(
         name=name,

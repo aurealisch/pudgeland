@@ -43,7 +43,7 @@ class ImageResource:
   urls: URLs
 
   def search(self) -> typing.Sequence[Image]:
-    response = requests.get(self.urls.search())
+    response = requests.get(self.urls.search()) # pylint: disable=missing-timeout
 
     content = response.content
 
@@ -68,4 +68,4 @@ class Client:
 
   @property
   def images(self) -> ImageResource:
-    return self.__image_resource
+    return self._image_resource

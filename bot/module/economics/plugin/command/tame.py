@@ -12,7 +12,7 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(seconds=2.5)
 
-_ = utilities.humanize
+_humanize = utilities.humanize
 
 
 @plugin.include
@@ -44,7 +44,7 @@ class Command(commands.Command):
         monkey = contextual.monkey
 
         if banana < fed:
-          raise errors.YouCantDoThatError
+          raise errors.NotEnoughBananaError
 
         banana -= fed
 
@@ -58,7 +58,7 @@ class Command(commands.Command):
           )
 
           description = f"""\
-            <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
+            <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
             и...
 
             ❌ Не получилось приручить обезьяну...
@@ -85,7 +85,7 @@ class Command(commands.Command):
         )
 
         description = f"""\
-          <@{_contextual}> скормил 🍌 `{_(fed)}` бананов
+          <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
           и...
 
           ✅ Получилось приручить обезьяну!!!
@@ -124,7 +124,7 @@ class Command(commands.Command):
     components = view
 
     description = (
-      f'Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_(fed)}`'
+      f'Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_humanize(fed)}`'
     )
 
     embed = embeds.embed(

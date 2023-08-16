@@ -10,7 +10,7 @@ plugin = plugins.Plugin()
 
 period = cooldowns.Period(hours=4)
 
-_ = utilities.humanize
+_humanize = utilities.humanize
 
 
 @plugin.include
@@ -48,7 +48,7 @@ class Command(commands.Command):
 
     total += collecting
 
-    description = f'<@{_contextual}> собрал 🍌 `{_(collecting)}` бананов'
+    description = f'<@{_contextual}> собрал 🍌 `{_humanize(collecting)}` бананов'
 
     if monkey:
       monkeying = monkey * random.randint(
@@ -68,11 +68,11 @@ class Command(commands.Command):
 
       # fmt: off
       description += (
-        f'\n+ 🍌 `{_(monkeying)}` бананов от 🐒 `{_(monkey)}` обезьян'
+        f'\n+ 🍌 `{_humanize(monkeying)}` бананов от 🐒 `{_humanize(monkey)}` обезьян'
       )
       # fmt: on
 
-      description += f'\n\n✨ Всего: 🍌 `{_(total)}` бананов'
+      description += f'\n\n✨ Всего: 🍌 `{_humanize(total)}` бананов'
 
     await plugin.model.database.update(
       _contextual,

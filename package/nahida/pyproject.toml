@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nahida"
-version = "0.1.5"
+version = "0.1.6"
 description = "An unofficial Waifu.pics API wrapper for Python"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "collei"
-version = "0.1.5"
+version = "0.1.6"
 description = "An unofficial The Dog API wrapper for Python"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]
