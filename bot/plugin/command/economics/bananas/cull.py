@@ -66,7 +66,7 @@ class Command(commands.Command):
         _contextual,
         banana=contextual.banana - culling,
         monkey=contextual.monkey,
-        reputation=contextual.banana,
+        reputation=contextual.reputation,
         item=contextual.item,
       )
 
