@@ -21,12 +21,12 @@ with open(
   './configuration.json',
   encoding='utf-8',
 ) as stream:
-  buffer = stream.read()
-  
+  buf = stream.read()
+
   type__ = configurations.Configuration
 
   configuration = msgspec.json.decode(
-    buffer,
+    buf,
     type=type__,
   )
 
@@ -37,32 +37,18 @@ _prisma.register(prisma)
 database = databases.Database(prisma)
 
 token = os.environ.get('TOKEN')
-url = os.environ.get('URL')
 
-default = configuration.api.port.default
-
-port = int(
-  os.environ.get(
-    'PORT',
-    default=default,
-  ),
-)
-
-environment = environments.Environment(
-  token,
-  url=url,
-  port=port,
-)
-
-bot = hikari.GatewayBot(token)
-
-miru.install(bot)
+environment = environments.Environment(token)
 
 model = models.Model(
   configuration,
   database=database,
   environment=environment,
 )
+
+bot = hikari.GatewayBot(model.environment.token)
+
+miru.install(bot)
 
 bot.subscribe(
   hikari.StartedEvent,

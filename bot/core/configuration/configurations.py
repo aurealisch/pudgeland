@@ -3,6 +3,26 @@
 import msgspec
 
 
+class Activity(msgspec.Struct):
+  """."""
+
+  name: str
+
+
+class Sort(msgspec.Struct):
+  """."""
+
+  order: str
+
+
+class Leaders(msgspec.Struct):
+  """."""
+
+  sort: Sort
+
+  take: int
+
+
 class Range(msgspec.Struct):
   """."""
 
@@ -20,15 +40,15 @@ class Collect(msgspec.Struct):
 class Cull(msgspec.Struct):
   """."""
 
-  fraction: float
   edge: int
+  fraction: float
 
 
 class Tame(msgspec.Struct):
   """."""
 
-  price: int
   edge: int
+  price: int
 
 
 class Plugins(msgspec.Struct):
@@ -39,28 +59,9 @@ class Plugins(msgspec.Struct):
   tame: Tame
 
 
-class Activity(msgspec.Struct):
-  """."""
-
-  name: str
-
-
-class Port(msgspec.Struct):
-  """."""
-
-  default: int
-
-
-class API(msgspec.Struct):
-  """."""
-
-  host: str
-  port: Port
-
-
 class Configuration(msgspec.Struct):
   """."""
 
-  plugins: Plugins
   activity: Activity
-  api: API
+  leaders: Leaders
+  plugins: Plugins

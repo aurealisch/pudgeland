@@ -3,12 +3,16 @@
 import crescent
 import hikari
 
-from bot.common.command import commands, cooldowns, embeds
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+)
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
-from bot.module.other.reputation.service import reputation
+from . import _groups
 
-from . import _groups, _periods
+from . import _periods
 
 plugin = plugins.Plugin()
 
@@ -35,7 +39,19 @@ class Command(commands.Command):
     optional = str(self.user.id)
 
     if contextual != optional:
-      await reputation.ReputationService.downgrade(optional)
+      user = await plugin.model.database.find_first(optional)
+
+      reputation = user.reputation
+
+      reputation -= 1
+
+      await plugin.model.database.update(
+        optional,
+        banana=user.banana,
+        monkey=user.monkey,
+        reputation=reputation,
+        item=user.item,
+      )
 
       description = f'<@{contextual}> убрал репутацию <@{optional}>'
 

@@ -4,11 +4,18 @@ import string
 
 import crescent
 
-from bot.common.command import commands, cooldowns, embeds, utilities
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+)
 from bot.common.plugin import plugins
-from bot.module.other.leaders.service import leaders
+from . import _emojis, _groups
 
-from . import _emojis, _groups, _periods
+from . import (
+  _periods,
+)
 
 plugin = plugins.Plugin()
 
@@ -27,7 +34,15 @@ class Command(commands.Command):
 
   async def run(self, context: crescent.Context) -> None:
     """."""
+<<<<<<< HEAD:bot/plugin/command/others/leaders/bananas.py
+    users = await plugin.model.database.find_many(
+      plugin.model.configuration.leaders.take,
+      user_keys='banana',
+      sort_order=plugin.model.configuration.leaders.sort.order,
+    )
+=======
     users = await leaders.LeadersService.leaders('banana')
+>>>>>>> 4a90e1fbd587c87a73cb7cc0488b307472aaaa4e:bot/module/other/leaders/plugin/command/bananas.py
 
     embed = embeds.embed(
       'default',

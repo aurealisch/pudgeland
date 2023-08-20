@@ -4,11 +4,18 @@ import string
 
 import crescent
 
-from bot.common.command import commands, cooldowns, embeds, utilities
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+  utilities,
+)
 from bot.common.plugin import plugins
-from bot.module.other.leaders.service import leaders
+from . import _emojis, _groups
 
-from . import _emojis, _groups, _periods
+from . import (
+  _periods,
+)
 
 plugin = plugins.Plugin()
 
@@ -19,15 +26,23 @@ _humanize = utilities.humanize
 @plugin.include
 @crescent.hook(cooldowns.cooldown(1, period=_periods.period))
 @crescent.command(
-  name='обезьяны',
-  description='Обезьяны',
+  name='репутация',
+  description='Репутация',
 )
 class Command(commands.Command):
   """."""
 
   async def run(self, context: crescent.Context) -> None:
     """."""
-    users = await leaders.LeadersService.leaders('monkey')
+<<<<<<< HEAD:bot/plugin/command/others/leaders/reputation.py
+    users = await plugin.model.database.find_many(
+      plugin.model.configuration.leaders.take,
+      user_keys='reputation',
+      sort_order=plugin.model.configuration.leaders.sort.order,
+    )
+=======
+    users = await leaders.LeadersService.leaders('reputation')
+>>>>>>> 4a90e1fbd587c87a73cb7cc0488b307472aaaa4e:bot/module/other/leaders/plugin/command/reputation.py
 
     embed = embeds.embed(
       'default',
@@ -41,14 +56,14 @@ class Command(commands.Command):
       position = index + 1
 
       id__ = user.id
-      monkey = user.monkey
+      reputation = user.reputation
 
       if position in _emojis.emoji:
         name += _emojis.emoji[position]
 
       name += f'#{position}'
 
-      value += f'<@{id__}>\nОбезьяны: `{_humanize(monkey)}`'
+      value += f'<@{id__}>\nРепутация: `{_humanize(reputation)}`'
 
       embed.add_field(
         name=name,

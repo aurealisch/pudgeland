@@ -1,4 +1,13 @@
 {
+  "activity": {
+    "name": "гг сервер умер"
+  },
+  "leaders": {
+    "sort": {
+      "order": "desc"
+    },
+    "take": 5
+  },
   "plugins": {
     "collect": {
       "collecting": {
@@ -17,15 +26,6 @@
     "tame": {
       "price": 500,
       "edge": 4
-    }
-  },
-  "activity": {
-    "name": "гг сервер умер"
-  },
-  "api": {
-    "host": "0.0.0.0",
-    "port": {
-      "default": 5000
     }
   }
 }

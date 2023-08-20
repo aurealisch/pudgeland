@@ -55,10 +55,7 @@ class Command(commands.Command):
         """."""
         await context.defer()
 
-        contextual = await plugin.model.database.find_first(_contextual)
-
         banana = contextual.banana
-        monkey = contextual.monkey
 
         if banana < fed:
           raise errors.NotEnoughBananaError

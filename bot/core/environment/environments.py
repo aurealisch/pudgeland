@@ -10,5 +10,3 @@ class Environment:
   """."""
 
   token: typing.Optional[str]
-  url: typing.Optional[str]
-  port: typing.Optional[int]

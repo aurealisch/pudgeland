@@ -76,7 +76,7 @@ class Command(commands.Command):
 
         ❌ Не получилось...
 
-        - 🍌 `{_humanize(culling)}` бананов
+        ```diff\n- 🍌 `{_humanize(culling)}` бананов```
       """
 
       embed = embeds.embed(
@@ -93,7 +93,7 @@ class Command(commands.Command):
       _contextual,
       banana=contextual.banana + culling,
       monkey=contextual.monkey,
-      reputation=contextual.banana,
+      reputation=contextual.reputation,
       item=contextual.item,
     )
 
@@ -101,7 +101,7 @@ class Command(commands.Command):
       _optional,
       banana=optional.banana - culling,
       monkey=optional.monkey,
-      reputation=optional.banana,
+      reputation=optional.reputation,
       item=optional.item,
     )
 
@@ -111,7 +111,7 @@ class Command(commands.Command):
 
       ✅ Получилось!!!
 
-      + 🍌 `{_humanize(culling)}` бананов
+      ```diff\n+ 🍌 `{_humanize(culling)}` бананов```
     """
 
     embed = embeds.embed(
