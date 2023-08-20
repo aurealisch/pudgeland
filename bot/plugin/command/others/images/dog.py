@@ -3,7 +3,11 @@
 import collei
 import crescent
 
-from bot.common.command import commands, cooldowns, embeds
+from bot.common.command import (
+  commands,
+  cooldowns,
+  embeds,
+)
 from bot.common.plugin import plugins
 
 plugin = plugins.Plugin()

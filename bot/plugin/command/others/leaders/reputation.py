@@ -11,9 +11,10 @@ from bot.common.command import (
   utilities,
 )
 from bot.common.plugin import plugins
-from . import _emojis, _groups
 
 from . import (
+  _emojis,
+  _groups,
   _periods,
 )
 
@@ -34,15 +35,11 @@ class Command(commands.Command):
 
   async def run(self, context: crescent.Context) -> None:
     """."""
-<<<<<<< HEAD:bot/plugin/command/others/leaders/reputation.py
     users = await plugin.model.database.find_many(
       plugin.model.configuration.leaders.take,
       user_keys='reputation',
       sort_order=plugin.model.configuration.leaders.sort.order,
     )
-=======
-    users = await leaders.LeadersService.leaders('reputation')
->>>>>>> 4a90e1fbd587c87a73cb7cc0488b307472aaaa4e:bot/module/other/leaders/plugin/command/reputation.py
 
     embed = embeds.embed(
       'default',

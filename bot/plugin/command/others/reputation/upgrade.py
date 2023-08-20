@@ -10,9 +10,11 @@ from bot.common.command import (
 )
 from bot.common.command.error import errors
 from bot.common.plugin import plugins
-from . import _groups
 
-from . import _periods
+from . import (
+  _groups,
+  _periods,
+)
 
 plugin = plugins.Plugin()
 
