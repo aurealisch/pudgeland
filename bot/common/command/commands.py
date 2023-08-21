@@ -17,9 +17,9 @@ class Command:
   @typing.final
   async def callback(self, context: crescent.Context) -> None:
     """."""
-    try:
-      await context.defer()
+    await context.defer()
 
+    try:
       await self.run(context)
     except Exception as error: # pylint: disable=broad-exception-caught
       await handlers.ErrorHandler.handle(

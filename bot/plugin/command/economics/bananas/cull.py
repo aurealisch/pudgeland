@@ -81,7 +81,7 @@ class Command(commands.Command):
 
         ❌ Не получилось...
 
-        ```diff\n- 🍌 `{_humanize(culling)}` бананов```
+        ```diff\n- 🍌 {_humanize(culling)} бананов```
       """
 
       embed = embeds.embed(
@@ -116,7 +116,7 @@ class Command(commands.Command):
 
       ✅ Получилось!!!
 
-      ```diff\n+ 🍌 `{_humanize(culling)}` бананов```
+      ```diff\n+ 🍌 {_humanize(culling)} бананов```
     """
 
     embed = embeds.embed(
