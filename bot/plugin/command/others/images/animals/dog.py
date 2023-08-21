@@ -1,7 +1,7 @@
 """."""
 
+import collei
 import crescent
-import tighnari
 
 from bot.common.command import (
   commands,
@@ -10,23 +10,28 @@ from bot.common.command import (
 )
 from bot.common.plugin import plugins
 
-plugin = plugins.Plugin()
+from . import _periods
 
-period = cooldowns.Period(seconds=2.5)
+plugin = plugins.Plugin()
 
 
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(
+  cooldowns.cooldown(
+    1,
+    period=_periods.period
+  )
+)
 @crescent.command(
-  name='кошка',
-  description='Случайное изображение кошки',
+  name='собака',
+  description='Случайное изображение собаки',
 )
 class Command(commands.Command):
   """."""
 
   async def run(self, context: crescent.Context) -> None:
     """."""
-    url = tighnari.Client().images.search()[0].url
+    url = collei.Client().images.search()[0].url
 
     image = url
 

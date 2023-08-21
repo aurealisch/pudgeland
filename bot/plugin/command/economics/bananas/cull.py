@@ -9,9 +9,9 @@ from bot.common.command import (
   commands,
   cooldowns,
   embeds,
-  utilities,
 )
 from bot.common.command.error import errors
+from bot.common.command.utility import utilities
 from bot.common.plugin import plugins
 
 from . import _groups
@@ -25,7 +25,12 @@ _humanize = utilities.humanize
 
 @_groups.group.child
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(
+  cooldowns.cooldown(
+    1,
+    period=period
+  )
+)
 @crescent.command(
   name='отобрать',
   description='Отобрать бананы',

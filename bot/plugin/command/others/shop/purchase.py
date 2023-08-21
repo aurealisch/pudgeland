@@ -8,10 +8,10 @@ from bot.common.command import (
   commands,
   cooldowns,
   embeds,
-  utilities,
-  views,
 )
 from bot.common.command.error import errors
+from bot.common.command.utility import utilities
+from bot.common.command.view import views
 from bot.common.plugin import plugins
 from bot.common.shop import shops
 
@@ -26,7 +26,12 @@ _humanize = utilities.humanize
 
 @_groups.group.child
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(
+  cooldowns.cooldown(
+    1,
+    period=period
+  )
+)
 @crescent.command(
   name='покупка',
   description='Покупка',

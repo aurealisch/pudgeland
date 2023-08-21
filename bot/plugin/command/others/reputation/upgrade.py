@@ -21,7 +21,12 @@ plugin = plugins.Plugin()
 
 @_groups.group.child
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=_periods.period))
+@crescent.hook(
+  cooldowns.cooldown(
+    1,
+    period=_periods.period
+  )
+)
 @crescent.command(
   name='повысить',
   description='Повысить репутацию пользователю',

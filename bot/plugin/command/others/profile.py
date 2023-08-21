@@ -6,8 +6,8 @@ from bot.common.command import (
   commands,
   cooldowns,
   embeds,
-  utilities,
 )
+from bot.common.command.utility import utilities
 from bot.common.plugin import plugins
 from bot.common.shop import shops
 
@@ -19,7 +19,12 @@ _humanize = utilities.humanize
 
 
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=period))
+@crescent.hook(
+  cooldowns.cooldown(
+    1,
+    period=period
+  )
+)
 @crescent.command(
   name="профиль",
   description="Профиль",

@@ -18,7 +18,12 @@ plugin = plugins.Plugin()
 
 
 @plugin.include
-@crescent.hook(cooldowns.cooldown(1, period=_periods.period))
+@crescent.hook(
+  cooldowns.cooldown(
+    1,
+    period=_periods.period
+  )
+)
 @crescent.command(
   name='обнять',
   description='Обнять пользователя',
