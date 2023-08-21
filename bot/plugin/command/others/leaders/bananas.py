@@ -40,10 +40,13 @@ class Command(commands.Command):
 
   async def run(self, context: crescent.Context) -> None:
     """."""
+    take = plugin.configuration.leaders.take
+    sort_order = plugin.configuration.leaders.sort.order
+
     users = await plugin.model.database.find_many(
-      plugin.model.configuration.leaders.take,
+      take,
       user_keys='banana',
-      sort_order=plugin.model.configuration.leaders.sort.order,
+      sort_order=sort_order,
     )
 
     embed = embeds.embed(

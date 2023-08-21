@@ -1,23 +1,23 @@
-# Alhaitham
+# Tighnari
 
 > Це частина `Pudgeland 💖 Open Source` екосистеми
 
-Неофіційна **[The Dog API](https://thedogapi.com)** оболонка для Python
+Неофіційна [_The Cat API_](https://thecatapi.com) оболонка для Python
 
 ## 📦 Пакети
 
 ### 🐍 PyPI
 
 ```sh
-pip install alhaitham
+pip install tighnari
 ```
 
 ## 🔎 Приклади
 
 ```py
-import alhaitham
+import tighnari
 
-client = alhaitham.Client()
+client = tighnari.Client()
 
 for _ in range(5):
   print(client.images.search())

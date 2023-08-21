@@ -1,3 +1,5 @@
+"""."""
+
 from __future__ import annotations
 
 __all__: typing.Sequence[str] = (
@@ -60,30 +62,41 @@ SFWCategory = typing.Literal[
 
 @attrs.define
 class Configuration:
+  """."""
+
   url: yarl.URL
 
 
 @attrs.define
 class URLs:
+  """."""
+
   configuration: Configuration
 
   def nsfw(self, category: NSFWCategory) -> str:
+    """."""
     return self.configuration.url / 'nsfw' / category
 
   def sfw(self, category: SFWCategory) -> str:
+    """."""
     return self.configuration.url / 'sfw' / category
 
 
 @attrs.define
 class Image:
+  """."""
+
   url: str
 
 
 @attrs.define
 class NSFWResource:
+  """."""
+
   urls: URLs
 
   def search(self, category: NSFWCategory) -> Image:
+    """."""
     url = self.urls.nsfw(category)
 
     response = requests.get(url) # pylint: disable=missing-timeout
@@ -95,9 +108,12 @@ class NSFWResource:
 
 @attrs.define
 class SFWResource:
+  """."""
+
   urls: URLs
 
   def search(self, category: SFWCategory) -> Image:
+    """."""
     url = self.urls.sfw(category)
 
     response = requests.get(url) # pylint: disable=missing-timeout
@@ -109,6 +125,8 @@ class SFWResource:
 
 @attrs.define
 class Client:
+  """."""
+
   _url = yarl.URL('https://api.waifu.pics')
 
   _configuration = Configuration(_url)
@@ -120,8 +138,10 @@ class Client:
 
   @property
   def nsfw(self) -> NSFWResource:
+    """."""
     return self._nsfw_resource
 
   @property
   def sfw(self) -> SFWResource:
+    """."""
     return self._sfw_resource

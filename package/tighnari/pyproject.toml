@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tighnari"
-version = "0.1.6"
+version = "0.1.7"
 description = "An unofficial The Cat API wrapper for Python"
 license = "MIT"
 authors = ["elaresai <elaresai@gmail.com>"]
@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.8",
 ]
-packages = [{ include = "tighnari", from = "src" }]
+packages = [{ include = "tighnari" }]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"

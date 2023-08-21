@@ -1,3 +1,5 @@
+"""."""
+
 from __future__ import annotations
 
 __all__: typing.Sequence[str] = (
@@ -18,18 +20,25 @@ import yarl
 
 @attrs.define
 class Configuration:
+  """."""
+
   url: yarl.URL
 
 
 @attrs.define
 class URLs:
+  """."""
+
   configuration: Configuration
 
   def search(self) -> str:
+    """."""
     return self.configuration.url / 'images' / 'search'
 
 
 class Image(msgspec.Struct):
+  """."""
+
   id: str
 
   url: str
@@ -40,9 +49,12 @@ class Image(msgspec.Struct):
 
 @attrs.define
 class ImageResource:
+  """."""
+
   urls: URLs
 
   def search(self) -> typing.Sequence[Image]:
+    """."""
     response = requests.get(self.urls.search()) # pylint: disable=missing-timeout
 
     content = response.content
@@ -51,14 +63,19 @@ class ImageResource:
 
     type__ = typing.Sequence[Image]
 
-    image = msgspec.json.decode(buf, type=type__)
+    image = msgspec.json.decode(
+      buf,
+      type=type__,
+    )
 
     return image
 
 
 @attrs.define
 class Client:
-  _url = yarl.URL('https://api.thecatapi.com/v1')
+  """."""
+
+  _url = yarl.URL('https://api.thedogapi.com/v1')
 
   _configuration = Configuration(_url)
 
@@ -68,4 +85,5 @@ class Client:
 
   @property
   def images(self) -> ImageResource:
+    """."""
     return self._image_resource
