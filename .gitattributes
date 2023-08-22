@@ -1,6 +1,3 @@
-# Fix syntax highlighting on GitHub to allow comments
-.vscode/*.json linguist-language=JSON-with-Comments
-
 # Basic .gitattributes for a python repo.
 
 # Source files
