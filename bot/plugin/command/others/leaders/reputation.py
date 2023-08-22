@@ -40,8 +40,8 @@ class Command(commands.Command):
 
   async def run(self, context: crescent.Context) -> None:
     """."""
-    take = plugin.configuration.leaders.take
-    sort_order = plugin.configuration.leaders.sort.order
+    take = plugin.model.configuration.leaders.take
+    sort_order = plugin.model.configuration.leaders.sort.order
 
     users = await plugin.model.database.find_many(
       take,
