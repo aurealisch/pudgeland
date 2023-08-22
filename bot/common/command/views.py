@@ -5,7 +5,7 @@ import typing
 import miru
 import miru.abc
 
-from ..error.handler import handlers
+from .error.handler import handlers
 
 
 class View(miru.View):

@@ -9,7 +9,7 @@ from bot.common.command import (
   embeds,
 )
 from bot.common.command.error import errors
-from bot.common.plugin import plugins
+from bot.common import plugins
 
 from . import (
   _groups,

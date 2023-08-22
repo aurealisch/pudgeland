@@ -6,10 +6,12 @@ from bot.common.command import (
   commands,
   cooldowns,
   embeds,
+  utilities,
 )
-from bot.common.command.utility import utilities
-from bot.common.plugin import plugins
-from bot.common.shop import shops
+from bot.common import (
+  plugins,
+  shops,
+)
 
 plugin = plugins.Plugin()
 
