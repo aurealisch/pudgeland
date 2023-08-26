@@ -52,7 +52,7 @@ class Command(commands.Command):
       price = item.price
 
       description += f"""
-        # {value}. {emoji} **{label}**"
+        # {value}. {emoji} **{label}**
 
         > {description_}
 

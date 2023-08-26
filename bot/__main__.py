@@ -1,10 +1,10 @@
 """."""
 
 from .common import commons
-from .utility.constant import presences
+from .utility.constant import activities
 
 commons.client.plugins.load_folder('bot.plugin')
 
-activity = presences.activity
+activity = activities.activity
 
 commons.bot.run(activity=activity)
