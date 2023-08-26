@@ -26,7 +26,7 @@ class Item(msgspec.Struct):
 
 
 with open(
-  './asset/json/shops.json',
+  './asset/json/shop/shops.json',
   encoding='utf-8',
 ) as stream:
   buf = stream.read()

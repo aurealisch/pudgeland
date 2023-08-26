@@ -15,11 +15,12 @@ from bot.common import (
   shops,
 )
 
-from . import _groups
+from . import (
+  _groups,
+  _periods,
+)
 
 plugin = plugins.Plugin()
-
-period = cooldowns.Period(hours=4)
 
 _humanize = utilities.humanize
 
@@ -29,7 +30,7 @@ _humanize = utilities.humanize
 @crescent.hook(
   cooldowns.cooldown(
     1,
-    period=period
+    period=_periods.period
   )
 )
 @crescent.command(

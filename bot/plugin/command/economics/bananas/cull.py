@@ -14,7 +14,10 @@ from bot.common.command import (
 from bot.common.command.error import errors
 from bot.common import plugins
 
-from . import _groups
+from . import (
+  _groups,
+  _periods,
+)
 
 plugin = plugins.Plugin()
 
@@ -28,7 +31,7 @@ _humanize = utilities.humanize
 @crescent.hook(
   cooldowns.cooldown(
     1,
-    period=period
+    period=_periods.period
   )
 )
 @crescent.command(
