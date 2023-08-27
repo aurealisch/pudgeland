@@ -1,5 +1,3 @@
-"""."""
-
 import crescent
 
 from bot.common import commons

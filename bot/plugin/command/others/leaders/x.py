@@ -1,6 +1,5 @@
-"""."""
-
 import string
+import typing
 
 import crescent
 
@@ -39,11 +38,11 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name=name)
-class Command(commands.Command):
-  """."""
-
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+class XCommand(commands.Command):
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     take = plugin.model.configuration.leaders.take
     sort_order = plugin.model.configuration.leaders.sort.order
 

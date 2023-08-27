@@ -1,4 +1,4 @@
-"""."""
+import typing
 
 import crescent
 import hikari
@@ -35,14 +35,12 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='покупка')
-class Command(commands.Command):
-  """."""
-
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+class PurchaseCommand(commands.Command):
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     class View(views.View):
-      """."""
-
       @miru.text_select(
         options=[
           hikari.SelectMenuOption(
@@ -57,9 +55,12 @@ class Command(commands.Command):
         placeholder='Предметы',
       )
       async def _(
-        self, text_select: miru.TextSelect, context: miru.ViewContext
+        self: typing.Self,
+        text_select: miru.TextSelect,
+        context: miru.ViewContext,
       ) -> None:
-        """."""
+        emojis = plugin.model.configuration.emojis
+
         await context.defer()
 
         _item = int(text_select.values[0])

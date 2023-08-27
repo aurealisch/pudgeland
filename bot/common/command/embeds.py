@@ -1,5 +1,3 @@
-"""."""
-
 import typing
 
 import crescent
@@ -26,7 +24,6 @@ def embed(
   description: typing.Optional[str] = None,
   image: typing.Optional[hikari.files.Resourceish] = None,
 ) -> hikari.Embed:
-  """."""
   color = hikari.Color.of(colors[mode])
 
   contextual = context.user

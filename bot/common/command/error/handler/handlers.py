@@ -1,5 +1,3 @@
-"""."""
-
 import traceback
 import typing
 
@@ -10,8 +8,6 @@ from bot.common.command import embeds
 
 
 class ErrorHandler:
-  """."""
-
   @staticmethod
   async def handle(
     error: Exception,
@@ -19,7 +15,6 @@ class ErrorHandler:
       crescent.Context, typing.Optional[miru.context.view.ViewContext]
     ],
   ) -> None:
-    """."""
     value = error
     tb = error.__traceback__
 

@@ -1,6 +1,5 @@
-"""."""
-
 import random
+import typing
 
 import crescent
 import hikari
@@ -34,11 +33,11 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='приручать')
-class Command(commands.Command):
-  """."""
-
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+class TameCommand(commands.Command):
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     tame = plugin.model.configuration.plugins.tame
     emojis = plugin.model.configuration.emojis
 
@@ -50,12 +49,19 @@ class Command(commands.Command):
 
     fed = (x + 1) * tame.price
 
-    class View(views.View):
-      """."""
+    style = hikari.ButtonStyle.SECONDARY
 
-      @miru.button(label='ОК', style=hikari.ButtonStyle.SECONDARY, emoji='✅')
-      async def ok(self, _: miru.Button, context: miru.ViewContext) -> None:
-        """."""
+    class View(views.View):
+      @miru.button(
+        label='ОК',
+        style=style,
+        emoji='✅',
+      )
+      async def ok(
+        self: typing.Self,
+        _: miru.Button,
+        context: miru.ViewContext,
+      ) -> None:
         await context.defer()
 
         x = contextual.x
@@ -124,10 +130,15 @@ class Command(commands.Command):
         self.stop()
 
       @miru.button(
-        label='Отменить', style=hikari.ButtonStyle.SECONDARY, emoji='❌'
+        label='Отменить',
+        style=style,
+        emoji='❌',
       )
-      async def cancel(self, _: miru.Button, context: miru.ViewContext) -> None:
-        """."""
+      async def cancel(
+        self: typing.Self,
+        _: miru.Button,
+        context: miru.ViewContext,
+      ) -> None:
         await context.defer()
 
         description = 'Отменено'

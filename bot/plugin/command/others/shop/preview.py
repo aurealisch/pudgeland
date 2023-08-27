@@ -1,6 +1,5 @@
-"""."""
-
 import string
+import typing
 
 import crescent
 
@@ -33,11 +32,11 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='просмотр')
-class Command(commands.Command):
-  """."""
-
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+class PreviewCommand(commands.Command):
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     bunch = plugin.model.configuration.economics.x.bunch
     emojis = plugin.model.configuration.emojis
 

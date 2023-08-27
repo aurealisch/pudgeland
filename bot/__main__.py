@@ -1,5 +1,3 @@
-"""."""
-
 from .common import commons
 from .utility.constant import activities
 

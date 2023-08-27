@@ -1,6 +1,5 @@
-"""."""
-
 import random
+import typing
 
 import crescent
 
@@ -34,11 +33,11 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='собрать')
-class Command(commands.Command):
-  """."""
-
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+class CollectCommand(commands.Command):
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     _contextual = str(context.user.id)
 
     contextual = await plugin.model.database.find_first(_contextual)

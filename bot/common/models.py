@@ -1,4 +1,4 @@
-"""."""
+import typing
 
 import attrs
 import hikari
@@ -12,16 +12,18 @@ from ..core import (
 
 @attrs.define
 class Model:
-  """."""
-
   configuration: configurations.Configuration
   database: databases.Database
   environment: environments.Environment
 
-  async def on_started_event(self, _: hikari.StartedEvent) -> None:
-    """."""
+  async def on_started_event(
+    self: typing.Self,
+    _: hikari.StartedEvent,
+  ) -> None:
     await self.database.prisma.connect()
 
-  async def on_stopped_event(self, _: hikari.StoppedEvent) -> None:
-    """."""
+  async def on_stopped_event(
+    self: typing.Self,
+    _: hikari.StoppedEvent,
+  ) -> None:
     await self.database.prisma.disconnect()

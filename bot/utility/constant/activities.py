@@ -1,5 +1,3 @@
-"""."""
-
 import hikari
 
 from bot.common import commons

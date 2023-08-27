@@ -1,4 +1,4 @@
-"""."""
+import typing
 
 import crescent
 
@@ -28,11 +28,11 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='профиль')
-class Command(commands.Command):
-  """."""
-
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+class ProfileCommand(commands.Command):
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     emojis = plugin.model.configuration.emojis
     economics = plugin.model.configuration.economics
 

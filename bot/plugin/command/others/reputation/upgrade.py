@@ -1,4 +1,4 @@
-"""."""
+import typing
 
 import crescent
 import hikari
@@ -27,21 +27,17 @@ plugin = plugins.Plugin()
     period=_periods.period
   )
 )
-@crescent.command(
-  name='повысить',
-  description='Повысить репутацию пользователю',
-)
-class Command(commands.Command):
-  """."""
-
+@crescent.command(name='повысить')
+class UpgradeCommand(commands.Command):
   user = crescent.option(
     hikari.User,
     name='пользователь',
-    description='Пользователь',
   )
 
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     contextual = str(context.user.id)
     optional = str(self.user.id)
 

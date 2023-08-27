@@ -1,5 +1,3 @@
-"""."""
-
 import typing
 
 import msgspec
@@ -13,15 +11,11 @@ Velocity = typing.TypeVar(
 
 
 class Bonus(msgspec.Struct):
-  """."""
-
   x: Velocity = 0
   y: Velocity = 0
 
 
 class Item(msgspec.Struct):
-  """."""
-
   label: str
   description: str
 

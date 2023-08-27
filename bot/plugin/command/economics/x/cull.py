@@ -1,6 +1,5 @@
-"""."""
-
 import random
+import typing
 
 import crescent
 import hikari
@@ -35,16 +34,16 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='отобрать')
-class Command(commands.Command):
-  """."""
-
+class CullCommand(commands.Command):
   user = crescent.option(
     hikari.User,
     name='пользователь',
   )
 
-  async def run(self, context: crescent.Context) -> None:
-    """."""
+  async def run(
+    self: typing.Self,
+    context: crescent.Context,
+  ) -> None:
     _optional = str(self.user.id)
     _contextual = str(context.user.id)
 
