@@ -26,6 +26,6 @@
     }
   },
   "start": {
-    "cmd": "python -OO -m bot"
+    "cmd": "python -OO main.py"
   }
 }
