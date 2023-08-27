@@ -33,8 +33,8 @@ class Range(msgspec.Struct):
 class Collect(msgspec.Struct):
   """."""
 
-  collecting: Range
-  monkeying: Range
+  xing: Range
+  ying: Range
 
 
 class Cull(msgspec.Struct):
@@ -59,9 +59,35 @@ class Plugins(msgspec.Struct):
   tame: Tame
 
 
+class Resource(msgspec.Struct):
+  """."""
+
+  bunch: str
+
+
+X = Resource
+Y = Resource
+
+
+class Economics(msgspec.Struct):
+  """."""
+
+  x: X
+  y: Y
+
+
+class Emojis(msgspec.Struct):
+  """."""
+
+  x: str
+  y: str
+
+
 class Configuration(msgspec.Struct):
   """."""
 
   activity: Activity
   leaders: Leaders
   plugins: Plugins
+  economics: Economics
+  emojis: Emojis

@@ -32,15 +32,15 @@ _humanize = utilities.humanize
     period=period
   )
 )
-@crescent.command(
-  name='просмотр',
-  description='Просмотр предметов магазина',
-)
+@crescent.command(name='просмотр')
 class Command(commands.Command):
   """."""
 
   async def run(self, context: crescent.Context) -> None:
     """."""
+    bunch = plugin.model.configuration.economics.x.bunch
+    emojis = plugin.model.configuration.emojis
+
     description = string.whitespace
 
     for value, item in shops.shop.items():
@@ -56,7 +56,7 @@ class Command(commands.Command):
 
         > {description_}
 
-        🏷 Цена: 🍌 Бананы: `{_humanize(price)}`
+        🏷 Цена: {emojis.x} {bunch.capitalize()}: `{_humanize(price)}`
       """
 
     embed = embeds.embed(

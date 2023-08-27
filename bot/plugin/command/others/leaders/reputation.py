@@ -31,10 +31,7 @@ _humanize = utilities.humanize
     period=_periods.period
   )
 )
-@crescent.command(
-  name='репутация',
-  description='Репутация',
-)
+@crescent.command(name='репутация')
 class Command(commands.Command):
   """."""
 

@@ -33,24 +33,22 @@ _humanize = utilities.humanize
     period=period
   )
 )
-@crescent.command(
-  name='приручать',
-  description='Приручать',
-)
+@crescent.command(name='приручать')
 class Command(commands.Command):
   """."""
 
   async def run(self, context: crescent.Context) -> None:
     """."""
     tame = plugin.model.configuration.plugins.tame
+    emojis = plugin.model.configuration.emojis
 
     _contextual = str(context.user.id)
 
     contextual = await plugin.model.database.find_first(_contextual)
 
-    monkey = contextual.monkey
+    x = contextual.x
 
-    fed = (monkey + 1) * tame.price
+    fed = (x + 1) * tame.price
 
     class View(views.View):
       """."""
@@ -60,12 +58,12 @@ class Command(commands.Command):
         """."""
         await context.defer()
 
-        banana = contextual.banana
+        x = contextual.x
 
-        if banana < fed:
+        if x < fed:
           raise errors.NotEnoughBananaError
 
-        banana -= fed
+        x -= fed
 
         if random.choice(
           range(
@@ -75,17 +73,17 @@ class Command(commands.Command):
          ) != 1:
           await plugin.model.database.update(
             _contextual,
-            banana=banana,
-            monkey=monkey,
+            x=x,
+            y=y,
             reputation=contextual.reputation,
             item=contextual.item,
           )
 
           description = f"""\
-            <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
+            <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
             и...
 
-            ❌ Не получилось приручить обезьяну...
+            ❌ Не получилось приручить...
           """
 
           embed = embeds.embed(
@@ -102,17 +100,17 @@ class Command(commands.Command):
 
         await plugin.model.database.update(
           _contextual,
-          banana=banana,
-          monkey=monkey + 1,
+          x=x,
+          y=y + 1,
           reputation=contextual.reputation,
           item=contextual.item,
         )
 
         description = f"""\
-          <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
+          <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
           и...
 
-          ✅ Получилось приручить обезьяну!!!
+          ✅ Получилось приручить!!!
         """
 
         embed = embeds.embed(
@@ -140,7 +138,12 @@ class Command(commands.Command):
           description=description,
         )
 
-        await context.respond(embed=embed, flags=hikari.MessageFlag.EPHEMERAL)
+        flags = hikari.MessageFlag.EPHEMERAL
+
+        await context.respond(
+          embed=embed,
+          flags=flags,
+        )
 
         self.stop()
 
@@ -149,7 +152,7 @@ class Command(commands.Command):
     components = view
 
     description = (
-      f'Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_humanize(fed)}`'
+      f'Чтобы попробовать приручить, потребуется скормить {emojis.x} `{_humanize(fed)}`'
     )
 
     embed = embeds.embed(

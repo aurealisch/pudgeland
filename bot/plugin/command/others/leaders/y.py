@@ -10,7 +10,10 @@ from bot.common.command import (
   embeds,
   utilities,
 )
-from bot.common import plugins
+from bot.common import (
+  plugins,
+  commons,
+)
 
 from . import (
   _emojis,
@@ -19,6 +22,10 @@ from . import (
 )
 
 plugin = plugins.Plugin()
+
+bunch = commons.configuration.economics.x.bunch
+
+name = bunch
 
 _humanize = utilities.humanize
 
@@ -31,10 +38,7 @@ _humanize = utilities.humanize
     period=_periods.period
   )
 )
-@crescent.command(
-  name='обезьяны',
-  description='Обезьяны',
-)
+@crescent.command(name=name)
 class Command(commands.Command):
   """."""
 
@@ -45,7 +49,7 @@ class Command(commands.Command):
 
     users = await plugin.model.database.find_many(
       take,
-      user_keys='monkey',
+      user_keys='y',
       sort_order=sort_order,
     )
 
@@ -61,14 +65,14 @@ class Command(commands.Command):
       position = index + 1
 
       id__ = user.id
-      monkey = user.monkey
+      y = user.y
 
       if position in _emojis.emoji:
         name += _emojis.emoji[position]
 
       name += f'#{position}'
 
-      value += f'<@{id__}>\nОбезьяны: `{_humanize(monkey)}`'
+      value += f'<@{id__}>\n{bunch.capitalize()} `{_humanize(y)}`'
 
       embed.add_field(
         name=name,

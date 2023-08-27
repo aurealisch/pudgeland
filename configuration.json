@@ -10,11 +10,11 @@
   },
   "plugins": {
     "collect": {
-      "collecting": {
+      "xing": {
         "a": 75,
         "b": 200
       },
-      "monkeying": {
+      "ying": {
         "a": 50,
         "b": 135
       }
@@ -27,5 +27,17 @@
       "price": 500,
       "edge": 4
     }
+  },
+  "economics": {
+    "x": {
+      "bunch": "бананы"
+    },
+    "y": {
+      "bunch": "обезьяны"
+    }
+  },
+  "emojis": {
+    "x": "🍌",
+    "y": "🐒"
   }
 }

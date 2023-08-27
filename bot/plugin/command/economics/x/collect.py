@@ -33,10 +33,7 @@ _humanize = utilities.humanize
     period=_periods.period
   )
 )
-@crescent.command(
-  name='собрать',
-  description='Cобрать бананы',
-)
+@crescent.command(name='собрать')
 class Command(commands.Command):
   """."""
 
@@ -46,17 +43,19 @@ class Command(commands.Command):
 
     contextual = await plugin.model.database.find_first(_contextual)
 
-    monkey = contextual.monkey
+    x = contextual.x
+    y = contextual.y
 
     _item = contextual.item
 
     collect = plugin.model.configuration.plugins.collect
+    emojis = plugin.model.configuration.emojis
 
     total = 0
 
-    collecting = random.randint(
-      collect.collecting.a,
-      b=collect.collecting.b,
+    xing = random.randint(
+      collect.xing.a,
+      b=collect.xing.b,
     )
 
     if _item:
@@ -64,17 +63,17 @@ class Command(commands.Command):
 
       bonus = item.bonus
 
-      if bonus.banana:
-        collecting += int(round(collecting * bonus.banana))
+      if bonus.x:
+        xing += int(round(xing * bonus.x))
 
-    total += collecting
+    total += xing
 
-    description = f'<@{_contextual}> собрал 🍌 `{_humanize(collecting)}` бананов'
+    description = f'<@{_contextual}> собрал {emojis.x} `{_humanize(xing)}`'
 
-    if monkey:
-      monkeying = monkey * random.randint(
-        collect.monkeying.a,
-        b=collect.monkeying.b,
+    if y:
+      ying = y * random.randint(
+        collect.ying.a,
+        b=collect.ying.b,
       )
 
       if _item:
@@ -82,23 +81,23 @@ class Command(commands.Command):
 
         bonus = item.bonus
 
-        if bonus.monkey:
-          monkeying += int(round(monkeying * bonus.monkey))
+        if bonus.y:
+          ying += int(round(ying * bonus.y))
 
-      total += monkeying
+      total += ying
 
       # fmt: off
       description += (
-        f'\n+ 🍌 `{_humanize(monkeying)}` бананов от 🐒 `{_humanize(monkey)}` обезьян'
+        f'\n+ {emojis.x} `{_humanize(ying)}` от {emojis.y} `{_humanize(y)}`'
       )
       # fmt: on
 
-      description += f'\n\n✨ Всего: 🍌 `{_humanize(total)}` бананов'
+      description += f'\n\n✨ Всего: {emojis.x} `{_humanize(total)}`'
 
     await plugin.model.database.update(
       _contextual,
-      banana=contextual.banana + total,
-      monkey=monkey,
+      x=x + total,
+      y=y,
       reputation=contextual.reputation,
       item=contextual.item,
     )

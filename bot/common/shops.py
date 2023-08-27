@@ -8,8 +8,8 @@ import msgspec
 class Bonus(msgspec.Struct):
   """."""
 
-  banana: float = 0.0
-  monkey: float = 0.0
+  x: float = 0.0
+  y: float = 0.0
 
 
 class Item(msgspec.Struct):

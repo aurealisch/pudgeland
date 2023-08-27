@@ -54,8 +54,8 @@ class Command(commands.Command):
 
       await plugin.model.database.update(
         optional,
-        banana=user.banana,
-        monkey=user.monkey,
+        x=user.x,
+        y=user.y,
         reputation=reputation,
         item=user.item,
       )

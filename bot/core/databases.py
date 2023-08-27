@@ -45,16 +45,16 @@ class Database:
     self,
     id__: str,
     *,
-    banana: typing.Union[_prisma.types.AtomicIntInput, int],
-    monkey: typing.Union[_prisma.types.AtomicIntInput, int],
+    x: typing.Union[_prisma.types.AtomicIntInput, int],
+    y: typing.Union[_prisma.types.AtomicIntInput, int],
     reputation: typing.Union[_prisma.types.AtomicIntInput, int],
     item: typing.Union[_prisma.types.AtomicIntInput, int]
   ) -> typing.Optional[_prisma.models.User]:
     """."""
     return await self.prisma.user.update(
       _prisma.types.UserUpdateInput(
-        banana=banana,
-        monkey=monkey,
+        x=x,
+        y=y,
         reputation=reputation,
         item=item,
       ),

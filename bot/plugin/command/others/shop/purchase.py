@@ -34,10 +34,7 @@ _humanize = utilities.humanize
     period=period
   )
 )
-@crescent.command(
-  name='покупка',
-  description='Покупка',
-)
+@crescent.command(name='покупка')
 class Command(commands.Command):
   """."""
 
@@ -76,22 +73,22 @@ class Command(commands.Command):
 
         contextual = await plugin.model.database.find_first(_contextual)
 
-        banana = contextual.banana
+        x = contextual.x
 
-        if banana < price:
+        if x < price:
           raise errors.NotEnoughBananaError
 
         await plugin.model.database.update(
           _contextual,
-          banana=banana - price,
-          monkey=contextual.monkey,
+          x=x - price,
+          y=contextual.y,
           reputation=contextual.reputation,
           item=int(_item),
         )
 
         # fmt: off
         description = (
-          f'<@{_contextual}> купил `{label}` за 🍌 `{_humanize(price)}` бананов'
+          f'<@{_contextual}> купил `{label}` за {emojis.x} `{_humanize(price)}`'
         )
         # fmt: on
 

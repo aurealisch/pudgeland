@@ -27,29 +27,29 @@ _humanize = utilities.humanize
     period=period
   )
 )
-@crescent.command(
-  name="профиль",
-  description="Профиль",
-)
+@crescent.command(name='профиль')
 class Command(commands.Command):
   """."""
 
   async def run(self, context: crescent.Context) -> None:
     """."""
+    emojis = plugin.model.configuration.emojis
+    economics = plugin.model.configuration.economics
+
     _contextual = str(context.user.id)
 
     contextual = await plugin.model.database.find_first(_contextual)
 
-    banana = contextual.banana
-    monkey = contextual.monkey
+    x = contextual.x
+    y = contextual.y
 
     reputation = contextual.reputation
 
     _item = contextual.item
 
     description = f"""\
-      🍌 Бананы: `{_humanize(banana)}`
-      🐒 Обезьяны: `{_humanize(monkey)}`
+      {emojis.x} {economics.x.bunch.capitalize()}: `{_humanize(x)}`
+      {emojis.y} {economics.y.bunch.capitalize()}: `{_humanize(y)}`
 
       📊 Репутация: `{_humanize(reputation)}`
     """

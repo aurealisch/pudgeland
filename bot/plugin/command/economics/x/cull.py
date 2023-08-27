@@ -34,17 +34,13 @@ _humanize = utilities.humanize
     period=_periods.period
   )
 )
-@crescent.command(
-  name='отобрать',
-  description='Отобрать бананы',
-)
+@crescent.command(name='отобрать')
 class Command(commands.Command):
   """."""
 
   user = crescent.option(
     hikari.User,
     name='пользователь',
-    description='Пользователь',
   )
 
   async def run(self, context: crescent.Context) -> None:
@@ -56,10 +52,12 @@ class Command(commands.Command):
     contextual = await plugin.model.database.find_first(_contextual)
 
     cull = plugin.model.configuration.plugins.cull
+    bunch = plugin.model.configuration.economics.x.bunch
+    emojis = plugin.model.configuration.emojis
 
     fraction = cull.fraction
 
-    culling = int(round(optional.banana * fraction))
+    culling = int(round(optional.x * fraction))
 
     if culling < 1:
       raise errors.NothingToCullError
@@ -72,19 +70,19 @@ class Command(commands.Command):
     ) != 1:
       await plugin.model.database.update(
         _contextual,
-        banana=contextual.banana - culling,
-        monkey=contextual.monkey,
+        x=contextual.x - culling,
+        y=contextual.y,
         reputation=contextual.reputation,
         item=contextual.item,
       )
 
       description = f"""\
-        <@{_contextual}> попытался отобрать бананы у <@{_optional}>
+        <@{_contextual}> попытался отобрать {bunch} у <@{_optional}>
         и...
 
         ❌ Не получилось...
 
-        ```diff\n- 🍌 {_humanize(culling)} бананов```
+        ```diff\n- {emojis.x} {_humanize(culling)}```
       """
 
       embed = embeds.embed(
@@ -99,27 +97,27 @@ class Command(commands.Command):
 
     await plugin.model.database.update(
       _contextual,
-      banana=contextual.banana + culling,
-      monkey=contextual.monkey,
+      x=contextual.x + culling,
+      y=contextual.y,
       reputation=contextual.reputation,
       item=contextual.item,
     )
 
     await plugin.model.database.update(
       _optional,
-      banana=optional.banana - culling,
-      monkey=optional.monkey,
+      banana=optional.x - culling,
+      monkey=optional.y,
       reputation=optional.reputation,
       item=optional.item,
     )
 
     description = f"""
-      <@{_contextual}> попытался отобрать бананы у <@{_optional}>
+      <@{_contextual}> попытался отобрать {bunch} у <@{_optional}>
       и...
 
       ✅ Получилось!!!
 
-      ```diff\n+ 🍌 {_humanize(culling)} бананов```
+      ```diff\n+ {emojis.x} {_humanize(culling)}```
     """
 
     embed = embeds.embed(
