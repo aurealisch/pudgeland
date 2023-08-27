@@ -8,14 +8,15 @@ import msgspec
 Velocity = typing.TypeVar(
   'Velocity',
   float,
+  int,
 )
 
 
 class Bonus(msgspec.Struct):
   """."""
 
-  x: Velocity = 0.0
-  y: Velocity = 0.0
+  x: Velocity = 0
+  y: Velocity = 0
 
 
 class Item(msgspec.Struct):
