@@ -55,7 +55,7 @@ class Command(commands.Command):
     """
 
     if _item:
-      item = shops.shop[str(_item)]
+      item = shops.shop[_item]
 
       label = item.label
 

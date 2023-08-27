@@ -62,7 +62,7 @@ class Command(commands.Command):
         """."""
         await context.defer()
 
-        _item = text_select.values[0]
+        _item = int(text_select.values[0])
 
         item = shops.shop[_item]
 
@@ -83,7 +83,7 @@ class Command(commands.Command):
           x=x - price,
           y=contextual.y,
           reputation=contextual.reputation,
-          item=int(_item),
+          item=_item,
         )
 
         # fmt: off

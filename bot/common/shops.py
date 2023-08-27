@@ -5,11 +5,17 @@ import typing
 import msgspec
 
 
+Velocity = typing.TypeVar(
+  'Velocity',
+  float,
+)
+
+
 class Bonus(msgspec.Struct):
   """."""
 
-  x: float = 0.0
-  y: float = 0.0
+  x: Velocity = 0.0
+  y: Velocity = 0.0
 
 
 class Item(msgspec.Struct):
@@ -25,12 +31,33 @@ class Item(msgspec.Struct):
   bonus: Bonus
 
 
-with open(
-  './asset/json/shop/shops.json',
-  encoding='utf-8',
-) as stream:
-  buf = stream.read()
-
-type__ = typing.Mapping[str, Item]
-
-shop = msgspec.json.decode(buf, type=type__)
+shop = {
+  1: Item(
+    'Hook',
+    description='Выпускает Hook, который вместо очередного Shadow Fiend на центре притягивает +10% бананов!',
+    emoji='⛓',
+    price=500,
+    bonus=Bonus(x=0.1),
+  ),
+  2: Item(
+    'Топор Администратора',
+    description='Топор Администратора позволяет моментально полностью срубить дерево, что даёт +30% бананов!',
+    emoji='🪓',
+    price=1_360,
+    bonus=Bonus(x=0.3),
+  ),
+  3: Item(
+    'Модные Тапочки',
+    description='Модные Тапочки настолько удобные, что они дают +80% к сбору бананов обезьянами!',
+    emoji='🥿',
+    price=4_700,
+    bonus=Bonus(y=0.8),
+  ),
+  4: Item(
+    'Тропический Напиток',
+    description='Тропический Напиток настолько вкусный, что даёт +120% к сбору бананов обезьянами!',
+    emoji='🍹',
+    price=12_775,
+    bonus=Bonus(y=1.2),
+  ),
+}

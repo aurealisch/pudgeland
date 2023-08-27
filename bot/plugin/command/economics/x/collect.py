@@ -59,7 +59,7 @@ class Command(commands.Command):
     )
 
     if _item:
-      item = shops.shop.get(str(_item))
+      item = shops.shop.get(_item)
 
       bonus = item.bonus
 
@@ -77,7 +77,7 @@ class Command(commands.Command):
       )
 
       if _item:
-        item = shops.shop.get(str(_item))
+        item = shops.shop.get(_item)
 
         bonus = item.bonus
 
