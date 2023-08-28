@@ -11,8 +11,8 @@ datasource db {
 model User {
     id String @id @map("_id")
 
-    x Int @default(0)
-    y Int @default(0)
+    banana Int @default(0)
+    monkey Int @default(0)
 
     reputation Int @default(0)
 

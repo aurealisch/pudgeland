@@ -5,7 +5,6 @@ import crescent
 import hikari
 import miru
 
-from di.bot.common import commons
 from di.bot.common.abc.command import commands
 from di.bot.common.abc.view import views
 from di.bot.common.command.cooldown.hook import cooldowns
@@ -16,11 +15,7 @@ from di.bot.common.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
-y = commons.configuration.bunches.y
-
-name = y
-
-group = crescent.Group(name=name)
+group = crescent.Group('обезьяны')
 
 period = cooldowns.PeriodDTO(seconds=2.5)
 
@@ -48,9 +43,9 @@ class TameCommand(commands.CommandABC):
 
     contextual = await plugin.model.database.find_first(_contextual)
 
-    x = contextual.x
+    monkey = contextual.monkey
 
-    fed = (x + 1) * tame.price
+    fed = (monkey + 1) * tame.price
 
     style = hikari.ButtonStyle.SECONDARY
 
@@ -67,12 +62,12 @@ class TameCommand(commands.CommandABC):
       ) -> None:
         await context.defer()
 
-        x = contextual.x
+        banana = contextual.banana
 
-        if x < fed:
+        if banana < fed:
           raise errors.NotEnoughBananaError
 
-        x -= fed
+        banana -= fed
 
         if random.choice(
           range(
@@ -82,26 +77,24 @@ class TameCommand(commands.CommandABC):
          ) != 1:
           await plugin.model.database.update(
             _contextual,
-            x=x,
-            y=y,
+            banana=banana,
+            monkey=monkey,
             reputation=contextual.reputation,
             item=contextual.item,
           )
 
-          description = f"""\
-            <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
-            и...
+          await context.respond(
+            embed=embeds.embed(
+              'default',
+              context=context,
+              description=f"""\
+                <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
+                и...
 
-            ❌ Не получилось приручить...
-          """
-
-          embed = embeds.embed(
-            'default',
-            context=context,
-            description=description,
+                ❌ Не получилось приручить...
+              """,
+            )
           )
-
-          await context.respond(embed=embed)
 
           self.stop()
 
@@ -109,26 +102,24 @@ class TameCommand(commands.CommandABC):
 
         await plugin.model.database.update(
           _contextual,
-          x=x,
-          y=y + 1,
+          banana=banana,
+          monkey=monkey + 1,
           reputation=contextual.reputation,
           item=contextual.item,
         )
 
-        description = f"""\
-          <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
-          и...
+        await context.respond(
+          embed=embeds.embed(
+            'default',
+            context=context,
+            description=f"""\
+              <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
+              и...
 
-          ✅ Получилось приручить!!!
-        """
-
-        embed = embeds.embed(
-          'default',
-          context=context,
-          description=description,
+              ✅ Получилось приручить!!!
+            """,
+          )
         )
-
-        await context.respond(embed=embed)
 
         self.stop()
 
@@ -144,19 +135,13 @@ class TameCommand(commands.CommandABC):
       ) -> None:
         await context.defer()
 
-        description = 'Отменено'
-
-        embed = embeds.embed(
-          'default',
-          context=context,
-          description=description,
-        )
-
-        flags = hikari.MessageFlag.EPHEMERAL
-
         await context.respond(
-          embed=embed,
-          flags=flags,
+          embed=embeds.embed(
+            'default',
+            context=context,
+            description='Отменено',
+          ),
+          flags=hikari.MessageFlag.EPHEMERAL,
         )
 
         self.stop()
@@ -165,21 +150,17 @@ class TameCommand(commands.CommandABC):
 
     components = view
 
-    description = (
-      f'Чтобы попробовать приручить, потребуется скормить {emojis.x} `{_humanize(fed)}`'
-    )
-
-    embed = embeds.embed(
-      'default',
-      context=context,
-      description=description,
-    )
-
     message = await context.respond(
       ensure_message=True,
       ephemeral=True,
       components=components,
-      embed=embed,
+      embed=embeds.embed(
+        'default',
+        context=context,
+        description=f"""\
+          Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_humanize(fed)}`' бананов
+        """
+      ),
     )
 
     if message is not None:

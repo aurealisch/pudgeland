@@ -55,65 +55,54 @@ class PurchaseCommand(commands.CommandABC):
         text_select: miru.TextSelect,
         context: miru.ViewContext,
       ) -> None:
-        emojis = plugin.model.configuration.emojis
-
         await context.defer()
 
         _item = int(text_select.values[0])
 
-        item = shops.shop[_item]
+        item = shops.shop.get(_item)
 
-        label = item.label
         price = item.price
 
         _contextual = str(context.user.id)
 
         contextual = await plugin.model.database.find_first(_contextual)
 
-        x = contextual.x
+        banana = contextual.banana
 
-        if x < price:
+        if banana < price:
           raise errors.NotEnoughBananaError
 
         await plugin.model.database.update(
           _contextual,
-          x=x - price,
-          y=contextual.y,
+          banana=banana - price,
+          monkey=contextual.monkey,
           reputation=contextual.reputation,
           item=_item,
         )
 
-        # fmt: off
-        description = (
-          f'<@{_contextual}> купил `{label}` за {emojis.x} `{_humanize(price)}`'
+        await context.respond(
+          embed=embeds.embed(
+            'default',
+            context=context,
+            description=f"""\
+              <@{_contextual}> купил `{item.label}` за 🍌 `{_humanize(price)}` бананов
+            """,
+          )
         )
-        # fmt: on
-
-        embed = embeds.embed(
-          'default',
-          context=context,
-          description=description,
-        )
-
-        await context.respond(embed=embed)
 
     view = View()
 
     components = view
 
-    description = '✨ Выберите предмет для покупки'
-
-    embed = embeds.embed(
-      'default',
-      context=context,
-      description=description,
-    )
-
     message = await context.respond(
       ensure_message=True,
       ephemeral=True,
       components=components,
-      embed=embed,
+      embed=embeds.embed(
+        'default',
+        context=context,
+        description='✨ Выберите предмет для покупки',
+      ),
     )
 
     if message is not None:

@@ -2,18 +2,18 @@ import typing
 
 import hikari
 
-from di.bot.common.database import databases
-
-from .. import commons
+from ..database import databases
+from ..dto.configuration import configurations
 
 
 class Model:
   def __init__(
     self: typing.Self,
     database: databases.Database,
+    configuration: configurations.ConfigurationDTO
   ) -> None:
-    self.configuration = commons.configuration
     self.database = database
+    self.configuration = configuration
 
   async def on_started_event(
     self: typing.Self,

@@ -29,38 +29,24 @@ class ProfileCommand(commands.CommandABC):
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
-    emojis = plugin.model.configuration.emojis
-    bunches = plugin.model.configuration.bunches
-
-    _contextual = str(context.user.id)
-
-    contextual = await plugin.model.database.find_first(_contextual)
-
-    x = contextual.x
-    y = contextual.y
-
-    reputation = contextual.reputation
+    contextual = await plugin.model.database.find_first(str(context.user.id))
 
     _item = contextual.item
 
     description = f"""\
-      {emojis.x} {bunches.x.capitalize()}: `{_humanize(x)}`
-      {emojis.y} {bunches.y.capitalize()}: `{_humanize(y)}`
+      🍌 Бананы: `{_humanize(contextual.banana)}`
+      🐒 Обезьяны: `{_humanize(contextual.monkey)}`
 
-      📊 Репутация: `{_humanize(reputation)}`
+      📊 Репутация: `{_humanize(contextual.reputation)}`
     """
 
     if _item:
-      item = shops.shop[_item]
+      description += f'\n✨ Предмет: `{shops.shop.get(_item).label}`'
 
-      label = item.label
-
-      description += f'\n✨ Предмет: `{label}`'
-
-    embed = embeds.embed(
-      'default',
-      context=context,
-      description=description,
+    await context.respond(
+      embed=embeds.embed(
+        'default',
+        context=context,
+        description=description,
+      )
     )
-
-    await context.respond(embed=embed)

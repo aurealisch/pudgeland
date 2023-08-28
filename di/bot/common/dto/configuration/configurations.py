@@ -20,8 +20,8 @@ class RangeDTO:
 
 @dataclasses.dataclass
 class CollectDTO:
-  xing: RangeDTO
-  ying: RangeDTO
+  bananing: RangeDTO
+  monkeying: RangeDTO
 
 
 @dataclasses.dataclass
@@ -44,18 +44,6 @@ class PluginsDTO:
 
 
 @dataclasses.dataclass
-class BunchesDTO:
-  x: str
-  y: str
-
-
-@dataclasses.dataclass
-class EmojisDTO:
-  x: str
-  y: str
-
-
-@dataclasses.dataclass
 class ActivityDTO:
   name: str
 
@@ -65,5 +53,3 @@ class ConfigurationDTO:
   activity: ActivityDTO
   leaders: LeadersDTO
   plugins: PluginsDTO
-  bunches: BunchesDTO
-  emojis: EmojisDTO

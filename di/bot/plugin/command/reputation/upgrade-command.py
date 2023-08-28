@@ -39,27 +39,21 @@ class UpgradeCommand(commands.CommandABC):
     if contextual != optional:
       user = await plugin.model.database.find_first(optional)
 
-      reputation = user.reputation
-
-      reputation += 1
-
       await plugin.model.database.update(
         optional,
-        x=user.x,
-        y=user.y,
-        reputation=reputation,
+        banana=user.banana,
+        monkey=user.monkey,
+        reputation=user.reputation + 1,
         item=user.item,
       )
 
-      description = f'<@{contextual}> повысил репутацию <@{optional}>'
-
-      embed = embeds.embed(
-        'default',
-        context=context,
-        description=description,
+      await context.respond(
+        embed=embeds.embed(
+          'default',
+          context=context,
+          description=f'<@{contextual}> повысил репутацию <@{optional}>',
+        )
       )
-
-      await context.respond(embed=embed)
 
       return
 

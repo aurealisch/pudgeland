@@ -49,15 +49,15 @@ class Database:
     self: typing.Self,
     id__: str,
     *,
-    x: typing.Union[_prisma.types.AtomicIntInput, int],
-    y: typing.Union[_prisma.types.AtomicIntInput, int],
+    banana: typing.Union[_prisma.types.AtomicIntInput, int],
+    monkey: typing.Union[_prisma.types.AtomicIntInput, int],
     reputation: typing.Union[_prisma.types.AtomicIntInput, int],
     item: typing.Union[_prisma.types.AtomicIntInput, int]
   ) -> typing.Optional[_prisma.models.User]:
     return await self.prisma.user.update(
       _prisma.types.UserUpdateInput(
-        x=x,
-        y=y,
+        banana=banana,
+        monkey=monkey,
         reputation=reputation,
         item=item,
       ),

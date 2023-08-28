@@ -30,13 +30,10 @@ class ReputationCommand(commands.CommandABC):
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
-    take = plugin.model.configuration.leaders.take
-    sort_order = plugin.model.configuration.leaders.sort.order
-
     users = await plugin.model.database.find_many(
-      take,
+      plugin.model.configuration.leaders.take,
       user_keys='reputation',
-      sort_order=sort_order,
+      sort_order=plugin.model.configuration.leaders.sort.order,
     )
 
     embed = embeds.embed(
@@ -46,23 +43,17 @@ class ReputationCommand(commands.CommandABC):
 
     for index, user in enumerate(users):
       name = string.whitespace
-      value = string.whitespace
 
       position = index + 1
-
-      id__ = user.id
-      reputation = user.reputation
 
       if position in _emojis.emoji:
         name += _emojis.emoji[position]
 
       name += f'#{position}'
 
-      value += f'<@{id__}>\nРепутация: `{_humanize(reputation)}`'
-
       embed.add_field(
         name=name,
-        value=value,
+        value=f'<@{user.id}>\nРепутация: `{_humanize(user.reputation)}`',
       )
 
     await context.respond(embed=embed)

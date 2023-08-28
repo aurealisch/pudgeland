@@ -35,19 +35,18 @@ class CollectCommand(commands.CommandABC):
 
     contextual = await plugin.model.database.find_first(_contextual)
 
-    x = contextual.x
-    y = contextual.y
+    banana = contextual.banana
+    monkey = contextual.monkey
 
     _item = contextual.item
 
     collect = plugin.model.configuration.plugins.collect
-    emojis = plugin.model.configuration.emojis
 
     total = 0
 
-    xing = random.randint(
-      collect.xing.a,
-      b=collect.xing.b,
+    bananing = random.randint(
+      collect.bananing.a,
+      b=collect.bananing.b,
     )
 
     if _item:
@@ -55,17 +54,17 @@ class CollectCommand(commands.CommandABC):
 
       bonus = item.bonus
 
-      if bonus.x:
-        xing += int(round(xing * bonus.x))
+      if bonus.banana:
+        bananing += int(round(bananing * bonus.banana))
 
-    total += xing
+    total += bananing
 
-    description = f'<@{_contextual}> собрал {emojis.x} `{_humanize(xing)}`'
+    description = f'<@{_contextual}> собрал 🍌 `{_humanize(bananing)}` бананов'
 
-    if y:
-      ying = y * random.randint(
-        collect.ying.a,
-        b=collect.ying.b,
+    if monkey:
+      monkeying = monkey * random.randint(
+        collect.monkeying.a,
+        b=collect.monkeying.b,
       )
 
       if _item:
@@ -73,31 +72,31 @@ class CollectCommand(commands.CommandABC):
 
         bonus = item.bonus
 
-        if bonus.y:
-          ying += int(round(ying * bonus.y))
+        if bonus.monkey:
+          monkeying += int(round(monkeying * bonus.monkey))
 
-      total += ying
+      total += monkeying
 
       # fmt: off
       description += (
-        f'\n+ {emojis.x} `{_humanize(ying)}` от {emojis.y} `{_humanize(y)}`'
+        f'\n+ 🍌 `{_humanize(monkeying)}` бананов от 🐒 `{_humanize(monkey)}` обезьян'
       )
       # fmt: on
 
-      description += f'\n\n✨ Всего: {emojis.x} `{_humanize(total)}`'
+      description += f'\n\n🔁 Всего: 🍌 `{_humanize(total)}` бананов'
 
     await plugin.model.database.update(
       _contextual,
-      x=x + total,
-      y=y,
+      banana=banana + total,
+      monkey=monkey,
       reputation=contextual.reputation,
       item=contextual.item,
     )
 
-    embed = embeds.embed(
-      'default',
-      context=context,
-      description=description,
+    await context.respond(
+      embed=embeds.embed(
+        'default',
+        context=context,
+        description=description,
+      )
     )
-
-    await context.respond(embed=embed)

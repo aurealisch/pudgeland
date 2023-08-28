@@ -3,7 +3,6 @@ import typing
 
 import crescent
 
-from di.bot.common import commons
 from di.bot.common.abc.command import commands
 from di.bot.common.command.cooldown.hook import cooldowns
 from di.bot.common.command.utility import utilities
@@ -13,10 +12,6 @@ from di.bot.common.utility.embed import embeds
 from . import _emojis, _groups, _periods
 
 plugin = plugins.Plugin()
-
-x = commons.configuration.bunches.x
-
-name = x
 
 _humanize = utilities.humanize
 
@@ -29,19 +24,16 @@ _humanize = utilities.humanize
     period=_periods.period
   )
 )
-@crescent.command(name=name)
-class XCommand(commands.CommandABC):
+@crescent.command(name='бананы')
+class BananasCommand(commands.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
-    take = plugin.model.configuration.leaders.take
-    sort_order = plugin.model.configuration.leaders.sort.order
-
     users = await plugin.model.database.find_many(
-      take,
-      user_keys='x',
-      sort_order=sort_order,
+      plugin.model.configuration.leaders.take,
+      user_keys='banana',
+      sort_order=plugin.model.configuration.leaders.sort.order,
     )
 
     embed = embeds.embed(
@@ -51,23 +43,17 @@ class XCommand(commands.CommandABC):
 
     for index, user in enumerate(users):
       _name = string.whitespace
-      value = string.whitespace
 
       position = index + 1
-
-      id__ = user.id
-      x = user.x
 
       if position in _emojis.emoji:
         _name += _emojis.emoji[position]
 
       _name += f'#{position}'
 
-      value += f'<@{id__}>\n{name.capitalize()} `{_humanize(x)}`'
-
       embed.add_field(
         name=_name,
-        value=value,
+        value=f'<@{user.id}>\nБананы `{_humanize(user.banana)}`',
       )
 
     await context.respond(embed=embed)
