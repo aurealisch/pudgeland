@@ -5,8 +5,15 @@ import hikari
 import miru
 
 from di.bot.common import shops
-from di.bot.common.abc import commands, views
-from di.bot.common.command import cooldowns, errors, utilities
+from di.bot.common.abc import (
+  commands,
+  views,
+)
+from di.bot.common.command import (
+  cooldowns,
+  errors,
+  utilities,
+)
 from di.bot.common.type.alias.plugin import plugins
 from di.bot.common.utility.embed import embeds
 

@@ -5,11 +5,18 @@ import crescent
 import hikari
 
 from di.bot.common.abc import commands
-from di.bot.common.command import cooldowns, errors, utilities
+from di.bot.common.command import (
+  cooldowns,
+  errors,
+  utilities,
+)
 from di.bot.common.type.alias.plugin import plugins
 from di.bot.common.utility.embed import embeds
 
-from . import _groups, _periods
+from . import (
+  _groups,
+  _periods,
+)
 
 plugin = plugins.Plugin()
 
