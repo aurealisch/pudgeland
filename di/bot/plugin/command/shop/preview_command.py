@@ -4,7 +4,7 @@ import typing
 import crescent
 
 from di.bot.common import shops
-from di.bot.common.abc import commands
+from di.bot.common.abc import command_abc
 from di.bot.common.command import cooldowns, utilities
 from di.bot.common.type.alias.plugin import plugins
 from di.bot.common.utility.embed import embeds
@@ -27,7 +27,7 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='просмотр')
-class PreviewCommand(commands.CommandABC):
+class PreviewCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,

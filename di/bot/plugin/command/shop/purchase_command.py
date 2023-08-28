@@ -6,8 +6,8 @@ import miru
 
 from di.bot.common import shops
 from di.bot.common.abc import (
-  commands,
-  views,
+  command_abc,
+  view_abc,
 )
 from di.bot.common.command import (
   cooldowns,
@@ -35,12 +35,12 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='покупка')
-class PurchaseCommand(commands.CommandABC):
+class PurchaseCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
-    class View(views.ViewABC):
+    class View(view_abc.ViewABC):
       @miru.text_select(
         options=[
           hikari.SelectMenuOption(

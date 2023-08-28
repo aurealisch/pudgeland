@@ -4,7 +4,7 @@ import typing
 import crescent
 import hikari
 
-from di.bot.common.abc import commands
+from di.bot.common.abc import command_abc
 from di.bot.common.command import (
   cooldowns,
   errors,
@@ -32,7 +32,7 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='отобрать')
-class CullCommand(commands.CommandABC):
+class CullCommand(command_abc.CommandABC):
   user = crescent.option(
     hikari.User,
     name='пользователь',

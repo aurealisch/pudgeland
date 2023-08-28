@@ -6,8 +6,8 @@ import hikari
 import miru
 
 from di.bot.common.abc import (
-  commands,
-  views,
+  command_abc,
+  view_abc,
 )
 from di.bot.common.command import (
   cooldowns,
@@ -35,7 +35,7 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='приручать')
-class TameCommand(commands.CommandABC):
+class TameCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,
@@ -52,7 +52,7 @@ class TameCommand(commands.CommandABC):
 
     style = hikari.ButtonStyle.SECONDARY
 
-    class View(views.ViewABC):
+    class View(view_abc.ViewABC):
       @miru.button(
         label='ОК',
         style=style,

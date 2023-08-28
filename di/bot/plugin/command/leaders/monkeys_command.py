@@ -3,7 +3,7 @@ import typing
 
 import crescent
 
-from di.bot.common.abc import commands
+from di.bot.common.abc import command_abc
 from di.bot.common.command import (
   cooldowns,
   utilities,
@@ -31,7 +31,7 @@ _humanize = utilities.humanize
   )
 )
 @crescent.command(name='обезьяны')
-class MonkeysCommand(commands.CommandABC):
+class MonkeysCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,

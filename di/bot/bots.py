@@ -18,15 +18,15 @@ class Bot:
     self.configuration = self.model.configuration
     self.database = self.model.database
 
-    # intents = (
-    #   hikari.Intents.MESSAGE_CONTENT
-    #   | hikari.Intents.GUILDS
-    #   | hikari.Intents.GUILD_MESSAGES
-    # )
+    intents = (
+      hikari.Intents.MESSAGE_CONTENT
+      | hikari.Intents.GUILDS
+      | hikari.Intents.GUILD_MESSAGES
+    )
 
     self.gateway_bot = hikari.GatewayBot(
       token,
-    #   intents=intents,
+      intents=intents,
     )
 
     miru.install(self.gateway_bot)

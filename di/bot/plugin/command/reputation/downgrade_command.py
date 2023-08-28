@@ -3,7 +3,7 @@ import typing
 import crescent
 import hikari
 
-from di.bot.common.abc import commands
+from di.bot.common.abc import command_abc
 from di.bot.common.command import (
   cooldowns,
   errors,
@@ -28,7 +28,7 @@ plugin = plugins.Plugin()
   )
 )
 @crescent.command(name='понизить')
-class DowngradeCommand(commands.CommandABC):
+class DowngradeCommand(command_abc.CommandABC):
   user = crescent.option(
     hikari.User,
     name='пользователь',
