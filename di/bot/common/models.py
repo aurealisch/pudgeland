@@ -3,14 +3,14 @@ import typing
 import hikari
 
 from . import databases
-from .dto.configuration import configurations
+from . import configurations
 
 
 class Model:
   def __init__(
     self: typing.Self,
     database: databases.Database,
-    configuration: configurations.ConfigurationDTO
+    configuration: configurations.Configuration
   ) -> None:
     self.database = database
     self.configuration = configuration

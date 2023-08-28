@@ -1,3 +1,3 @@
 from di.bot.common.command import cooldowns
 
-period = cooldowns.PeriodDTO(seconds=10)
+period = cooldowns.Period(seconds=10)

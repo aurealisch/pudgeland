@@ -10,7 +10,7 @@ from di.bot.common.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
-period = cooldowns.PeriodDTO(seconds=2.5)
+period = cooldowns.Period(seconds=2.5)
 
 _humanize = utilities.humanize
 

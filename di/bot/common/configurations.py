@@ -2,54 +2,54 @@ import dataclasses
 
 
 @dataclasses.dataclass
-class SortDTO:
+class Sort:
   order: str
 
 
 @dataclasses.dataclass
-class LeadersDTO:
-  sort: SortDTO
+class Leaders:
+  sort: Sort
   take: int
 
 
 @dataclasses.dataclass
-class RangeDTO:
+class Range:
   a: int
   b: int
 
 
 @dataclasses.dataclass
-class CollectDTO:
-  bananing: RangeDTO
-  monkeying: RangeDTO
+class Collect:
+  bananing: Range
+  monkeying: Range
 
 
 @dataclasses.dataclass
-class CullDTO:
+class Cull:
   edge: int
   fraction: float
 
 
 @dataclasses.dataclass
-class TameDTO:
+class Tame:
   edge: int
   price: int
 
 
 @dataclasses.dataclass
-class PluginsDTO:
-  collect: CollectDTO
-  cull: CullDTO
-  tame: TameDTO
+class Plugins:
+  collect: Collect
+  cull: Cull
+  tame: Tame
 
 
 @dataclasses.dataclass
-class ActivityDTO:
+class Activity:
   name: str
 
 
 @dataclasses.dataclass
-class ConfigurationDTO:
-  activity: ActivityDTO
-  leaders: LeadersDTO
-  plugins: PluginsDTO
+class Configuration:
+  activity: Activity
+  leaders: Leaders
+  plugins: Plugins

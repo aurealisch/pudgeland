@@ -13,7 +13,7 @@ from . import _groups
 
 plugin = plugins.Plugin()
 
-period = cooldowns.PeriodDTO(seconds=2.5)
+period = cooldowns.Period(seconds=2.5)
 
 _humanize = utilities.humanize
 

@@ -8,7 +8,7 @@ _KEY = typing.TypeVar('_KEY')
 
 
 @dataclasses.dataclass
-class PeriodDTO:
+class Period:
   weeks: float = 0.0
   days: float = 0.0
   hours: float = 0.0
@@ -158,7 +158,7 @@ class Cooldown(typing.Generic[_KEY]):
 
 def cooldown(
   capacity: float,
-  period: PeriodDTO,
+  period: Period,
 ) -> typing.Callable[
   [crescent.Context], typing.Awaitable[typing.Optional[crescent.HookResult]]
 ]:
