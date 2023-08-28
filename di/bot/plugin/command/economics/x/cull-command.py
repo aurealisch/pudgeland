@@ -15,8 +15,6 @@ from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(hours=4)
-
 _humanize = utilities.humanize
 
 
