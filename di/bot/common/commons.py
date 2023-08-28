@@ -1,4 +1,4 @@
-from .configuration.dto import configurations
+from .dto.configuration import configurations
 
 configuration = configurations.ConfigurationDTO(
   configurations.ActivityDTO('гг сервер умер'),

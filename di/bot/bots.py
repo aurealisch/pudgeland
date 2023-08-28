@@ -3,15 +3,15 @@ import typing
 import crescent
 import hikari
 
-from .common.model.models import Model
-from .environment.dto.environments import EnvironmentDTO
+from .common.model import models
+from .dto.environment import environments
 
 
 class Bot:
   def __init__(
     self: typing.Self,
-    environment: EnvironmentDTO,
-    model: Model,
+    environment: environments.EnvironmentDTO,
+    model: models.Model,
   ) -> None:
     token = environment.token
 

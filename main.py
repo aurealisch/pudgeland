@@ -1,20 +1,20 @@
 import os
 
 import dotenv
-import prisma as _prisma
 
-from di.bot.bots import Bot
-from di.bot.common.databases import Database
-from di.bot.environment.dto.environments import EnvironmentDTO
-from di.bot.common.model.models import Model
+import prisma as _prisma
+from di.bot import bots
+from di.bot.common.database import databases
+from di.bot.common.model import models
+from di.bot.dto.environment import environments
 
 dotenv.load_dotenv()
 
 token = os.environ.get('TOKEN')
 
-bot = Bot(
-  EnvironmentDTO(token),
-  model=Model(Database(_prisma.Prisma())),
+bot = bots.Bot(
+  environments.EnvironmentDTO(token),
+  model=models.Model(databases.Database(_prisma.Prisma())),
 )
 
 _prisma.register(bot.database.prisma)

@@ -3,7 +3,7 @@ import typing
 
 import crescent
 
-from di.bot.common.handler.error.handlers import ErrorHandler
+from di.bot.common.error.handler import handlers
 
 
 class CommandABC(abc.ABC):
@@ -21,7 +21,7 @@ class CommandABC(abc.ABC):
     try:
       await self.run(context)
     except Exception as error:
-      await ErrorHandler.handle(
+      await handlers.ErrorHandler.handle(
         error,
         context=context,
       )

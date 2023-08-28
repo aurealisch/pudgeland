@@ -4,7 +4,7 @@ import typing
 import crescent
 import miru
 
-from di.bot.common.embed.utility import embeds
+from di.bot.common.utility.embed import embeds
 
 
 class ErrorHandler:

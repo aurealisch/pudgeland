@@ -2,7 +2,7 @@ import typing
 
 import hikari
 
-from di.bot.common import databases
+from di.bot.common.database import databases
 
 from .. import commons
 

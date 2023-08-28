@@ -4,13 +4,14 @@ import crescent
 import hikari
 import miru
 
-from di.bot.common import shops
-from di.bot.common.command import errors, utilities
-from di.bot.common.command.abc import commands
+from di.bot.common.abc.command import commands
+from di.bot.common.abc.view import views
 from di.bot.common.command.cooldown.hook import cooldowns
-from di.bot.common.embed.utility import embeds
-from di.bot.common.plugin.type.alias import plugins
-from di.bot.common.view.abc import views
+from di.bot.common.command.error import errors
+from di.bot.common.command.utility import utilities
+from di.bot.common.shop import shops
+from di.bot.common.type.alias.plugin import plugins
+from di.bot.common.utility.embed import embeds
 
 from . import _groups
 
