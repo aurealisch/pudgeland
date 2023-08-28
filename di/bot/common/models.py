@@ -2,8 +2,8 @@ import typing
 
 import hikari
 
-from ..database import databases
-from ..dto.configuration import configurations
+from . import databases
+from .dto.configuration import configurations
 
 
 class Model:

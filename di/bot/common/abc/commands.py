@@ -3,7 +3,7 @@ import typing
 
 import crescent
 
-from di.bot.common.error.handler import handlers
+from ..error.handler import handlers
 
 
 class CommandABC(abc.ABC):

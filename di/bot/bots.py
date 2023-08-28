@@ -4,18 +4,15 @@ import crescent
 import hikari
 import miru
 
-from .common.model import models
-from .dto.environment import environments
+from .common import models
 
 
 class Bot:
   def __init__(
     self: typing.Self,
-    environment: environments.EnvironmentDTO,
+    token: str,
     model: models.Model,
   ) -> None:
-    token = environment.token
-
     self.model = model
 
     self.configuration = self.model.configuration
