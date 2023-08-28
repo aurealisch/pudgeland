@@ -2,6 +2,7 @@ import typing
 
 import crescent
 import hikari
+import miru
 
 from .common.model import models
 from .dto.environment import environments
@@ -30,6 +31,8 @@ class Bot:
       token,
     #   intents=intents,
     )
+
+    miru.install(self.gateway_bot)
 
     self.gateway_bot.subscribe(
       hikari.StartedEvent,

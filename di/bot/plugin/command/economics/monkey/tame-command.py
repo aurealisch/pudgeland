@@ -37,7 +37,6 @@ class TameCommand(commands.CommandABC):
     context: crescent.Context,
   ) -> None:
     tame = plugin.model.configuration.plugins.tame
-    emojis = plugin.model.configuration.emojis
 
     _contextual = str(context.user.id)
 
@@ -88,7 +87,7 @@ class TameCommand(commands.CommandABC):
               'default',
               context=context,
               description=f"""\
-                <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
+                <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
                 и...
 
                 ❌ Не получилось приручить...
@@ -113,7 +112,7 @@ class TameCommand(commands.CommandABC):
             'default',
             context=context,
             description=f"""\
-              <@{_contextual}> скормил {emojis.x} `{_humanize(fed)}`
+              <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
               и...
 
               ✅ Получилось приручить!!!
