@@ -3,8 +3,12 @@ import os
 import dotenv
 
 import prisma as _prisma
-from di.bot import bots
-from di.bot.common import configurations, databases, models
+from bot import bots
+from bot.common import (
+  configurations,
+  databases,
+  models,
+)
 
 dotenv.load_dotenv()
 
