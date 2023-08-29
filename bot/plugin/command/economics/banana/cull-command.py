@@ -49,12 +49,10 @@ class CullCommand(command_abc.CommandABC):
     contextual = await plugin.model.database.find_first(_contextual)
 
     cull = plugin.model.configuration.plugins.cull
-    bunch = plugin.model.configuration.economics.x.bunch
-    emojis = plugin.model.configuration.emojis
 
     fraction = cull.fraction
 
-    culling = int(round(optional.x * fraction))
+    culling = int(round(optional.banana * fraction))
 
     if culling < 1:
       raise errors.NothingToCullError
@@ -67,35 +65,33 @@ class CullCommand(command_abc.CommandABC):
     ) != 1:
       await plugin.model.database.update(
         _contextual,
-        x=contextual.x - culling,
-        y=contextual.y,
+        banana=contextual.banana - culling,
+        monkey=contextual.monkey,
         reputation=contextual.reputation,
         item=contextual.item,
       )
 
-      description = f"""\
-        <@{_contextual}> попытался отобрать {bunch} у <@{_optional}>
-        и...
+      await context.respond(
+        embed=embeds.embed(
+          'default',
+          context=context,
+          description=f"""\
+            <@{_contextual}> попытался отобрать бананы у <@{_optional}>
+            и...
 
-        ❌ Не получилось...
+            ❌ Не получилось...
 
-        ```diff\n- {emojis.x} {_humanize(culling)}```
-      """
-
-      embed = embeds.embed(
-        'default',
-        context=context,
-        description=description,
+            ```diff\n- 🍌 {_humanize(culling)} бананов```
+          """
+        )
       )
-
-      await context.respond(embed=embed)
 
       return
 
     await plugin.model.database.update(
       _contextual,
-      x=contextual.x + culling,
-      y=contextual.y,
+      banana=contextual.banana + culling,
+      monkey=contextual.monkey,
       reputation=contextual.reputation,
       item=contextual.item,
     )
@@ -108,19 +104,17 @@ class CullCommand(command_abc.CommandABC):
       item=optional.item,
     )
 
-    description = f"""
-      <@{_contextual}> попытался отобрать {bunch} у <@{_optional}>
-      и...
+    await context.respond(
+      embed=embeds.embed(
+        'default',
+        context=context,
+        description=f"""\
+          <@{_contextual}> попытался отобрать бананы у <@{_optional}>
+          и...
 
-      ✅ Получилось!!!
+          ✅ Получилось!!!
 
-      ```diff\n+ {emojis.x} {_humanize(culling)}```
-    """
-
-    embed = embeds.embed(
-      'default',
-      context=context,
-      description=description,
+          ```diff\n+ 🍌 {_humanize(culling)} бананов```
+        """
+      )
     )
-
-    await context.respond(embed=embed)
