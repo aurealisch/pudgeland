@@ -50,7 +50,7 @@ bot = bots.Bot(
         cull=configurations.Cull(4, fraction=0.4),
         tame=configurations.Tame(4, price=250)
       ),
-    )
+    ),
   ),
 )
 

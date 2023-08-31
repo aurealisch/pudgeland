@@ -59,7 +59,7 @@ class CullCommand(command_abc.CommandABC):
 
     fraction = cull.fraction
 
-    culling = round((optional.berry / 4) * fraction)
+    culling = round((optional.partial.berry / 4) * fraction)
 
     if culling < 1:
       raise errors.NothingToCullError
