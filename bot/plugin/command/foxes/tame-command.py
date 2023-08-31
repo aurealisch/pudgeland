@@ -1,4 +1,5 @@
 import random
+import math
 import typing
 
 import crescent
@@ -15,13 +16,17 @@ from bot.common.command import (
   utilities,
 )
 from bot.common.type.alias.plugin import plugins
+from bot.common.utility.constant.emoji import emojis
 from bot.common.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
-group = crescent.Group('обезьяны')
+group = crescent.Group('лисы')
 
-period = cooldowns.Period(seconds=2.5)
+period = cooldowns.Period(
+  seconds=2,
+  milliseconds=500,
+)
 
 _humanize = utilities.humanize
 
@@ -31,26 +36,32 @@ _humanize = utilities.humanize
 @crescent.hook(
   cooldowns.cooldown(
     1,
-    period=period
-  )
+    period=period,
+  ),
 )
-@crescent.command(name='приручать')
+@crescent.command(
+  name='приручить',
+  description='Приручить лису',
+)
 class TameCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
+    await context.defer(ephemeral=True)
+
     tame = plugin.model.configuration.plugins.tame
 
     _contextual = str(context.user.id)
 
-    contextual = await plugin.model.database.find_first(_contextual)
+    contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-    monkey = contextual.monkey
+    fox = contextual.partial.fox
 
-    fed = (monkey + 1) * tame.price
+    fed = round((fox + 1) * math.e * tame.price)
 
     style = hikari.ButtonStyle.SECONDARY
+
 
     class View(view_abc.ViewABC):
       @miru.button(
@@ -65,12 +76,12 @@ class TameCommand(command_abc.CommandABC):
       ) -> None:
         await context.defer()
 
-        banana = contextual.banana
+        berry = contextual.partial.berry
 
-        if banana < fed:
-          raise errors.NotEnoughBananaError
+        if berry < fed:
+          raise errors.NotEnoughBerriesError
 
-        banana -= fed
+        await contextual.berry.remove(fed)
 
         if random.choice(
           range(
@@ -78,50 +89,36 @@ class TameCommand(command_abc.CommandABC):
             tame.edge,
           )
          ) != 1:
-          await plugin.model.database.update(
-            _contextual,
-            banana=banana,
-            monkey=monkey,
-            reputation=contextual.reputation,
-            item=contextual.item,
-          )
-
           await context.respond(
             embed=embeds.embed(
               'default',
               context=context,
               description=f"""\
-                <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
+                <@{_contextual}> скормил {emojis.BERRY} `{_humanize(fed)}` ягод
                 и...
 
                 ❌ Не получилось приручить...
               """,
-            )
+            ),
           )
 
           self.stop()
 
           return
 
-        await plugin.model.database.update(
-          _contextual,
-          banana=banana,
-          monkey=monkey + 1,
-          reputation=contextual.reputation,
-          item=contextual.item,
-        )
+        await contextual.fox.add(1)
 
         await context.respond(
           embed=embeds.embed(
             'default',
             context=context,
             description=f"""\
-              <@{_contextual}> скормил 🍌 `{_humanize(fed)}` бананов
+              <@{_contextual}> скормил {emojis.BERRY} `{_humanize(fed)}` ягод
               и...
 
               ✅ Получилось приручить!!!
             """,
-          )
+          ),
         )
 
         self.stop()
@@ -149,6 +146,7 @@ class TameCommand(command_abc.CommandABC):
 
         self.stop()
 
+
     view = View()
 
     components = view
@@ -161,8 +159,8 @@ class TameCommand(command_abc.CommandABC):
         'default',
         context=context,
         description=f"""\
-          Чтобы попробовать приручить обезьяну, потребуется скормить 🍌 `{_humanize(fed)}`' бананов
-        """
+          Чтобы попробовать приручить обезьяну, потребуется скормить {emojis.BERRY} `{_humanize(fed)}` ягод
+        """,
       ),
     )
 

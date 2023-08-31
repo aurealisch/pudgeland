@@ -18,7 +18,7 @@ colors = {
 
 
 def embed(
-  mode: Mode,
+  mode: typing.Literal['default', 'error'],
   context: typing.Union[crescent.Context, miru.context.view.ViewContext],
   title: typing.Optional[str] = None,
   description: typing.Optional[str] = None,

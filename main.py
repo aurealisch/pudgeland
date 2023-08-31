@@ -3,12 +3,15 @@ import os
 import dotenv
 
 import prisma as _prisma
-from bot import bots
+from bot import (
+  bots,
+  economics,
+)
 from bot.common import (
   configurations,
-  databases,
   models,
 )
+from bot.common.utility.constant.emoji import emojis
 
 dotenv.load_dotenv()
 
@@ -17,7 +20,22 @@ token = os.environ.get('TOKEN')
 bot = bots.Bot(
   token,
   model=models.Model(
-    databases.Database(_prisma.Prisma()),
+    economics.Economics(
+      economics.Configuration([economics.Event(
+        'Осень',
+        description=f"""\
+          Я календарь переверну - и снова третье сентября...
+
+          {emojis.BERRY} Множитель сбора ягод: `2.5x`
+          {emojis.FOX} Множитель сбора ягод лисами: `1.25x`
+        """,
+        buff=economics.Buff(
+          2.5,
+          fox=1.25,
+        ),
+      )]),
+      prisma=_prisma.Prisma()
+    ),
     configuration=configurations.Configuration(
       configurations.Activity('гг сервер умер'),
       leaders=configurations.Leaders(
@@ -27,15 +45,15 @@ bot = bots.Bot(
       plugins=configurations.Plugins(
         configurations.Collect(
           configurations.Range(75, b=200),
-          monkeying=configurations.Range(50, b=135)
+          foxying=configurations.Range(50, b=135)
         ),
         cull=configurations.Cull(4, fraction=0.4),
-        tame=configurations.Tame(4, price=500)
+        tame=configurations.Tame(4, price=250)
       ),
     )
   ),
 )
 
-_prisma.register(bot.database.prisma)
+_prisma.register(bot.economics.prisma)
 
 bot.run()

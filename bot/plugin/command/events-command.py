@@ -1,3 +1,4 @@
+import string
 import typing
 
 import crescent
@@ -30,29 +31,25 @@ _ = utilities.humanize
   ),
 )
 @crescent.command(
-  name='профиль',
-  description='Профиль',
+  name='события',
+  description='События',
 )
-class ProfileCommand(command_abc.CommandABC):
+class EventsCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
     await context.defer(ephemeral=True)
 
-    contextual = await plugin.model.economics.find_first_or_create(str(context.user.id))
+    description = string.whitespace
 
-    _item = contextual.partial.item
+    events = plugin.model.economics.configuration.events
 
-    description = f"""\
-      {emojis.BERRY} Ягоды: `{_(contextual.partial.berry)}`
-      {emojis.FOX} Лисы: `{_(contextual.partial.fox)}`
-
-      📊 Репутация: `{_(contextual.partial.reputation)}`
-    """
-
-    if _item:
-      description += f'\n✨ Предмет: `{shops.shop.get(_item).label}`'
+    for event in events:
+      description += '\n'.join([
+        f'# {event.title}',
+        f'> {event.description}',
+      ])
 
     await context.respond(
       ephemeral=True,

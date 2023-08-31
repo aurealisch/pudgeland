@@ -19,7 +19,7 @@ from . import (
 
 plugin = plugins.Plugin()
 
-_humanize = utilities.humanize
+_ = utilities.humanize
 
 
 @_groups.group.child
@@ -27,8 +27,8 @@ _humanize = utilities.humanize
 @crescent.hook(
   cooldowns.cooldown(
     1,
-    period=_periods.period
-  )
+    period=_periods.period,
+  ),
 )
 @crescent.command(name='репутация')
 class ReputationCommand(command_abc.CommandABC):
@@ -36,7 +36,9 @@ class ReputationCommand(command_abc.CommandABC):
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
-    users = await plugin.model.database.find_many(
+    await context.defer(ephemeral=True)
+
+    users = await plugin.model.economics.find_many(
       plugin.model.configuration.leaders.take,
       user_keys='reputation',
       sort_order=plugin.model.configuration.leaders.sort.order,
@@ -47,7 +49,10 @@ class ReputationCommand(command_abc.CommandABC):
       context=context,
     )
 
-    for index, user in enumerate(users):
+    for (
+      index,
+      user,
+     ) in enumerate(users):
       name = string.whitespace
 
       position = index + 1
@@ -59,7 +64,10 @@ class ReputationCommand(command_abc.CommandABC):
 
       embed.add_field(
         name=name,
-        value=f'<@{user.id}>\nРепутация: `{_humanize(user.reputation)}`',
+        value=f'<@{user.partial.id}>\nРепутация: `{_(user.partial.reputation)}`',
       )
 
-    await context.respond(embed=embed)
+    await context.respond(
+      ephemeral=True,
+      embed=embed,
+    )

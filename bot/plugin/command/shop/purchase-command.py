@@ -15,13 +15,17 @@ from bot.common.command import (
   utilities,
 )
 from bot.common.type.alias.plugin import plugins
+from bot.common.utility.constant.emoji import emojis
 from bot.common.utility.embed import embeds
 
 from . import _groups
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(seconds=2.5)
+period = cooldowns.Period(
+  seconds=2,
+  milliseconds=500,
+)
 
 _humanize = utilities.humanize
 
@@ -31,15 +35,21 @@ _humanize = utilities.humanize
 @crescent.hook(
   cooldowns.cooldown(
     1,
-    period=period
-  )
+    period=period,
+  ),
 )
-@crescent.command(name='покупка')
+@crescent.command(
+  name='покупка',
+  description='Покупка',
+)
 class PurchaseCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
     context: crescent.Context,
   ) -> None:
+    await context.defer(ephemeral=True)
+
+
     class View(view_abc.ViewABC):
       @miru.text_select(
         options=[
@@ -50,7 +60,10 @@ class PurchaseCommand(command_abc.CommandABC):
             emoji=item.emoji,
             is_default=False,
           )
-          for value, item in shops.shop.items()
+          for (
+            value,
+            item
+          ) in shops.shop.items()
         ],
         placeholder='Предметы',
       )
@@ -65,34 +78,32 @@ class PurchaseCommand(command_abc.CommandABC):
 
         item = shops.shop.get(_item)
 
-        price = item.price
-
         _contextual = str(context.user.id)
 
-        contextual = await plugin.model.database.find_first(_contextual)
+        contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-        banana = contextual.banana
+        item = contextual.partial.item
 
-        if banana < price:
-          raise errors.NotEnoughBananaError
+        if item != _item:
+          berry = contextual.partial.berry
 
-        await plugin.model.database.update(
-          _contextual,
-          banana=banana - price,
-          monkey=contextual.monkey,
-          reputation=contextual.reputation,
-          item=_item,
-        )
+          price = item.price
 
-        await context.respond(
-          embed=embeds.embed(
+          if berry < price:
+            raise errors.NotEnoughBerriesError
+
+          await contextual.berry.remove(price)
+
+          await context.respond(embed=embeds.embed(
             'default',
             context=context,
             description=f"""\
-              <@{_contextual}> купил `{item.label}` за 🍌 `{_humanize(price)}` бананов
+              <@{_contextual}> купил `{item.label}` за {emojis.BERRY} `{_humanize(price)}` ягод
             """,
-          )
-        )
+          ))
+        
+        raise errors.YouCantDoThatError
+
 
     view = View()
 

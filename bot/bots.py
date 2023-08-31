@@ -16,7 +16,7 @@ class Bot:
     self.model = model
 
     self.configuration = self.model.configuration
-    self.database = self.model.database
+    self.economics = self.model.economics
 
     intents = (
       hikari.Intents.MESSAGE_CONTENT

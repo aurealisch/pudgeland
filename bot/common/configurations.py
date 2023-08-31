@@ -20,8 +20,8 @@ class Range:
 
 @dataclasses.dataclass
 class Collect:
-  bananing: Range
-  monkeying: Range
+  berrying: Range
+  foxying: Range
 
 
 @dataclasses.dataclass
