@@ -63,9 +63,7 @@ class PurchaseCommand(command_abc.CommandABC):
 
         contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-        item = contextual.partial.item
-
-        if item != _item:
+        if contextual.partial.item != _item:
           berry = contextual.partial.berry
 
           price = item.price
