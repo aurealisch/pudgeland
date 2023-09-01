@@ -2,7 +2,6 @@ import typing
 
 import crescent
 import hikari
-import miru
 
 Mode = typing.Literal[
   'default',
@@ -18,8 +17,8 @@ colors = {
 
 
 def embed(
-  mode: typing.Literal['default', 'error'],
-  context: typing.Union[crescent.Context, miru.context.view.ViewContext],
+  mode: Mode,
+  context: crescent.Context,
   title: typing.Optional[str] = None,
   description: typing.Optional[str] = None,
   image: typing.Optional[hikari.files.Resourceish] = None,

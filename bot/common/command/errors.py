@@ -1,3 +1,3 @@
 YouCantDoThatError = Exception('Так нельзя')
-NotEnoughBerriesError = Exception('Недостаточно бананов')
+NotEnoughBerriesError = Exception('Недостаточно ягод')
 NothingToCullError = Exception('Нечего отбирать')

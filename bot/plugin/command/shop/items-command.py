@@ -3,36 +3,21 @@ import typing
 
 import crescent
 
-from bot.common import shops
+from bot.common import contexts, shops
 from bot.common.abc import command_abc
-from bot.common.command import (
-  cooldowns,
-  utilities,
-)
+from bot.common.command import cooldowns
 from bot.common.type.alias.plugin import plugins
-from bot.common.utility.constant.emoji import emojis
-from bot.common.utility.embed import embeds
 
 from . import _groups
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(
-  seconds=2,
-  milliseconds=500,
-)
-
-_ = utilities.humanize
+period = cooldowns.Period(seconds=2, milliseconds=500)
 
 
 @_groups.group.child
 @plugin.include
-@crescent.hook(
-  cooldowns.cooldown(
-    1,
-    period=period,
-  ),
-)
+@crescent.hook(cooldowns.cooldown(period=period))
 @crescent.command(
   name='предметы',
   description='Предметы',
@@ -40,7 +25,7 @@ _ = utilities.humanize
 class PreviewCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
-    context: crescent.Context,
+    context: contexts.Context,
   ) -> None:
     await context.defer(ephemeral=True)
 
@@ -55,14 +40,13 @@ class PreviewCommand(command_abc.CommandABC):
 
         > {item.description}
 
-        🏷 Цена: {emojis.BERRY} Ягоды: `{_(item.price)}`
+        🏷 Цена: {context.emoji.berry} Ягоды: `{context.humanize(item.price)}`
       """
 
     await context.respond(
       ephemeral=True,
-      embed=embeds.embed(
+      embed=context.embed(
         'default',
-        context=context,
         description=description,
       ),
     )

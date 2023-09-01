@@ -3,15 +3,9 @@ import os
 import dotenv
 
 import prisma as _prisma
-from bot import (
-  bots,
-  economics,
-)
-from bot.common import (
-  configurations,
-  models,
-)
-from bot.common.utility.constant.emoji import emojis
+from bot import bots, economics
+from bot.common import configurations, models
+from bot.common.utility.enum.emoji import emojis
 
 dotenv.load_dotenv()
 
@@ -26,8 +20,8 @@ bot = bots.Bot(
         description=f"""\
           Я календарь переверну - и снова третье сентября...
 
-          {emojis.BERRY} Множитель сбора ягод: `2.5x`
-          {emojis.FOX} Множитель сбора ягод лисами: `1.25x`
+          {emojis.Emoji.berry} Множитель сбора ягод: `2,5x`
+          {emojis.Emoji.fox} Множитель сбора ягод лисами: `1,25x`
         """,
         buff=economics.Buff(
           2.5,

@@ -2,33 +2,18 @@ import typing
 
 import crescent
 
-from bot.common import shops
+from bot.common import contexts, shops
 from bot.common.abc import command_abc
-from bot.common.command import (
-  cooldowns,
-  utilities,
-)
+from bot.common.command import cooldowns
 from bot.common.type.alias.plugin import plugins
-from bot.common.utility.constant.emoji import emojis
-from bot.common.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(
-  seconds=2,
-  milliseconds=500,
-)
-
-_ = utilities.humanize
+period = cooldowns.Period(seconds=2, milliseconds=500)
 
 
 @plugin.include
-@crescent.hook(
-  cooldowns.cooldown(
-    1,
-    period=period,
-  ),
-)
+@crescent.hook(cooldowns.cooldown(period=period))
 @crescent.command(
   name='профиль',
   description='Профиль',
@@ -36,7 +21,7 @@ _ = utilities.humanize
 class ProfileCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
-    context: crescent.Context,
+    context: contexts.Context,
   ) -> None:
     await context.defer(ephemeral=True)
 
@@ -45,10 +30,10 @@ class ProfileCommand(command_abc.CommandABC):
     _item = contextual.partial.item
 
     description = f"""\
-      {emojis.BERRY} Ягоды: `{_(contextual.partial.berry)}`
-      {emojis.FOX} Лисы: `{_(contextual.partial.fox)}`
+      {context.emoji.berry} Ягоды: `{context.humanize(contextual.partial.berry)}`
+      {context.emoji.fox} Лисы: `{context.humanize(contextual.partial.fox)}`
 
-      📊 Репутация: `{_(contextual.partial.reputation)}`
+      📊 Репутация: `{context.humanize(contextual.partial.reputation)}`
     """
 
     if _item:
@@ -56,9 +41,8 @@ class ProfileCommand(command_abc.CommandABC):
 
     await context.respond(
       ephemeral=True,
-      embed=embeds.embed(
+      embed=context.embed(
         'default',
-        context=context,
         description=description,
       ),
     )

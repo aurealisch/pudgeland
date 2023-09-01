@@ -157,17 +157,21 @@ class Cooldown(typing.Generic[_KEY]):
 
 
 def cooldown(
-  capacity: float,
   period: Period,
 ) -> typing.Callable[
-  [crescent.Context], typing.Awaitable[typing.Optional[crescent.HookResult]]
+  [crescent.Context],
+  typing.Awaitable[
+    typing.Optional[
+      crescent.HookResult
+    ]
+  ],
 ]:
   total = period.total
 
   _period = total
 
   _cooldown = Cooldown(
-    capacity,
+    1,
     period=_period,
   )
 
@@ -179,7 +183,7 @@ def cooldown(
 
     current = _time.time()
 
-    future = int(round(current + remained))
+    future = round(current + remained)
 
     timestamp = f'<t:{future}:R>'
 

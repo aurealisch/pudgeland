@@ -3,38 +3,27 @@ import typing
 
 import crescent
 
+from bot.common import contexts
 from bot.common.abc import command_abc
-from bot.common.command import (
-  cooldowns,
-  utilities,
-)
+from bot.common.command import cooldowns
 from bot.common.type.alias.plugin import plugins
-from bot.common.utility.embed import embeds
 
-from . import (
-  _emojis,
-  _groups,
-  _periods,
-)
+from . import _emojis, _groups, _periods
 
 plugin = plugins.Plugin()
-
-_ = utilities.humanize
 
 
 @_groups.group.child
 @plugin.include
-@crescent.hook(
-  cooldowns.cooldown(
-    1,
-    period=_periods.period,
-  ),
+@crescent.hook(cooldowns.cooldown(period=_periods.period))
+@crescent.command(
+  name='репутация',
+  description='Лидеры по репутации'
 )
-@crescent.command(name='репутация')
 class ReputationCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
-    context: crescent.Context,
+    context: contexts.Context,
   ) -> None:
     await context.defer(ephemeral=True)
 
@@ -44,10 +33,7 @@ class ReputationCommand(command_abc.CommandABC):
       sort_order=plugin.model.configuration.leaders.sort.order,
     )
 
-    embed = embeds.embed(
-      'default',
-      context=context,
-    )
+    embed = context.embed('default')
 
     for (
       index,
@@ -64,7 +50,10 @@ class ReputationCommand(command_abc.CommandABC):
 
       embed.add_field(
         name=name,
-        value=f'<@{user.partial.id}>\nРепутация: `{_(user.partial.reputation)}`',
+        value='\n'.join([
+          f'<@{user.partial.id}',
+          f'Ягоды `{context.humanize(user.partial.berry)}`'
+        ]),
       )
 
     await context.respond(

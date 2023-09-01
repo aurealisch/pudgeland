@@ -3,34 +3,19 @@ import typing
 
 import crescent
 
-from bot.common import shops
+from bot.common import contexts, shops
 from bot.common.abc import command_abc
-from bot.common.command import (
-  cooldowns,
-  utilities,
-)
+from bot.common.command import cooldowns
 from bot.common.type.alias.plugin import plugins
-from bot.common.utility.constant.emoji import emojis
-from bot.common.utility.embed import embeds
 
-from . import (
-  _groups,
-  _periods,
-)
+from . import _groups, _periods
 
 plugin = plugins.Plugin()
-
-_ = utilities.humanize
 
 
 @_groups.group.child
 @plugin.include
-@crescent.hook(
-  cooldowns.cooldown(
-    1,
-    period=_periods.period,
-  ),
-)
+@crescent.hook(cooldowns.cooldown(period=_periods.period))
 @crescent.command(
   name='собрать',
   description='Собрать ягоды',
@@ -38,7 +23,7 @@ _ = utilities.humanize
 class CollectCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
-    context: crescent.Context,
+    context: contexts.Context,
   ) -> None:
     await context.defer()
 
@@ -82,7 +67,7 @@ class CollectCommand(command_abc.CommandABC):
 
     total += berrying
 
-    description = f'<@{_contextual}> собрал {emojis.BERRY} `{_(berrying)}` ягод'
+    description = f'<@{_contextual}> собрал {context.emoji.berry} `{context.humanize(berrying)}` ягод'
 
     if fox:
       foxying = fox * random.randint(
@@ -113,16 +98,15 @@ class CollectCommand(command_abc.CommandABC):
 
       # fmt: off
       description += (
-        f'\n+ {emojis.BERRY} `{_(foxying)}` ягод от {emojis.FOX} `{_(fox)}` лис'
+        f'\n+ {context.emoji.berry} `{context.humanize(foxying)}` ягод от {context.emoji.fox} `{context.humanize(fox)}` лис'
       )
       # fmt: on
 
-      description += f'\n\n🔁 Всего: {emojis.BERRY} `{_(total)}` ягод'
+      description += f'\n\n🔁 Всего: {context.emoji.berry} `{context.humanize(total)}` ягод'
 
     await contextual.berry.add(total)
 
-    await context.respond(embed=embeds.embed(
+    await context.respond(embed=context.embed(
       'default',
-      context=context,
       description=description,
     ))

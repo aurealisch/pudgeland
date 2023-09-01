@@ -1,44 +1,26 @@
-import random
 import math
+import random
 import typing
 
 import crescent
 import hikari
 import miru
 
-from bot.common.abc import (
-  command_abc,
-  view_abc,
-)
-from bot.common.command import (
-  cooldowns,
-  errors,
-  utilities,
-)
+from bot.common import contexts
+from bot.common.abc import command_abc, view_abc
+from bot.common.command import cooldowns, errors
 from bot.common.type.alias.plugin import plugins
-from bot.common.utility.constant.emoji import emojis
-from bot.common.utility.embed import embeds
 
 plugin = plugins.Plugin()
 
 group = crescent.Group('лисы')
 
-period = cooldowns.Period(
-  seconds=2,
-  milliseconds=500,
-)
-
-_humanize = utilities.humanize
+period = cooldowns.Period(seconds=2, milliseconds=500)
 
 
 @group.child
 @plugin.include
-@crescent.hook(
-  cooldowns.cooldown(
-    1,
-    period=period,
-  ),
-)
+@crescent.hook(cooldowns.cooldown(period=period))
 @crescent.command(
   name='приручить',
   description='Приручить лису',
@@ -46,7 +28,7 @@ _humanize = utilities.humanize
 class TameCommand(command_abc.CommandABC):
   async def run(
     self: typing.Self,
-    context: crescent.Context,
+    context: contexts.Context,
   ) -> None:
     await context.defer(ephemeral=True)
 
@@ -72,9 +54,9 @@ class TameCommand(command_abc.CommandABC):
       async def ok(
         self: typing.Self,
         _: miru.Button,
-        context: miru.ViewContext,
+        view_context: miru.ViewContext,
       ) -> None:
-        await context.defer()
+        await view_context.defer()
 
         berry = contextual.partial.berry
 
@@ -89,12 +71,11 @@ class TameCommand(command_abc.CommandABC):
             tame.edge,
           )
          ) != 1:
-          await context.respond(
-            embed=embeds.embed(
+          await view_context.respond(
+            embed=context.embed(
               'default',
-              context=context,
               description=f"""\
-                <@{_contextual}> скормил {emojis.BERRY} `{_humanize(fed)}` ягод
+                <@{_contextual}> скормил {context.emoji.berry} `{context.humanize(fed)}` ягод
                 и...
 
                 ❌ Не получилось приручить...
@@ -108,12 +89,11 @@ class TameCommand(command_abc.CommandABC):
 
         await contextual.fox.add(1)
 
-        await context.respond(
-          embed=embeds.embed(
+        await view_context.respond(
+          embed=context.embed(
             'default',
-            context=context,
             description=f"""\
-              <@{_contextual}> скормил {emojis.BERRY} `{_humanize(fed)}` ягод
+              <@{_contextual}> скормил {context.emoji.berry} `{context.humanize(fed)}` ягод
               и...
 
               ✅ Получилось приручить!!!
@@ -131,17 +111,18 @@ class TameCommand(command_abc.CommandABC):
       async def cancel(
         self: typing.Self,
         _: miru.Button,
-        context: miru.ViewContext,
+        view_context: miru.ViewContext,
       ) -> None:
-        await context.defer()
+        await view_context.defer()
 
-        await context.respond(
-          embed=embeds.embed(
+        flags = hikari.MessageFlag.EPHEMERAL
+
+        await view_context.respond(
+          embed=context.embed(
             'default',
-            context=context,
             description='Отменено',
           ),
-          flags=hikari.MessageFlag.EPHEMERAL,
+          flags=flags,
         )
 
         self.stop()
@@ -155,11 +136,10 @@ class TameCommand(command_abc.CommandABC):
       ensure_message=True,
       ephemeral=True,
       components=components,
-      embed=embeds.embed(
+      embed=context.embed(
         'default',
-        context=context,
         description=f"""\
-          Чтобы попробовать приручить обезьяну, потребуется скормить {emojis.BERRY} `{_humanize(fed)}` ягод
+          Чтобы попробовать приручить обезьяну, потребуется скормить {context.emoji.berry} `{context.humanize(fed)}` ягод
         """,
       ),
     )
