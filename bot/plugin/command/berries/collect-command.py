@@ -51,9 +51,9 @@ class CollectCommand(command_abc.CommandABC):
         buff = event.buff
 
         if buff:
-          berry = buff.berry
+          _berry = buff.berry
 
-          berrying *= berry
+          berrying *= _berry
 
     if _item:
       item = shops.shop.get(_item)
@@ -80,9 +80,9 @@ class CollectCommand(command_abc.CommandABC):
           buff = event.buff
 
           if buff:
-            fox = buff.fox
+            _fox = buff.fox
 
-            foxying *= fox
+            foxying *= _fox
 
       if _item:
         item = shops.shop.get(_item)
