@@ -49,11 +49,11 @@ bot = bots.Bot(
                     foxying=configurations.Range(50, b=135.0),
                 ),
                 cull=configurations.Cull(
-                    4,
+                    2,
                     fraction=0.4,
                 ),
                 tame=configurations.Tame(
-                    4,
+                    2,
                     price=250,
                 ),
             ),
