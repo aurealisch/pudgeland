@@ -1,11 +1,12 @@
+import typing
+
 import crescent
 import hikari
 import miru
 
-from bot.common import contexts, shops
-from bot.common.abc import command_abc, view_abc
-from bot.common.command import cooldowns, errors
-from bot.common.type.alias.plugin import plugins
+from bot.common import contexts, plugins, shops
+from bot.common.abc import commands, views
+from bot.common.command import cooldowns, exceptions
 
 from . import _groups
 
@@ -17,6 +18,7 @@ period = cooldowns.Period(
 )  # 2.5 seconds
 
 
+@typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
@@ -24,14 +26,14 @@ period = cooldowns.Period(
     name="покупка",
     description="Покупка",
 )
-class PurchaseCommand(command_abc.CommandABC):
+class PurchaseCommand(commands.CommandABC):
     async def run(
         self,
         context: contexts.Context,
     ) -> None:
         await context.defer(ephemeral=True)
 
-        class View(view_abc.ViewABC):
+        class View(views.ViewABC):
             @miru.text_select(
                 options=[
                     hikari.SelectMenuOption(
@@ -71,7 +73,7 @@ class PurchaseCommand(command_abc.CommandABC):
                     price = item.price
 
                     if berry < price:
-                        raise errors.NotEnoughBerriesError
+                        raise exceptions.NotEnoughBerriesException
 
                     await contextual.berry.remove(price)
 
@@ -86,7 +88,7 @@ class PurchaseCommand(command_abc.CommandABC):
 
                     return
 
-                raise errors.YouCantDoThatError
+                raise exceptions.YouCantDoThatException
 
         view = View()
 

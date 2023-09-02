@@ -3,9 +3,8 @@ import typing
 import crescent
 import hikari
 
-from .command import utilities
-from .utility.embed import embeds
-from .utility.enum.emoji import emojis
+from .command.utility import embeds, humanizes
+from .utility import emojis
 
 
 @typing.final
@@ -33,4 +32,4 @@ class Context(crescent.Context):
         self,
         number: int,
     ) -> str:
-        return utilities.humanize(number)
+        return humanizes.humanize(number)

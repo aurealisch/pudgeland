@@ -1,3 +1,5 @@
+import typing
+
 import crescent
 import hikari
 import miru
@@ -5,6 +7,7 @@ import miru
 from .common import models
 
 
+@typing.final
 class Bot:
     def __init__(
         self,

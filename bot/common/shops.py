@@ -1,21 +1,24 @@
 import dataclasses
+import typing
 
-from .. import typevars
+from .. import types
 
 
+@typing.final
 @dataclasses.dataclass
 class Bonus:
-    berry: typevars.Velocity = 0
-    fox: typevars.Velocity = 0
+    berry: typing.Optional[types.FloatOrInt] = None
+    fox: typing.Optional[types.FloatOrInt] = None
 
 
+@typing.final
 @dataclasses.dataclass
 class Item:
-    label: str
-    description: str
-    emoji: str
-    price: int
-    bonus: Bonus
+    label: typing.Optional[str] = None
+    description: typing.Optional[str] = None
+    emoji: typing.Optional[str] = None
+    price: typing.Optional[int] = None
+    bonus: typing.Optional[Bonus] = None
 
 
 shop = {

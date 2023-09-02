@@ -1,14 +1,14 @@
 import math
 import random
+import typing
 
 import crescent
 import hikari
 import miru
 
-from bot.common import contexts
-from bot.common.abc import command_abc, view_abc
-from bot.common.command import cooldowns, errors
-from bot.common.type.alias.plugin import plugins
+from bot.common import contexts, plugins
+from bot.common.abc import commands, views
+from bot.common.command import cooldowns, exceptions
 
 plugin = plugins.Plugin()
 
@@ -20,6 +20,7 @@ period = cooldowns.Period(
 )  # 2.5 seconds
 
 
+@typing.final
 @group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
@@ -27,7 +28,7 @@ period = cooldowns.Period(
     name="приручить",
     description="Приручить лису",
 )
-class TameCommand(command_abc.CommandABC):
+class TameCommand(commands.CommandABC):
     async def run(
         self,
         context: contexts.Context,
@@ -46,7 +47,7 @@ class TameCommand(command_abc.CommandABC):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        class View(view_abc.ViewABC):
+        class View(views.ViewABC):
             @miru.button(
                 label="ОК",
                 style=style,
@@ -62,7 +63,7 @@ class TameCommand(command_abc.CommandABC):
                 berry = contextual.partial.berry
 
                 if berry < fed:
-                    raise errors.NotEnoughBerriesError
+                    raise exceptions.NotEnoughBerriesException
 
                 await contextual.berry.remove(fed)
 

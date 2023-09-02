@@ -3,179 +3,83 @@ import typing
 
 import prisma as _prisma
 
-from . import typevars
+from . import types
 
 
+@typing.final
 @dataclasses.dataclass
 class Effect:
-    berry: typevars.Velocity
-    fox: typevars.Velocity
+    berry: types.FloatOrInt
+    fox: types.FloatOrInt
 
 
 Debuff = Effect
 Buff = Effect
 
 
+@typing.final
 @dataclasses.dataclass
 class Event:
     title: typing.Optional[str] = None
     description: typing.Optional[str] = None
-
     debuff: typing.Optional[Debuff] = None
     buff: typing.Optional[Buff] = None
 
 
-@dataclasses.dataclass
-class Configuration:
-    events: typing.Optional[typing.Sequence[Event]]
-
-
-class Berry:
+@typing.final
+class Resource:
     def __init__(
         self,
-        configuration: Configuration,
+        key: typing.Literal[
+            "berry",
+            "fox",
+            "reputation",
+        ],
         partial: _prisma.models.User,
     ) -> None:
-        self.configuration = configuration
+        self.key = key
         self.partial = partial
 
-    async def add(
-        self,
-        value: int,
-    ) -> None:
+    async def add(self, value: int) -> None:
         await self.partial.prisma().update(
-            _prisma.types.UserUpdateInput(
-                berry=self.partial.berry + value,
-                fox=self.partial.fox,
-                reputation=self.partial.reputation,
-                item=self.partial.item,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
+            {self.key: self.partial.dict().get(self.key) + value},
+            where={
+                "id": self.partial.id,
+            },
         )
 
-    async def remove(
-        self,
-        value: int,
-    ) -> None:
+    async def remove(self, value: int) -> None:
         await self.partial.prisma().update(
-            _prisma.types.UserUpdateInput(
-                berry=self.partial.berry - value,
-                fox=self.partial.fox,
-                reputation=self.partial.reputation,
-                item=self.partial.item,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
+            {self.key: self.partial.dict().get(self.key) - value},
+            where={
+                "id": self.partial.id,
+            },
         )
 
 
-class Fox:
-    def __init__(
-        self,
-        configuration: Configuration,
-        partial: _prisma.models.User,
-    ) -> None:
-        self.configuration = configuration
-        self.partial = partial
-
-    async def add(
-        self,
-        value: int,
-    ) -> None:
-        await self.partial.prisma().update(
-            _prisma.types.UserUpdateInput(
-                berry=self.partial.berry,
-                fox=self.partial.fox + value,
-                reputation=self.partial.reputation,
-                item=self.partial.item,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
-        )
-
-    async def remove(
-        self,
-        value: int,
-    ) -> None:
-        await self.partial.prisma().update(
-            _prisma.types.UserUpdateInput(
-                berry=self.partial.berry,
-                fox=self.partial.fox - value,
-                reputation=self.partial.reputation,
-                item=self.partial.item,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
-        )
-
-
-class Reputation:
-    def __init__(
-        self,
-        configuration: Configuration,
-        partial: _prisma.models.User,
-    ) -> None:
-        self.configuration = configuration
-        self.partial = partial
-
-    async def add(
-        self,
-        value: int,
-    ) -> None:
-        await self.partial.prisma().update(
-            _prisma.types.UserUpdateInput(
-                berry=self.partial.berry,
-                fox=self.partial.fox,
-                reputation=self.partial.reputation + value,
-                item=self.partial.item,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
-        )
-
-    async def remove(
-        self,
-        value: int,
-    ) -> None:
-        await self.partial.prisma().update(
-            _prisma.types.UserUpdateInput(
-                berry=self.partial.berry,
-                fox=self.partial.fox,
-                reputation=self.partial.reputation - value,
-                item=self.partial.item,
-            ),
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
-        )
-
-
+@typing.final
 class User:
     def __init__(
         self,
-        configuration: Configuration,
         partial: _prisma.models.User,
     ) -> None:
-        self.configuration = configuration
         self.partial = partial
 
-        self.berry = Berry(
-            configuration=self.configuration,
-            partial=self.partial,
-        )
-        self.fox = Fox(
-            configuration=self.configuration,
-            partial=self.partial,
-        )
+        self.berry = Resource("berry", partial=self.partial)
+        self.fox = Resource("fox", partial=self.partial)
 
-        self.reputation = Reputation(
-            configuration=self.configuration,
-            partial=self.partial,
-        )
+        self.reputation = Resource("reputation", partial=self.partial)
 
 
+@typing.final
 class Economics:
     def __init__(
         self,
-        configuration: Configuration,
         prisma: _prisma.Prisma,
+        events: typing.Optional[typing.Sequence[Event]] = None,
     ) -> None:
-        self.configuration = configuration
         self.prisma = prisma
+        self.events = events
 
     async def find_first_or_create(self, id: str) -> User:
         partial = await self.prisma.user.find_first(

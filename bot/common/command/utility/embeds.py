@@ -3,7 +3,7 @@ import typing
 import crescent
 import hikari
 
-Mode = typing.Literal[
+Color = typing.Literal[
     "default",
     "error",
     "success",
@@ -17,13 +17,13 @@ colors = {
 
 
 def embed(
-    mode: Mode,
+    color: Color,
     context: crescent.Context,
     title: typing.Optional[str] = None,
     description: typing.Optional[str] = None,
     image: typing.Optional[hikari.files.Resourceish] = None,
 ) -> hikari.Embed:
-    color = hikari.Color.of(colors[mode])
+    _color = hikari.Color.of(colors[color])
 
     contextual = context.user
 
@@ -37,7 +37,7 @@ def embed(
         hikari.Embed(
             title=title,
             description=description,
-            color=color,
+            color=_color,
         )
         .set_author(
             name=name,

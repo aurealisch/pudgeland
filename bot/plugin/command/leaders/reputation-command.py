@@ -1,17 +1,18 @@
 import string
+import typing
 
 import crescent
 
-from bot.common import contexts
-from bot.common.abc import command_abc
+from bot.common import contexts, plugins
+from bot.common.abc import commands
 from bot.common.command import cooldowns
-from bot.common.type.alias.plugin import plugins
 
 from . import _emojis, _groups, _periods
 
 plugin = plugins.Plugin()
 
 
+@typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
@@ -19,7 +20,7 @@ plugin = plugins.Plugin()
     name="репутация",
     description="Лидеры по репутации",
 )
-class ReputationCommand(command_abc.CommandABC):
+class ReputationCommand(commands.CommandABC):
     async def run(
         self,
         context: contexts.Context,

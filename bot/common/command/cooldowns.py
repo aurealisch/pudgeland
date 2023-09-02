@@ -4,43 +4,47 @@ import typing
 
 import crescent
 
+from bot import types
+
 _KEY = typing.TypeVar("_KEY")
 
 
+@typing.final
 @dataclasses.dataclass
 class Period:
-    weeks: float = 0.0
-    days: float = 0.0
-    hours: float = 0.0
-    minutes: float = 0.0
-    seconds: float = 0.0
-    milliseconds: float = 0.0
-    microseconds: float = 0.0
+    weeks: types.FloatOrInt = 0
+    days: types.FloatOrInt = 0
+    hours: types.FloatOrInt = 0
+    minutes: types.FloatOrInt = 0
+    seconds: types.FloatOrInt = 0
+    milliseconds: types.FloatOrInt = 0
+    microseconds: types.FloatOrInt = 0
 
     @property
-    def total(self) -> float:
+    def total(self) -> types.FloatOrInt:
         return (
             self.weeks * 7 * 24 * 60 * 60
             + self.days * 24 * 60 * 60
             + self.hours * 60 * 60
             + self.minutes * 60
             + self.seconds
-            + self.milliseconds / 1000
-            + self.microseconds / 1000000
+            + self.milliseconds / 1_000
+            + self.microseconds / 1_000_000
         )
 
 
+@typing.final
 class SlidingWindow:
     def __init__(
         self,
-        capacity: float,
+        capacity: int,
         period: float,
     ) -> None:
-        self.capacity: int = int(capacity)
-        self.period: float = float(period)
-        self._window: float = 0.0
-        self._tokens: int = self.capacity
-        self._last: float = 0.0
+        self.capacity = capacity
+        self.period = period
+        self._window = 0.0
+        self._tokens = self.capacity
+        self._last = 0.0
 
     def get_tokens(
         self,
@@ -89,6 +93,7 @@ class SlidingWindow:
         self._last = 0.0
 
 
+@typing.final
 class Cooldown(typing.Generic[_KEY]):
     def __init__(
         self,
@@ -160,7 +165,13 @@ def cooldown(
     period: Period,
 ) -> typing.Callable[
     [crescent.Context],
-    typing.Awaitable[typing.Optional[crescent.HookResult]],
+    # fmt: off
+    typing.Awaitable[
+        typing.Optional[
+            crescent.HookResult,
+        ],
+    ],
+    # fmt: on
 ]:
     total = period.total
 

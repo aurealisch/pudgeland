@@ -1,11 +1,11 @@
 import string
+import typing
 
 import crescent
 
-from bot.common import contexts, shops
-from bot.common.abc import command_abc
+from bot.common import contexts, plugins, shops
+from bot.common.abc import commands
 from bot.common.command import cooldowns
-from bot.common.type.alias.plugin import plugins
 
 from . import _groups
 
@@ -17,6 +17,7 @@ period = cooldowns.Period(
 )  # 2.5 seconds
 
 
+@typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
@@ -24,7 +25,7 @@ period = cooldowns.Period(
     name="предметы",
     description="Предметы",
 )
-class PreviewCommand(command_abc.CommandABC):
+class PreviewCommand(commands.CommandABC):
     async def run(
         self,
         context: contexts.Context,

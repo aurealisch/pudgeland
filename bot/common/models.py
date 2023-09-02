@@ -1,9 +1,12 @@
+import typing
+
 import hikari
 
 from .. import economics as _economics
 from . import configurations
 
 
+@typing.final
 class Model:
     def __init__(
         self,

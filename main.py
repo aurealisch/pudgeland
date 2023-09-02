@@ -5,7 +5,7 @@ import dotenv
 import prisma as _prisma
 from bot import bots, economics
 from bot.common import configurations, models
-from bot.common.utility.enum.emoji import emojis
+from bot.common.utility import emojis
 
 dotenv.load_dotenv()
 
@@ -50,7 +50,7 @@ bot = bots.Bot(
                 ),
                 cull=configurations.Cull(
                     2,
-                    fraction=0.4,
+                    fraction=0.1,
                 ),
                 tame=configurations.Tame(
                     2,

@@ -1,16 +1,18 @@
+import typing
+
 import crescent
 import hikari
 
-from bot.common import contexts
-from bot.common.abc import command_abc
-from bot.common.command import cooldowns, errors
-from bot.common.type.alias.plugin import plugins
+from bot.common import contexts, plugins
+from bot.common.abc import commands
+from bot.common.command import cooldowns, exceptions
 
 from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
 
+@typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
@@ -18,7 +20,7 @@ plugin = plugins.Plugin()
     name="повысить",
     description="Повысить репутацию пользователю",
 )
-class UpgradeCommand(command_abc.CommandABC):
+class UpgradeCommand(commands.CommandABC):
     user = crescent.option(
         hikari.User,
         name="пользователь",
@@ -48,4 +50,4 @@ class UpgradeCommand(command_abc.CommandABC):
 
             return
 
-        raise errors.YouCantDoThatError
+        raise exceptions.YouCantDoThatException

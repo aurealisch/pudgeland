@@ -1,17 +1,18 @@
 import random
+import typing
 
 import crescent
 
-from bot.common import contexts, shops
-from bot.common.abc import command_abc
+from bot.common import contexts, plugins, shops
+from bot.common.abc import commands
 from bot.common.command import cooldowns
-from bot.common.type.alias.plugin import plugins
 
 from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
 
+@typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
@@ -19,7 +20,7 @@ plugin = plugins.Plugin()
     name="собрать",
     description="Собрать ягоды",
 )
-class CollectCommand(command_abc.CommandABC):
+class CollectCommand(commands.CommandABC):
     async def run(
         self,
         context: contexts.Context,

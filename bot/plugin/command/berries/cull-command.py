@@ -1,18 +1,19 @@
 import random
+import typing
 
 import crescent
 import hikari
 
-from bot.common import contexts
-from bot.common.abc import command_abc
-from bot.common.command import cooldowns, errors
-from bot.common.type.alias.plugin import plugins
+from bot.common import contexts, plugins
+from bot.common.abc import commands
+from bot.common.command import cooldowns, exceptions
 
 from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
 
+@typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
@@ -20,7 +21,7 @@ plugin = plugins.Plugin()
     name="отобрать",
     description="Отобрать ягоды",
 )
-class CullCommand(command_abc.CommandABC):
+class CullCommand(commands.CommandABC):
     user = crescent.option(
         hikari.User,
         name="пользователь",
@@ -43,10 +44,10 @@ class CullCommand(command_abc.CommandABC):
 
         fraction = cull.fraction
 
-        culling = round((optional.partial.berry / 4) * fraction)
+        culling = round((optional.partial.berry / 2) * fraction)
 
         if culling < 1:
-            raise errors.NothingToCullError
+            raise exceptions.NothingToCullException
 
         if (
             random.choice(
