@@ -95,10 +95,7 @@ class Economics:
                 ),
             )
 
-        return User(
-            self.configuration,
-            partial=partial,
-        )
+        return User(partial=partial)
 
     async def find_many(
         self,
