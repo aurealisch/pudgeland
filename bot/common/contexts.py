@@ -13,15 +13,15 @@ class Context(crescent.Context):
 
     def embed(
         self,
-        mode: embeds.Mode,
+        color: embeds.Color,
         title: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
-        image: typing.Optional[hikari.files.Resourceish] = None,
+        image: typing.Optional[hikari.Resourceish] = None,
     ) -> hikari.Embed:
         context = self
 
         return embeds.embed(
-            mode,
+            color,
             context=context,
             title=title,
             description=description,
