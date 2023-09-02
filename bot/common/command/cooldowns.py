@@ -168,9 +168,9 @@ def cooldown(
     # fmt: off
     typing.Awaitable[
         typing.Optional[
-            crescent.HookResult,
-        ],
-    ],
+            crescent.HookResult
+        ]
+    ]
     # fmt: on
 ]:
     total = period.total
