@@ -1,5 +1,3 @@
-import typing
-
 import crescent
 import hikari
 
@@ -17,45 +15,47 @@ plugin = plugins.Plugin()
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
 @crescent.command(
-  name='дать',
-  description='Дать ягоды',
+    name="дать",
+    description="Дать ягоды",
 )
 class GiveCommand(command_abc.CommandABC):
-  user = crescent.option(
-    hikari.User,
-    name='пользователь',
-    description='Пользователь',
-  )
+    user = crescent.option(
+        hikari.User,
+        name="пользователь",
+        description="Пользователь",
+    )
 
-  amount = crescent.option(
-    int,
-    name='количество',
-    description='Количество',
-  )
+    amount = crescent.option(
+        int,
+        name="количество",
+        description="Количество",
+    )
 
-  async def run(
-    self: typing.Self,
-    context: contexts.Context,
-  ) -> None:
-    if self.amount > 0:
-      await context.defer()
+    async def run(
+        self,
+        context: contexts.Context,
+    ) -> None:
+        if self.amount > 0:
+            await context.defer()
 
-      _optional = str(self.user.id)
-      _contextual = str(context.user.id)
+            _optional = str(self.user.id)
+            _contextual = str(context.user.id)
 
-      optional = await plugin.model.economics.find_first_or_create(_optional)
-      contextual = await plugin.model.economics.find_first_or_create(_contextual)
+            optional = await plugin.model.economics.find_first_or_create(_optional)
+            contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-      await optional.berry.add(self.amount)
-      await contextual.berry.remove(self.amount)
+            await optional.berry.add(self.amount)
+            await contextual.berry.remove(self.amount)
 
-      await context.respond(embed=context.embed(
-        'default',
-        description=f"""\
-          <@{_contextual}> дал {context.emoji.berry} `{self.amount}` ягод <@{_optional}>
-        """,
-      ))
+            await context.respond(
+                embed=context.embed(
+                    "default",
+                    description=f"""\
+                        <@{_contextual}> дал {context.emoji.berry} `{self.amount}` ягод <@{_optional}>
+                    """,  # noqa: E501
+                ),
+            )
 
-      return
+            return
 
-    raise errors.YouCantDoThatError
+        raise errors.YouCantDoThatError

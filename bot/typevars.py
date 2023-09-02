@@ -1,7 +1,7 @@
 import typing
 
 Velocity = typing.TypeVar(
-  'Velocity',
-  float,
-  int,
+    "Velocity",
+    float,
+    int,
 )

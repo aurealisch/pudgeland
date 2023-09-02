@@ -1,5 +1,3 @@
-import typing
-
 import crescent
 import hikari
 
@@ -17,35 +15,37 @@ plugin = plugins.Plugin()
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
 @crescent.command(
-  name='понизить',
-  description='Понизить репутацию пользователю',
+    name="понизить",
+    description="Понизить репутацию пользователю",
 )
 class DowngradeCommand(command_abc.CommandABC):
-  user = crescent.option(
-    hikari.User,
-    name='пользователь',
-    description='Пользователь',
-  )
+    user = crescent.option(
+        hikari.User,
+        name="пользователь",
+        description="Пользователь",
+    )
 
-  async def run(
-    self: typing.Self,
-    context: contexts.Context,
-  ) -> None:
-    await context.defer()
+    async def run(
+        self,
+        context: contexts.Context,
+    ) -> None:
+        await context.defer()
 
-    contextual = str(context.user.id)
-    optional = str(self.user.id)
+        contextual = str(context.user.id)
+        optional = str(self.user.id)
 
-    if contextual != optional:
-      user = await plugin.model.economics.find_first_or_create(optional)
+        if contextual != optional:
+            user = await plugin.model.economics.find_first_or_create(optional)
 
-      await user.reputation.remove(1)
+            await user.reputation.remove(1)
 
-      await context.respond(embed=context.embed(
-        'default',
-        description=f'📉 <@{contextual}> понизил репутацию <@{optional}>',
-      ))
+            await context.respond(
+                embed=context.embed(
+                    "default",
+                    description=f"📉 <@{contextual}> понизил репутацию <@{optional}>",
+                ),
+            )
 
-      return
+            return
 
-    raise errors.YouCantDoThatError
+        raise errors.YouCantDoThatError

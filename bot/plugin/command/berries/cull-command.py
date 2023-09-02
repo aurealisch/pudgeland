@@ -1,5 +1,4 @@
 import random
-import typing
 
 import crescent
 import hikari
@@ -18,70 +17,77 @@ plugin = plugins.Plugin()
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
 @crescent.command(
-  name='отобрать',
-  description='Отобрать ягоды',
+    name="отобрать",
+    description="Отобрать ягоды",
 )
 class CullCommand(command_abc.CommandABC):
-  user = crescent.option(
-    hikari.User,
-    name='пользователь',
-    description='Пользователь',
-  )
+    user = crescent.option(
+        hikari.User,
+        name="пользователь",
+        description="Пользователь",
+    )
 
-  async def run(
-    self: typing.Self,
-    context: contexts.Context,
-  ) -> None:
-    await context.defer()
+    async def run(
+        self,
+        context: contexts.Context,
+    ) -> None:
+        await context.defer()
 
-    _contextual = str(context.user.id)
-    _optional = str(self.user.id)
+        _contextual = str(context.user.id)
+        _optional = str(self.user.id)
 
-    contextual = await plugin.model.economics.find_first_or_create(_contextual)
-    optional = await plugin.model.economics.find_first_or_create(_optional)
+        contextual = await plugin.model.economics.find_first_or_create(_contextual)
+        optional = await plugin.model.economics.find_first_or_create(_optional)
 
-    cull = plugin.model.configuration.plugins.cull
+        cull = plugin.model.configuration.plugins.cull
 
-    fraction = cull.fraction
+        fraction = cull.fraction
 
-    culling = round((optional.partial.berry / 4) * fraction)
+        culling = round((optional.partial.berry / 4) * fraction)
 
-    if culling < 1:
-      raise errors.NothingToCullError
+        if culling < 1:
+            raise errors.NothingToCullError
 
-    if random.choice(
-      range(
-        1,
-        cull.edge,
-      )
-    ) != 1:
-      await contextual.berry.remove(culling)
+        if (
+            random.choice(
+                range(
+                    1,
+                    cull.edge,
+                )
+            )
+            != 1
+        ):
+            await contextual.berry.remove(culling)
 
-      await context.respond(embed=context.embed(
-        'default',
-        description=f"""\
-          <@{_contextual}> попытался отобрать {context.emoji.berry} ягоды у <@{_optional}>
-          и...
+            await context.respond(
+                embed=context.embed(
+                    "default",
+                    description=f"""\
+                        <@{_contextual}> попытался отобрать {context.emoji.berry} ягоды у <@{_optional}>
+                        и...
 
-          ❌ Не получилось...
+                        ❌ Не получилось...
 
-          ```diff\n- {context.humanize(culling)} ягод```
-        """,
-      ))
+                        ```diff\n- {context.humanize(culling)} ягод```
+                    """,  # noqa: E501
+                ),
+            )
 
-      return
+            return
 
-    await contextual.berry.add(culling)
-    await optional.berry.remove(culling)
+        await contextual.berry.add(culling)
+        await optional.berry.remove(culling)
 
-    await context.respond(embed=context.embed(
-      'default',
-      description=f"""\
-        <@{_contextual}> попытался отобрать {context.emoji.berry} ягоды у <@{_optional}>
-        и...
+        await context.respond(
+            embed=context.embed(
+                "default",
+                description=f"""\
+                    <@{_contextual}> попытался отобрать {context.emoji.berry} ягоды у <@{_optional}>
+                    и...
 
-        ✅ Получилось!!!
+                    ✅ Получилось!!!
 
-        ```diff\n+ {context.humanize(culling)} ягод```
-      """,
-    ))
+                    ```diff\n+ {context.humanize(culling)} ягод```
+                """,  # noqa: E501
+            ),
+        )

@@ -1,3 +1,3 @@
 import crescent
 
-group = crescent.Group('репутация')
+group = crescent.Group("репутация")

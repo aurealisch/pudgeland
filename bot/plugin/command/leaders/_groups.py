@@ -1,3 +1,3 @@
 import crescent
 
-group = crescent.Group('лидеры')
+group = crescent.Group("лидеры")

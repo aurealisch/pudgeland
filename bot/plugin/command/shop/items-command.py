@@ -1,5 +1,4 @@
 import string
-import typing
 
 import crescent
 
@@ -12,41 +11,44 @@ from . import _groups
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(seconds=2, milliseconds=500)
+period = cooldowns.Period(
+    seconds=2,
+    milliseconds=500,
+)  # 2.5 seconds
 
 
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
 @crescent.command(
-  name='предметы',
-  description='Предметы',
+    name="предметы",
+    description="Предметы",
 )
 class PreviewCommand(command_abc.CommandABC):
-  async def run(
-    self: typing.Self,
-    context: contexts.Context,
-  ) -> None:
-    await context.defer(ephemeral=True)
+    async def run(
+        self,
+        context: contexts.Context,
+    ) -> None:
+        await context.defer(ephemeral=True)
 
-    description = string.whitespace
+        description = string.whitespace
 
-    for (
-      value,
-      item,
-     ) in shops.shop.items():
-      description += f"""
-        # {value}. {item.emoji} **{item.label}**
+        for (
+            value,
+            item,
+        ) in shops.shop.items():
+            description += f"""
+                # {value}. {item.emoji} **{item.label}**
 
-        > {item.description}
+                > {item.description}
 
-        🏷 Цена: {context.emoji.berry} Ягоды: `{context.humanize(item.price)}`
-      """
+                🏷 Цена: {context.emoji.berry} Ягоды: `{context.humanize(item.price)}`
+            """
 
-    await context.respond(
-      ephemeral=True,
-      embed=context.embed(
-        'default',
-        description=description,
-      ),
-    )
+        await context.respond(
+            ephemeral=True,
+            embed=context.embed(
+                "default",
+                description=description,
+            ),
+        )

@@ -1,7 +1,10 @@
-python-dotenv ~= 1.0.0
+python-dotenv
 
-hikari ~= 2.0.0.dev120
-hikari-crescent ~= 0.6.2
-hikari-miru ~= 3.1.2
+hikari
+hikari[speedups]
+hikari-crescent
+hikari-miru
 
-prisma ~= 0.9.1
+prisma
+
+uvloop

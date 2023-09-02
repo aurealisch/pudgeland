@@ -1,5 +1,4 @@
 import string
-import typing
 
 import crescent
 
@@ -17,46 +16,48 @@ plugin = plugins.Plugin()
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
 @crescent.command(
-  name='репутация',
-  description='Лидеры по репутации'
+    name="репутация",
+    description="Лидеры по репутации",
 )
 class ReputationCommand(command_abc.CommandABC):
-  async def run(
-    self: typing.Self,
-    context: contexts.Context,
-  ) -> None:
-    await context.defer(ephemeral=True)
+    async def run(
+        self,
+        context: contexts.Context,
+    ) -> None:
+        await context.defer(ephemeral=True)
 
-    users = await plugin.model.economics.find_many(
-      plugin.model.configuration.leaders.take,
-      user_keys='reputation',
-      sort_order=plugin.model.configuration.leaders.sort.order,
-    )
+        users = await plugin.model.economics.find_many(
+            plugin.model.configuration.leaders.take,
+            user_keys="reputation",
+            sort_order=plugin.model.configuration.leaders.sort.order,
+        )
 
-    embed = context.embed('default')
+        embed = context.embed("default")
 
-    for (
-      index,
-      user,
-     ) in enumerate(users):
-      name = string.whitespace
+        for (
+            index,
+            user,
+        ) in enumerate(users):
+            name = string.whitespace
 
-      position = index + 1
+            position = index + 1
 
-      if position in _emojis.emoji:
-        name += _emojis.emoji[position]
+            if position in _emojis.emoji:
+                name += _emojis.emoji[position]
 
-      name += f'#{position}'
+            name += f"#{position}"
 
-      embed.add_field(
-        name=name,
-        value='\n'.join([
-          f'<@{user.partial.id}',
-          f'Ягоды `{context.humanize(user.partial.berry)}`'
-        ]),
-      )
+            embed.add_field(
+                name=name,
+                value="\n".join(
+                    [
+                        f"<@{user.partial.id}",
+                        f"Ягоды `{context.humanize(user.partial.berry)}`",
+                    ]
+                ),
+            )
 
-    await context.respond(
-      ephemeral=True,
-      embed=embed,
-    )
+        await context.respond(
+            ephemeral=True,
+            embed=embed,
+        )

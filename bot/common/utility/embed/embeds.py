@@ -4,46 +4,46 @@ import crescent
 import hikari
 
 Mode = typing.Literal[
-  'default',
-  'error',
-  'success',
+    "default",
+    "error",
+    "success",
 ]
 
 colors = {
-  'default': '#4f686d',
-  'error': '#ff4b4b',
-  'success': '#77b35a',
+    "default": "#4f686d",
+    "error": "#ff4b4b",
+    "success": "#77b35a",
 }
 
 
 def embed(
-  mode: Mode,
-  context: crescent.Context,
-  title: typing.Optional[str] = None,
-  description: typing.Optional[str] = None,
-  image: typing.Optional[hikari.files.Resourceish] = None,
+    mode: Mode,
+    context: crescent.Context,
+    title: typing.Optional[str] = None,
+    description: typing.Optional[str] = None,
+    image: typing.Optional[hikari.files.Resourceish] = None,
 ) -> hikari.Embed:
-  color = hikari.Color.of(colors[mode])
+    color = hikari.Color.of(colors[mode])
 
-  contextual = context.user
+    contextual = context.user
 
-  username = contextual.username
-  avatar_url = contextual.avatar_url
+    username = contextual.username
+    avatar_url = contextual.avatar_url
 
-  name = username
-  icon = avatar_url
+    name = username
+    icon = avatar_url
 
-  _embed = (
-    hikari.Embed(
-      title=title,
-      description=description,
-      color=color,
+    _embed = (
+        hikari.Embed(
+            title=title,
+            description=description,
+            color=color,
+        )
+        .set_author(
+            name=name,
+            icon=icon,
+        )
+        .set_image(image)
     )
-    .set_author(
-      name=name,
-      icon=icon,
-    )
-    .set_image(image)
-  )
 
-  return _embed
+    return _embed

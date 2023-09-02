@@ -1,5 +1,4 @@
 import random
-import typing
 
 import crescent
 
@@ -17,96 +16,93 @@ plugin = plugins.Plugin()
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
 @crescent.command(
-  name='собрать',
-  description='Собрать ягоды',
+    name="собрать",
+    description="Собрать ягоды",
 )
 class CollectCommand(command_abc.CommandABC):
-  async def run(
-    self: typing.Self,
-    context: contexts.Context,
-  ) -> None:
-    await context.defer()
+    async def run(
+        self,
+        context: contexts.Context,
+    ) -> None:
+        await context.defer()
 
-    _contextual = str(context.user.id)
+        _contextual = str(context.user.id)
 
-    contextual = await plugin.model.economics.find_first_or_create(_contextual)
+        contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-    berry = contextual.partial.berry
-    fox = contextual.partial.fox
+        fox = contextual.partial.fox
 
-    _item = contextual.partial.item
+        _item = contextual.partial.item
 
-    collect = plugin.model.configuration.plugins.collect
-    events = plugin.model.economics.configuration.events
+        collect = plugin.model.configuration.plugins.collect
+        events = plugin.model.economics.configuration.events
 
-    total = 0
+        total = 0
 
-    berrying = random.randint(
-      collect.berrying.a,
-      b=collect.berrying.b,
-    )
+        berrying = random.randint(
+            collect.berrying.a,
+            b=collect.berrying.b,
+        )
 
-    if events:
-      for event in events:
-        buff = event.buff
+        if events:
+            for event in events:
+                buff = event.buff
 
-        if buff:
-          _berry = buff.berry
+                if buff:
+                    _berry = buff.berry
 
-          berrying *= _berry
+                    berrying *= _berry
 
-    if _item:
-      item = shops.shop.get(_item)
+        if _item:
+            item = shops.shop.get(_item)
 
-      bonus = item.bonus
+            bonus = item.bonus
 
-      if bonus.berry:
-        berrying += round(berrying * bonus.berry)
+            if bonus.berry:
+                berrying += round(berrying * bonus.berry)
 
-    berrying = round(berrying)
+        berrying = round(berrying)
 
-    total += berrying
+        total += berrying
 
-    description = f'<@{_contextual}> собрал {context.emoji.berry} `{context.humanize(berrying)}` ягод'
+        description = f"<@{_contextual}> собрал {context.emoji.berry} `{context.humanize(berrying)}` ягод"  # noqa: E501
 
-    if fox:
-      foxying = fox * random.randint(
-        collect.foxying.a,
-        b=collect.foxying.b,
-      )
+        if fox:
+            foxying = fox * random.randint(
+                collect.foxying.a,
+                b=collect.foxying.b,
+            )
 
-      if events:
-        for event in events:
-          buff = event.buff
+            if events:
+                for event in events:
+                    buff = event.buff
 
-          if buff:
-            _fox = buff.fox
+                    if buff:
+                        _fox = buff.fox
 
-            foxying *= _fox
+                        foxying *= _fox
 
-      if _item:
-        item = shops.shop.get(_item)
+            if _item:
+                item = shops.shop.get(_item)
 
-        bonus = item.bonus
+                bonus = item.bonus
 
-        if bonus.fox:
-          foxying += round(foxying * bonus.fox)
+                if bonus.fox:
+                    foxying += round(foxying * bonus.fox)
 
-      foxying = round(foxying)
+            foxying = round(foxying)
 
-      total += foxying
+            total += foxying
 
-      # fmt: off
-      description += (
-        f'\n+ {context.emoji.berry} `{context.humanize(foxying)}` ягод от {context.emoji.fox} `{context.humanize(fox)}` лис'
-      )
-      # fmt: on
+            description += f"\n+ {context.emoji.berry} `{context.humanize(foxying)}` ягод от {context.emoji.fox} `{context.humanize(fox)}` лис"  # noqa: E501
 
-      description += f'\n\n🔁 Всего: {context.emoji.berry} `{context.humanize(total)}` ягод'
+            description += f"\n\n🔁 Всего: {context.emoji.berry} `{context.humanize(total)}` ягод"  # noqa: E501'
 
-    await contextual.berry.add(total)
+        await contextual.berry.add(total)
 
-    await context.respond(embed=context.embed(
-      'default',
-      description=description,
-    ))
+        await context.respond(
+            embed=context.embed(
+                "default",
+                description=description,
+            ),
+        )
