@@ -114,10 +114,7 @@ class Economics:
         )
 
         users = map(
-            lambda partial: User(
-                self.configuration,
-                partial=partial,
-            ),
+            lambda partial: User(partial=partial),
             partials,
         )
 
