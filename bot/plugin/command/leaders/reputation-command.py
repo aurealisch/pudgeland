@@ -52,8 +52,8 @@ class ReputationCommand(commands.CommandABC):
                 name=name,
                 value="\n".join(
                     [
-                        f"<@{user.partial.id}",
-                        f"Ягоды `{context.humanize(user.partial.berry)}`",
+                        f"<@{user.partial.id}>",
+                        f"Репутация `{context.humanize(user.partial.reputation)}`",
                     ]
                 ),
             )
