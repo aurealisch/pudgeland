@@ -31,7 +31,7 @@ class EventsCommand(commands.CommandABC):
 
         description = string.whitespace
 
-        events = plugin.model.economics.configuration.events
+        events = plugin.model.economics.events
 
         for event in events:
             description += "\n".join(

@@ -36,7 +36,7 @@ class CollectCommand(commands.CommandABC):
         _item = contextual.partial.item
 
         collect = plugin.model.configuration.plugins.collect
-        events = plugin.model.economics.configuration.events
+        events = plugin.model.economics.events
 
         total = 0
 
