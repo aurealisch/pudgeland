@@ -15,14 +15,12 @@ events = [
     economics.Event(
         "Осень",
         description=f"""\
-            Я календарь переверну - и снова третье сентября..
-
-            {emojis.Emoji.berry} Множитель сбора ягод: `2,5x`
-            {emojis.Emoji.fox} Множитель сбора ягод лисами: `1,25x`
+            {emojis.Emoji.berry} Множитель сбора ягод: `1,1x`
+            {emojis.Emoji.fox} Множитель сбора ягод лисами: `1,01x`
         """,
         buff=economics.Buff(
-            2.5,
-            fox=1.25,
+            1.1,
+            fox=1.01,
         ),
     ),
 ]
