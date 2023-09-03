@@ -28,8 +28,5 @@ class Context(crescent.Context):
             image=image,
         )
 
-    def humanize(
-        self,
-        number: int,
-    ) -> str:
+    def humanize(self, number: int) -> str:
         return humanizes.humanize(number)

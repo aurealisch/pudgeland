@@ -25,26 +25,14 @@ class Bot:
             | hikari.Intents.GUILD_MESSAGES
         )
 
-        self.gateway_bot = hikari.GatewayBot(
-            token,
-            intents=intents,
-        )
+        self.gateway_bot = hikari.GatewayBot(token, intents=intents)
 
         miru.install(self.gateway_bot)
 
-        self.gateway_bot.subscribe(
-            hikari.StartedEvent,
-            callback=self.model.on_started_event,
-        )
-        self.gateway_bot.subscribe(
-            hikari.StoppedEvent,
-            callback=self.model.on_stopped_event,
-        )
+        self.gateway_bot.subscribe(hikari.StartedEvent, callback=self.model.started)
+        self.gateway_bot.subscribe(hikari.StoppedEvent, callback=self.model.stopped)
 
-        self.client = crescent.Client(
-            self.gateway_bot,
-            model=self.model,
-        )
+        self.client = crescent.Client(self.gateway_bot, model=self.model)
 
         self.client.plugins.load_folder("bot.plugin")
 

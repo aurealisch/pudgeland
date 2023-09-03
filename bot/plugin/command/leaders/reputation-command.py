@@ -16,16 +16,10 @@ plugin = plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(
-    name="репутация",
-    description="Лидеры по репутации",
-)
+@crescent.command(name="репутация", description="Лидеры по репутации")
 class ReputationCommand(commands.CommandABC):
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
-        await context.defer(ephemeral=True)
+    async def run(self, context: contexts.Context) -> None:
+        await context.defer(True)
 
         users = await plugin.model.economics.find_many(
             plugin.model.configuration.leaders.take,
@@ -35,10 +29,7 @@ class ReputationCommand(commands.CommandABC):
 
         embed = context.embed("default")
 
-        for (
-            index,
-            user,
-        ) in enumerate(users):
+        for index, user in enumerate(users):
             name = string.whitespace
 
             position = index + 1
@@ -58,7 +49,4 @@ class ReputationCommand(commands.CommandABC):
                 ),
             )
 
-        await context.respond(
-            ephemeral=True,
-            embed=embed,
-        )
+        await context.respond(ephemeral=True, embed=embed)

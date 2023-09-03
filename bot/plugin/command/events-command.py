@@ -9,37 +9,23 @@ from bot.common.command import cooldowns
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(
-    seconds=2,
-    milliseconds=500,
-)  # 2.5 seconds
+period = cooldowns.Period(seconds=2, milliseconds=500)  # 2.5 seconds
 
 
 @typing.final
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
-@crescent.command(
-    name="события",
-    description="События",
-)
+@crescent.command(name="события", description="События")
 class EventsCommand(commands.CommandABC):
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
-        await context.defer(ephemeral=True)
+    async def run(self, context: contexts.Context) -> None:
+        await context.defer(True)
 
         description = string.whitespace
 
         events = plugin.model.economics.events
 
         for event in events:
-            description += "\n".join(
-                [
-                    f"# {event.title}",
-                    f"> {event.description}",
-                ]
-            )
+            description += "\n".join([f"# {event.title}", f"> {event.description}"])
 
         await context.respond(
             ephemeral=True,

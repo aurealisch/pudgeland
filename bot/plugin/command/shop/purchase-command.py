@@ -12,26 +12,17 @@ from . import _groups
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(
-    seconds=2,
-    milliseconds=500,
-)  # 2.5 seconds
+period = cooldowns.Period(seconds=2, milliseconds=500)  # 2.5 seconds
 
 
 @typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
-@crescent.command(
-    name="покупка",
-    description="Покупка",
-)
+@crescent.command(name="покупка", description="Покупка")
 class PurchaseCommand(commands.CommandABC):
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
-        await context.defer(ephemeral=True)
+    async def run(self, context: contexts.Context) -> None:
+        await context.defer(True)
 
         class View(views.ViewABC):
             @miru.text_select(
@@ -43,10 +34,7 @@ class PurchaseCommand(commands.CommandABC):
                         emoji=item.emoji,
                         is_default=False,
                     )
-                    for (
-                        value,
-                        item,
-                    ) in shops.shop.items()
+                    for value, item in shops.shop.items()
                 ],
                 placeholder="Предметы",
             )

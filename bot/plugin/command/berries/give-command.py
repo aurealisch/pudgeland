@@ -16,10 +16,7 @@ plugin = plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(
-    name="дать",
-    description="Дать ягоды",
-)
+@crescent.command(name="дать", description="Дать ягоды")
 class GiveCommand(commands.CommandABC):
     user = crescent.option(
         hikari.User,
@@ -33,10 +30,7 @@ class GiveCommand(commands.CommandABC):
         description="Количество",
     )
 
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
+    async def run(self, context: contexts.Context) -> None:
         if self.amount > 0:
             await context.defer()
 

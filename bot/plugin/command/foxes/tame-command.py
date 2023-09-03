@@ -12,28 +12,19 @@ from bot.common.command import cooldowns, exceptions
 
 plugin = plugins.Plugin()
 
-group = crescent.Group("лисы")
+group = crescent.Group("лисы", description="Лисы")
 
-period = cooldowns.Period(
-    seconds=2,
-    milliseconds=500,
-)  # 2.5 seconds
+period = cooldowns.Period(seconds=2, milliseconds=500)  # 2.5 seconds
 
 
 @typing.final
 @group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
-@crescent.command(
-    name="приручить",
-    description="Приручить лису",
-)
+@crescent.command(name="приручить", description="Приручить лису")
 class TameCommand(commands.CommandABC):
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
-        await context.defer(ephemeral=True)
+    async def run(self, context: contexts.Context) -> None:
+        await context.defer(True)
 
         tame = plugin.model.configuration.plugins.tame
 
@@ -67,15 +58,7 @@ class TameCommand(commands.CommandABC):
 
                 await contextual.berry.remove(fed)
 
-                if (
-                    random.choice(
-                        range(
-                            1,
-                            tame.edge,
-                        ),
-                    )
-                    != 1
-                ):
+                if random.choice(range(1, tame.edge)) != 1:
                     await view_context.respond(
                         embed=context.embed(
                             "default",

@@ -21,7 +21,7 @@ def embed(
     context: crescent.Context,
     title: typing.Optional[str] = None,
     description: typing.Optional[str] = None,
-    image: typing.Optional[hikari.files.Resourceish] = None,
+    image: typing.Optional[hikari.Resourceish] = None,
 ) -> hikari.Embed:
     _color = hikari.Color.of(colors[color])
 
@@ -39,10 +39,7 @@ def embed(
             description=description,
             color=_color,
         )
-        .set_author(
-            name=name,
-            icon=icon,
-        )
+        .set_author(name=name, icon=icon)
         .set_image(image)
     )
 

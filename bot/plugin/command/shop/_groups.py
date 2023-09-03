@@ -1,3 +1,3 @@
 import crescent
 
-group = crescent.Group("магазин")
+group = crescent.Group("магазин", description="Магазин")

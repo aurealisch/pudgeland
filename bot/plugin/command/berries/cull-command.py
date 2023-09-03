@@ -17,10 +17,7 @@ plugin = plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(
-    name="отобрать",
-    description="Отобрать ягоды",
-)
+@crescent.command(name="отобрать", description="Отобрать ягоды")
 class CullCommand(commands.CommandABC):
     user = crescent.option(
         hikari.User,
@@ -28,10 +25,7 @@ class CullCommand(commands.CommandABC):
         description="Пользователь",
     )
 
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
+    async def run(self, context: contexts.Context) -> None:
         await context.defer()
 
         _contextual = str(context.user.id)
@@ -49,15 +43,7 @@ class CullCommand(commands.CommandABC):
         if culling < 1:
             raise exceptions.NothingToCullException
 
-        if (
-            random.choice(
-                range(
-                    1,
-                    cull.edge,
-                )
-            )
-            != 1
-        ):
+        if random.choice(range(1, cull.edge)) != 1:
             await contextual.berry.remove(culling)
 
             await context.respond(

@@ -43,17 +43,13 @@ class Resource:
     async def add(self, value: int) -> None:
         await self.partial.prisma().update(
             {self.key: self.partial.dict().get(self.key) + value},
-            where={
-                "id": self.partial.id,
-            },
+            where={"id": self.partial.id},
         )
 
     async def remove(self, value: int) -> None:
         await self.partial.prisma().update(
             {self.key: self.partial.dict().get(self.key) - value},
-            where={
-                "id": self.partial.id,
-            },
+            where={"id": self.partial.id},
         )
 
 
@@ -105,14 +101,8 @@ class Economics:
     ) -> typing.List[User]:
         order = {user_keys: sort_order}
 
-        partials = await self.prisma.user.find_many(
-            take,
-            order=order,
-        )
+        partials = await self.prisma.user.find_many(take, order=order)
 
-        users = map(
-            lambda partial: User(partial=partial),
-            partials,
-        )
+        users = map(lambda partial: User(partial=partial), partials)
 
         return users

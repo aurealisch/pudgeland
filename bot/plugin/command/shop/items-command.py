@@ -11,33 +11,21 @@ from . import _groups
 
 plugin = plugins.Plugin()
 
-period = cooldowns.Period(
-    seconds=2,
-    milliseconds=500,
-)  # 2.5 seconds
+period = cooldowns.Period(seconds=2, milliseconds=500)  # 2.5 seconds
 
 
 @typing.final
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=period))
-@crescent.command(
-    name="предметы",
-    description="Предметы",
-)
+@crescent.command(name="предметы", description="Предметы")
 class PreviewCommand(commands.CommandABC):
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
-        await context.defer(ephemeral=True)
+    async def run(self, context: contexts.Context) -> None:
+        await context.defer(True)
 
         description = string.whitespace
 
-        for (
-            value,
-            item,
-        ) in shops.shop.items():
+        for value, item in shops.shop.items():
             description += f"""
                 # {value}. {item.emoji} **{item.label}**
 

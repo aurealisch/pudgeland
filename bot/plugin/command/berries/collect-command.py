@@ -16,15 +16,9 @@ plugin = plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(
-    name="собрать",
-    description="Собрать ягоды",
-)
+@crescent.command(name="собрать", description="Собрать ягоды")
 class CollectCommand(commands.CommandABC):
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
+    async def run(self, context: contexts.Context) -> None:
         await context.defer()
 
         _contextual = str(context.user.id)
@@ -40,12 +34,7 @@ class CollectCommand(commands.CommandABC):
 
         total = 0
 
-        berrying = random.choice(
-            range(
-                collect.berrying.a,
-                b=collect.berrying.b,
-            ),
-        )
+        berrying = random.choice(range(collect.berrying.a, b=collect.berrying.b))
 
         if events:
             for event in events:
@@ -71,12 +60,7 @@ class CollectCommand(commands.CommandABC):
         description = f"<@{_contextual}> собрал {context.emoji.berry} `{context.humanize(berrying)}` ягод"  # noqa: E501
 
         if fox:
-            foxying = fox * random.choice(
-                range(
-                    collect.foxying.a,
-                    b=collect.foxying.b,
-                ),
-            )
+            foxying = fox * random.choice(range(collect.foxying.a, b=collect.foxying.b))
 
             if events:
                 for event in events:
@@ -105,9 +89,4 @@ class CollectCommand(commands.CommandABC):
 
         await contextual.berry.add(total)
 
-        await context.respond(
-            embed=context.embed(
-                "default",
-                description=description,
-            ),
-        )
+        await context.respond(embed=context.embed("default", description=description))

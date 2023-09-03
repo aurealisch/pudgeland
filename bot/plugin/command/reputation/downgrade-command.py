@@ -16,10 +16,7 @@ plugin = plugins.Plugin()
 @_groups.group.child
 @plugin.include
 @crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(
-    name="понизить",
-    description="Понизить репутацию пользователю",
-)
+@crescent.command(name="понизить", description="Понизить репутацию пользователю")
 class DowngradeCommand(commands.CommandABC):
     user = crescent.option(
         hikari.User,
@@ -27,10 +24,7 @@ class DowngradeCommand(commands.CommandABC):
         description="Пользователь",
     )
 
-    async def run(
-        self,
-        context: contexts.Context,
-    ) -> None:
+    async def run(self, context: contexts.Context) -> None:
         await context.defer()
 
         contextual = str(context.user.id)
