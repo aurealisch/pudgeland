@@ -1,11 +1,13 @@
 import abc
 import typing
 
+import crescent
+
 from .. import contexts
 from ..error.handler import handlers
 
 
-class CommandABC(abc.ABC):
+class CommandABC(crescent.ClassCommandProto, abc.ABC):
     async def run(
         self,
         context: contexts.Context,

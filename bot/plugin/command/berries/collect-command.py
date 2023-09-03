@@ -40,9 +40,11 @@ class CollectCommand(commands.CommandABC):
 
         total = 0
 
-        berrying = random.randint(
-            collect.berrying.a,
-            b=collect.berrying.b,
+        berrying = random.choice(
+            range(
+                collect.berrying.a,
+                b=collect.berrying.b,
+            ),
         )
 
         if events:
@@ -69,9 +71,11 @@ class CollectCommand(commands.CommandABC):
         description = f"<@{_contextual}> собрал {context.emoji.berry} `{context.humanize(berrying)}` ягод"  # noqa: E501
 
         if fox:
-            foxying = fox * random.randint(
-                collect.foxying.a,
-                b=collect.foxying.b,
+            foxying = fox * random.choice(
+                range(
+                    collect.foxying.a,
+                    b=collect.foxying.b,
+                ),
             )
 
             if events:
