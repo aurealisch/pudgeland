@@ -24,7 +24,7 @@ plugin = plugins.Plugin()
 )
 async def callback(
     context: plugin.contexts.Context,
-    user: hikari.User,
+    user: "hikari.User",
 ) -> None:
     await context.defer()
 
@@ -45,4 +45,4 @@ async def callback(
 
         return
 
-    await context.handle(plugin.exceptions.YouCantDoThatException)
+    raise plugin.exceptions.YouCantDoThatException

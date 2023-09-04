@@ -29,7 +29,7 @@ plugin = plugins.Plugin()
 )
 async def callback(
     context: plugin.contexts.Context,
-    user: hikari.User,
+    user: "hikari.User",
     amount: int,
 ) -> None:
     if amount > 0:
@@ -55,4 +55,4 @@ async def callback(
 
         return
 
-    await context.handle(plugin.exceptions.YouCantDoThatException)
+    raise plugin.exceptions.YouCantDoThatException

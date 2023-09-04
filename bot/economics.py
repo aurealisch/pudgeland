@@ -72,7 +72,7 @@ class User:
 class Economics:
     def __init__(
         self,
-        prisma: _prisma.Prisma,
+        prisma: "_prisma.Prisma",
         events: typing.Optional[typing.Sequence[Event]] = None,
     ) -> None:
         self.prisma = prisma

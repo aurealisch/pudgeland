@@ -3,6 +3,7 @@ import typing
 import crescent
 import crescent.internal
 
+from ..utility import handles
 from . import contexts, cooldowns
 from . import options as _options
 
@@ -14,24 +15,27 @@ def command(
     group: typing.Optional["crescent.Group"] = None,
     options: typing.Optional[typing.Sequence["_options.Option"]] = None,
 ) -> typing.Callable[
-    [tuple],
-    # fmt: off
-    crescent.internal.Includable[
-        crescent.internal.AppCommandMeta,
-    ]
-    # fmt: on
+    [tuple], "crescent.internal.Includable[crescent.internal.AppCommandMeta]"
 ]:
-    def inner(*args) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
+    def inner(
+        *args,
+    ) -> "crescent.internal.Includable[crescent.internal.AppCommandMeta]":
         callback, *_ = args
 
-        async def _callback(self, context: contexts.Context) -> None:
+        async def _callback(self, context: "contexts.Context") -> None:
             arguments = (context,)
 
             if context.options:
                 for _, value in context.options.items():
                     arguments += (value,)
 
-            return await callback(*arguments)
+            try:
+                await callback(*arguments)
+            except Exception as exception:
+                await handles.handle(
+                    exception,
+                    contetx=context,
+                )
 
         __name = "Command"
         __bases = (object,)

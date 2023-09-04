@@ -23,7 +23,7 @@ class Period:
     microseconds: "types.FloatOrInt" = 0
 
     @property
-    def total(self) -> types.FloatOrInt:
+    def total(self) -> "types.FloatOrInt":
         return (
             self.weeks * 7 * 24 * 60 * 60
             + self.days * 24 * 60 * 60

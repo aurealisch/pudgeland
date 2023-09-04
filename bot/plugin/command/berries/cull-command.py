@@ -26,7 +26,7 @@ plugin = plugins.Plugin()
 )
 async def cull(
     context: plugin.contexts.Context,
-    user: hikari.User,
+    user: "hikari.User",
 ) -> None:
     await context.defer()
 
@@ -43,7 +43,7 @@ async def cull(
     culling = round((optional.partial.berry / 2) * fraction)
 
     if culling < 1:
-        await context.handle(plugin.exceptions.NothingToCullException)
+        raise Exception("Нечего отбирать")
 
     if (
         random.choice(
