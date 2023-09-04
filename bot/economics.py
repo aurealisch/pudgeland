@@ -10,8 +10,8 @@ from .common import shops
 @typing.final
 @dataclasses.dataclass
 class Effect:
-    berry: types.FloatOrInt
-    fox: types.FloatOrInt
+    berry: "types.FloatOrInt"
+    fox: "types.FloatOrInt"
 
 
 Debuff = Effect
@@ -36,7 +36,7 @@ class Resource:
             "fox",
             "reputation",
         ],
-        partial: _prisma.models.User,
+        partial: "_prisma.models.User",
     ) -> None:
         self.key = key
         self.partial = partial
@@ -58,7 +58,7 @@ class Resource:
 class User:
     def __init__(
         self,
-        partial: _prisma.models.User,
+        partial: "_prisma.models.User",
     ) -> None:
         self.partial = partial
 
@@ -98,8 +98,8 @@ class Economics:
     async def find_many(
         self,
         take: int,
-        user_keys: _prisma.types.UserKeys,
-        sort_order: _prisma.types.SortOrder,
+        user_keys: "_prisma.types.UserKeys",
+        sort_order: "_prisma.types.SortOrder",
     ) -> typing.List[User]:
         order = {user_keys: sort_order}
 

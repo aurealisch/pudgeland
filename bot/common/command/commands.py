@@ -10,9 +10,9 @@ from . import options as _options
 def command(
     name: str,
     description: str,
-    period: cooldowns.Period,
-    group: typing.Optional[crescent.Group] = None,
-    options: typing.Optional[typing.Sequence[_options.Option]] = None,
+    period: "cooldowns.Period",
+    group: typing.Optional["crescent.Group"] = None,
+    options: typing.Optional[typing.Sequence["_options.Option"]] = None,
 ) -> typing.Callable[
     [tuple],
     # fmt: off

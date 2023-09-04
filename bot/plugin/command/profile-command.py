@@ -1,19 +1,17 @@
 from bot.common import plugins
-from bot.common.command import commands, contexts, cooldowns
+
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "профиль",
     description="Профиль",
-    period=cooldowns.Period(
-        seconds=2,
-        milliseconds=500,
-    ),  # 2.5 seconds
+    period=period,
 )
-async def callback(context: contexts.Context) -> None:
+async def callback(context: plugin.contexts.Context) -> None:
     await context.defer(True)
 
     contextual = await plugin.model.economics.find_first_or_create(str(context.user.id))

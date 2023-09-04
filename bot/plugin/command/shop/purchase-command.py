@@ -2,28 +2,24 @@ import hikari
 import miru
 
 from bot.common import plugins
-from bot.common.abc import views
-from bot.common.command import commands, contexts, cooldowns, exceptions
 
-from . import _groups
+from ._groups import group
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "покупка",
     description="Покупка",
-    period=cooldowns.Period(
-        seconds=2,
-        milliseconds=500,
-    ),  # 2.5 seconds
-    group=_groups.group,
+    period=period,
+    group=group,
 )
-async def callback(context: contexts.Context) -> None:
+async def callback(context: plugin.contexts.Context) -> None:
     await context.defer(True)
 
-    class View(views.ViewABC):
+    class View(plugin.views.ViewABC):
         @miru.text_select(
             options=[
                 hikari.SelectMenuOption(
@@ -39,8 +35,8 @@ async def callback(context: contexts.Context) -> None:
         )
         async def _(
             self,
-            text_select: miru.TextSelect,
-            view_context: miru.ViewContext,
+            text_select: "miru.TextSelect",
+            view_context: "miru.ViewContext",
         ) -> None:
             await view_context.defer()
 
@@ -58,7 +54,7 @@ async def callback(context: contexts.Context) -> None:
                 price = item.price
 
                 if berry < price:
-                    raise exceptions.NotEnoughBerriesException
+                    raise plugin.exceptions.NotEnoughBerriesException
 
                 await contextual.berry.remove(price)
 
@@ -73,7 +69,7 @@ async def callback(context: contexts.Context) -> None:
 
                 return
 
-            raise exceptions.YouCantDoThatException
+            raise plugin.exceptions.YouCantDoThatException
 
     view = View()
 

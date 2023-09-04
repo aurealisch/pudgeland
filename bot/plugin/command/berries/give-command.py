@@ -1,34 +1,34 @@
 import hikari
 
 from bot.common import plugins
-from bot.common.command import commands, contexts, exceptions, options
 
-from . import _groups, _periods
+from ._groups import group
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "дать",
     description="Дать ягоды",
-    period=_periods.period,
-    group=_groups.group,
+    period=period,
+    group=group,
     options=[
-        options.option(
+        plugin.options.option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
         ),
-        options.option(
+        plugin.options.option(
             int,
             name="количество",
             description="Количество",
         ),
     ],
 )
-async def give(
-    context: contexts.Context,
+async def callback(
+    context: plugin.contexts.Context,
     user: hikari.User,
     amount: int,
 ) -> None:
@@ -55,4 +55,4 @@ async def give(
 
         return
 
-    await context.handle(exceptions.YouCantDoThatException)
+    await context.handle(plugin.exceptions.YouCantDoThatException)

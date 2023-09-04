@@ -6,19 +6,21 @@ import crescent
 
 from bot import types
 
+from . import contexts
+
 _KEY = typing.TypeVar("_KEY")
 
 
 @typing.final
 @dataclasses.dataclass
 class Period:
-    weeks: types.FloatOrInt = 0
-    days: types.FloatOrInt = 0
-    hours: types.FloatOrInt = 0
-    minutes: types.FloatOrInt = 0
-    seconds: types.FloatOrInt = 0
-    milliseconds: types.FloatOrInt = 0
-    microseconds: types.FloatOrInt = 0
+    weeks: "types.FloatOrInt" = 0
+    days: "types.FloatOrInt" = 0
+    hours: "types.FloatOrInt" = 0
+    minutes: "types.FloatOrInt" = 0
+    seconds: "types.FloatOrInt" = 0
+    milliseconds: "types.FloatOrInt" = 0
+    microseconds: "types.FloatOrInt" = 0
 
     @property
     def total(self) -> types.FloatOrInt:
@@ -149,7 +151,7 @@ class Cooldown(typing.Generic[_KEY]):
 def cooldown(
     period: Period,
 ) -> typing.Callable[
-    [crescent.Context],
+    ["contexts.Context"],
     # fmt: off
     typing.Awaitable[
         typing.Optional[
@@ -162,9 +164,14 @@ def cooldown(
 
     _period = total
 
-    _cooldown = Cooldown(1, period=_period)
+    _cooldown = Cooldown(
+        1,
+        period=_period,
+    )
 
-    async def inner(context: crescent.Context) -> typing.Optional[crescent.HookResult]:
+    async def inner(
+        context: "contexts.Context",
+    ) -> typing.Optional[crescent.HookResult]:
         remained = _cooldown.trigger(context.user.id)
 
         if remained is None:
@@ -177,12 +184,15 @@ def cooldown(
         timestamp = f"<t:{future}:R>"
 
         await context.respond(
-            f"""\
-                Ты слишком часто используешь эту команду!
-
-                Попробуйте еще раз {timestamp}
-            """,
             ephemeral=True,
+            embed=context.embed(
+                "default",
+                description=f"""\
+                    Ты слишком часто используешь эту команду!
+
+                    Попробуйте еще раз {timestamp}
+                """,
+            ),
         )
 
         return crescent.HookResult(True)

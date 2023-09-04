@@ -9,11 +9,11 @@ Type = typing.Union[
     type[bool],
     type[int],
     type[float],
-    type[hikari.PartialChannel],
-    type[hikari.Role],
-    type[hikari.User],
-    type[crescent.Mentionable],
-    type[hikari.Attachment],
+    type["hikari.PartialChannel"],
+    type["hikari.Role"],
+    type["hikari.User"],
+    type["crescent.Mentionable"],
+    type["hikari.Attachment"],
 ]
 
 

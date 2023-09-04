@@ -3,21 +3,21 @@ import random
 import hikari
 
 from bot.common import plugins
-from bot.common.command import commands, contexts, exceptions, options
 
-from . import _groups, _periods
+from ._groups import group
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "отобрать",
     description="Отобрать ягоды",
-    period=_periods.period,
-    group=_groups.group,
+    period=period,
+    group=group,
     options=[
-        options.option(
+        plugin.options.option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
@@ -25,7 +25,7 @@ plugin = plugins.Plugin()
     ],
 )
 async def cull(
-    context: contexts.Context,
+    context: plugin.contexts.Context,
     user: hikari.User,
 ) -> None:
     await context.defer()
@@ -43,7 +43,7 @@ async def cull(
     culling = round((optional.partial.berry / 2) * fraction)
 
     if culling < 1:
-        await context.handle(exceptions.NothingToCullException)
+        await context.handle(plugin.exceptions.NothingToCullException)
 
     if (
         random.choice(

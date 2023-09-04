@@ -1,21 +1,22 @@
 import string
 
 from bot.common import plugins
-from bot.common.command import commands, contexts
 
-from . import _emojis, _groups, _periods
+from ._emojis import emoji
+from ._groups import group
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "лисы",
     description="Лидеры по лисам",
-    period=_periods.period,
-    group=_groups.group,
+    period=period,
+    group=group,
 )
-async def callback(context: contexts.Context) -> None:
+async def callback(context: plugin.contexts.Context) -> None:
     await context.defer(True)
 
     users = await plugin.model.economics.find_many(
@@ -31,8 +32,8 @@ async def callback(context: contexts.Context) -> None:
 
         position = index + 1
 
-        if position in _emojis.emoji:
-            name += _emojis.emoji[position]
+        if position in emoji:
+            name += emoji[position]
 
         name += f"#{position}"
 

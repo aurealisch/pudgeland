@@ -12,7 +12,7 @@ class Bot:
     def __init__(
         self,
         token: str,
-        model: models.Model,
+        model: "models.Model",
     ) -> None:
         self.model = model
 

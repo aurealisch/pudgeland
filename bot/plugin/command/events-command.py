@@ -1,21 +1,19 @@
 import string
 
 from bot.common import plugins
-from bot.common.command import commands, contexts, cooldowns
+
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "события",
     description="События",
-    period=cooldowns.Period(
-        seconds=2,
-        milliseconds=500,
-    ),  # 2.5 seconds
+    period=period,
 )
-async def callback(context: contexts.Context) -> None:
+async def callback(context: plugin.contexts.Context) -> None:
     await context.defer(True)
 
     description = string.whitespace

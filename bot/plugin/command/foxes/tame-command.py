@@ -6,17 +6,15 @@ import hikari
 import miru
 
 from bot.common import plugins
-from bot.common.abc import views
-from bot.common.command import commands, contexts, cooldowns, exceptions
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "приручить",
     description="Приручить лису",
-    period=cooldowns.Period(
+    period=plugin.cooldowns.Period(
         seconds=2,
         milliseconds=500,
     ),  # 2.5 seconds
@@ -25,7 +23,7 @@ plugin = plugins.Plugin()
         description="Лисы",
     ),
 )
-async def tame(context: contexts.Context) -> None:
+async def tame(context: plugin.contexts.Context) -> None:
     await context.defer(True)
 
     tame = plugin.model.configuration.plugins.tame
@@ -40,7 +38,7 @@ async def tame(context: contexts.Context) -> None:
 
     style = hikari.ButtonStyle.SECONDARY
 
-    class View(views.ViewABC):
+    class View(plugin.views.ViewABC):
         @miru.button(
             label="ОК",
             style=style,
@@ -48,15 +46,15 @@ async def tame(context: contexts.Context) -> None:
         )
         async def ok(
             self,
-            _: miru.Button,
-            view_context: miru.ViewContext,
+            _: "miru.Button",
+            view_context: "miru.ViewContext",
         ) -> None:
             await view_context.defer()
 
             berry = contextual.partial.berry
 
             if berry < fed:
-                raise exceptions.NotEnoughBerriesException
+                raise plugin.exceptions.NotEnoughBerriesException
 
             await contextual.berry.remove(fed)
 
@@ -108,8 +106,8 @@ async def tame(context: contexts.Context) -> None:
         )
         async def cancel(
             self,
-            _: miru.Button,
-            view_context: miru.ViewContext,
+            _: "miru.Button",
+            view_context: "miru.ViewContext",
         ) -> None:
             await view_context.defer()
 

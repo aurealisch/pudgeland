@@ -1,21 +1,21 @@
 import hikari
 
 from bot.common import plugins
-from bot.common.command import commands, contexts, exceptions, options
 
-from . import _groups, _periods
+from ._groups import group
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "понизить",
     description="Понизить",
-    period=_periods.period,
-    group=_groups.group,
+    period=period,
+    group=group,
     options=[
-        options.option(
+        plugin.options.option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
@@ -23,7 +23,7 @@ plugin = plugins.Plugin()
     ],
 )
 async def callback(
-    context: contexts.Context,
+    context: plugin.contexts.Context,
     user: hikari.User,
 ) -> None:
     await context.defer()
@@ -45,4 +45,4 @@ async def callback(
 
         return
 
-    await context.handle(exceptions.YouCantDoThatException)
+    await context.handle(plugin.exceptions.YouCantDoThatException)

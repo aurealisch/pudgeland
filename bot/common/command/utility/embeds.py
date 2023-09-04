@@ -22,7 +22,7 @@ def embed(
     context: "contexts.Context",
     title: typing.Optional[str] = None,
     description: typing.Optional[str] = None,
-    image: typing.Optional[hikari.Resourceish] = None,
+    image: typing.Optional["hikari.Resourceish"] = None,
 ) -> hikari.Embed:
     _color = hikari.Color.of(colors[color])
 

@@ -1,21 +1,21 @@
 import random
 
 from bot.common import plugins
-from bot.common.command import commands, contexts
 
-from . import _groups, _periods
+from ._groups import group
+from ._periods import period
 
 plugin = plugins.Plugin()
 
 
 @plugin.include
-@commands.command(
+@plugin.commands.command(
     "собрать",
     description="Собрать ягоды",
-    period=_periods.period,
-    group=_groups.group,
+    period=period,
+    group=group,
 )
-async def collect(context: contexts.Context) -> None:
+async def collect(context: plugin.contexts.Context) -> None:
     await context.defer()
 
     _contextual = str(context.user.id)

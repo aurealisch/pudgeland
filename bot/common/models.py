@@ -10,20 +10,20 @@ from . import configurations
 class Model:
     def __init__(
         self,
-        economics: _economics.Economics,
-        configuration: configurations.Configuration,
+        economics: "_economics.Economics",
+        configuration: "configurations.Configuration",
     ) -> None:
         self.economics = economics
         self.configuration = configuration
 
     async def started(
         self,
-        _: hikari.StartedEvent,
+        _: "hikari.StartedEvent",
     ) -> None:
-        return await self.economics.prisma.connect()
+        await self.economics.prisma.connect()
 
     async def stopped(
         self,
-        _: hikari.StoppedEvent,
+        _: "hikari.StartedEvent",
     ) -> None:
-        return await self.economics.prisma.disconnect()
+        await self.economics.prisma.disconnect()

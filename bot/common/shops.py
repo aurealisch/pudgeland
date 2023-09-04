@@ -7,8 +7,8 @@ from .. import types
 @typing.final
 @dataclasses.dataclass
 class Bonus:
-    berry: typing.Optional[types.FloatOrInt] = None
-    fox: typing.Optional[types.FloatOrInt] = None
+    berry: typing.Optional["types.FloatOrInt"] = None
+    fox: typing.Optional["types.FloatOrInt"] = None
 
 
 @typing.final

@@ -12,8 +12,8 @@ class ViewABC(miru.View, abc.ABC):
     async def on_error(
         self,
         error: Exception,
-        _: typing.Optional[miru.abc.item.ViewItem] = None,
-        context: typing.Optional[miru.context.view.ViewContext] = None,
+        _: typing.Optional["miru.abc.ViewItem"] = None,
+        context: typing.Optional["miru.ViewContext"] = None,
     ) -> None:
         await handles.handle(
             error,
