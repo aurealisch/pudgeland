@@ -24,6 +24,6 @@ class Model:
 
     async def stopped(
         self,
-        _: "hikari.StartedEvent",
+        _: "hikari.StoppedEvent",
     ) -> None:
         await self.economics.prisma.disconnect()
