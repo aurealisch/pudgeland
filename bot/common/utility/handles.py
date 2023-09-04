@@ -5,7 +5,7 @@ from ..command import contexts
 
 async def handle(
     exception: Exception,
-    context: contexts.Context,
+    context: "contexts.Context",
 ) -> None:
     value = exception
     tb = exception.__traceback__

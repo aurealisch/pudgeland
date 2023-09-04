@@ -1,7 +1,8 @@
 import typing
 
-import crescent
 import hikari
+
+from .. import contexts
 
 Color = typing.Literal[
     "default",
@@ -18,7 +19,7 @@ colors = {
 
 def embed(
     color: Color,
-    context: crescent.Context,
+    context: "contexts.Context",
     title: typing.Optional[str] = None,
     description: typing.Optional[str] = None,
     image: typing.Optional[hikari.Resourceish] = None,
