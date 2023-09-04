@@ -1,57 +1,58 @@
-import typing
-
-import crescent
 import hikari
 
-from bot.common import contexts, plugins
-from bot.common.abc import commands
-from bot.common.command import cooldowns, exceptions
+from bot.common import plugins
+from bot.common.command import commands, contexts, exceptions, options
 
 from . import _groups, _periods
 
 plugin = plugins.Plugin()
 
 
-@typing.final
-@_groups.group.child
 @plugin.include
-@crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(name="дать", description="Дать ягоды")
-class GiveCommand(commands.CommandABC):
-    user = crescent.option(
-        hikari.User,
-        name="пользователь",
-        description="Пользователь",
-    )
+@commands.command(
+    "дать",
+    description="Дать ягоды",
+    period=_periods.period,
+    group=_groups.group,
+    options=[
+        options.option(
+            hikari.User,
+            name="пользователь",
+            description="Пользователь",
+        ),
+        options.option(
+            int,
+            name="количество",
+            description="Количество",
+        ),
+    ],
+)
+async def give(
+    context: contexts.Context,
+    user: hikari.User,
+    amount: int,
+) -> None:
+    if amount > 0:
+        await context.defer()
 
-    amount = crescent.option(
-        int,
-        name="количество",
-        description="Количество",
-    )
+        _optional = str(user.id)
+        _contextual = str(context.user.id)
 
-    async def run(self, context: contexts.Context) -> None:
-        if self.amount > 0:
-            await context.defer()
+        optional = await plugin.model.economics.find_first_or_create(_optional)
+        contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-            _optional = str(self.user.id)
-            _contextual = str(context.user.id)
+        await optional.berry.add(amount)
+        await contextual.berry.remove(amount)
 
-            optional = await plugin.model.economics.find_first_or_create(_optional)
-            contextual = await plugin.model.economics.find_first_or_create(_contextual)
+        await context.respond(
+            embed=context.embed(
+                "default",
+                description=f"""\
+                    <@{_contextual}> дал {context.emoji.berry} `{amount}` ягод <@{_optional}>
+                """,  # noqa: E501
+            ),
+        )
 
-            await optional.berry.add(self.amount)
-            await contextual.berry.remove(self.amount)
+        return
 
-            await context.respond(
-                embed=context.embed(
-                    "default",
-                    description=f"""\
-                        <@{_contextual}> дал {context.emoji.berry} `{self.amount}` ягод <@{_optional}>
-                    """,  # noqa: E501
-                ),
-            )
-
-            return
-
-        raise exceptions.YouCantDoThatException
+    await context.handle(exceptions.YouCantDoThatException)

@@ -3,8 +3,8 @@ import typing
 import crescent
 import hikari
 
-from .command.utility import embeds, humanizes
-from .utility import emojis
+from ..utility import emojis, handles
+from .utility import embeds, humanizes
 
 
 @typing.final
@@ -28,5 +28,19 @@ class Context(crescent.Context):
             image=image,
         )
 
-    def humanize(self, number: int) -> str:
+    def humanize(
+        self,
+        number: int,
+    ) -> str:
         return humanizes.humanize(number)
+
+    async def handle(
+        self,
+        exception: Exception,
+    ) -> None:
+        context = self
+
+        await handles.handle(
+            exception,
+            context=context,
+        )

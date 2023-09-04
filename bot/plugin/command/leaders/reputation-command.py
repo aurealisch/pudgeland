@@ -1,52 +1,52 @@
 import string
-import typing
 
-import crescent
-
-from bot.common import contexts, plugins
-from bot.common.abc import commands
-from bot.common.command import cooldowns
+from bot.common import plugins
+from bot.common.command import commands, contexts
 
 from . import _emojis, _groups, _periods
 
 plugin = plugins.Plugin()
 
 
-@typing.final
-@_groups.group.child
 @plugin.include
-@crescent.hook(cooldowns.cooldown(period=_periods.period))
-@crescent.command(name="репутация", description="Лидеры по репутации")
-class ReputationCommand(commands.CommandABC):
-    async def run(self, context: contexts.Context) -> None:
-        await context.defer(True)
+@commands.command(
+    "репутация",
+    description="Лидеры по репутации",
+    period=_periods.period,
+    group=_groups.group,
+)
+async def callback(context: contexts.Context) -> None:
+    await context.defer(True)
 
-        users = await plugin.model.economics.find_many(
-            plugin.model.configuration.leaders.take,
-            user_keys="reputation",
-            sort_order=plugin.model.configuration.leaders.sort.order,
+    users = await plugin.model.economics.find_many(
+        plugin.model.configuration.leaders.take,
+        user_keys="reputation",
+        sort_order=plugin.model.configuration.leaders.sort.order,
+    )
+
+    embed = context.embed("default")
+
+    for index, user in enumerate(users):
+        name = string.whitespace
+
+        position = index + 1
+
+        if position in _emojis.emoji:
+            name += _emojis.emoji[position]
+
+        name += f"#{position}"
+
+        embed.add_field(
+            name=name,
+            value="\n".join(
+                [
+                    f"<@{user.partial.id}>",
+                    f"Репутация `{context.humanize(user.partial.reputation)}`",
+                ]
+            ),
         )
 
-        embed = context.embed("default")
-
-        for index, user in enumerate(users):
-            name = string.whitespace
-
-            position = index + 1
-
-            if position in _emojis.emoji:
-                name += _emojis.emoji[position]
-
-            name += f"#{position}"
-
-            embed.add_field(
-                name=name,
-                value="\n".join(
-                    [
-                        f"<@{user.partial.id}>",
-                        f"Репутация `{context.humanize(user.partial.reputation)}`",
-                    ]
-                ),
-            )
-
-        await context.respond(ephemeral=True, embed=embed)
+    await context.respond(
+        ephemeral=True,
+        embed=embed,
+    )

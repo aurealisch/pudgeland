@@ -3,4 +3,7 @@ import hikari
 
 from bot.common import models
 
-Plugin = crescent.Plugin[hikari.GatewayBot, models.Model]
+Plugin = crescent.Plugin[
+    hikari.GatewayBot,
+    models.Model,
+]

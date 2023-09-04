@@ -16,8 +16,14 @@ class Model:
         self.economics = economics
         self.configuration = configuration
 
-    async def started(self, _: hikari.StartedEvent) -> None:
+    async def started(
+        self,
+        _: hikari.StartedEvent,
+    ) -> None:
         return await self.economics.prisma.connect()
 
-    async def stopped(self, _: hikari.StoppedEvent) -> None:
+    async def stopped(
+        self,
+        _: hikari.StoppedEvent,
+    ) -> None:
         return await self.economics.prisma.disconnect()

@@ -39,7 +39,10 @@ def embed(
             description=description,
             color=_color,
         )
-        .set_author(name=name, icon=icon)
+        .set_author(
+            name=name,
+            icon=icon,
+        )
         .set_image(image)
     )
 
