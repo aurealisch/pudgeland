@@ -12,7 +12,7 @@ class Context(crescent.Context):
     emoji = emojis.Emoji
 
     def embed(
-        self,
+        self: typing.Self,
         color: "embeds.Color",
         title: typing.Optional[str] = None,
         description: typing.Optional[str] = None,
@@ -29,7 +29,7 @@ class Context(crescent.Context):
         )
 
     def humanize(
-        self,
+        self: typing.Self,
         number: int,
     ) -> str:
         return humanizes.humanize(number)

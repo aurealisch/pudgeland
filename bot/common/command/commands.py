@@ -22,7 +22,10 @@ def command(
     ) -> "crescent.internal.Includable[crescent.internal.AppCommandMeta]":
         callback, *_ = args
 
-        async def _callback(self, context: "contexts.Context") -> None:
+        async def _callback(
+            self: typing.Self,
+            context: "contexts.Context",
+        ) -> None:
             arguments = (context,)
 
             if context.options:

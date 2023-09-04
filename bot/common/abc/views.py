@@ -10,7 +10,7 @@ from ..utility import handles
 class ViewABC(miru.View, abc.ABC):
     @typing.final
     async def on_error(
-        self,
+        self: typing.Self,
         error: Exception,
         _: typing.Optional["miru.abc.ViewItem"] = None,
         context: typing.Optional["miru.ViewContext"] = None,

@@ -1,5 +1,6 @@
 import math
 import random
+import typing
 
 import crescent
 import hikari
@@ -45,7 +46,7 @@ async def tame(context: plugin.contexts.Context) -> None:
             emoji="✅",
         )
         async def ok(
-            self,
+            self: typing.Self,
             _: "miru.Button",
             view_context: "miru.ViewContext",
         ) -> None:
@@ -105,7 +106,7 @@ async def tame(context: plugin.contexts.Context) -> None:
             emoji="❌",
         )
         async def cancel(
-            self,
+            self: typing.Self,
             _: "miru.Button",
             view_context: "miru.ViewContext",
         ) -> None:

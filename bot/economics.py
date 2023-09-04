@@ -30,7 +30,7 @@ class Event:
 @typing.final
 class Resource:
     def __init__(
-        self,
+        self: typing.Self,
         key: typing.Literal[
             "berry",
             "fox",
@@ -41,13 +41,19 @@ class Resource:
         self.key = key
         self.partial = partial
 
-    async def add(self, value: int) -> None:
+    async def add(
+        self: typing.Self,
+        value: int,
+    ) -> None:
         await self.partial.prisma().update(
             {self.key: self.partial.dict().get(self.key) + value},
             where={"id": self.partial.id},
         )
 
-    async def remove(self, value: int) -> None:
+    async def remove(
+        self: typing.Self,
+        value: int,
+    ) -> None:
         await self.partial.prisma().update(
             {self.key: self.partial.dict().get(self.key) - value},
             where={"id": self.partial.id},
@@ -57,7 +63,7 @@ class Resource:
 @typing.final
 class User:
     def __init__(
-        self,
+        self: typing.Self,
         partial: "_prisma.models.User",
     ) -> None:
         self.partial = partial
@@ -71,7 +77,7 @@ class User:
 @typing.final
 class Economics:
     def __init__(
-        self,
+        self: typing.Self,
         prisma: "_prisma.Prisma",
         events: typing.Optional[typing.Sequence[Event]] = None,
     ) -> None:
@@ -79,7 +85,10 @@ class Economics:
         self.events = events
         self.shop = shops.shop
 
-    async def find_first_or_create(self, id: str) -> User:
+    async def find_first_or_create(
+        self: typing.Self,
+        id: str,
+    ) -> User:
         partial = await self.prisma.user.find_first(
             where=_prisma.types.UserWhereInput(
                 id=id,
@@ -96,7 +105,7 @@ class Economics:
         return User(partial=partial)
 
     async def find_many(
-        self,
+        self: typing.Self,
         take: int,
         user_keys: "_prisma.types.UserKeys",
         sort_order: "_prisma.types.SortOrder",

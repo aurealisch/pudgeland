@@ -10,7 +10,7 @@ from .common import models
 @typing.final
 class Bot:
     def __init__(
-        self,
+        self: typing.Self,
         token: str,
         model: "models.Model",
     ) -> None:
@@ -36,7 +36,7 @@ class Bot:
 
         self.client.plugins.load_folder("bot.plugin")
 
-    def run(self) -> None:
+    def run(self: typing.Self) -> None:
         return self.gateway_bot.run(
             activity=hikari.Activity(name=self.configuration.activity.name)
         )

@@ -1,3 +1,5 @@
+import typing
+
 import hikari
 import miru
 
@@ -34,7 +36,7 @@ async def callback(context: plugin.contexts.Context) -> None:
             placeholder="Предметы",
         )
         async def _(
-            self,
+            self: typing.Self,
             text_select: "miru.TextSelect",
             view_context: "miru.ViewContext",
         ) -> None:
