@@ -1,7 +1,7 @@
 import hikari
 import miru
 
-from bot.common import plugins, shops
+from bot.common import plugins
 from bot.common.abc import views
 from bot.common.command import commands, contexts, cooldowns, exceptions
 
@@ -33,7 +33,7 @@ async def callback(context: contexts.Context) -> None:
                     emoji=item.emoji,
                     is_default=False,
                 )
-                for value, item in shops.shop.items()
+                for value, item in plugin.model.economics.shop.items()
             ],
             placeholder="Предметы",
         )
@@ -46,7 +46,7 @@ async def callback(context: contexts.Context) -> None:
 
             _item = int(text_select.values[0])
 
-            item = shops.shop.get(_item)
+            item = plugin.model.economics.shop.get(_item)
 
             _contextual = str(view_context.user.id)
 

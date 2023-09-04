@@ -1,6 +1,6 @@
 import string
 
-from bot.common import plugins, shops
+from bot.common import plugins
 from bot.common.command import commands, contexts, cooldowns
 
 from . import _groups
@@ -23,7 +23,7 @@ async def callback(context: contexts.Context) -> None:
 
     description = string.whitespace
 
-    for value, item in shops.shop.items():
+    for value, item in plugin.model.economics.shop.items():
         description += f"""
             # {value}. {item.emoji} **{item.label}**
 

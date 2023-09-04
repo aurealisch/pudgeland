@@ -1,6 +1,6 @@
 import random
 
-from bot.common import plugins, shops
+from bot.common import plugins
 from bot.common.command import commands, contexts
 
 from . import _groups, _periods
@@ -43,7 +43,7 @@ async def collect(context: contexts.Context) -> None:
                 berrying *= _berry
 
     if _item:
-        item = shops.shop.get(_item)
+        item = plugin.model.economics.shop.get(_item)
 
         bonus = item.bonus
 
@@ -69,7 +69,7 @@ async def collect(context: contexts.Context) -> None:
                     foxying *= _fox
 
         if _item:
-            item = shops.shop.get(_item)
+            item = plugin.model.economics.shop.get(_item)
 
             bonus = item.bonus
 

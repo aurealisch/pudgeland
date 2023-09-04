@@ -4,6 +4,7 @@ import typing
 import prisma as _prisma
 
 from . import types
+from .common import shops
 
 
 @typing.final
@@ -76,6 +77,7 @@ class Economics:
     ) -> None:
         self.prisma = prisma
         self.events = events
+        self.shop = shops.shop
 
     async def find_first_or_create(self, id: str) -> User:
         partial = await self.prisma.user.find_first(

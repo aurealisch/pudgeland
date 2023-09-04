@@ -1,4 +1,4 @@
-from bot.common import plugins, shops
+from bot.common import plugins
 from bot.common.command import commands, contexts, cooldowns
 
 plugin = plugins.Plugin()
@@ -29,7 +29,7 @@ async def callback(context: contexts.Context) -> None:
     )
 
     if _item:
-        description += f"\n✨ Предмет: `{shops.shop.get(_item).label}`"
+        description += f"\n✨ Предмет: `{plugin.model.economics.shop.get(_item).label}`"
 
     await context.respond(
         ephemeral=True,
