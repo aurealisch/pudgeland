@@ -135,7 +135,7 @@ async def tame(context: plugin.contexts.Context) -> None:
         embed=context.embed(
             "default",
             description=f"""\
-                Чтобы попробовать приручить обезьяну, потребуется скормить {context.emoji.berry} `{context.humanize(fed)}` ягод
+                Чтобы попробовать приручить лису, потребуется скормить {context.emoji.berry} `{context.humanize(fed)}` ягод
             """,  # noqa: E501
         ),
     )
