@@ -11,11 +11,11 @@ class ViewABC(miru.View, abc.ABC):
     @typing.final
     async def on_error(
         self: typing.Self,
-        error: Exception,
+        exception: Exception,
         _: typing.Optional["miru.abc.ViewItem"] = None,
         context: typing.Optional["miru.ViewContext"] = None,
     ) -> None:
         await handles.handle(
-            error,
+            exception,
             context=context,
         )
