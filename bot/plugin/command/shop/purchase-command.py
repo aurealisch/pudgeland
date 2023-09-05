@@ -11,9 +11,9 @@ from ._periods import period
 plugin = plugins.Plugin()
 
 
-@plugin.include
 @plugin.commands.command(
-    "покупка",
+    plugin,
+    name="покупка",
     description="Покупка",
     period=period,
     group=group,

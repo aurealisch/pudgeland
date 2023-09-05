@@ -3,23 +3,21 @@ import typing
 import crescent
 import crescent.internal
 
+from .. import plugins
 from ..utility import handles
 from . import contexts, cooldowns
 from . import options as _options
 
 
 def command(
+    plugin: "plugins.Plugin",
     name: str,
     description: str,
     period: "cooldowns.Period",
     group: typing.Optional["crescent.Group"] = None,
     options: typing.Optional[typing.Sequence["_options.Option"]] = None,
-) -> typing.Callable[
-    [tuple], "crescent.internal.Includable[crescent.internal.AppCommandMeta]"
-]:
-    def inner(
-        *args,
-    ) -> "crescent.internal.Includable[crescent.internal.AppCommandMeta]":
+) -> None:
+    def inner(*args) -> None:
         callback, *_ = args
 
         async def _callback(
@@ -71,6 +69,6 @@ def command(
         if group:
             includable = group.child(includable)
 
-        return includable
+        plugin.include(includable)
 
     return inner

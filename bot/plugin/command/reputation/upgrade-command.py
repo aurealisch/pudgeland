@@ -8,9 +8,9 @@ from ._periods import period
 plugin = plugins.Plugin()
 
 
-@plugin.include
 @plugin.commands.command(
-    "повысить",
+    plugin,
+    name="повысить",
     description="Повысить",
     period=period,
     group=group,

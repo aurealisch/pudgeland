@@ -11,9 +11,9 @@ from bot.common import plugins
 plugin = plugins.Plugin()
 
 
-@plugin.include
 @plugin.commands.command(
-    "приручить",
+    plugin,
+    name="приручить",
     description="Приручить лису",
     period=plugin.cooldowns.Period(
         seconds=2,

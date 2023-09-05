@@ -9,9 +9,9 @@ from ._periods import period
 plugin = plugins.Plugin()
 
 
-@plugin.include
 @plugin.commands.command(
-    "репутация",
+    plugin,
+    name="репутация",
     description="Лидеры по репутации",
     period=period,
     group=group,
