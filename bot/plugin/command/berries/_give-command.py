@@ -7,20 +7,24 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+commands = plugin.commands
+contexts = plugin.contexts
+options = plugin.options
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="дать",
     description="Дать ягоды",
     period=period,
     group=group,
     options=[
-        plugin.options.option(
+        options.option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
         ),
-        plugin.options.option(
+        options.option(
             int,
             name="количество",
             description="Количество",
@@ -28,12 +32,12 @@ plugin = plugins.Plugin()
     ],
 )
 async def callback(
-    context: plugin.contexts.Context,
+    context: contexts.Context,
     user: "hikari.User",
     amount: int,
 ) -> None:
     if amount > 0:
-        await context.defer()
+        _ = context.humanize
 
         _optional = str(user.id)
         _contextual = str(context.user.id)
@@ -44,14 +48,14 @@ async def callback(
         await optional.berry.add(amount)
         await contextual.berry.remove(amount)
 
-        await context.respond(
-            embed=context.embed(
-                "default",
-                description=f"""\
-                    <@{_contextual}> дал {context.emoji.berry} `{amount}` ягод <@{_optional}>
-                """,  # noqa: E501
-            ),
-        )
+        # fmt: off
+        await context.respond(embed=context.embed(
+            "default",
+            description=f"""\
+                Вы дали {context.emoji.berry} `{_(amount)}` ягод <@{_optional}>
+            """,  # noqa: E501
+        ))
+        # fmt: on
 
         return
 

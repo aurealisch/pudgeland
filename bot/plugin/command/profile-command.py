@@ -4,35 +4,37 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+commands = plugin.commands
+contexts = plugin.contexts
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="профиль",
     description="Профиль",
     period=period,
 )
-async def callback(context: plugin.contexts.Context) -> None:
-    await context.defer(True)
+async def callback(context: contexts.Context) -> None:
+    _ = context.humanize
 
     contextual = await plugin.model.economics.find_first_or_create(str(context.user.id))
 
     _item = contextual.partial.item
 
-    description = "\n".join(
-        [
-            f"{context.emoji.berry} Ягоды: `{context.humanize(contextual.partial.berry)}`",  # noqa: E501
-            f"{context.emoji.fox} Лисы: `{context.humanize(contextual.partial.fox)}`",  # noqa: E501
-            f"📊 Репутация: `{context.humanize(contextual.partial.reputation)}`",
-        ]
-    )
+    # fmt: off
+    description = "\n".join([
+        f"{context.emoji.berry} Ягоды: `{_(contextual.partial.berry)}`",
+        f"{context.emoji.fox} Лисы: `{_(contextual.partial.fox)}`",
+        f"📊 Репутация: `{_(contextual.partial.reputation)}`",
+    ])
+    # fmt: on
 
     if _item:
         description += f"\n✨ Предмет: `{plugin.model.economics.shop.get(_item).label}`"
 
-    await context.respond(
-        ephemeral=True,
-        embed=context.embed(
-            "default",
-            description=description,
-        ),
-    )
+    # fmt: off
+    await context.respond(embed=context.embed(
+        "default",
+        description=description,
+    ))
+    # fmt: on

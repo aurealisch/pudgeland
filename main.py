@@ -11,19 +11,19 @@ dotenv.load_dotenv()
 
 token = os.environ.get("TOKEN")
 
-events = [
-    economics.Event(
-        "Осень",
-        description=f"""\
-            {emojis.Emoji.berry} Множитель сбора ягод: `1,1x`
-            {emojis.Emoji.fox} Множитель сбора ягод лисами: `1,01x`
-        """,
-        buff=economics.Buff(
-            1.1,
-            fox=1.01,
-        ),
+# fmt: off
+events = [economics.Event(
+    "Осень",
+    description=f"""\
+        {emojis.Emoji.berry} Множитель сбора ягод: `1.1x`
+        {emojis.Emoji.fox} Множитель сбора ягод лисами: `1.01x`
+    """,
+    buff=economics.Buff(
+        1.1,
+        fox=1.01,
     ),
-]
+)]
+# fmt: on
 
 configuration = configurations.Configuration(
     configurations.Activity("гг сервер умер"),
@@ -33,11 +33,11 @@ configuration = configurations.Configuration(
     ),
     plugins=configurations.Plugins(
         configurations.Collect(
-            configurations.Range(75, b=200),
-            foxying=configurations.Range(50, b=135),
+            configurations.Range(25, b=100),
+            foxying=configurations.Range(100, b=250),
         ),
-        cull=configurations.Cull(2, fraction=0.1),
-        tame=configurations.Tame(2, price=250),
+        cull=configurations.Cull(3, fraction=0.1),
+        tame=configurations.Tame(5, price=200),
     ),
 )
 

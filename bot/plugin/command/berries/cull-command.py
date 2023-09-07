@@ -9,26 +9,30 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+commands = plugin.commands
+contexts = plugin.contexts
+options = plugin.options
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="отобрать",
     description="Отобрать ягоды",
     period=period,
     group=group,
     options=[
-        plugin.options.option(
+        options.option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
         ),
     ],
 )
-async def cull(
-    context: plugin.contexts.Context,
+async def callback(
+    context: contexts.Context,
     user: "hikari.User",
 ) -> None:
-    await context.defer()
+    _ = context.humanize
 
     _contextual = str(context.user.id)
     _optional = str(user.id)
@@ -56,35 +60,35 @@ async def cull(
     ):
         await contextual.berry.remove(culling)
 
-        await context.respond(
-            embed=context.embed(
-                "default",
-                description=f"""\
-                    <@{_contextual}> попытался отобрать {context.emoji.berry} ягоды у <@{_optional}>
-                    и...
+        # fmt: off
+        await context.respond(embed=context.embed(
+            "default",
+            description=f"""\
+                Вы попытались отобрать {context.emoji.berry} ягоды у <@{_optional}>
+                и...
 
-                    ❌ Не получилось...
+                ❌ Не получилось...
 
-                    ```diff\n- {context.humanize(culling)} ягод```
-                """,  # noqa: E501
-            ),
-        )
+                ```diff\n- {_(culling)} ягод```
+            """,  # noqa: E501
+        ))
+        # fmt: on
 
         return
 
     await contextual.berry.add(culling)
     await optional.berry.remove(culling)
 
-    await context.respond(
-        embed=context.embed(
-            "default",
-            description=f"""\
-                <@{_contextual}> попытался отобрать {context.emoji.berry} ягоды у <@{_optional}>
-                и...
+    # fmt: off
+    await context.respond(embed=context.embed(
+        "default",
+        description=f"""\
+            Вы попытались отобрать {context.emoji.berry} ягоды у <@{_optional}>
+            и...
 
-                ✅ Получилось!!!
+            ✅ Получилось!!!
 
-                ```diff\n+ {context.humanize(culling)} ягод```
-            """,  # noqa: E501
-        ),
-    )
+            ```diff\n+ {_(culling)} ягод```
+        """,  # noqa: E501
+    ))
+    # fmt: on

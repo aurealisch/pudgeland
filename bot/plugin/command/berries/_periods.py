@@ -1,6 +1,6 @@
 from bot.common.command import cooldowns
 
 period = cooldowns.Period(
-    hours=2,
+    hours=1,
     minutes=30,
-)  # 2.5 hours
+)  # 1.5 hours

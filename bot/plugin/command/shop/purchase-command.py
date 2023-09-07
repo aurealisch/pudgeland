@@ -1,5 +1,3 @@
-import typing
-
 import hikari
 import miru
 
@@ -10,19 +8,70 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+views = plugin.views
+commands = plugin.commands
+contexts = plugin.contexts
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="покупка",
     description="Покупка",
     period=period,
     group=group,
 )
-async def callback(context: plugin.contexts.Context) -> None:
-    await context.defer(True)
+async def callback(context: contexts.Context) -> None:
+    shop = plugin.model.economics.shop
 
-    class View(plugin.views.ViewABC):
-        @miru.text_select(
+    async def text_select(
+        self: views.ViewABC,
+        text_select: "miru.TextSelect",
+        view_context: "miru.ViewContext",
+    ) -> None:
+        humanize = context.humanize
+
+        await view_context.defer()
+
+        _item, *_ = text_select.values
+
+        item = plugin.model.economics.shop.get(int(_item))
+
+        _contextual = str(view_context.user.id)
+
+        contextual = await plugin.model.economics.find_first_or_create(_contextual)
+
+        if contextual.partial.item != int(_item):
+            berry = contextual.partial.berry
+
+            price = item.price
+
+            if berry < price:
+                raise plugin.exceptions.NotEnoughBerriesException
+
+            await contextual.berry.remove(price)
+
+            flags = hikari.MessageFlag.EPHEMERAL
+
+            # fmt: off
+            await view_context.respond(
+                flags=flags,
+                embed=context.embed(
+                    "default",
+                    description=f"""\
+                        Вы купили `{item.label}` за {context.emoji.berry} `{humanize(price)}` ягод
+                    """,  # noqa: E501
+                ),
+            )
+            # fmt: on
+
+            return
+
+        raise plugin.exceptions.YouCantDoThatException
+
+    __name = "View"
+    __bases = (views.ViewABC,)
+    __dict = {
+        "text_select": miru.text_select(
             options=[
                 hikari.SelectMenuOption(
                     label=item.label,
@@ -31,60 +80,27 @@ async def callback(context: plugin.contexts.Context) -> None:
                     emoji=item.emoji,
                     is_default=False,
                 )
-                for value, item in plugin.model.economics.shop.items()
+                for value, item in shop
             ],
             placeholder="Предметы",
-        )
-        async def _(
-            self: typing.Self,
-            text_select: "miru.TextSelect",
-            view_context: "miru.ViewContext",
-        ) -> None:
-            await view_context.defer()
+        )(text_select),
+    }
 
-            _item = int(text_select.values[0])
-
-            item = plugin.model.economics.shop.get(_item)
-
-            _contextual = str(view_context.user.id)
-
-            contextual = await plugin.model.economics.find_first_or_create(_contextual)
-
-            if contextual.partial.item != _item:
-                berry = contextual.partial.berry
-
-                price = item.price
-
-                if berry < price:
-                    raise plugin.exceptions.NotEnoughBerriesException
-
-                await contextual.berry.remove(price)
-
-                await view_context.respond(
-                    embed=context.embed(
-                        "default",
-                        description=f"""\
-                            <@{_contextual}> купил `{item.label}` за {context.emoji.berry} `{context.humanize(price)}` ягод
-                        """,  # noqa: E501
-                    ),
-                )
-
-                return
-
-            raise plugin.exceptions.YouCantDoThatException
-
-    view = View()
+    view = type(
+        __name,
+        __bases,
+        __dict,
+    )()
 
     components = view
 
     message = await context.respond(
-        ensure_message=True,
-        ephemeral=True,
         components=components,
         embed=context.embed(
             "default",
             description="✨ Выберите предмет для покупки",
         ),
+        ensure_message=True,
     )
 
     if message is not None:

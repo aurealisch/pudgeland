@@ -7,15 +7,19 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+commands = plugin.commands
+contexts = plugin.contexts
+options = plugin.options
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="понизить",
-    description="Понизить",
+    description="Понизить репутацию пользователю",
     period=period,
     group=group,
     options=[
-        plugin.options.option(
+        options.option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
@@ -23,11 +27,9 @@ plugin = plugins.Plugin()
     ],
 )
 async def callback(
-    context: plugin.contexts.Context,
+    context: contexts.Context,
     user: "hikari.User",
 ) -> None:
-    await context.defer()
-
     contextual = str(context.user.id)
     optional = str(user.id)
 
@@ -36,12 +38,12 @@ async def callback(
 
         await user.reputation.remove(1)
 
-        await context.respond(
-            embed=context.embed(
-                "default",
-                description=f"📉 <@{contextual}> понизил репутацию <@{optional}>",
-            ),
-        )
+        # fmt: off
+        await context.respond(embed=context.embed(
+            "default",
+            description=f"📉 Вы понизили репутацию <@{optional}>",
+        ))
+        # fmt: on
 
         return
 

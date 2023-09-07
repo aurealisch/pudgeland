@@ -8,16 +8,19 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+commands = plugin.commands
+contexts = plugin.contexts
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="лисы",
     description="Лидеры по лисам",
     period=period,
     group=group,
 )
-async def callback(context: plugin.contexts.Context) -> None:
-    await context.defer(True)
+async def callback(context: contexts.Context) -> None:
+    _ = context.humanize
 
     users = await plugin.model.economics.find_many(
         plugin.model.configuration.leaders.take,
@@ -39,15 +42,12 @@ async def callback(context: plugin.contexts.Context) -> None:
 
         embed.add_field(
             name=name,
-            value="\n".join(
-                [
-                    f"<@{user.partial.id}>",
-                    f"Лисы `{context.humanize(user.partial.fox)}`",
-                ]
-            ),
+            # fmt: off
+            value="\n".join([
+                f"<@{user.partial.id}>",
+                f"Лисы: `{_(user.partial.fox)}`",
+            ]),
+            # fmt: on
         )
 
-    await context.respond(
-        ephemeral=True,
-        embed=embed,
-    )
+    await context.respond(embed=embed)

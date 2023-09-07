@@ -7,16 +7,19 @@ from ._periods import period
 
 plugin = plugins.Plugin()
 
+commands = plugin.commands
+contexts = plugin.contexts
 
-@plugin.commands.command(
+
+@commands.command(
     plugin,
     name="собрать",
     description="Собрать ягоды",
     period=period,
     group=group,
 )
-async def collect(context: plugin.contexts.Context) -> None:
-    await context.defer()
+async def callback(context: contexts.Context) -> None:
+    _ = context.humanize
 
     _contextual = str(context.user.id)
 
@@ -31,7 +34,12 @@ async def collect(context: plugin.contexts.Context) -> None:
 
     total = 0
 
-    berrying = random.choice(range(collect.berrying.a, collect.berrying.b))
+    # fmt: off
+    berrying = random.choice(range(
+        collect.berrying.a,
+        collect.berrying.b,
+    ))
+    # fmt: on
 
     if events:
         for event in events:
@@ -54,10 +62,15 @@ async def collect(context: plugin.contexts.Context) -> None:
 
     total += berrying
 
-    description = f"<@{_contextual}> собрал {context.emoji.berry} `{context.humanize(berrying)}` ягод"  # noqa: E501
+    description = f"Вы собрали {context.emoji.berry} `{_(berrying)}` ягод"
 
     if fox:
-        foxying = fox * random.choice(range(collect.foxying.a, collect.foxying.b))
+        # fmt: off
+        foxying = fox * random.choice(range(
+            collect.foxying.a,
+            collect.foxying.b,
+        ))
+        # fmt: on
 
         if events:
             for event in events:
@@ -80,10 +93,14 @@ async def collect(context: plugin.contexts.Context) -> None:
 
         total += foxying
 
-        description += f"\n+ {context.emoji.berry} `{context.humanize(foxying)}` ягод от {context.emoji.fox} `{context.humanize(fox)}` лис"  # noqa: E501
-
-        description += f"\n\n🔁 Всего: {context.emoji.berry} `{context.humanize(total)}` ягод"  # noqa: E501'
+        description += f"\n+ {context.emoji.berry} `{_(foxying)}` ягод от {context.emoji.fox} `{_(fox)}` лис"  # noqa: E501
+        description += f"\n\n🔁 Всего: {context.emoji.berry} `{_(total)}` ягод"
 
     await contextual.berry.add(total)
 
-    await context.respond(embed=context.embed("default", description=description))
+    # fmt: off
+    await context.respond(embed=context.embed(
+        "default",
+        description=description,
+    ))
+    # fmt: on

@@ -16,9 +16,9 @@ async def handle(
         tb=tb,
     )
 
-    await context.respond(
-        embed=context.embed(
-            "error",
-            description=f"```{exception}```",
-        ),
-    )
+    # fmt: off
+    await context.respond(embed=context.embed(
+        "error",
+        description=f"```{exception}```",
+    ))
+    # fmt: on

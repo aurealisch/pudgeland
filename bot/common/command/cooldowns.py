@@ -204,17 +204,16 @@ def cooldown(
 
         timestamp = f"<t:{future}:R>"
 
-        await context.respond(
-            ephemeral=True,
-            embed=context.embed(
-                "default",
-                description=f"""\
-                    Ты слишком часто используешь эту команду!
+        # fmt: off
+        await context.respond(embed=context.embed(
+            "default",
+            description=f"""\
+                Ты слишком часто используешь эту команду!
 
-                    Попробуйте еще раз {timestamp}
-                """,
-            ),
-        )
+                Попробуйте еще раз {timestamp}
+            """,
+        ))
+        # fmt: on
 
         return crescent.HookResult(True)
 

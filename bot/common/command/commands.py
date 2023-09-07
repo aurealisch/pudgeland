@@ -21,7 +21,7 @@ def command(
         callback, *_ = args
 
         async def _callback(
-            self: typing.Self,
+            self: crescent.ClassCommandProto,
             context: "contexts.Context",
         ) -> None:
             arguments = (context,)
@@ -39,7 +39,7 @@ def command(
                 )
 
         __name = "Command"
-        __bases = (object,)
+        __bases = (crescent.ClassCommandProto,)
         __dict = {
             "callback": _callback,
         }
@@ -58,13 +58,11 @@ def command(
             __dict,
         )
 
-        includable = crescent.hook(cooldowns.cooldown(period))(
-            crescent.command(
-                __type,
-                name=name,
-                description=description,
-            )
-        )
+        includable = crescent.hook(cooldowns.cooldown(period))(crescent.command(
+            __type,
+            name=name,
+            description=description,
+        ))
 
         if group:
             includable = group.child(includable)
