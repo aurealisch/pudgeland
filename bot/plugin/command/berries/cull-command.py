@@ -50,12 +50,12 @@ async def callback(
         raise Exception("Нечего отбирать")
 
     if (
-        random.choice(
-            range(
-                1,
-                cull.edge,
-            )
-        )
+        # fmt: off
+        random.choice(range(
+            1,
+            cull.edge,
+        ))
+        # fmt: on
         != 1
     ):
         await contextual.berry.remove(culling)

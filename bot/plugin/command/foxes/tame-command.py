@@ -61,12 +61,12 @@ async def callback(context: contexts.Context) -> None:
         await contextual.berry.remove(fed)
 
         if (
-            random.choice(
-                range(
-                    1,
-                    tame.edge,
-                ),
-            )
+            # fmt: off
+            random.choice(range(
+                1,
+                tame.edge,
+            ))
+            # fmt: on
             != 1
         ):
             # fmt: off

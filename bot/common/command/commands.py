@@ -30,6 +30,8 @@ def command(
                 for _, value in context.options.items():
                     arguments += (value,)
 
+            await context.defer()
+
             try:
                 await callback(*arguments)
             except Exception as exception:

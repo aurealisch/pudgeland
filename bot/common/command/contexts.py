@@ -43,7 +43,6 @@ class Context(crescent.Context):
         ensure_message: typing.Literal[False] = ...,
     ) -> None:
         return await super().respond(
-            ephemeral=True,
             component=component,
             components=components,
             embed=embed,
