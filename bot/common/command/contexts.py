@@ -36,6 +36,7 @@ class Context(crescent.Context):
 
     async def respond(
         self: typing.Self,
+        ephemeral: bool = False,
         component: "hikari.UndefinedOr[hikari.ComponentBuilder]" = hikari.UNDEFINED,
         components: "hikari.UndefinedOr[typing.Sequence[hikari.ComponentBuilder]]" = hikari.UNDEFINED,  # noqa: E501
         embed: "hikari.UndefinedOr[hikari.Embed]" = hikari.UNDEFINED,
@@ -43,6 +44,7 @@ class Context(crescent.Context):
         ensure_message: typing.Literal[False] = ...,
     ) -> None:
         return await super().respond(
+            ephemeral=ephemeral,
             component=component,
             components=components,
             embed=embed,

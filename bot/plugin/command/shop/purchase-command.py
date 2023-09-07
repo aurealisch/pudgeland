@@ -50,18 +50,13 @@ async def callback(context: contexts.Context) -> None:
 
             await contextual.berry.remove(price)
 
-            flags = hikari.MessageFlag.EPHEMERAL
-
             # fmt: off
-            await view_context.respond(
-                flags=flags,
-                embed=context.embed(
-                    "default",
-                    description=f"""\
-                        Вы купили `{item.label}` за {context.emoji.berry} `{humanize(price)}` ягод
-                    """,  # noqa: E501
-                ),
-            )
+            await view_context.respond(embed=context.embed(
+                "default",
+                description=f"""\
+                    Вы купили `{item.label}` за {context.emoji.berry} `{humanize(price)}` ягод
+                """,  # noqa: E501
+            ))
             # fmt: on
 
             return
@@ -95,6 +90,7 @@ async def callback(context: contexts.Context) -> None:
     components = view
 
     message = await context.respond(
+        True,
         components=components,
         embed=context.embed(
             "default",

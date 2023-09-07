@@ -42,7 +42,6 @@ async def callback(context: contexts.Context) -> None:
     fed = round((fox + 1) * math.e * tame.price)
 
     style = hikari.ButtonStyle.SECONDARY
-    flags = hikari.MessageFlag.EPHEMERAL
 
     async def ok(
         self: views.ViewABC,
@@ -70,18 +69,15 @@ async def callback(context: contexts.Context) -> None:
             != 1
         ):
             # fmt: off
-            await view_context.respond(
-                flags=flags,
-                embed=context.embed(
-                    "default",
-                    description=f"""\
-                        Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
-                        и...
+            await view_context.respond(embed=context.embed(
+                "default",
+                description=f"""\
+                    Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
+                    и...
 
-                        💔 Не получилось приручить лису...
-                    """,  # noqa: E501
-                ),
-            )
+                    💔 Не получилось приручить лису...
+                """,  # noqa: E501
+            ))
             # fmt: on
 
             self.stop()
@@ -91,18 +87,15 @@ async def callback(context: contexts.Context) -> None:
         await contextual.fox.add(1)
 
         # fmt: off
-        await view_context.respond(
-            flags=flags,
-            embed=context.embed(
-                "default",
-                description=f"""\
-                    Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
-                    и...
+        await view_context.respond(embed=context.embed(
+            "default",
+            description=f"""\
+                Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
+                и...
 
-                    💖 Получилось приручить лису!!!
-                """,  # noqa: E501
-            ),
-        )
+                💖 Получилось приручить лису!!!
+            """,  # noqa: E501
+        ))
         # fmt: on
 
         self.stop()
@@ -115,7 +108,6 @@ async def callback(context: contexts.Context) -> None:
         await view_context.defer()
 
         await view_context.respond(
-            flags=flags,
             embed=context.embed(
                 "default",
                 description="Отменено",
@@ -148,6 +140,7 @@ async def callback(context: contexts.Context) -> None:
     components = view
 
     message = await context.respond(
+        True,
         components=components,
         embed=context.embed(
             "default",
