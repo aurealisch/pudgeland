@@ -35,7 +35,7 @@ def command(
             except Exception as exception:
                 await handles.handle(
                     exception,
-                    contetx=context,
+                    context=context,
                 )
 
         __name = "Command"
