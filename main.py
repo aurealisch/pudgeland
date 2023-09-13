@@ -1,5 +1,3 @@
-import os
-
 import env
 
 import prisma as _prisma
@@ -51,10 +49,5 @@ bot = bots.Bot(
 )
 
 _prisma.register(bot.economics.prisma)
-
-if os.name != "nt":
-    import uvloop
-
-    uvloop.install()
 
 bot.run()
