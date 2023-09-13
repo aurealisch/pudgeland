@@ -7,4 +7,4 @@
 <kbd>[<img title="Русский язык" alt="Русский язык" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/ru.svg" width="22">](readme.ru.md)</kbd>
 <kbd>[<img title="Українська" alt="Українська" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/ua.svg" width="22">](readme.ua.md)</kbd>
 
-_Pudgeland_ is a Discord gateway API bot written in Python with Hikari, Crescent and Miru
+🎃 _Pudgeland_ is a Discord gateway API bot written in Python with Hikari, Crescent and Miru
