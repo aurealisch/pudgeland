@@ -1,15 +1,13 @@
 import os
 
-import dotenv
+import env
 
 import prisma as _prisma
 from bot import bots, economics
 from bot.common import configurations, models
 from bot.common.utility import emojis
 
-dotenv.load_dotenv()
-
-token = os.environ.get("TOKEN")
+token = env.get("TOKEN")
 
 # fmt: off
 events = [economics.Event(
