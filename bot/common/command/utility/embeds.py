@@ -5,46 +5,46 @@ import hikari
 from .. import contexts
 
 Color = typing.Literal[
-    "default",
-    "error",
-    "success",
+  'default',
+  'error',
+  'success',
 ]
 
 colors = {
-    "default": "#4f686d",
-    "error": "#ff4b4b",
-    "success": "#77b35a",
+  'default': '#4f686d',
+  'error': '#ff4b4b',
+  'success': '#77b35a',
 }
 
 
 def embed(
-    color: Color,
-    context: "contexts.Context",
-    title: typing.Optional[str] = None,
-    description: typing.Optional[str] = None,
-    image: typing.Optional["hikari.Resourceish"] = None,
+  color: Color,
+  context: 'contexts.Context',
+  title: typing.Optional[str] = None,
+  description: typing.Optional[str] = None,
+  image: typing.Optional['hikari.Resourceish'] = None,
 ) -> hikari.Embed:
-    _color = hikari.Color.of(colors[color])
+  _color = hikari.Color.of(colors[color])
 
-    contextual = context.user
+  contextual = context.user
 
-    username = contextual.username
-    avatar_url = contextual.avatar_url
+  username = contextual.username
+  avatar_url = contextual.avatar_url
 
-    name = username
-    icon = avatar_url
+  name = username
+  icon = avatar_url
 
-    _embed = (
-        hikari.Embed(
-            title=title,
-            description=description,
-            color=_color,
-        )
-        .set_author(
-            name=name,
-            icon=icon,
-        )
-        .set_image(image)
+  _embed = (
+    hikari.Embed(
+      title=title,
+      description=description,
+      color=_color,
     )
+    .set_author(
+      name=name,
+      icon=icon,
+    )
+    .set_image(image)
+  )
 
-    return _embed
+  return _embed

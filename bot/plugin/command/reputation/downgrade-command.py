@@ -13,38 +13,36 @@ options = plugin.options
 
 
 @commands.command(
-    plugin,
-    name="понизить",
-    description="Понизить репутацию пользователю",
-    period=period,
-    group=group,
-    options=[
-        options.option(
-            hikari.User,
-            name="пользователь",
-            description="Пользователь",
-        ),
-    ],
+  plugin,
+  name='понизить',
+  description='Понизить репутацию пользователю',
+  period=period,
+  group=group,
+  options=[
+    options.option(
+      hikari.User,
+      name='пользователь',
+      description='Пользователь',
+    ),
+  ],
 )
 async def callback(
-    context: contexts.Context,
-    user: "hikari.User",
+  context: contexts.Context,
+  user: 'hikari.User',
 ) -> None:
-    contextual = str(context.user.id)
-    optional = str(user.id)
+  contextual = str(context.user.id)
+  optional = str(user.id)
 
-    if contextual != optional:
-        user = await plugin.model.economics.find_first_or_create(optional)
+  if contextual != optional:
+    user = await plugin.model.economics.find_first_or_create(optional)
 
-        await user.reputation.remove(1)
+    await user.reputation.remove(1)
 
-        # fmt: off
-        await context.respond(embed=context.embed(
-            "default",
-            description=f"📉 Вы понизили репутацию <@{optional}>",
-        ))
-        # fmt: on
+    await context.respond(embed=context.embed(
+      'default',
+      description=f'📉 Вы понизили репутацию <@{optional}>',
+    ))
 
-        return
+    return
 
-    raise plugin.exceptions.YouCantDoThatException
+  raise plugin.exceptions.YouCantDoThatException

@@ -1,2 +1,2 @@
-YouCantDoThatException = Exception("Так нельзя")
-NotEnoughBerriesException = Exception("Недостаточно ягод")
+YouCantDoThatException = Exception('Так нельзя')
+NotEnoughBerriesException = Exception('Недостаточно ягод')

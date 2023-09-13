@@ -10,31 +10,27 @@ contexts = plugin.contexts
 
 
 @commands.command(
-    plugin,
-    name="предметы",
-    description="Предметы",
-    period=period,
-    group=group,
+  plugin,
+  name='предметы',
+  description='Предметы',
+  period=period,
+  group=group,
 )
 async def callback(context: contexts.Context) -> None:
-    humanize = context.humanize
+  humanize = context.humanize
 
-    shop = plugin.model.economics.shop
+  shop = plugin.model.economics.shop
 
-    # fmt: off
-    description = "\n".join([
-        "\n\n".join([
-            f"# {item.emoji} {item.label}",
-            f"> {item.description}",
-            f"🏷 Цена: {context.emoji.berry} Ягоды: `{humanize(item.price)}`"
-        ])
-        for _, item in shop.items()
+  description = '\n'.join([
+    '\n'.join([
+      f'# {item.emoji} {item.label}',
+      f'> {item.description}',
+      f'🏷 Цена: {context.emoji.berry} Ягоды: `{humanize(item.price)}`'
     ])
-    # fmt: on
+    for _, item in shop.items()
+  ])
 
-    # fmt: off
-    await context.respond(embed=context.embed(
-        "default",
-        description=description,
-    )),
-    # fmt: on
+  await context.respond(embed=context.embed(
+    'default',
+    description=description,
+  )),

@@ -16,140 +16,134 @@ cooldowns = plugin.cooldowns
 
 
 @commands.command(
-    plugin,
-    name="приручить",
-    description="Приручить лису",
-    period=cooldowns.Period(
-        seconds=2,
-        milliseconds=500,
-    ),  # 2.5 seconds
-    group=crescent.Group(
-        "лисы",
-        description="Лисы",
-    ),
+  plugin,
+  name='приручить',
+  description='Приручить лису',
+  period=cooldowns.Period(
+    seconds=2,
+    milliseconds=500,
+  ),  # 2.5 seconds
+  group=crescent.Group(
+    'лисы',
+    description='Лисы',
+  ),
 )
 async def callback(context: contexts.Context) -> None:
-    _ = context.humanize
+  _ = context.humanize
 
-    tame = plugin.model.configuration.plugins.tame
+  tame = plugin.model.configuration.plugins.tame
 
-    _contextual = str(context.user.id)
+  _contextual = str(context.user.id)
 
-    contextual = await plugin.model.economics.find_first_or_create(_contextual)
+  contextual = await plugin.model.economics.find_first_or_create(_contextual)
 
-    fox = contextual.partial.fox
+  fox = contextual.partial.fox
 
-    fed = round((fox + 1) * math.e * tame.price)
+  fed = round((fox + 1) * math.e * tame.price)
 
-    style = hikari.ButtonStyle.SECONDARY
+  style = hikari.ButtonStyle.SECONDARY
 
-    async def ok(
-        self: views.ViewABC,
-        _: "miru.Button",
-        view_context: "miru.ViewContext",
-    ) -> None:
-        humanize = context.humanize
+  async def ok(
+    self: views.ViewABC,
+    _: 'miru.Button',
+    view_context: 'miru.ViewContext',
+  ) -> None:
+    humanize = context.humanize
 
-        await view_context.defer()
+    await view_context.defer()
 
-        berry = contextual.partial.berry
+    berry = contextual.partial.berry
 
-        if berry < fed:
-            raise plugin.exceptions.NotEnoughBerriesException
+    if berry < fed:
+      raise plugin.exceptions.NotEnoughBerriesException
 
-        await contextual.berry.remove(fed)
+    await contextual.berry.remove(fed)
 
-        if (
-            # fmt: off
-            random.choice(range(
-                1,
-                tame.edge,
-            ))
-            # fmt: on
-            != 1
-        ):
-            # fmt: off
-            await view_context.respond(embed=context.embed(
-                "default",
-                description=f"""\
-                    Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
-                    и...
+    if (
+      random.choice(range(
+        1,
+        tame.edge,
+      ))
+      != 1
+    ):
+      await view_context.respond(embed=context.embed(
+        'default',
+        description=f"""\
+          Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
+          и...
 
-                    💔 Не получилось приручить лису...
-                """,  # noqa: E501
-            ))
-            # fmt: on
+          💔 Не получилось приручить лису...
+        """,  # noqa: E501
+      ))
 
-            self.stop()
+      self.stop()
 
-            return
+      return
 
-        await contextual.fox.add(1)
+    await contextual.fox.add(1)
 
-        # fmt: off
-        await view_context.respond(embed=context.embed(
-            "default",
-            description=f"""\
-                Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
-                и...
+    await view_context.respond(embed=context.embed(
+      'default',
+      description=f"""\
+        Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
+        и...
 
-                💖 Получилось приручить лису!!!
-            """,  # noqa: E501
-        ))
-        # fmt: on
+        💖 Получилось приручить лису!!!
+      """,  # noqa: E501
+    ))
 
-        self.stop()
+    self.stop()
 
-    async def cancel(
-        self: views.ViewABC,
-        _: "miru.Button",
-        view_context: "miru.ViewContext",
-    ) -> None:
-        await view_context.defer()
+  async def cancel(
+    self: views.ViewABC,
+    _: 'miru.Button',
+    view_context: 'miru.ViewContext',
+  ) -> None:
+    await view_context.defer()
 
-        await view_context.respond(
-            embed=context.embed(
-                "default",
-                description="Отменено",
-            ),
-        )
-
-        self.stop()
-
-    __name = "View"
-    __bases = (views.ViewABC,)
-    __dict = {
-        "ok": miru.button(
-            label="ОК",
-            style=style,
-            emoji="✅",
-        )(ok),
-        "cancel": miru.button(
-            label="Отменить",
-            style=style,
-            emoji="❌",
-        )(cancel),
-    }
-
-    view = type(
-        __name,
-        __bases,
-        __dict,
-    )()
-
-    components = view
-
-    message = await context.respond(
-        True,
-        components=components,
-        embed=context.embed(
-            "default",
-            description=f"""\
-                Чтобы попробовать приручить лису, потребуется скормить {context.emoji.berry} `{_(fed)}` ягод
-            """,  # noqa: E501
-        ),
-        ensure_message=True,
+    await view_context.respond(
+      embed=context.embed(
+        'default',
+        description='Отменено',
+      ),
     )
 
-    if message is not None:
-        await view.start(message)
+    self.stop()
+
+  __name = 'View'
+  __bases = (views.ViewABC,)
+  __dict = {
+    'ok': miru.button(
+      label='ОК',
+      style=style,
+      emoji='✅',
+    )(ok),
+    'cancel': miru.button(
+      label='Отменить',
+      style=style,
+      emoji='❌',
+    )(cancel),
+  }
+
+  view = type(
+    __name,
+    __bases,
+    __dict,
+  )()
+
+  components = view
+
+  message = await context.respond(
+    True,
+    components=components,
+    embed=context.embed(
+      'default',
+      description=f"""\
+        Чтобы попробовать приручить лису, потребуется скормить {context.emoji.berry} `{_(fed)}` ягод
+      """,  # noqa: E501
+    ),
+    ensure_message=True,
+  )
+
+  if message is not None:
+    await view.start(message)

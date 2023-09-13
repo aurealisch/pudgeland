@@ -13,41 +13,39 @@ contexts = plugin.contexts
 
 
 @commands.command(
-    plugin,
-    name="репутация",
-    description="Лидеры по репутации",
-    period=period,
-    group=group,
+  plugin,
+  name='репутация',
+  description='Лидеры по репутации',
+  period=period,
+  group=group,
 )
 async def callback(context: contexts.Context) -> None:
-    _ = context.humanize
+  _ = context.humanize
 
-    users = await plugin.model.economics.find_many(
-        plugin.model.configuration.leaders.take,
-        user_keys="reputation",
-        sort_order=plugin.model.configuration.leaders.sort.order,
+  users = await plugin.model.economics.find_many(
+    plugin.model.configuration.leaders.take,
+    user_keys='reputation',
+    sort_order=plugin.model.configuration.leaders.sort.order,
+  )
+
+  embed = context.embed('default')
+
+  for index, user in enumerate(users):
+    name = string.whitespace
+
+    position = index + 1
+
+    if position in emoji:
+      name += emoji[position]
+
+    name += f'#{position}'
+
+    embed.add_field(
+      name=name,
+      value='\n'.join([
+        f'<@{user.partial.id}>',
+        f'Репутация: `{_(user.partial.reputation)}`',
+      ]),
     )
 
-    embed = context.embed("default")
-
-    for index, user in enumerate(users):
-        name = string.whitespace
-
-        position = index + 1
-
-        if position in emoji:
-            name += emoji[position]
-
-        name += f"#{position}"
-
-        embed.add_field(
-            name=name,
-            # fmt: off
-            value="\n".join([
-                f"<@{user.partial.id}>",
-                f"Репутация: `{_(user.partial.reputation)}`",
-            ]),
-            # fmt: on
-        )
-
-    await context.respond(embed=embed)
+  await context.respond(embed=embed)

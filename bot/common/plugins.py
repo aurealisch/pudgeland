@@ -5,23 +5,21 @@ from bot.common import models
 
 from .abc import views
 from .command import (
-    commands,
-    contexts,
-    cooldowns,
-    exceptions,
-    options,
+  commands,
+  contexts,
+  cooldowns,
+  exceptions,
+  options,
 )
 
 
-# fmt: off
 class Plugin(crescent.Plugin[
-    hikari.GatewayBot,
-    models.Model,
+  hikari.GatewayBot,
+  models.Model,
 ]):
-    views = views
-    commands = commands
-    contexts = contexts
-    cooldowns = cooldowns
-    exceptions = exceptions
-    options = options
-# fmt: on
+  views = views
+  commands = commands
+  contexts = contexts
+  cooldowns = cooldowns
+  exceptions = exceptions
+  options = options
