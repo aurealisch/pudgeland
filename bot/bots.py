@@ -11,13 +11,11 @@ from .common import models
 class Bot:
   def __init__(
     self: typing.Self,
-    token: str,
+    plugins: typing.Iterable[str],
     model: 'models.Model',
+    token: str,
   ) -> None:
     self.model = model
-
-    self.configuration = self.model.configuration
-    self.economics = self.model.economics
 
     intents = (
       hikari.Intents.MESSAGE_CONTENT
@@ -25,18 +23,21 @@ class Bot:
       | hikari.Intents.GUILD_MESSAGES
     )
 
-    self.gateway_bot = hikari.GatewayBot(token, intents=intents)
+    gateway_bot = hikari.GatewayBot(token, intents=intents)
 
-    miru.install(self.gateway_bot)
+    miru.install(gateway_bot)
 
-    self.gateway_bot.subscribe(hikari.StartedEvent, callback=self.model.started)
-    self.gateway_bot.subscribe(hikari.StoppedEvent, callback=self.model.stopped)
+    client = crescent.Client(gateway_bot, model=model)
 
-    self.client = crescent.Client(self.gateway_bot, model=self.model)
+    for plugin in plugins:
+      client.plugins.load(f'plugin.{plugin}')
 
-    self.client.plugins.load_folder('bot.plugin')
+    gateway_bot.listen(hikari.StartedEvent)(model._on_started_event)
+    gateway_bot.listen(hikari.StoppedEvent)(model._on_stopped_event)
+
+    self.__gateway_bot = gateway_bot
 
   def run(self: typing.Self) -> None:
-    return self.gateway_bot.run(
-      activity=hikari.Activity(name=self.configuration.activity.name)
+    return self.__gateway_bot.run(
+      activity=hikari.Activity(name=self.model.configuration.activity.name)
     )

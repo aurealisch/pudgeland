@@ -2,8 +2,8 @@ import hikari
 
 from bot.common import plugins
 
-from ._groups import group
-from ._periods import period
+from .constant.groups import group
+from .constant.periods import period
 
 plugin = plugins.Plugin()
 
@@ -14,8 +14,8 @@ options = plugin.options
 
 @commands.command(
   plugin,
-  name='повысить',
-  description='Повысить репутацию пользователю',
+  name='понизить',
+  description='Понизить репутацию пользователю',
   period=period,
   group=group,
   options=[
@@ -36,11 +36,11 @@ async def callback(
   if contextual != optional:
     user = await plugin.model.economics.find_first_or_create(optional)
 
-    await user.reputation.add(1)
+    await user.reputation.remove(1)
 
     await context.respond(embed=context.embed(
       'default',
-      description=f'📈 Вы повысили репутацию <@{optional}>',
+      description=f'📉 Вы понизили репутацию <@{optional}>',
     ))
 
     return

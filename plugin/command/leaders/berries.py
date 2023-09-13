@@ -2,9 +2,9 @@ import string
 
 from bot.common import plugins
 
-from ._emojis import emoji
-from ._groups import group
-from ._periods import period
+from .constant.emojis import emoji
+from .constant.groups import group
+from .constant.periods import period
 
 plugin = plugins.Plugin()
 
@@ -14,8 +14,8 @@ contexts = plugin.contexts
 
 @commands.command(
   plugin,
-  name='лисы',
-  description='Лидеры по лисам',
+  name='ягоды',
+  description='Лидеры по ягодам',
   period=period,
   group=group,
 )
@@ -24,7 +24,7 @@ async def callback(context: contexts.Context) -> None:
 
   users = await plugin.model.economics.find_many(
     plugin.model.configuration.leaders.take,
-    user_keys='fox',
+    user_keys='berry',
     sort_order=plugin.model.configuration.leaders.sort.order,
   )
 
@@ -44,7 +44,7 @@ async def callback(context: contexts.Context) -> None:
       name=name,
       value='\n'.join([
         f'<@{user.partial.id}>',
-        f'Лисы: `{_(user.partial.fox)}`',
+        f'Ягоды: `{_(user.partial.berry)}`',
       ]),
     )
 

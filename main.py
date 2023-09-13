@@ -5,7 +5,27 @@ from bot import bots, economics
 from bot.common import configurations, models
 from bot.common.utility import emojis
 
-token = env.get('TOKEN')
+commands = [
+  'events',
+  'profile',
+
+  'berries.collect',
+  'berries.cull',
+  #  'berries.give',
+
+  'foxes.tame',
+
+  'leaders.berries',
+  'leaders.foxes',
+  'leaders.reputation',
+
+  'reputation.downgrade',
+  'reputation.upgrade',
+
+  'store.items',
+  'store.purchase',
+]
+plugins = [f'command.{command}' for command in commands]
 
 events = [economics.Event(
   'Осень',
@@ -35,8 +55,10 @@ configuration = configurations.Configuration(
   ),
 )
 
+token = env.get('TOKEN')
+
 bot = bots.Bot(
-  token,
+  plugins,
   model=models.Model(
     economics.Economics(
       _prisma.Prisma(),
@@ -44,8 +66,9 @@ bot = bots.Bot(
     ),
     configuration=configuration,
   ),
+  token=token,
 )
 
-_prisma.register(bot.economics.prisma)
+_prisma.register(bot.model.economics.prisma)
 
 bot.run()

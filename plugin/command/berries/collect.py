@@ -2,8 +2,8 @@ import random
 
 from bot.common import plugins
 
-from ._groups import group
-from ._periods import period
+from .constant.groups import group
+from .constant.periods import period
 
 plugin = plugins.Plugin()
 
