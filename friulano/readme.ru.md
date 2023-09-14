@@ -1,6 +1,6 @@
 # pudgeland
 ## friulano
 
-<img src="https://github.com/pudg3land/avatar/blob/d2e1201e9ec3f5d1a9fc7c9fed4504220f7469db/avatar-summer.png" align=right width="128" height="128">
+<img src="https://github.com/aurealisch/pudgeland/blob/57e89fb6c2d5971cdfc2c2b28393ca602e56a5b3/asset/avatar-summer.png" align=right width="128" height="128">
 
 > 🧩 Minecraft PaperMC API плагин, написанный на Kotlin.
