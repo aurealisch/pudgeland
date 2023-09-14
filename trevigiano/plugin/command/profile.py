@@ -1,6 +1,6 @@
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from ._periods import period
+from .common import periods
 
 plugin = plugins.Plugin()
 
@@ -12,25 +12,31 @@ contexts = plugin.contexts
   plugin,
   name='профиль',
   description='Профиль',
-  period=period,
+  period=periods.period,
 )
-async def callback(context: contexts.Context) -> None:
-  _ = context.humanize
+async def callback(context: 'contexts.Context') -> None:
+  contextual = await plugin.model.database.find(str(context.user.id))
 
-  contextual = await plugin.model.economics.find_first_or_create(str(context.user.id))
+  embeds = context.embeds
+  humanizes = context.humanizes
+
+  embed = embeds.embed
+  humanize = humanizes.humanize
+
+  description = [
+    f'{context.emoji.berry} Ягоды: `{humanize(contextual.partial.berry)}`',
+    f'{context.emoji.fox} Лисы: `{humanize(contextual.partial.fox)}`',
+    f'📊 Репутация: `{humanize(contextual.partial.reputation)}`',
+  ]
 
   _item = contextual.partial.item
 
-  description = '\n'.join([
-    f'{context.emoji.berry} Ягоды: `{_(contextual.partial.berry)}`',
-    f'{context.emoji.fox} Лисы: `{_(contextual.partial.fox)}`',
-    f'📊 Репутация: `{_(contextual.partial.reputation)}`',
-  ])
-
   if _item:
-    description += f'\n✨ Предмет: `{plugin.model.economics.shop.get(_item).label}`'
+    description.extend([
+      f'✨ Предмет: 🏷 Этикетка`{plugin.model.database.store.get(_item).label}`'
+    ])
 
-  await context.respond(embed=context.embed(
+  await context.respond(embed=embed(
     'default',
-    description=description,
+    description='\n'.join(description),
   ))

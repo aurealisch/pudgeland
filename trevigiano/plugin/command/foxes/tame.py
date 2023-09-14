@@ -5,7 +5,7 @@ import crescent
 import hikari
 import miru
 
-from bot.common import plugins
+from trevigiano.client import plugins
 
 plugin = plugins.Plugin()
 
@@ -18,7 +18,7 @@ cooldowns = plugin.cooldowns
 @commands.command(
   plugin,
   name='приручить',
-  description='Приручить лису',
+  description='Приручить',
   period=cooldowns.Period(
     seconds=2,
     milliseconds=500,
@@ -28,14 +28,18 @@ cooldowns = plugin.cooldowns
     description='Лисы',
   ),
 )
-async def callback(context: contexts.Context) -> None:
-  _ = context.humanize
+async def callback(context: 'contexts.Context') -> None:
+  embeds = context.embeds
+  humanizes = context.humanizes
+
+  embed = embeds.embed
+  humanize = humanizes.humanize
 
   tame = plugin.model.configuration.plugins.tame
 
   _contextual = str(context.user.id)
 
-  contextual = await plugin.model.economics.find_first_or_create(_contextual)
+  contextual = await plugin.model.database.find(_contextual)
 
   fox = contextual.partial.fox
 
@@ -45,12 +49,10 @@ async def callback(context: contexts.Context) -> None:
 
   async def ok(
     self: views.ViewABC,
-    _: 'miru.Button',
-    view_context: 'miru.ViewContext',
+    _button: 'miru.Button',
+    _context: 'miru.Context',
   ) -> None:
-    humanize = context.humanize
-
-    await view_context.defer()
+    await _context.defer()
 
     berry = contextual.partial.berry
 
@@ -59,14 +61,11 @@ async def callback(context: contexts.Context) -> None:
 
     await contextual.berry.remove(fed)
 
-    if (
-      random.choice(range(
-        1,
-        tame.probability,
-      ))
-      != 1
-    ):
-      await view_context.respond(embed=context.embed(
+    if (random.choice(range(
+      1,
+      tame.probability,
+    ))) != 1:
+      await _context.respond(embed=embed(
         'default',
         description=f"""\
           Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
@@ -82,7 +81,7 @@ async def callback(context: contexts.Context) -> None:
 
     await contextual.fox.add(1)
 
-    await view_context.respond(embed=context.embed(
+    await _context.respond(embed=embed(
       'default',
       description=f"""\
         Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
@@ -96,17 +95,15 @@ async def callback(context: contexts.Context) -> None:
 
   async def cancel(
     self: views.ViewABC,
-    _: 'miru.Button',
-    view_context: 'miru.ViewContext',
+    _button: 'miru.Button',
+    _context: 'miru.Context',
   ) -> None:
-    await view_context.defer()
+    await _context.defer()
 
-    await view_context.respond(
-      embed=context.embed(
-        'default',
-        description='Отменено',
-      ),
-    )
+    await _context.respond(embed=embed(
+      'default',
+      description='Отменено',
+    ))
 
     self.stop()
 
@@ -125,25 +122,25 @@ async def callback(context: contexts.Context) -> None:
     )(cancel),
   }
 
-  view = type(
+  type__ = type(
     __name,
     __bases,
     __dict,
   )()
 
-  components = view
+  components = type__
 
   message = await context.respond(
     True,
     components=components,
-    embed=context.embed(
+    embed=embed(
       'default',
       description=f"""\
-        Чтобы попробовать приручить лису, потребуется скормить {context.emoji.berry} `{_(fed)}` ягод
+        Чтобы попробовать приручить лису, потребуется скормить {context.emoji.berry} `{humanize(fed)}` ягод
       """,  # noqa: E501
     ),
     ensure_message=True,
   )
 
   if message is not None:
-    await view.start(message)
+    await components.start(message)

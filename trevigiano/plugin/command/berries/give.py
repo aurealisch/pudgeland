@@ -1,30 +1,30 @@
 import hikari
 
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from .constant.groups import group
-from .constant.periods import period
+from .common import groups, periods
 
 plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
 options = plugin.options
+exceptions = plugin.exceptions
 
 
 @commands.command(
   plugin,
-  name='дать',
-  description='Дать ягоды',
-  period=period,
-  group=group,
+  name='подарить',
+  description='Подарить',
+  period=periods.period,
+  group=groups.group,
   options=[
-    options.option(
+    options.Option(
       hikari.User,
       name='пользователь',
       description='Пользователь',
     ),
-    options.option(
+    options.Option(
       int,
       name='количество',
       description='Количество',
@@ -32,29 +32,31 @@ options = plugin.options
   ],
 )
 async def callback(
-  context: contexts.Context,
+  context: 'contexts.Context',
   user: 'hikari.User',
   amount: int,
 ) -> None:
-  if amount > 0:
-    _ = context.humanize
+  if amount < 0:
+    raise plugin.exceptions.YouCantDoThatException
+  
+  embeds = context.embeds
+  humanizes = context.humanizes
 
-    _optional = str(user.id)
-    _contextual = str(context.user.id)
+  embed = embeds.embed
+  humanize = humanizes.humanize
 
-    optional = await plugin.model.economics.find_first_or_create(_optional)
-    contextual = await plugin.model.economics.find_first_or_create(_contextual)
+  _optional = str(user.id)
+  _contextual = str(context.user.id)
 
-    await optional.berry.add(amount)
-    await contextual.berry.remove(amount)
+  optional = await plugin.model.database.find(_optional)
+  contextual = await plugin.model.database.find(_contextual)
 
-    await context.respond(embed=context.embed(
-      'default',
-      description=f"""\
-        Вы дали {context.emoji.berry} `{_(amount)}` ягод <@{_optional}>
-      """,  # noqa: E501
-    ))
+  await optional.berry.add(amount)
+  await contextual.berry.remove(amount)
 
-    return
-
-  raise plugin.exceptions.YouCantDoThatException
+  await context.respond(embed=embed(
+    'default',
+    description=f"""\
+      Вы дали {context.emoji.berry} `{humanize(amount)}` ягод <@{_optional}>
+    """,  # noqa: E501
+  ))

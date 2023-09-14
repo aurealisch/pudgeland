@@ -1,17 +1,18 @@
 import env
 
 import prisma as _prisma
-from bot import bots, economics
-from bot.common import configurations, models
-from bot.common.utility import emojis
+from trevigiano import trevigiano
+from trevigiano.client import models
+from trevigiano.client.command.utility import emojis
+from trevigiano.module import configurations, databases
 
 commands = [
   'events',
   'profile',
 
   'berries.collect',
-  'berries.cull',
   #  'berries.give',
+  'berries.steal',
 
   'foxes.tame',
 
@@ -23,21 +24,30 @@ commands = [
   'reputation.upgrade',
 
   'store.items',
-  'store.purchase',
+  'store.buy',
 ]
 plugins = [f'command.{command}' for command in commands]
 
-events = [economics.Event(
+prisma = _prisma.Prisma()
+
+_prisma.register(prisma)
+
+events = [databases.Event(
   'Осень',
   description=f"""\
     {emojis.Emoji.berry} Множитель сбора ягод: `1.1x`
     {emojis.Emoji.fox} Множитель сбора ягод лисами: `1.01x`
   """,
-  buff=economics.Buff(
+  buff=databases.Buff(
     1.1,
     fox=1.01,
   ),
 )]
+
+database = databases.Database(
+  prisma,
+  events=events,
+)
 
 configuration = configurations.of("""\
 {
@@ -61,20 +71,15 @@ configuration = configurations.of("""\
 }
 """)
 
-token = env.get('TOKEN')
-
-bot = bots.Bot(
-  plugins,
-  model=models.Model(
-    economics.Economics(
-      _prisma.Prisma(),
-      events=events,
-    ),
-    configuration=configuration,
-  ),
-  token=token,
+model = models.Model(
+  configuration,
+  database=database,
 )
 
-_prisma.register(bot.model.economics.prisma)
+token = env.get('TOKEN')
 
-bot.run()
+trevigiano.Trevigiano(
+  plugins,
+  model=model,
+  token=token,
+).run()

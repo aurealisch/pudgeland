@@ -1,7 +1,6 @@
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from .constant.groups import group
-from .constant.periods import period
+from .common import groups, periods
 
 plugin = plugins.Plugin()
 
@@ -13,13 +12,17 @@ contexts = plugin.contexts
   plugin,
   name='предметы',
   description='Предметы',
-  period=period,
-  group=group,
+  period=periods.period,
+  group=groups.group,
 )
-async def callback(context: contexts.Context) -> None:
-  humanize = context.humanize
+async def callback(context: 'contexts.Context') -> None:
+  store = plugin.model.database.store
 
-  shop = plugin.model.economics.shop
+  embeds = context.embeds
+  humanizes = context.humanizes
+
+  embed = embeds.embed
+  humanize = humanizes.humanize
 
   description = '\n'.join([
     '\n'.join([
@@ -27,10 +30,10 @@ async def callback(context: contexts.Context) -> None:
       f'> {item.description}',
       f'🏷 Цена: {context.emoji.berry} Ягоды: `{humanize(item.price)}`'
     ])
-    for _, item in shop.items()
+    for _, item in store.items()
   ])
 
-  await context.respond(embed=context.embed(
+  await context.respond(embed=embed(
     'default',
     description=description,
-  )),
+  ))

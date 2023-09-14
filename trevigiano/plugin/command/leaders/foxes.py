@@ -1,10 +1,8 @@
 import string
 
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from .constant.emojis import emoji
-from .constant.groups import group
-from .constant.periods import period
+from .common import emojis, groups, periods
 
 plugin = plugins.Plugin()
 
@@ -15,28 +13,32 @@ contexts = plugin.contexts
 @commands.command(
   plugin,
   name='лисы',
-  description='Лидеры по лисам',
-  period=period,
-  group=group,
+  description='Лисы',
+  period=periods.period,
+  group=groups.group,
 )
-async def callback(context: contexts.Context) -> None:
-  _ = context.humanize
+async def callback(context: 'contexts.Context') -> None:
+  embeds = context.embeds
+  humanizes = context.humanizes
 
-  users = await plugin.model.economics.find_many(
+  embed = embeds.embed
+  humanize = humanizes.humanize
+
+  users = await plugin.model.database.leaders(
     plugin.model.configuration.leaders.take,
     user_keys='fox',
     sort_order=plugin.model.configuration.leaders.sort.order,
   )
 
-  embed = context.embed('default')
+  embed = embed('default')
 
   for index, user in enumerate(users):
     name = string.whitespace
 
     position = index + 1
 
-    if position in emoji:
-      name += emoji[position]
+    if position in emojis.emoji:
+      name += emojis.emoji[position]
 
     name += f'#{position}'
 
@@ -44,7 +46,7 @@ async def callback(context: contexts.Context) -> None:
       name=name,
       value='\n'.join([
         f'<@{user.partial.id}>',
-        f'Лисы: `{_(user.partial.fox)}`',
+        f'Лисы: `{humanize(user.partial.fox)}`',
       ]),
     )
 

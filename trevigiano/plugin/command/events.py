@@ -1,6 +1,6 @@
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from ._periods import period
+from .common import periods
 
 plugin = plugins.Plugin()
 
@@ -12,12 +12,16 @@ contexts = plugin.contexts
   plugin,
   name='события',
   description='События',
-  period=period,
+  period=periods.period,
 )
-async def callback(context: contexts.Context) -> None:
-  events = plugin.model.economics.events
+async def callback(context: 'contexts.Context') -> None:
+  events = plugin.model.database.events
 
-  await context.respond(embed=context.embed(
+  embeds = context.embeds
+
+  embed = embeds.embed
+
+  await context.respond(embed=embed(
     'default',
     description='\n'.join([
       '\n'.join([

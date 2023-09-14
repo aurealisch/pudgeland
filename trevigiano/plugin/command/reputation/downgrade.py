@@ -1,48 +1,48 @@
 import hikari
 
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from .constant.groups import group
-from .constant.periods import period
+from .common import groups, periods
 
 plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
 options = plugin.options
+exceptions = plugin.exceptions
 
 
 @commands.command(
   plugin,
   name='понизить',
-  description='Понизить репутацию пользователю',
-  period=period,
-  group=group,
-  options=[
-    options.option(
-      hikari.User,
-      name='пользователь',
-      description='Пользователь',
-    ),
-  ],
+  description='Понизить',
+  period=periods.period,
+  group=groups.group,
+  options=[options.Option(
+    hikari.User,
+    name='пользователь',
+    description='Пользователь',
+  )],
 )
 async def callback(
-  context: contexts.Context,
+  context: 'contexts.Context',
   user: 'hikari.User',
 ) -> None:
+  embeds = context.embeds
+
+  embed = embeds.embed
+
   contextual = str(context.user.id)
   optional = str(user.id)
 
-  if contextual != optional:
-    user = await plugin.model.economics.find_first_or_create(optional)
+  if not contextual != optional:
+    raise exceptions.YouCantDoThatException
 
-    await user.reputation.remove(1)
+  user = await plugin.model.database.find(optional)
 
-    await context.respond(embed=context.embed(
-      'default',
-      description=f'📉 Вы понизили репутацию <@{optional}>',
-    ))
+  await user.reputation.remove(1)
 
-    return
-
-  raise plugin.exceptions.YouCantDoThatException
+  await context.respond(embed=embed(
+    'default',
+    description=f'📉 Вы понизили репутацию <@{optional}>',
+  ))

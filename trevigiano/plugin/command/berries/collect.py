@@ -1,9 +1,8 @@
 import random
 
-from bot.common import plugins
+from trevigiano.client import plugins
 
-from .constant.groups import group
-from .constant.periods import period
+from .common import groups, periods
 
 plugin = plugins.Plugin()
 
@@ -14,23 +13,27 @@ contexts = plugin.contexts
 @commands.command(
   plugin,
   name='собрать',
-  description='Собрать ягоды',
-  period=period,
-  group=group,
+  description='Собрать',
+  period=periods.period,
+  group=groups.group,
 )
-async def callback(context: contexts.Context) -> None:
-  _ = context.humanize
+async def callback(context: 'contexts.Context') -> None:
+  embeds = context.embeds
+  humanizes = context.humanizes
+
+  embed = embeds.embed
+  humanize = humanizes.humanize
 
   _contextual = str(context.user.id)
 
-  contextual = await plugin.model.economics.find_first_or_create(_contextual)
+  contextual = await plugin.model.database.find(_contextual)
 
   fox = contextual.partial.fox
 
   _item = contextual.partial.item
 
   collect = plugin.model.configuration.plugins.collect
-  events = plugin.model.economics.events
+  events = plugin.model.database.events
 
   total = 0
 
@@ -49,7 +52,7 @@ async def callback(context: contexts.Context) -> None:
         berrying *= _berry
 
   if _item:
-    item = plugin.model.economics.shop.get(_item)
+    item = plugin.model.database.shop.get(_item)
 
     bonus = item.bonus
 
@@ -60,7 +63,7 @@ async def callback(context: contexts.Context) -> None:
 
   total += berrying
 
-  description = f'Вы собрали {context.emoji.berry} `{_(berrying)}` ягод'
+  description = f'Вы собрали {context.emoji.berry} `{humanize(berrying)}` ягод'
 
   if fox:
     foxying = fox * random.choice(range(
@@ -78,7 +81,7 @@ async def callback(context: contexts.Context) -> None:
           foxying *= _fox
 
     if _item:
-      item = plugin.model.economics.shop.get(_item)
+      item = plugin.model.database.shop.get(_item)
 
       bonus = item.bonus
 
@@ -89,12 +92,12 @@ async def callback(context: contexts.Context) -> None:
 
     total += foxying
 
-    description += f'\n+ {context.emoji.berry} `{_(foxying)}` ягод от {context.emoji.fox} `{_(fox)}` лис'  # noqa: E501
-    description += f'\n\n🔁 Всего: {context.emoji.berry} `{_(total)}` ягод'
+    description += f'\n+ {context.emoji.berry} `{humanize(foxying)}` ягод от {context.emoji.fox} `{humanize(fox)}` лис'  # noqa: E501
+    description += f'\n\n🔁 Всего: {context.emoji.berry} `{humanize(total)}` ягод'
 
   await contextual.berry.add(total)
 
-  await context.respond(embed=context.embed(
+  await context.respond(embed=embed(
     'default',
     description=description,
   ))

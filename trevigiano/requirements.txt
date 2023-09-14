@@ -1,5 +1,6 @@
 hikari==2.0.0.dev121
 hikari-crescent==0.6.3
 hikari-miru==3.2.0
+msgspec==0.18.2
 parsenv==0.3.0
 prisma==0.10.0
