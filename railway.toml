@@ -1,0 +1,8 @@
+[build]
+builder = "NIXPACKS"
+nixpacksConfigPath = "./trevigiano/nixpacks.json"
+
+[deploy]
+numReplicas = 1
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
