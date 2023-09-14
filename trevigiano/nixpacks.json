@@ -9,7 +9,7 @@
     "install": {
       "dependsOn": ["setup"],
       "cmds": [
-        "python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install -r ./trevigiano/requirements.txt"
+        "python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"
       ],
       "cacheDirectories": ["/root/.cache/pip"],
       "paths": ["/opt/venv/bin"]
@@ -22,6 +22,6 @@
     }
   },
   "start": {
-    "cmd": "python -OO ./trevigiano/main.py"
+    "cmd": "python -OO main.py"
   }
 }
