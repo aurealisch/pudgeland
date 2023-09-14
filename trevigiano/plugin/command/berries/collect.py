@@ -18,9 +18,11 @@ contexts = plugin.contexts
   group=groups.group,
 )
 async def callback(context: 'contexts.Context') -> None:
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
@@ -63,7 +65,7 @@ async def callback(context: 'contexts.Context') -> None:
 
   total += berrying
 
-  description = f'Вы собрали {context.emoji.berry} `{humanize(berrying)}` ягод'
+  description = f'Вы собрали {emoji.berry} `{humanize(berrying)}` ягод'
 
   if fox:
     foxying = fox * random.choice(range(
@@ -92,8 +94,8 @@ async def callback(context: 'contexts.Context') -> None:
 
     total += foxying
 
-    description += f'\n+ {context.emoji.berry} `{humanize(foxying)}` ягод от {context.emoji.fox} `{humanize(fox)}` лис'  # noqa: E501
-    description += f'\n\n🔁 Всего: {context.emoji.berry} `{humanize(total)}` ягод'
+    description += f'\n+ {emoji.berry} `{humanize(foxying)}` ягод от {emoji.fox} `{humanize(fox)}` лис'  # noqa: E501
+    description += f'\n\n🔁 Всего: {emoji.berry} `{humanize(total)}` ягод'
 
   await contextual.berry.add(total)
 

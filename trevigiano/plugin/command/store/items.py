@@ -18,9 +18,11 @@ contexts = plugin.contexts
 async def callback(context: 'contexts.Context') -> None:
   store = plugin.model.database.store
 
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
@@ -28,7 +30,7 @@ async def callback(context: 'contexts.Context') -> None:
     '\n'.join([
       f'# {item.emoji} {item.label}',
       f'> {item.description}',
-      f'🏷 Цена: {context.emoji.berry} Ягоды: `{humanize(item.price)}`'
+      f'🏷 Цена: {emoji.berry} Ягоды: `{humanize(item.price)}`'
     ])
     for _, item in store.items()
   ])

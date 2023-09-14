@@ -39,9 +39,11 @@ async def callback(
   if amount < 0:
     raise plugin.exceptions.YouCantDoThatException
   
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
@@ -57,6 +59,6 @@ async def callback(
   await context.respond(embed=embed(
     'default',
     description=f"""\
-      Вы дали {context.emoji.berry} `{humanize(amount)}` ягод <@{_optional}>
+      Вы дали {emoji.berry} `{humanize(amount)}` ягод <@{_optional}>
     """,  # noqa: E501
   ))

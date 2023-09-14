@@ -29,9 +29,11 @@ async def callback(
   context: 'contexts.Context',
   user: 'hikari.User',
 ) -> None:
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
@@ -59,7 +61,7 @@ async def callback(
     await context.respond(embed=embeds.embed(
       'default',
       description=f"""\
-        Вы попытались отобрать {context.emoji.berry} ягоды у <@{_optional}>
+        Вы попытались отобрать {emoji.berry} ягоды у <@{_optional}>
         и...
 
         ❌ Не получилось...
@@ -76,7 +78,7 @@ async def callback(
   await context.respond(embed=embed(
     'default',
     description=f"""\
-      Вы попытались отобрать {context.emoji.berry} ягоды у <@{_optional}>
+      Вы попытались отобрать {emoji.berry} ягоды у <@{_optional}>
       и...
 
       ✅ Получилось!!!

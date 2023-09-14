@@ -25,9 +25,11 @@ async def callback(context: 'contexts.Context') -> None:
   database = plugin.model.database
   store = database.store
 
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
@@ -59,7 +61,7 @@ async def callback(context: 'contexts.Context') -> None:
       await _context.respond(embed=embed(
         'default',
         description=f"""\
-          Вы купили `{item.label}` за {context.emoji.berry} `{humanize(price)}` ягод
+          Вы купили `{item.label}` за {emoji.berry} `{humanize(price)}` ягод
         """,  # noqa: E501
       ))
 

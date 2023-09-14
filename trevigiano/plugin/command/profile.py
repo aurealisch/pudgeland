@@ -17,15 +17,17 @@ contexts = plugin.contexts
 async def callback(context: 'contexts.Context') -> None:
   contextual = await plugin.model.database.find(str(context.user.id))
 
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
   description = [
-    f'{context.emoji.berry} Ягоды: `{humanize(contextual.partial.berry)}`',
-    f'{context.emoji.fox} Лисы: `{humanize(contextual.partial.fox)}`',
+    f'{emoji.berry} Ягоды: `{humanize(contextual.partial.berry)}`',
+    f'{emoji.fox} Лисы: `{humanize(contextual.partial.fox)}`',
     f'📊 Репутация: `{humanize(contextual.partial.reputation)}`',
   ]
 

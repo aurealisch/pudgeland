@@ -29,9 +29,11 @@ cooldowns = plugin.cooldowns
   ),
 )
 async def callback(context: 'contexts.Context') -> None:
+  emojis = context.emojis
   embeds = context.embeds
   humanizes = context.humanizes
 
+  emoji = emojis.Emoji
   embed = embeds.embed
   humanize = humanizes.humanize
 
@@ -68,7 +70,7 @@ async def callback(context: 'contexts.Context') -> None:
       await _context.respond(embed=embed(
         'default',
         description=f"""\
-          Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
+          Вы скормили {emoji.berry} `{humanize(fed)}` ягод
           и...
 
           💔 Не получилось приручить лису...
@@ -84,7 +86,7 @@ async def callback(context: 'contexts.Context') -> None:
     await _context.respond(embed=embed(
       'default',
       description=f"""\
-        Вы скормили {context.emoji.berry} `{humanize(fed)}` ягод
+        Вы скормили {emoji.berry} `{humanize(fed)}` ягод
         и...
 
         💖 Получилось приручить лису!!!
@@ -136,7 +138,7 @@ async def callback(context: 'contexts.Context') -> None:
     embed=embed(
       'default',
       description=f"""\
-        Чтобы попробовать приручить лису, потребуется скормить {context.emoji.berry} `{humanize(fed)}` ягод
+        Чтобы попробовать приручить лису, потребуется скормить {emoji.berry} `{humanize(fed)}` ягод
       """,  # noqa: E501
     ),
     ensure_message=True,
