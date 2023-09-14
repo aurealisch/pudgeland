@@ -1,65 +1,64 @@
-import dataclasses
 import typing
+import msgspec
+
+from .. import types
 
 
-@typing.final
-@dataclasses.dataclass
-class Sort:
-  order: str
+class Activity(msgspec.Struct):
+  name: str
 
 
-@typing.final
-@dataclasses.dataclass
-class Leaders:
+class Sort(msgspec.Struct):
+  order: typing.Literal[
+    'asc',
+    'desc',
+  ]
+
+
+class Leaders(msgspec.Struct):
   sort: Sort
   take: int
 
 
-@typing.final
-@dataclasses.dataclass
-class Range:
-  a: int
-  b: int
+class Range(msgspec.Struct):
+  start: 'types.FloatOrInt'
+  stop: 'types.FloatOrInt'
 
 
-@typing.final
-@dataclasses.dataclass
-class Collect:
-  berrying: Range
-  foxying: Range
+class Collect(msgspec.Struct):
+  berry: Range
+  fox: Range
 
 
-@typing.final
-@dataclasses.dataclass
-class Cull:
-  edge: int
-  fraction: float
+class Cull(msgspec.Struct):
+  probability: 'types.FloatOrInt'
+  fraction: 'types.FloatOrInt'
 
 
-@typing.final
-@dataclasses.dataclass
-class Tame:
-  edge: int
-  price: int
+class Tame(msgspec.Struct):
+  probability: 'types.FloatOrInt'
+  price: 'types.FloatOrInt'
 
 
-@typing.final
-@dataclasses.dataclass
-class Plugins:
+class Plugins(msgspec.Struct):
   collect: Collect
   cull: Cull
   tame: Tame
 
 
-@typing.final
-@dataclasses.dataclass
-class Activity:
-  name: str
-
-
-@typing.final
-@dataclasses.dataclass
-class Configuration:
+class Configuration(msgspec.Struct):
   activity: Activity
   leaders: Leaders
   plugins: Plugins
+
+
+def of(buf: typing.Union[
+  bytes,
+  str,
+]) -> Configuration:
+  type = Configuration
+
+  return msgspec.json.decode(
+    buf,
+    type=type,
+  )

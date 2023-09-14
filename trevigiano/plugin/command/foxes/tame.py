@@ -62,7 +62,7 @@ async def callback(context: contexts.Context) -> None:
     if (
       random.choice(range(
         1,
-        tame.edge,
+        tame.probability,
       ))
       != 1
     ):

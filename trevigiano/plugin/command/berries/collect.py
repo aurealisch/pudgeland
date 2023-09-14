@@ -35,8 +35,8 @@ async def callback(context: contexts.Context) -> None:
   total = 0
 
   berrying = random.choice(range(
-    collect.berrying.a,
-    collect.berrying.b,
+    collect.berry.start,
+    collect.berry.stop,
   ))
 
   if events:
@@ -64,8 +64,8 @@ async def callback(context: contexts.Context) -> None:
 
   if fox:
     foxying = fox * random.choice(range(
-      collect.foxying.a,
-      collect.foxying.b,
+      collect.fox.start,
+      collect.fox.stop,
     ))
 
     if events:

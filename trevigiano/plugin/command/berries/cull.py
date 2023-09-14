@@ -52,7 +52,7 @@ async def callback(
   if (
     random.choice(range(
       1,
-      cull.edge,
+      cull.probability,
     ))
     != 1
   ):

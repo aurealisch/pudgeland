@@ -39,21 +39,27 @@ events = [economics.Event(
   ),
 )]
 
-configuration = configurations.Configuration(
-  configurations.Activity('гг сервер умер'),
-  leaders=configurations.Leaders(
-    configurations.Sort('desc'),
-    take=5,
-  ),
-  plugins=configurations.Plugins(
-    configurations.Collect(
-      configurations.Range(25, b=100),
-      foxying=configurations.Range(100, b=250),
-    ),
-    cull=configurations.Cull(3, fraction=0.1),
-    tame=configurations.Tame(5, price=200),
-  ),
-)
+configuration = configurations.of("""\
+{
+  "activity": {
+    "name": "гг сервер умер"
+  },
+  "leaders": {
+    "sort": {
+      "order": "desc"
+    },
+    "take": 5
+  },
+  "plugins": {
+    "collect": {
+      "berry": {"start": 25, "stop": 100},
+      "fox": {"start": 100, "stop": 250}
+    },
+    "cull": {"probability": 3, "fraction": 0.1},
+    "tame": {"probability": 5, "price": 200}
+  }
+}
+""")
 
 token = env.get('TOKEN')
 
