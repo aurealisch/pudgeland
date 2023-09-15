@@ -1,11 +1,18 @@
 import traceback
+import typing
 
-from ..command import contexts
+import miru
+
+from trevigiano.client.command import contexts
+from trevigiano.client.command.utility import embeds
 
 
 async def handle(
   exception: Exception,
-  context: 'contexts.Context',
+  context: typing.Union[
+    'contexts.Context',
+    'miru.Context',
+  ],
 ) -> None:
   value = exception
   tb = exception.__traceback__
@@ -16,7 +23,7 @@ async def handle(
     tb=tb,
   )
 
-  await context.respond(embed=context.embeds.embed(
+  await context.respond(embed=embeds.embed(
     'error',
     description=f'```{exception}```',
   ))

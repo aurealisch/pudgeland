@@ -4,7 +4,7 @@ import typing
 import miru
 import miru.abc
 
-from ..utility import handles
+from ..error.handler import handles
 
 
 class ViewABC(miru.View, abc.ABC):
