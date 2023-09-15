@@ -43,46 +43,47 @@ async def callback(
   contextual = await plugin.model.database.find(_contextual)
   optional = await plugin.model.database.find(_optional)
 
-  cull = plugin.model.configuration.plugins.cull
+  steal = plugin.model.configuration.plugins.steal
 
-  fraction = cull.fraction
+  fraction = steal.fraction
+  probability = steal.probability
 
-  culling = round((optional.partial.berry / 2) * fraction)
+  stealing = round((optional.partial.berry / 2) * fraction)
 
-  if culling < 1:
-    raise Exception('Нечего отбирать')
+  if stealing < 1:
+    raise Exception('Нечего красть')
 
   if (random.choice(range(
     1,
-    cull.probability,
+    probability,
   ))) != 1:
-    await contextual.berry.remove(culling)
+    await contextual.berry.remove(stealing)
 
     await context.respond(embed=embeds.embed(
       'default',
       description=f"""\
-        Вы попытались отобрать {emoji.berry} ягоды у <@{_optional}>
+        Вы попытались украсть {emoji.berry} ягоды у <@{_optional}>
         и...
 
         ❌ Не получилось...
 
-        ```diff\n- {humanize(culling)} ягод```
+        ```diff\n- {humanize(stealing)} ягод```
       """,  # noqa: E501
     ))
 
     return
 
-  await contextual.berry.add(culling)
-  await optional.berry.remove(culling)
+  await contextual.berry.add(stealing)
+  await optional.berry.remove(stealing)
 
   await context.respond(embed=embed(
     'default',
     description=f"""\
-      Вы попытались отобрать {emoji.berry} ягоды у <@{_optional}>
+      Вы попытались украсть {emoji.berry} ягоды у <@{_optional}>
       и...
 
       ✅ Получилось!!!
 
-      ```diff\n+ {humanize(culling)} ягод```
+      ```diff\n+ {humanize(stealing)} ягод```
     """,  # noqa: E501
   ))

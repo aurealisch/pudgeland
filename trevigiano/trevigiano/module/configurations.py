@@ -30,7 +30,7 @@ class Collect(msgspec.Struct):
   fox: Range
 
 
-class Cull(msgspec.Struct):
+class Steal(msgspec.Struct):
   probability: 'types.FloatOrInt'
   fraction: 'types.FloatOrInt'
 
@@ -42,7 +42,7 @@ class Tame(msgspec.Struct):
 
 class Plugins(msgspec.Struct):
   collect: Collect
-  cull: Cull
+  steal: Steal
   tame: Tame
 
 

@@ -65,7 +65,7 @@ configuration = configurations.of("""\
       "berry": {"start": 25, "stop": 100},
       "fox": {"start": 100, "stop": 250}
     },
-    "cull": {"probability": 3, "fraction": 0.1},
+    "steal": {"probability": 3, "fraction": 0.1},
     "tame": {"probability": 5, "price": 200}
   }
 }
