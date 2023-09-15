@@ -96,13 +96,12 @@ async def callback(context: 'contexts.Context') -> None:
   components = type__
 
   message = await context.respond(
-    True,
+    ephemeral=True,
     components=components,
     embed=embed(
       'default',
       description='✨ Выберите предмет для покупки',
     ),
-    ensure_message=True,
   )
 
   if not message:

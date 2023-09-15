@@ -102,10 +102,15 @@ async def callback(context: 'contexts.Context') -> None:
   ) -> None:
     await _context.defer()
 
-    await _context.respond(embed=embed(
-      'default',
-      description='Отменено',
-    ))
+    flags = hikari.MessageFlag.EPHEMERAL
+
+    await _context.respond(
+      flags=flags,
+      embed=embed(
+        'default',
+        description='Отменено',
+      ),
+    )
 
     self.stop()
 
@@ -133,7 +138,7 @@ async def callback(context: 'contexts.Context') -> None:
   components = type__
 
   message = await context.respond(
-    True,
+    ephemeral=True,
     components=components,
     embed=embed(
       'default',
@@ -141,7 +146,6 @@ async def callback(context: 'contexts.Context') -> None:
         Чтобы попробовать приручить лису, потребуется скормить {emoji.berry} `{humanize(fed)}` ягод
       """,  # noqa: E501
     ),
-    ensure_message=True,
   )
 
   if message is not None:
