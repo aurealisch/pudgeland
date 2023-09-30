@@ -37,6 +37,4 @@ class Trevigiano:
         self.__gateway_bot = GATEWAY_BOT
 
     def run(self: typing.Self) -> None:
-        return self.__gateway_bot.run(
-            activity=hikari.Activity(name=self.model.configuration.activity.name)
-        )
+        return self.__gateway_bot.run()

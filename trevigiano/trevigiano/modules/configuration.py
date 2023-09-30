@@ -5,10 +5,6 @@ import msgspec
 from .. import float_or_int
 
 
-class Activity(msgspec.Struct):
-    name: str
-
-
 class Sort(msgspec.Struct):
     order: typing.Literal["asc", "desc"]
 
@@ -45,7 +41,6 @@ class Plugins(msgspec.Struct):
 
 
 class Configuration(msgspec.Struct):
-    activity: Activity
     leaders: Leaders
     plugins: Plugins
 

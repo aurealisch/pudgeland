@@ -43,9 +43,6 @@ DATABASE = database.Database(PRISMA, events=EVENTS)
 CONFIGURATION = configuration.of(
     """\
     {
-        "activity": {
-            "name": "гг сервер умер"
-        },
         "leaders": {
             "sort": {
                 "order": "desc"
