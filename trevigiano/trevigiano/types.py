@@ -1,6 +1,3 @@
 import typing
 
-FloatOrInt = typing.Union[
-    float,
-    int,
-]
+FloatOrInt = typing.Union[float, int]

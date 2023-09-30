@@ -2,29 +2,29 @@ import hikari
 
 from trevigiano.client import plugins
 
-from .common import groups, periods
+from .constants import groups, periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
-options = plugin.options
-exceptions = plugin.exceptions
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
+OPTIONS = PLUGIN.options
+EXCEPTIONS = PLUGIN.exceptions
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="подарить",
     description="Подарить",
-    period=periods.period,
-    group=groups.group,
+    period=periods.PERIOD,
+    group=groups.GROUP,
     options=[
-        options.Option(
+        OPTIONS.Option(
             hikari.User,
             name="пользователь",
             description="Пользователь",
         ),
-        options.Option(
+        OPTIONS.Option(
             int,
             name="количество",
             description="Количество",
@@ -32,35 +32,34 @@ exceptions = plugin.exceptions
     ],
 )
 async def callback(
-    context: "contexts.Context",
+    context: "CONTEXTS.Context",
     user: "hikari.User",
     amount: int,
 ) -> None:
     if amount < 0:
-        raise plugin.exceptions.YouCantDoThatException
+        raise PLUGIN.exceptions.YouCantDoThatException
 
-    emojis = context.emojis
-    embeds = context.embeds
-    humanizes = context.humanizes
+    EMOJIS = context.emojis
+    EMBEDS = context.embeds
+    HUMANIZES = context.humanizes
 
-    emoji = emojis.Emoji
-    embed = embeds.embed
-    humanize = humanizes.humanize
+    _OPTIONAL = str(user.id)
+    _CONTEXTUAL = str(context.user.id)
 
-    _optional = str(user.id)
-    _contextual = str(context.user.id)
+    OPTIONAL = await PLUGIN.model.database.find(_OPTIONAL)
+    CONTEXTUAL = await PLUGIN.model.database.find(_CONTEXTUAL)
 
-    optional = await plugin.model.database.find(_optional)
-    contextual = await plugin.model.database.find(_contextual)
-
-    await optional.berry.add(amount)
-    await contextual.berry.remove(amount)
+    await OPTIONAL.berry.add(amount)
+    await CONTEXTUAL.berry.remove(amount)
 
     await context.respond(
-        embed=embed(
+        embed=EMBEDS.embed(
             "default",
             description=f"""\
-                Вы дали {emoji.berry} `{humanize(amount)}` ягод <@{_optional}>
+                Вы дали {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(amount)}` ягод <@{_OPTIONAL}>
             """,  # noqa: E501
         )
     )
+
+
+plugin = PLUGIN

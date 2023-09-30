@@ -15,13 +15,11 @@ class Model:
         self.database = database
 
     async def _on_started_event(
-        self: typing.Self,
-        _started_event: "hikari.StartedEvent",
+        self: typing.Self, _started_event: "hikari.StartedEvent"
     ) -> None:
         await self.database.prisma.connect()
 
     async def _on_stopped_event(
-        self: typing.Self,
-        _stopped_event: "hikari.StoppedEvent",
+        self: typing.Self, _stopped_event: "hikari.StoppedEvent"
     ) -> None:
         await self.database.prisma.disconnect()

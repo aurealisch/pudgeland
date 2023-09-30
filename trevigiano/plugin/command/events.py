@@ -1,39 +1,36 @@
 from trevigiano.client import plugins
 
-from .common import periods
+from .constants import periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="события",
     description="События",
-    period=periods.period,
+    period=periods.PERIOD,
 )
-async def callback(context: "contexts.Context") -> None:
-    events = plugin.model.database.events
-
-    embeds = context.embeds
-
-    embed = embeds.embed
+async def callback(context: "CONTEXTS.Context") -> None:
+    EMBEDS = context.embeds
 
     await context.respond(
-        embed=embed(
+        embed=EMBEDS.embed(
             "default",
-            description="\n".join(
-                [
-                    "\n".join(
-                        [
-                            f"# {event.title}",
-                            f"> {event.description}",
-                        ]
-                    )
-                    for event in events
-                ]
-            ),
+            # fmt: off
+            description="\n".join([
+                "\n".join([
+                    f"# {EVENT.title}",
+                    f"> {EVENT.description}",
+                ])
+                for EVENT in PLUGIN.model.database.events
+            ])
+            # fmt: on
         )
     )
+
+
+plugin = PLUGIN

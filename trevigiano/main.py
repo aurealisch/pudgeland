@@ -6,7 +6,7 @@ from trevigiano.client import models
 from trevigiano.client.command.utility import emojis
 from trevigiano.module import configurations, databases
 
-commands = [
+COMMANDS = [
     "events",
     "profile",
     "berries.collect",
@@ -21,32 +21,26 @@ commands = [
     "store.items",
     "store.buy",
 ]
-plugins = [f"command.{command}" for command in commands]
+PLUGINS = [f"command.{COMMAND}" for COMMAND in COMMANDS]
 
-prisma = _prisma.Prisma()
+PRISMA = _prisma.Prisma()
 
-_prisma.register(prisma)
+_prisma.register(PRISMA)
 
-events = [
+EVENTS = [
     databases.Event(
         "Осень",
         description=f"""\
-            {emojis.Emoji.berry} Множитель сбора ягод: `1.1x`
-            {emojis.Emoji.fox} Множитель сбора ягод лисами: `1.01x`
+            {emojis.Emoji.BERRY} Множитель сбора ягод: `1.1x`
+            {emojis.Emoji.FOX} Множитель сбора ягод лисами: `1.01x`
         """,
-        buff=databases.Buff(
-            1.1,
-            fox=1.01,
-        ),
+        buff=databases.Buff(1.1, fox=1.01),
     )
 ]
 
-database = databases.Database(
-    prisma,
-    events=events,
-)
+DATABASE = databases.Database(PRISMA, events=EVENTS)
 
-configuration = configurations.of(
+CONFIGURATION = configurations.of(
     """\
     {
         "activity": {
@@ -70,15 +64,12 @@ configuration = configurations.of(
     """
 )
 
-model = models.Model(
-    configuration,
-    database=database,
-)
+MODEL = models.Model(CONFIGURATION, database=DATABASE)
 
-token = env.get("TOKEN")
+TOKEN = env.get("TOKEN")
 
 trevigiano.Trevigiano(
-    plugins,
-    model=model,
-    token=token,
+    PLUGINS,
+    model=MODEL,
+    token=TOKEN,
 ).run()

@@ -35,9 +35,9 @@ class Period:
 
 
 class Bucket:
-    def __init__(self: typing.Self, capacity: int, period: float) -> None:
+    def __init__(self: typing.Self, capacity: int, total: float) -> None:
         self.capacity = capacity
-        self.period = period
+        self.total = total
         self._window = 0.0
         self._tokens = self.capacity
         self._last = 0.0
@@ -48,7 +48,7 @@ class Bucket:
 
         tokens = self._tokens
 
-        if current > self._window + self.period:
+        if current > self._window + self.total:
             tokens = self.capacity
 
         return tokens
@@ -60,7 +60,7 @@ class Bucket:
         tokens = self.get_tokens(current)
 
         if tokens == 0:
-            return self.period - (current - self._window)
+            return self.total - (current - self._window)
 
         return 0.0
 
@@ -75,7 +75,7 @@ class Bucket:
             self._window = current
 
         if self._tokens == 0:
-            return self.period - (current - self._window)
+            return self.total - (current - self._window)
 
         self._tokens -= 1
 
@@ -86,9 +86,9 @@ class Bucket:
         self._last = 0.0
 
 
-class Cooldown(typing.Generic[_KEY]):
-    def __init__(self: typing.Self, capacity: float, period: float) -> None:
-        self.period = period
+class CoolDown(typing.Generic[_KEY]):
+    def __init__(self: typing.Self, capacity: float, total: float) -> None:
+        self.total = total
         self.capacity = capacity
 
         self._old: dict[_KEY, Bucket] = {}
@@ -97,10 +97,7 @@ class Cooldown(typing.Generic[_KEY]):
         self.last_cycle = _time.time()
 
     def __getitem__(self: typing.Self, key: _KEY) -> Bucket:
-        if value := self._old.pop(
-            key,
-            None,
-        ):
+        if value := self._old.pop(key, None):
             self._current[key] = value
 
         return self._current[key]
@@ -111,7 +108,7 @@ class Cooldown(typing.Generic[_KEY]):
     def get_bucket(self: typing.Self, key: _KEY) -> Bucket:
         now = _time.time()
 
-        if now > self.last_cycle + self.period:
+        if now > self.last_cycle + self.total:
             self.last_cycle = now
 
             self._old.clear()
@@ -123,10 +120,7 @@ class Cooldown(typing.Generic[_KEY]):
         try:
             return self[key]
         except KeyError:
-            bucket = Bucket(
-                self.capacity,
-                self.period,
-            )
+            bucket = Bucket(self.capacity, self.total)
 
             self._current[key] = bucket
 
@@ -139,24 +133,15 @@ class Cooldown(typing.Generic[_KEY]):
         return self.get_bucket(key).trigger()
 
 
-def cooldown(
+def coolDown(
     period: Period,
 ) -> typing.Callable[
     ["contexts.Context"], typing.Awaitable[typing.Optional[crescent.HookResult]]
 ]:
-    total = period.total
-
-    _period = total
-
-    _cooldown = Cooldown(
-        1,
-        period=_period,
-    )
-
     async def inner(
         context: "contexts.Context",
     ) -> typing.Optional[crescent.HookResult]:
-        remained = _cooldown.trigger(context.user.id)
+        remained = CoolDown(1, total=period.total).trigger(context.user.id)
 
         if remained is None:
             return None

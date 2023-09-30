@@ -10,10 +10,7 @@ class Activity(msgspec.Struct):
 
 
 class Sort(msgspec.Struct):
-    order: typing.Literal[
-        "asc",
-        "desc",
-    ]
+    order: typing.Literal["asc", "desc"]
 
 
 class Leaders(msgspec.Struct):
@@ -53,15 +50,5 @@ class Configuration(msgspec.Struct):
     plugins: Plugins
 
 
-def of(
-    buf: typing.Union[
-        bytes,
-        str,
-    ]
-) -> Configuration:
-    type = Configuration
-
-    return msgspec.json.decode(
-        buf,
-        type=type,
-    )
+def of(buf: typing.Union[bytes, str]) -> Configuration:
+    return msgspec.json.decode(buf, type=Configuration)

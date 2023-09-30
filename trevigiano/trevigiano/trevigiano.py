@@ -16,25 +16,25 @@ class Trevigiano:
     ) -> None:
         self.model = model
 
-        intents = (
+        INTENTS = (
             hikari.Intents.MESSAGE_CONTENT
             | hikari.Intents.GUILDS
             | hikari.Intents.GUILD_MESSAGES
         )
 
-        gateway_bot = hikari.GatewayBot(token, intents=intents)
+        GATEWAY_BOT = hikari.GatewayBot(token, intents=INTENTS)
 
-        miru.install(gateway_bot)
+        miru.install(GATEWAY_BOT)
 
-        client = crescent.Client(gateway_bot, model=model)
+        CLIENT = crescent.Client(GATEWAY_BOT, model=model)
 
-        for plugin in plugins:
-            client.plugins.load(f"plugin.{plugin}")
+        for PLUGIN in plugins:
+            CLIENT.plugins.load(f"plugin.{PLUGIN}")
 
-        gateway_bot.listen(hikari.StartedEvent)(model._on_started_event)
-        gateway_bot.listen(hikari.StoppedEvent)(model._on_stopped_event)
+        GATEWAY_BOT.listen(hikari.StartedEvent)(model._on_started_event)
+        GATEWAY_BOT.listen(hikari.StoppedEvent)(model._on_stopped_event)
 
-        self.__gateway_bot = gateway_bot
+        self.__gateway_bot = GATEWAY_BOT
 
     def run(self: typing.Self) -> None:
         return self.__gateway_bot.run(

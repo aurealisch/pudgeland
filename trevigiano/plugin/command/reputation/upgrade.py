@@ -2,51 +2,44 @@ import hikari
 
 from trevigiano.client import plugins
 
-from .common import groups, periods
+from .constants import groups, periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
-options = plugin.options
-exceptions = plugin.exceptions
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
+OPTIONS = PLUGIN.options
+EXCEPTIONS = PLUGIN.exceptions
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="повысить",
     description="Повысить",
-    period=periods.period,
-    group=groups.group,
-    options=[
-        options.Option(
-            hikari.User,
-            name="пользователь",
-            description="Пользователь",
-        )
-    ],
+    period=periods.PERIOD,
+    group=groups.GROUP,
+    # fmt: off
+    options=[OPTIONS.Option(
+        hikari.User,
+        name="пользователь",
+        description="Пользователь",
+    )],
+    # fmt: on
 )
-async def callback(
-    context: "contexts.Context",
-    user: "hikari.User",
-) -> None:
-    embeds = context.embeds
+async def callback(context: "CONTEXTS.Context", user: "hikari.User") -> None:
+    EMBEDS = context.embeds
 
-    embed = embeds.embed
+    CONTEXTUAL = str(context.user.id)
+    OPTIONAL = str(user.id)
 
-    contextual = str(context.user.id)
-    optional = str(user.id)
+    if CONTEXTUAL == OPTIONAL:
+        raise EXCEPTIONS.YouCantDoThatException
 
-    if not contextual != optional:
-        raise exceptions.YouCantDoThatException
+    await PLUGIN.model.database.find(OPTIONAL).reputation.add(1)
 
-    user = await plugin.model.database.find(optional)
+    DESCRIPTION = f"📈 Вы повысили репутацию <@{OPTIONAL}>"
 
-    await user.reputation.add(1)
+    await context.respond(embed=EMBEDS.embed("default", description=DESCRIPTION))
 
-    await context.respond(
-        embed=embed(
-            "default",
-            description=f"📈 Вы повысили репутацию <@{optional}>",
-        )
-    )
+
+plugin = PLUGIN

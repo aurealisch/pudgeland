@@ -1,55 +1,57 @@
-import string
-
 from trevigiano.client import plugins
 
-from .common import emojis, groups, periods
+from .constants import (
+    emojis,
+    groups,
+    periods,
+)
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="лисы",
     description="Лисы",
-    period=periods.period,
-    group=groups.group,
+    period=periods.PERIOD,
+    group=groups.GROUP,
 )
-async def callback(context: "contexts.Context") -> None:
-    embeds = context.embeds
-    humanizes = context.humanizes
+async def callback(context: "CONTEXTS.Context") -> None:
+    EMBEDS = context.embeds
+    HUMANIZES = context.humanizes
 
-    embed = embeds.embed
-    humanize = humanizes.humanize
-
-    users = await plugin.model.database.leaders(
-        plugin.model.configuration.leaders.take,
+    USERS = await PLUGIN.model.database.leaders(
+        PLUGIN.model.configuration.leaders.take,
         user_keys="fox",
-        sort_order=plugin.model.configuration.leaders.sort.order,
+        sort_order=PLUGIN.model.configuration.leaders.sort.order,
     )
 
-    embed = embed("default")
+    EMBED = EMBEDS.embed("default")
 
-    for index, user in enumerate(users):
-        name = string.whitespace
+    for INDEX, USER in enumerate(USERS):
+        name = "\u0020"
 
-        position = index + 1
+        POSITION = INDEX + 1
 
-        if position in emojis.emoji:
-            name += emojis.emoji[position]
+        if POSITION in emojis.emoji:
+            name += emojis.emoji[POSITION]
 
-        name += f"#{position}"
+        name += f"#{POSITION}"
 
-        embed.add_field(
+        EMBED.add_field(
             name=name,
-            value="\n".join(
-                [
-                    f"<@{user.partial.id}>",
-                    f"Лисы: `{humanize(user.partial.fox)}`",
-                ]
-            ),
+            # fmt: off
+            value="\n".join([
+                f"<@{USER.partial.id}>",
+                f"Лисы: `{HUMANIZES.humanize(USER.partial.fox)}`",
+            ])
+            # fmt: on
         )
 
-    await context.respond(embed=embed)
+    await context.respond(embed=EMBED)
+
+
+plugin = PLUGIN

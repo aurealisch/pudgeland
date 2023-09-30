@@ -1,81 +1,63 @@
 import math
 import random
 
-import crescent
 import hikari
 import miru
 
 from trevigiano.client import plugins
 
-plugin = plugins.Plugin()
+from .constants import groups, periods
 
-views = plugin.views
-commands = plugin.commands
-contexts = plugin.contexts
-cooldowns = plugin.cooldowns
+PLUGIN = plugins.Plugin()
+
+VIEWS = PLUGIN.views
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="приручить",
     description="Приручить",
-    period=cooldowns.Period(
-        seconds=2,
-        milliseconds=500,
-    ),  # 2.5 seconds
-    group=crescent.Group(
-        "лисы",
-        description="Лисы",
-    ),
+    period=periods.PERIOD,
+    group=groups.GROUP,
 )
-async def callback(context: "contexts.Context") -> None:
-    emojis = context.emojis
-    embeds = context.embeds
-    humanizes = context.humanizes
+async def callback(context: "CONTEXTS.Context") -> None:
+    EMOJIS = context.emojis
+    EMBEDS = context.embeds
+    HUMANIZES = context.humanizes
 
-    emoji = emojis.Emoji
-    embed = embeds.embed
-    humanize = humanizes.humanize
+    TAME = PLUGIN.model.configuration.plugins.tame
 
-    tame = plugin.model.configuration.plugins.tame
+    CONTEXTUAL = await PLUGIN.model.database.find(str(context.user.id))
 
-    _contextual = str(context.user.id)
+    PRICE = TAME.price
+    PROBABILITY = TAME.probability
 
-    contextual = await plugin.model.database.find(_contextual)
+    FED = round((CONTEXTUAL.partial.fox + 1) * math.e * PRICE)
 
-    fox = contextual.partial.fox
-
-    fed = round((fox + 1) * math.e * tame.price)
-
-    style = hikari.ButtonStyle.SECONDARY
+    STYLE = hikari.ButtonStyle.SECONDARY
 
     async def ok(
-        self: views.ViewABC,
+        self: VIEWS.ViewABC,
         _button: "miru.Button",
         _context: "miru.Context",
     ) -> None:
         await _context.defer()
 
-        berry = contextual.partial.berry
+        berry = CONTEXTUAL.partial.berry
 
-        if berry < fed:
-            raise plugin.exceptions.NotEnoughBerriesException
+        if berry < FED:
+            raise PLUGIN.exceptions.NotEnoughBerriesException
 
-        await contextual.berry.remove(fed)
+        await CONTEXTUAL.berry.remove(FED)
 
-        if (
-            random.choice(
-                range(
-                    1,
-                    tame.probability,
-                )
-            )
-        ) != 1:
+        if random.choice(range(1, PROBABILITY)) != 1:
             await _context.respond(
-                embed=embed(
+                embed=EMBEDS.embed(
                     "default",
                     description=f"""\
-                        Вы скормили {emoji.berry} `{humanize(fed)}` ягод
+                        Вы скормили {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(FED)}` ягод
                         и...
 
                         💔 Не получилось приручить лису...
@@ -87,13 +69,13 @@ async def callback(context: "contexts.Context") -> None:
 
             return
 
-        await contextual.fox.add(1)
+        await CONTEXTUAL.fox.add(1)
 
         await _context.respond(
-            embed=embed(
+            embed=EMBEDS.embed(
                 "default",
                 description=f"""\
-                    Вы скормили {emoji.berry} `{humanize(fed)}` ягод
+                    Вы скормили {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(FED)}` ягод
                     и...
 
                     💖 Получилось приручить лису!!!
@@ -104,57 +86,56 @@ async def callback(context: "contexts.Context") -> None:
         self.stop()
 
     async def cancel(
-        self: views.ViewABC,
+        self: VIEWS.ViewABC,
         _button: "miru.Button",
         _context: "miru.Context",
     ) -> None:
         await _context.defer()
 
-        flags = hikari.MessageFlag.EPHEMERAL
+        FLAGS = hikari.MessageFlag.EPHEMERAL
 
         await _context.respond(
-            flags=flags,
-            embed=embed(
-                "default",
-                description="Отменено",
-            ),
+            flags=FLAGS, embed=EMBEDS.embed("default", description="Отменено")
         )
 
         self.stop()
 
-    __name = "View"
-    __bases = (views.ViewABC,)
-    __dict = {
+    NAME = "ViewABC"
+    BASES = (VIEWS.ViewABC,)
+    DICT = {
         "ok": miru.button(
             label="ОК",
-            style=style,
+            style=STYLE,
             emoji="✅",
         )(ok),
         "cancel": miru.button(
             label="Отменить",
-            style=style,
+            style=STYLE,
             emoji="❌",
         )(cancel),
     }
 
-    type__ = type(
-        __name,
-        __bases,
-        __dict,
+    TYPE = type(
+        NAME,
+        BASES,
+        DICT,
     )()
 
-    components = type__
+    COMPONENTS = TYPE
 
     message = await context.respond(
         ephemeral=True,
-        components=components,
-        embed=embed(
+        components=COMPONENTS,
+        embed=EMBEDS.embed(
             "default",
             description=f"""\
-                Чтобы попробовать приручить лису, потребуется скормить {emoji.berry} `{humanize(fed)}` ягод
+                Чтобы попробовать приручить лису, потребуется скормить {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(FED)}` ягод
             """,  # noqa: E501
         ),
     )
 
     if message is not None:
-        await components.start(message)
+        await COMPONENTS.start(message)
+
+
+plugin = PLUGIN

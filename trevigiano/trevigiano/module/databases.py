@@ -3,8 +3,7 @@ import typing
 
 import prisma as _prisma
 
-from .. import types
-from ..logic.store import stores
+from .. import shops, types
 
 
 @dataclasses.dataclass
@@ -38,30 +37,21 @@ class Resource:
         self.key = key
         self.partial = partial
 
-    async def add(
-        self: typing.Self,
-        value: int,
-    ) -> None:
+    async def add(self: typing.Self, value: int) -> None:
         await self.partial.prisma().update(
             {self.key: self.partial.dict().get(self.key) + value},
-            where={"id": self.partial.id},
+            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
         )
 
-    async def remove(
-        self: typing.Self,
-        value: int,
-    ) -> None:
+    async def remove(self: typing.Self, value: int) -> None:
         await self.partial.prisma().update(
             {self.key: self.partial.dict().get(self.key) - value},
-            where={"id": self.partial.id},
+            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
         )
 
 
 class User:
-    def __init__(
-        self: typing.Self,
-        partial: "_prisma.models.User",
-    ) -> None:
+    def __init__(self: typing.Self, partial: "_prisma.models.User") -> None:
         self.partial = partial
 
         self.berry = Resource("berry", partial=self.partial)
@@ -78,26 +68,19 @@ class Database:
     ) -> None:
         self.prisma = prisma
         self.events = events
-        self.store = stores.store
+        self.shop = shops.shop
 
-    async def find(
-        self: typing.Self,
-        id: str,
-    ) -> User:
-        partial = await self.prisma.user.find_first(
-            where=_prisma.types.UserWhereInput(
-                id=id,
-            ),
+    async def find(self: typing.Self, id__: str) -> User:
+        PARTIAL = await self.prisma.user.find_first(
+            where=_prisma.types.UserWhereInput(id=id__)
         )
 
-        if partial is None:
-            partial = await self.prisma.user.create(
-                _prisma.types.UserCreateInput(
-                    id=id,
-                ),
+        if PARTIAL is None:
+            PARTIAL = await self.prisma.user.create(
+                _prisma.types.UserCreateInput(id=id)
             )
 
-        return User(partial=partial)
+        return User(partial=PARTIAL)
 
     async def leaders(
         self: typing.Self,
@@ -105,10 +88,6 @@ class Database:
         user_keys: "_prisma.types.UserKeys",
         sort_order: "_prisma.types.SortOrder",
     ) -> typing.List[User]:
-        order = {user_keys: sort_order}
+        PARTIALS = await self.prisma.user.find_many(take, order={user_keys: sort_order})
 
-        partials = await self.prisma.user.find_many(take, order=order)
-
-        users = map(lambda partial: User(partial=partial), partials)
-
-        return users
+        return map(lambda PARTIAL: User(partial=PARTIAL), PARTIALS)

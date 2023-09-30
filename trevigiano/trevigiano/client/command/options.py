@@ -7,7 +7,7 @@ import hikari
 
 @dataclasses.dataclass
 class Option:
-    type: typing.Union[
+    type__: typing.Union[
         type[str],
         type[bool],
         type[int],

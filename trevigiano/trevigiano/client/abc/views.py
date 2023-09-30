@@ -15,7 +15,4 @@ class ViewABC(miru.View, abc.ABC):
         _view_item: typing.Optional["miru.abc.ViewItem"] = None,
         context: typing.Optional["miru.Context"] = None,
     ) -> None:
-        await handles.handle(
-            exception,
-            context=context,
-        )
+        await handles.handle(exception, context=context)

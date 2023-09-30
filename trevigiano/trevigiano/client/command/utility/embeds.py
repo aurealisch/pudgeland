@@ -8,7 +8,7 @@ Color = typing.Literal[
     "success",
 ]
 
-colors = {
+COLORS = {
     "default": "#4f686d",
     "error": "#ff4b4b",
     "success": "#77b35a",
@@ -20,12 +20,12 @@ def embed(
     title: typing.Optional[str] = None,
     description: typing.Optional[str] = None,
 ) -> hikari.Embed:
-    color = hikari.Color.of(colors[color])
+    COLOR = hikari.Color.of(COLORS[color])
 
-    embed = hikari.Embed(
+    EMBED = hikari.Embed(
         title=title,
         description=description,
-        color=color,
+        color=COLOR,
     )
 
-    return embed
+    return EMBED

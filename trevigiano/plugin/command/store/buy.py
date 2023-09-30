@@ -5,33 +5,29 @@ import miru
 
 from trevigiano.client import plugins
 
-from .common import groups, periods
+from .constants import groups, periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-views = plugin.views
-commands = plugin.commands
-contexts = plugin.contexts
+VIEWS = PLUGIN.views
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="купить",
     description="купить",
-    period=periods.period,
-    group=groups.group,
+    period=periods.PERIOD,
+    group=groups.GROUP,
 )
-async def callback(context: "contexts.Context") -> None:
-    database = plugin.model.database
-    store = database.store
+async def callback(context: "CONTEXTS.Context") -> None:
+    DATABASE = PLUGIN.model.database
+    SHOP = DATABASE.shop
 
-    emojis = context.emojis
-    embeds = context.embeds
-    humanizes = context.humanizes
-
-    emoji = emojis.Emoji
-    embed = embeds.embed
-    humanize = humanizes.humanize
+    EMOJIS = context.emojis
+    EMBEDS = context.embeds
+    HUMANIZES = context.humanizes
 
     async def text_select(
         self: typing.Self,
@@ -40,71 +36,72 @@ async def callback(context: "contexts.Context") -> None:
     ) -> None:
         await _context.defer()
 
-        _item, *_ = _text_select.values
+        _ITEM, *_ = _text_select.values
 
-        item = store.get(int(_item))
+        ITEM = SHOP.get(int(_ITEM))
 
-        _contextual = str(_context.user.id)
+        CONTEXTUAL = await DATABASE.find(str(_context.user.id))
 
-        contextual = await database.find(_contextual)
+        if CONTEXTUAL.partial.item != int(_ITEM):
+            BERRY = CONTEXTUAL.partial.berry
 
-        if contextual.partial.item != int(_item):
-            berry = contextual.partial.berry
+            PRICE = ITEM.price
 
-            price = item.price
+            if BERRY < PRICE:
+                raise PLUGIN.exceptions.NotEnoughBerriesException
 
-            if berry < price:
-                raise plugin.exceptions.NotEnoughBerriesException
-
-            await contextual.berry.remove(price)
+            await CONTEXTUAL.berry.remove(PRICE)
 
             await _context.respond(
-                embed=embed(
+                embed=EMBEDS.embed(
                     "default",
                     description=f"""\
-          Вы купили `{item.label}` за {emoji.berry} `{humanize(price)}` ягод
-        """,  # noqa: E501
+                        Вы купили `{ITEM.label}` за {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(PRICE)}` ягод
+                    """,  # noqa: E501
                 )
             )
 
             return
 
-        raise plugin.exceptions.YouCantDoThatException
+        raise PLUGIN.exceptions.YouCantDoThatException
 
-    __name = "View"
-    __bases = (views.ViewABC,)
-    __dict = {
+    NAME = "ViewABC"
+    BASES = (VIEWS.ViewABC,)
+    DICT = {
         "text_select": miru.text_select(
             options=[
                 hikari.SelectMenuOption(
-                    label=item.label,
-                    value=value,
-                    description=item.description,
-                    emoji=item.emoji,
+                    label=ITEM.label,
+                    value=VALUE,
+                    description=ITEM.description,
+                    emoji=ITEM.emoji,
                     is_default=False,
                 )
-                for value, item in store
+                for VALUE, ITEM in SHOP.items()
             ],
             placeholder="Предметы",
         )(text_select),
     }
 
-    type__ = type(
-        __name,
-        __bases,
-        __dict,
+    TYPE = type(
+        NAME,
+        BASES,
+        DICT,
     )()
 
-    components = type__
+    COMPONENTS = TYPE
 
     message = await context.respond(
         ephemeral=True,
-        components=components,
-        embed=embed(
+        components=COMPONENTS,
+        embed=EMBEDS.embed(
             "default",
             description="✨ Выберите предмет для покупки",
         ),
     )
 
     if not message:
-        await components.start(message)
+        await COMPONENTS.start(message)
+
+
+plugin = PLUGIN

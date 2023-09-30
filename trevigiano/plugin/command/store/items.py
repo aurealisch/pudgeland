@@ -1,47 +1,40 @@
 from trevigiano.client import plugins
 
-from .common import groups, periods
+from .constants import groups, periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="предметы",
     description="Предметы",
-    period=periods.period,
-    group=groups.group,
+    period=periods.PERIOD,
+    group=groups.GROUP,
 )
-async def callback(context: "contexts.Context") -> None:
-    store = plugin.model.database.store
-
-    emojis = context.emojis
-    embeds = context.embeds
-    humanizes = context.humanizes
-
-    emoji = emojis.Emoji
-    embed = embeds.embed
-    humanize = humanizes.humanize
-
-    description = "\n".join(
-        [
-            "\n".join(
-                [
-                    f"# {item.emoji} {item.label}",
-                    f"> {item.description}",
-                    f"🏷 Цена: {emoji.berry} Ягоды: `{humanize(item.price)}`",
-                ]
-            )
-            for _, item in store.items()
-        ]
-    )
+async def callback(context: "CONTEXTS.Context") -> None:
+    EMBEDS = context.embeds
+    EMOJIS = context.emojis
+    HUMANIZES = context.humanizes
 
     await context.respond(
-        embed=embed(
+        embed=EMBEDS.embed(
             "default",
-            description=description,
+            # fmt: off
+            description="\n".join([
+                "\n".join([
+                    f"# {item.emoji} {item.label}",
+                    f"> {item.description}",
+                    f"🏷 Цена: {EMOJIS.Emoji.BERRY} Ягоды: `{HUMANIZES.humanize(item.price)}`",  # noqa: E501,
+                ])
+                for _, item in PLUGIN.model.database.shop.items()
+            ])
+            # fmt: on
         )
     )
+
+
+plugin = PLUGIN

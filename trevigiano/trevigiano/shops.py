@@ -19,7 +19,7 @@ class Item:
     bonus: typing.Optional[Bonus] = None
 
 
-store = {
+shop = {
     1: Item(
         "Hook",
         description="Выпускает Hook, который вместо очередного Shadow Fiend на центре притягивает +10% ягод!",  # noqa: E501

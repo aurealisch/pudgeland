@@ -2,110 +2,88 @@ import random
 
 from trevigiano.client import plugins
 
-from .common import groups, periods
+from .constants import groups, periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="собрать",
     description="Собрать",
-    period=periods.period,
-    group=groups.group,
+    period=periods.PERIOD,
+    group=groups.GROUP,
 )
-async def callback(context: "contexts.Context") -> None:
-    emojis = context.emojis
-    embeds = context.embeds
-    humanizes = context.humanizes
+async def callback(context: "CONTEXTS.Context") -> None:
+    DATABASE = PLUGIN.model.database
+    SHOP = DATABASE.shop
 
-    emoji = emojis.Emoji
-    embed = embeds.embed
-    humanize = humanizes.humanize
+    EMOJIS = context.emojis
+    EMBEDS = context.embeds
+    HUMANIZES = context.humanizes
 
-    _contextual = str(context.user.id)
+    CONTEXTUAL = await DATABASE.find(str(context.user.id))
 
-    contextual = await plugin.model.database.find(_contextual)
+    FOX = CONTEXTUAL.partial.fox
+    _ITEM = CONTEXTUAL.partial.item
 
-    fox = contextual.partial.fox
+    COLLECT = PLUGIN.model.configuration.plugins.collect
+    EVENTS = PLUGIN.model.database.events
 
-    _item = contextual.partial.item
+    TOTAL = 0
 
-    collect = plugin.model.configuration.plugins.collect
-    events = plugin.model.database.events
+    BERRYING = random.choice(range(COLLECT.berry.start, COLLECT.berry.stop))
 
-    total = 0
+    if EVENTS:
+        for EVENT in EVENTS:
+            BUFF = EVENT.buff
 
-    berrying = random.choice(
-        range(
-            collect.berry.start,
-            collect.berry.stop,
-        )
+            if BUFF:
+                BERRYING *= BUFF.berry
+
+    if _ITEM:
+        BONUS = SHOP.get(_ITEM).bonus
+
+        if BONUS.berry:
+            BERRYING += round(BERRYING * BONUS.berry)
+
+    BERRYING = round(BERRYING)
+
+    TOTAL += BERRYING
+
+    description = (
+        f"Вы собрали {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(BERRYING)}` ягод"
     )
 
-    if events:
-        for event in events:
-            buff = event.buff
+    if FOX:
+        FOXYING = FOX * random.choice(range(COLLECT.fox.start, COLLECT.fox.stop))
 
-            if buff:
-                _berry = buff.berry
+        if EVENTS:
+            for EVENT in EVENTS:
+                BUFF = EVENT.buff
 
-                berrying *= _berry
+                if BUFF:
+                    FOXYING *= BUFF.fox
 
-    if _item:
-        item = plugin.model.database.shop.get(_item)
+        if _ITEM:
+            BONUS = SHOP.get(_ITEM).bonus
 
-        bonus = item.bonus
+            if BONUS.fox:
+                FOXYING += round(FOXYING * BONUS.fox)
 
-        if bonus.berry:
-            berrying += round(berrying * bonus.berry)
+        FOXYING = round(FOXYING)
 
-    berrying = round(berrying)
+        TOTAL += FOXYING
 
-    total += berrying
+        description += f"\n+ {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(FOXYING)}` ягод от {EMOJIS.fox} `{HUMANIZES.humanize(FOX)}` лис"  # noqa: E501
+        description += f"\n\n🔁 Всего: {EMOJIS.Emoji.BERRY} `{HUMANIZES.humanize(TOTAL)}` ягод"  # noqa: E501"
 
-    description = f"Вы собрали {emoji.berry} `{humanize(berrying)}` ягод"
+    await CONTEXTUAL.berry.add(TOTAL)
 
-    if fox:
-        foxying = fox * random.choice(
-            range(
-                collect.fox.start,
-                collect.fox.stop,
-            )
-        )
+    await context.respond(embed=EMBEDS.embed("default", description=description))
 
-        if events:
-            for event in events:
-                buff = event.buff
 
-                if buff:
-                    _fox = buff.fox
-
-                    foxying *= _fox
-
-        if _item:
-            item = plugin.model.database.shop.get(_item)
-
-            bonus = item.bonus
-
-            if bonus.fox:
-                foxying += round(foxying * bonus.fox)
-
-        foxying = round(foxying)
-
-        total += foxying
-
-        description += f"\n+ {emoji.berry} `{humanize(foxying)}` ягод от {emoji.fox} `{humanize(fox)}` лис"  # noqa: E501
-        description += f"\n\n🔁 Всего: {emoji.berry} `{humanize(total)}` ягод"
-
-    await contextual.berry.add(total)
-
-    await context.respond(
-        embed=embed(
-            "default",
-            description=description,
-        )
-    )
+plugin = PLUGIN

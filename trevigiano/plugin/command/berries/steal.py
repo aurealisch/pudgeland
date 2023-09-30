@@ -4,96 +4,85 @@ import hikari
 
 from trevigiano.client import plugins
 
-from .common import groups, periods
+from .constants import groups, periods
 
-plugin = plugins.Plugin()
+PLUGIN = plugins.Plugin()
 
-commands = plugin.commands
-contexts = plugin.contexts
-options = plugin.options
+COMMANDS = PLUGIN.commands
+CONTEXTS = PLUGIN.contexts
+OPTIONS = PLUGIN.options
 
 
-@commands.command(
-    plugin,
+@COMMANDS.command(
+    PLUGIN,
     name="украсть",
     description="Украсть",
-    period=periods.period,
-    group=groups.group,
-    options=[
-        options.Option(
-            hikari.User,
-            name="пользователь",
-            description="Пользователь",
-        )
-    ],
+    period=periods.PERIOD,
+    group=groups.GROUP,
+    # fmt: off
+    options=[OPTIONS.Option(
+        hikari.User,
+        name="пользователь",
+        description="Пользователь",
+    )],
+    # fmt: on
 )
-async def callback(
-    context: "contexts.Context",
-    user: "hikari.User",
-) -> None:
-    emojis = context.emojis
-    embeds = context.embeds
-    humanizes = context.humanizes
+async def callback(context: "CONTEXTS.Context", user: "hikari.User") -> None:
+    EMOJIS = context.emojis
+    EMBEDS = context.embeds
+    HUMANIZES = context.humanizes
 
-    emoji = emojis.Emoji
-    embed = embeds.embed
-    humanize = humanizes.humanize
+    _CONTEXTUAL = str(context.user.id)
+    _OPTIONAL = str(user.id)
 
-    _contextual = str(context.user.id)
-    _optional = str(user.id)
+    CONTEXTUAL = await PLUGIN.model.database.find(_CONTEXTUAL)
+    OPTIONAL = await PLUGIN.model.database.find(_OPTIONAL)
 
-    contextual = await plugin.model.database.find(_contextual)
-    optional = await plugin.model.database.find(_optional)
+    STEAL = PLUGIN.model.configuration.plugins.steal
 
-    steal = plugin.model.configuration.plugins.steal
+    FRACTION = STEAL.fraction
+    PROBABILITY = STEAL.probability
 
-    fraction = steal.fraction
-    probability = steal.probability
+    STEALING = round((OPTIONAL.partial.berry / 2) * FRACTION)
 
-    stealing = round((optional.partial.berry / 2) * fraction)
-
-    if stealing < 1:
+    if STEALING < 1:
         raise Exception("Нечего красть")
 
-    if (
-        random.choice(
-            range(
-                1,
-                probability,
-            )
-        )
-    ) != 1:
-        await contextual.berry.remove(stealing)
+    if random.choice(range(1, PROBABILITY)) != 1:
+        await CONTEXTUAL.berry.remove(STEALING)
 
         await context.respond(
-            embed=embeds.embed(
+            embed=EMBEDS.embed(
                 "default",
                 description=f"""\
-                    Вы попытались украсть {emoji.berry} ягоды у <@{_optional}>
+                    Вы попытались украсть {EMOJIS.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
                     и...
 
                     ❌ Не получилось...
 
-                    ```diff\n- {humanize(stealing)} ягод```
+                    ```diff\n- {HUMANIZES.humanize(STEALING)} ягод```
                 """,  # noqa: E501
             )
         )
 
         return
 
-    await contextual.berry.add(stealing)
-    await optional.berry.remove(stealing)
+    await CONTEXTUAL.berry.add(STEALING)
+    await OPTIONAL.berry.remove(STEALING)
 
     await context.respond(
-        embed=embed(
+        embed=EMBEDS.embed(
             "default",
             description=f"""\
-                Вы попытались украсть {emoji.berry} ягоды у <@{_optional}>
+                Вы попытались украсть {EMOJIS.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
                 и...
 
                 ✅ Получилось!!!
 
-                ```diff\n+ {humanize(stealing)} ягод```
+                ```diff\n+ {HUMANIZES.humanize(STEALING)} ягод```
             """,  # noqa: E501
         )
     )
+
+
+plugin = PLUGIN

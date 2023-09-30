@@ -6,7 +6,7 @@ from .. import plugins
 from ..error.handler import handles
 from . import (
     contexts,
-    cooldowns,
+    coolDowns,
     options,
 )
 
@@ -15,55 +15,48 @@ def command(
     plugin: "plugins.Plugin",
     name: str,
     description: str,
-    period: "cooldowns.Period",
+    period: "coolDowns.Period",
     group: typing.Optional["crescent.Group"] = None,
     options: typing.Optional[typing.Sequence["options.Option"]] = None,
-) -> None:
-    def inner(*args) -> None:
-        callback, *_ = args
-
-        async def _callback(self: typing.Self, context: "contexts.Context") -> None:
-            arguments = (context,)
+) -> typing.Callable[[crescent.CommandCallbackT], None]:
+    def inner(command_callback_t: crescent.CommandCallbackT) -> None:
+        async def callback(self: typing.Self, context: "contexts.Context") -> None:
+            ARGUMENTS = (context,)
 
             if context.options:
-                for _, value in context.options.items():
-                    arguments += (value,)
+                for _, VALUE in context.options.items():
+                    ARGUMENTS += (VALUE,)
 
             await context.defer()
 
             try:
-                await callback(*arguments)
+                await command_callback_t(*ARGUMENTS)
             except Exception as exception:
-                await handles.handle(
-                    exception,
-                    context=context,
-                )
+                await handles.handle(exception, context=context)
 
-        __name = "Command"
-        __bases = (object,)
-        __dict = {
-            "callback": _callback,
-        }
+        NAME = "ClassCommandProto"
+        BASES = (crescent.ClassCommandProto,)
+        DICT = {"callback": callback}
 
         if options:
             for option in options:
-                __dict[option.name] = crescent.option(
+                DICT[option.name] = crescent.option(
                     option.type,
                     name=option.name,
                     description=option.description,
                 )
 
-        __type = type(
-            __name,
-            __bases,
-            __dict,
+        TYPE = type(
+            NAME,
+            BASES,
+            DICT,
         )
 
-        hook = crescent.hook(cooldowns.cooldown(period))
+        hook = crescent.hook(coolDowns.coolDown(period))
 
         includable = hook(
             crescent.command(
-                __type,
+                TYPE,
                 name=name,
                 description=description,
             )
