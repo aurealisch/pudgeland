@@ -1,9 +1,0 @@
-{
-  "[python]": {
-      "editor.defaultFormatter": "ms-python.black-formatter"
-  },
-  "black-formatter.path": [
-      "${workspaceFolder}/.venv/bin/pyink",
-  ],
-  "editor.tabSize": 2,
-}
