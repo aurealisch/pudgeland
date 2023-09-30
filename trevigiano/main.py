@@ -15,8 +15,8 @@ COMMANDS = [
     "leaders.reputation",
     "reputation.downgrade",
     "reputation.upgrade",
-    "store.items",
-    "store.buy",
+    "shop.items",
+    "shop.buy",
 ]
 PLUGINS = [f"commands.{COMMAND}" for COMMAND in COMMANDS]
 
