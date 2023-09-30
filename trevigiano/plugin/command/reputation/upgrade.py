@@ -13,36 +13,40 @@ exceptions = plugin.exceptions
 
 
 @commands.command(
-  plugin,
-  name='повысить',
-  description='Повысить',
-  period=periods.period,
-  group=groups.group,
-  options=[options.Option(
-    hikari.User,
-    name='пользователь',
-    description='Пользователь',
-  )],
+    plugin,
+    name="повысить",
+    description="Повысить",
+    period=periods.period,
+    group=groups.group,
+    options=[
+        options.Option(
+            hikari.User,
+            name="пользователь",
+            description="Пользователь",
+        )
+    ],
 )
 async def callback(
-  context: 'contexts.Context',
-  user: 'hikari.User',
+    context: "contexts.Context",
+    user: "hikari.User",
 ) -> None:
-  embeds = context.embeds
+    embeds = context.embeds
 
-  embed = embeds.embed
+    embed = embeds.embed
 
-  contextual = str(context.user.id)
-  optional = str(user.id)
+    contextual = str(context.user.id)
+    optional = str(user.id)
 
-  if not contextual != optional:
-    raise exceptions.YouCantDoThatException
+    if not contextual != optional:
+        raise exceptions.YouCantDoThatException
 
-  user = await plugin.model.database.find(optional)
+    user = await plugin.model.database.find(optional)
 
-  await user.reputation.add(1)
+    await user.reputation.add(1)
 
-  await context.respond(embed=embed(
-    'default',
-    description=f'📈 Вы повысили репутацию <@{optional}>',
-  ))
+    await context.respond(
+        embed=embed(
+            "default",
+            description=f"📈 Вы повысили репутацию <@{optional}>",
+        )
+    )

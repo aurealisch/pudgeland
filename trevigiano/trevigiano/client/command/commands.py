@@ -5,69 +5,73 @@ import crescent
 from .. import plugins
 from ..error.handler import handles
 from . import (
-  contexts,
-  cooldowns,
-  options,
+    contexts,
+    cooldowns,
+    options,
 )
 
 
 def command(
-  plugin: 'plugins.Plugin',
-  name: str,
-  description: str,
-  period: 'cooldowns.Period',
-  group: typing.Optional['crescent.Group'] = None,
-  options: typing.Optional[typing.Sequence['options.Option']] = None,
+    plugin: "plugins.Plugin",
+    name: str,
+    description: str,
+    period: "cooldowns.Period",
+    group: typing.Optional["crescent.Group"] = None,
+    options: typing.Optional[typing.Sequence["options.Option"]] = None,
 ) -> None:
-  def inner(*args) -> None:
-    callback, *_ = args
+    def inner(*args) -> None:
+        callback, *_ = args
 
-    async def _callback(self: typing.Self, context: 'contexts.Context') -> None:
-      arguments = (context,)
+        async def _callback(self: typing.Self, context: "contexts.Context") -> None:
+            arguments = (context,)
 
-      if context.options:
-        for _, value in context.options.items():
-          arguments += (value,)
+            if context.options:
+                for _, value in context.options.items():
+                    arguments += (value,)
 
-      await context.defer()
+            await context.defer()
 
-      try:
-        await callback(*arguments)
-      except Exception as exception:
-        await handles.handle(
-          exception,
-          context=context,
+            try:
+                await callback(*arguments)
+            except Exception as exception:
+                await handles.handle(
+                    exception,
+                    context=context,
+                )
+
+        __name = "Command"
+        __bases = (object,)
+        __dict = {
+            "callback": _callback,
+        }
+
+        if options:
+            for option in options:
+                __dict[option.name] = crescent.option(
+                    option.type,
+                    name=option.name,
+                    description=option.description,
+                )
+
+        __type = type(
+            __name,
+            __bases,
+            __dict,
         )
 
-    __name = 'Command'
-    __bases = (object,)
-    __dict = {'callback': _callback,}
+        hook = crescent.hook(cooldowns.cooldown(period))
 
-    if options:
-      for option in options:
-        __dict[option.name] = crescent.option(
-          option.type,
-          name=option.name,
-          description=option.description,
+        includable = hook(
+            crescent.command(
+                __type,
+                name=name,
+                description=description,
+            )
         )
 
-    __type = type(
-      __name,
-      __bases,
-      __dict,
-    )
+        if group:
+            includable = group.child(includable)
 
-    hook = crescent.hook(cooldowns.cooldown(period))
+        plugin.include(includable)
 
-    includable = hook(crescent.command(
-      __type,
-      name=name,
-      description=description,
-    ))
-
-    if group:
-      includable = group.child(includable)
-
-    plugin.include(includable)
-
-  return inner
+    return inner

@@ -11,43 +11,45 @@ contexts = plugin.contexts
 
 
 @commands.command(
-  plugin,
-  name='ягоды',
-  description='Ягоды',
-  period=periods.period,
-  group=groups.group,
+    plugin,
+    name="ягоды",
+    description="Ягоды",
+    period=periods.period,
+    group=groups.group,
 )
-async def callback(context: 'contexts.Context') -> None:
-  embeds = context.embeds
-  humanizes = context.humanizes
+async def callback(context: "contexts.Context") -> None:
+    embeds = context.embeds
+    humanizes = context.humanizes
 
-  embed = embeds.embed
-  humanize = humanizes.humanize
+    embed = embeds.embed
+    humanize = humanizes.humanize
 
-  users = await plugin.model.database.leaders(
-    plugin.model.configuration.leaders.take,
-    user_keys='berry',
-    sort_order=plugin.model.configuration.leaders.sort.order,
-  )
-
-  embed = embed('default')
-
-  for index, user in enumerate(users):
-    name = string.whitespace
-
-    position = index + 1
-
-    if position in emojis.emoji:
-      name += emojis.emoji[position]
-
-    name += f'#{position}'
-
-    embed.add_field(
-      name=name,
-      value='\n'.join([
-        f'<@{user.partial.id}>',
-        f'Ягоды: `{humanize(user.partial.berry)}`',
-      ]),
+    users = await plugin.model.database.leaders(
+        plugin.model.configuration.leaders.take,
+        user_keys="berry",
+        sort_order=plugin.model.configuration.leaders.sort.order,
     )
 
-  await context.respond(embed=embed)
+    embed = embed("default")
+
+    for index, user in enumerate(users):
+        name = string.whitespace
+
+        position = index + 1
+
+        if position in emojis.emoji:
+            name += emojis.emoji[position]
+
+        name += f"#{position}"
+
+        embed.add_field(
+            name=name,
+            value="\n".join(
+                [
+                    f"<@{user.partial.id}>",
+                    f"Ягоды: `{humanize(user.partial.berry)}`",
+                ]
+            ),
+        )
+
+    await context.respond(embed=embed)

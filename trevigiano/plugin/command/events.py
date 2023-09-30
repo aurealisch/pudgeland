@@ -9,25 +9,31 @@ contexts = plugin.contexts
 
 
 @commands.command(
-  plugin,
-  name='события',
-  description='События',
-  period=periods.period,
+    plugin,
+    name="события",
+    description="События",
+    period=periods.period,
 )
-async def callback(context: 'contexts.Context') -> None:
-  events = plugin.model.database.events
+async def callback(context: "contexts.Context") -> None:
+    events = plugin.model.database.events
 
-  embeds = context.embeds
+    embeds = context.embeds
 
-  embed = embeds.embed
+    embed = embeds.embed
 
-  await context.respond(embed=embed(
-    'default',
-    description='\n'.join([
-      '\n'.join([
-        f'# {event.title}',
-        f'> {event.description}',
-      ])
-      for event in events
-    ]),
-  ))
+    await context.respond(
+        embed=embed(
+            "default",
+            description="\n".join(
+                [
+                    "\n".join(
+                        [
+                            f"# {event.title}",
+                            f"> {event.description}",
+                        ]
+                    )
+                    for event in events
+                ]
+            ),
+        )
+    )

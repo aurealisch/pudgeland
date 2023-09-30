@@ -1,64 +1,67 @@
 import typing
+
 import msgspec
 
 from .. import types
 
 
 class Activity(msgspec.Struct):
-  name: str
+    name: str
 
 
 class Sort(msgspec.Struct):
-  order: typing.Literal[
-    'asc',
-    'desc',
-  ]
+    order: typing.Literal[
+        "asc",
+        "desc",
+    ]
 
 
 class Leaders(msgspec.Struct):
-  sort: Sort
-  take: int
+    sort: Sort
+    take: int
 
 
 class Range(msgspec.Struct):
-  start: 'types.FloatOrInt'
-  stop: 'types.FloatOrInt'
+    start: "types.FloatOrInt"
+    stop: "types.FloatOrInt"
 
 
 class Collect(msgspec.Struct):
-  berry: Range
-  fox: Range
+    berry: Range
+    fox: Range
 
 
 class Steal(msgspec.Struct):
-  probability: 'types.FloatOrInt'
-  fraction: 'types.FloatOrInt'
+    probability: "types.FloatOrInt"
+    fraction: "types.FloatOrInt"
 
 
 class Tame(msgspec.Struct):
-  probability: 'types.FloatOrInt'
-  price: 'types.FloatOrInt'
+    probability: "types.FloatOrInt"
+    price: "types.FloatOrInt"
 
 
 class Plugins(msgspec.Struct):
-  collect: Collect
-  steal: Steal
-  tame: Tame
+    collect: Collect
+    steal: Steal
+    tame: Tame
 
 
 class Configuration(msgspec.Struct):
-  activity: Activity
-  leaders: Leaders
-  plugins: Plugins
+    activity: Activity
+    leaders: Leaders
+    plugins: Plugins
 
 
-def of(buf: typing.Union[
-  bytes,
-  str,
-]) -> Configuration:
-  type = Configuration
+def of(
+    buf: typing.Union[
+        bytes,
+        str,
+    ]
+) -> Configuration:
+    type = Configuration
 
-  return msgspec.json.decode(
-    buf,
-    type=type,
-  )
+    return msgspec.json.decode(
+        buf,
+        type=type,
+    )

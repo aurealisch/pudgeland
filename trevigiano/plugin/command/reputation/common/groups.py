@@ -1,6 +1,6 @@
 import crescent
 
 group = crescent.Group(
-  'репутация',
-  description='Репутация',
+    "репутация",
+    description="Репутация",
 )

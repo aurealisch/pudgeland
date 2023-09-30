@@ -13,52 +13,54 @@ exceptions = plugin.exceptions
 
 
 @commands.command(
-  plugin,
-  name='подарить',
-  description='Подарить',
-  period=periods.period,
-  group=groups.group,
-  options=[
-    options.Option(
-      hikari.User,
-      name='пользователь',
-      description='Пользователь',
-    ),
-    options.Option(
-      int,
-      name='количество',
-      description='Количество',
-    ),
-  ],
+    plugin,
+    name="подарить",
+    description="Подарить",
+    period=periods.period,
+    group=groups.group,
+    options=[
+        options.Option(
+            hikari.User,
+            name="пользователь",
+            description="Пользователь",
+        ),
+        options.Option(
+            int,
+            name="количество",
+            description="Количество",
+        ),
+    ],
 )
 async def callback(
-  context: 'contexts.Context',
-  user: 'hikari.User',
-  amount: int,
+    context: "contexts.Context",
+    user: "hikari.User",
+    amount: int,
 ) -> None:
-  if amount < 0:
-    raise plugin.exceptions.YouCantDoThatException
-  
-  emojis = context.emojis
-  embeds = context.embeds
-  humanizes = context.humanizes
+    if amount < 0:
+        raise plugin.exceptions.YouCantDoThatException
 
-  emoji = emojis.Emoji
-  embed = embeds.embed
-  humanize = humanizes.humanize
+    emojis = context.emojis
+    embeds = context.embeds
+    humanizes = context.humanizes
 
-  _optional = str(user.id)
-  _contextual = str(context.user.id)
+    emoji = emojis.Emoji
+    embed = embeds.embed
+    humanize = humanizes.humanize
 
-  optional = await plugin.model.database.find(_optional)
-  contextual = await plugin.model.database.find(_contextual)
+    _optional = str(user.id)
+    _contextual = str(context.user.id)
 
-  await optional.berry.add(amount)
-  await contextual.berry.remove(amount)
+    optional = await plugin.model.database.find(_optional)
+    contextual = await plugin.model.database.find(_contextual)
 
-  await context.respond(embed=embed(
-    'default',
-    description=f"""\
-      Вы дали {emoji.berry} `{humanize(amount)}` ягод <@{_optional}>
-    """,  # noqa: E501
-  ))
+    await optional.berry.add(amount)
+    await contextual.berry.remove(amount)
+
+    await context.respond(
+        embed=embed(
+            "default",
+            description=f"""\
+                Вы дали {emoji.berry} `{humanize(amount)}` ягод <@{_optional}>
+            """,  # noqa: E501
+        )
+    )
