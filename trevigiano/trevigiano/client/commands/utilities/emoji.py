@@ -10,3 +10,5 @@ class Emoji(str):
     TAMED = "<:tamed:1157716173157302332>"
     UNTAMED = "<:untamed:1157716170015781028>"
     TOTAL = "<:total:1157714030232875018>"
+    UNAVAILABLE = "<:unavailable:1153393415317368883>"
+    AVAILABLE = "<:available:1154061905686708274>"

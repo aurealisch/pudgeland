@@ -58,7 +58,7 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
                     Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
                     и...
 
-                    ❌ Не получилось...
+                    {EMOJI.Emoji.UNAVAILABLE} Не получилось...
 
                     ```diff\n- {HUMANIZE.humanize(STEALING)} ягод```
                 """,  # noqa: E501
@@ -77,7 +77,7 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
                 Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
                 и...
 
-                ✅ Получилось!!!
+                {EMOJI.Emoji.AVAILABLE} Получилось!!!
 
                 ```diff\n+ {HUMANIZE.humanize(STEALING)} ягод```
             """,  # noqa: E501
