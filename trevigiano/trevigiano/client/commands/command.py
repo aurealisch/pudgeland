@@ -41,7 +41,7 @@ def command(
         if options:
             for OPTION in options:
                 DICT[OPTION.name] = crescent.option(
-                    OPTION.type,
+                    OPTION.type__,
                     name=OPTION.name,
                     description=OPTION.description,
                 )
