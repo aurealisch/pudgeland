@@ -28,6 +28,7 @@ EXCEPTIONS = PLUGIN.exceptions
 )
 async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
     EMBED = context.embed
+    EMOJI = context.emoji
 
     CONTEXTUAL = str(context.user.id)
     OPTIONAL = str(user.id)
@@ -37,7 +38,7 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
 
     await PLUGIN.model.database.find(OPTIONAL).reputation.add(1)
 
-    DESCRIPTION = f"📈 Вы повысили репутацию <@{OPTIONAL}>"
+    DESCRIPTION = f"{EMOJI.Emoji.UPGRADE} Вы повысили репутацию <@{OPTIONAL}>"
 
     await context.respond(embed=EMBED.embed("default", description=DESCRIPTION))
 

@@ -1,10 +1,6 @@
 from trevigiano.client import plugin
 
-from .constants import (
-    emojis,
-    groups,
-    periods,
-)
+from .constants import groups, periods
 
 PLUGIN = plugin.Plugin()
 
@@ -21,6 +17,7 @@ CONTEXT = PLUGIN.context
 )
 async def callback(context: "CONTEXT.Context") -> None:
     EMBED = context.embed
+    EMOJI = context.emoji
     HUMANIZE = context.humanize
 
     USERS = await PLUGIN.model.database.leaders(
@@ -31,13 +28,19 @@ async def callback(context: "CONTEXT.Context") -> None:
 
     _EMBED = EMBED.embed("default")
 
+    EMOJIS = {
+        1: EMOJI.Emoji.FIRST_PLACE,
+        2: EMOJI.Emoji.SECOND_PLACE,
+        3: EMOJI.Emoji.THIRD_PLACE,
+    }
+
     for INDEX, USER in enumerate(USERS):
         name = "\u0020"
 
         POSITION = INDEX + 1
 
-        if POSITION in emojis.emoji:
-            name += emojis.emoji[POSITION]
+        if POSITION in EMOJIS:
+            name += EMOJIS[POSITION]
 
         name += f"#{POSITION}"
 
