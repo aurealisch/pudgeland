@@ -9,7 +9,7 @@ Color = typing.Literal[
 ]
 
 COLORS = {
-    "default": "#4f686d",
+    "default": "#f0a43c",
     "error": "#ff4b4b",
     "success": "#77b35a",
 }
