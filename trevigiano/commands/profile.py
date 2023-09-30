@@ -22,9 +22,9 @@ async def callback(context: "CONTEXT.Context") -> None:
     CONTEXTUAL = await PLUGIN.model.database.find(str(context.user.id))
 
     multiline = [
-        f"{EMOJI.Emoji.BERRY} Ягоды: `{HUMANIZE.humanize(CONTEXTUAL.partial.berry)}`",  # noqa: E501
-        f"{EMOJI.Emoji.FOX} Лисы: `{HUMANIZE.humanize(CONTEXTUAL.partial.fox)}`",  # noqa: E501
-        f"{EMOJI.Emoji.REPUTATION} Репутация: `{HUMANIZE.humanize(CONTEXTUAL.partial.reputation)}`",  # noqa: E501
+        f"{EMOJI.Emoji.BERRY} Ягоды: **`{HUMANIZE.humanize(CONTEXTUAL.partial.berry)}`**",  # noqa: E501
+        f"{EMOJI.Emoji.FOX} Лисы: **`{HUMANIZE.humanize(CONTEXTUAL.partial.fox)}`**",  # noqa: E501
+        f"{EMOJI.Emoji.REPUTATION} Репутация: **`{HUMANIZE.humanize(CONTEXTUAL.partial.reputation)}`**",  # noqa: E501
     ]
 
     _ITEM = CONTEXTUAL.partial.item

@@ -55,7 +55,7 @@ async def callback(context: "CONTEXT.Context") -> None:
                 embed=EMBED.embed(
                     "default",
                     description=f"""\
-                        Вы скормили {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
+                        Вы скормили {EMOJI.Emoji.BERRY} **`{HUMANIZE.humanize(FED)}`** ягод
                         и...
 
                         {EMOJI.Emoji.UNTAMED} Не получилось приручить лису...
@@ -73,7 +73,7 @@ async def callback(context: "CONTEXT.Context") -> None:
             embed=EMBED.embed(
                 "default",
                 description=f"""\
-                    Вы скормили {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
+                    Вы скормили {EMOJI.Emoji.BERRY} **`{HUMANIZE.humanize(FED)}`** ягод
                     и...
 
                     {EMOJI.Emoji.TAMED} Получилось приручить лису!!!

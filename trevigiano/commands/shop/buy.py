@@ -54,7 +54,7 @@ async def callback(context: "CONTEXT.Context") -> None:
                 embed=EMBED.embed(
                     "default",
                     description=f"""\
-                        Вы купили `{ITEM.label}` за {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(PRICE)}` ягод
+                        Вы купили `{ITEM.label}` за {EMOJI.Emoji.BERRY} **`{HUMANIZE.humanize(PRICE)}`** ягод
                     """,  # noqa: E501
                 )
             )

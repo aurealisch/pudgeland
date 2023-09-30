@@ -49,7 +49,7 @@ async def callback(context: "CONTEXT.Context") -> None:
             # fmt: off
             value="\n".join([
                 f"<@{USER.partial.id}>",
-                f"Ягоды: `{HUMANIZE.humanize(USER.partial.berry)}`",
+                f"Ягоды: **`{HUMANIZE.humanize(USER.partial.berry)}`**",
             ])
             # fmt: on
         )

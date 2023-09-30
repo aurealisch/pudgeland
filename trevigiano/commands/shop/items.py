@@ -28,7 +28,7 @@ async def callback(context: "CONTEXT.Context") -> None:
                 "\n".join([
                     f"# {item.emoji} {item.label}",
                     f"> {item.description}",
-                    f"🏷 Цена: {EMOJI.Emoji.BERRY} Ягоды: `{HUMANIZE.humanize(item.price)}`",  # noqa: E501,
+                    f"🏷 Цена: {EMOJI.Emoji.BERRY} Ягоды: **`{HUMANIZE.humanize(item.price)}`**",  # noqa: E501,
                 ])
                 for _, item in PLUGIN.model.database.shop.items()
             ])
