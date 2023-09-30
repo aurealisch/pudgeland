@@ -58,7 +58,7 @@ async def callback(context: "CONTEXT.Context") -> None:
                         Вы скормили {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
                         и...
 
-                        💔 Не получилось приручить лису...
+                        {EMOJI.Emoji.UNTAMED} Не получилось приручить лису...
                     """,  # noqa: E501
                 )
             )
@@ -76,7 +76,7 @@ async def callback(context: "CONTEXT.Context") -> None:
                     Вы скормили {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
                     и...
 
-                    💖 Получилось приручить лису!!!
+                    {EMOJI.Emoji.TAMED} Получилось приручить лису!!!
                 """,  # noqa: E501
             )
         )

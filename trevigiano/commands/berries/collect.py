@@ -62,7 +62,7 @@ async def callback(context: "CONTEXT.Context") -> None:
         TOTAL += FOXYING
 
         description += f"\n+ {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FOXYING)}` ягод от {EMOJI.Emoji.FOX} `{HUMANIZE.humanize(FOX)}` лис"  # noqa: E501
-        description += f"\n\n🔁 Всего: {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(TOTAL)}` ягод"  # noqa: E501"
+        description += f"\n\n{EMOJI.Emoji.TOTAL} Всего: {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(TOTAL)}` ягод"  # noqa: E501"
 
     await CONTEXTUAL.berry.add(TOTAL)
 
