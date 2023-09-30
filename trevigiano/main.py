@@ -8,7 +8,6 @@ from trevigiano.modules import configuration, database
 COMMANDS = [
     "profile",
     "berries.collect",
-    #  "berries.give",
     "berries.steal",
     "foxes.tame",
     "leaders.berries",
