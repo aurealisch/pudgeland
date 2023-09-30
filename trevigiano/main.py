@@ -3,11 +3,9 @@ import env
 import prisma as _prisma
 from trevigiano import trevigiano
 from trevigiano.client import model
-from trevigiano.client.commands.utilities import emoji
 from trevigiano.modules import configuration, database
 
 COMMANDS = [
-    "events",
     "profile",
     "berries.collect",
     #  "berries.give",
@@ -27,18 +25,7 @@ PRISMA = _prisma.Prisma()
 
 _prisma.register(PRISMA)
 
-EVENTS = [
-    database.Event(
-        "Осень",
-        description=f"""\
-            {emoji.Emoji.BERRY} Множитель сбора ягод: `1.1x`
-            {emoji.Emoji.FOX} Множитель сбора ягод лисами: `1.01x`
-        """,
-        buff=database.Buff(1.1, fox=1.01),
-    )
-]
-
-DATABASE = database.Database(PRISMA, events=EVENTS)
+DATABASE = database.Database(PRISMA)
 
 CONFIGURATION = configuration.of(
     """\

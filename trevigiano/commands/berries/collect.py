@@ -31,18 +31,10 @@ async def callback(context: "CONTEXT.Context") -> None:
     _ITEM = CONTEXTUAL.partial.item
 
     COLLECT = PLUGIN.model.configuration.plugins.collect
-    EVENTS = PLUGIN.model.database.events
 
     TOTAL = 0
 
     BERRYING = random.choice(range(COLLECT.berry.start, COLLECT.berry.stop))
-
-    if EVENTS:
-        for EVENT in EVENTS:
-            BUFF = EVENT.buff
-
-            if BUFF:
-                BERRYING *= BUFF.berry
 
     if _ITEM:
         BONUS = SHOP.get(_ITEM).bonus
@@ -58,13 +50,6 @@ async def callback(context: "CONTEXT.Context") -> None:
 
     if FOX:
         FOXYING = FOX * random.choice(range(COLLECT.fox.start, COLLECT.fox.stop))
-
-        if EVENTS:
-            for EVENT in EVENTS:
-                BUFF = EVENT.buff
-
-                if BUFF:
-                    FOXYING *= BUFF.fox
 
         if _ITEM:
             BONUS = SHOP.get(_ITEM).bonus

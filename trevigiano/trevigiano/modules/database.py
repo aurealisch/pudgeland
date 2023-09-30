@@ -1,27 +1,8 @@
-import dataclasses
 import typing
 
 import prisma as _prisma
 
-from .. import float_or_int, shop
-
-
-@dataclasses.dataclass
-class Effect:
-    berry: "float_or_int.FloatOrInt"
-    fox: "float_or_int.FloatOrInt"
-
-
-DeBuff = Effect
-Buff = Effect
-
-
-@dataclasses.dataclass
-class Event:
-    title: typing.Optional[str] = None
-    description: typing.Optional[str] = None
-    de_buff: typing.Optional[DeBuff] = None
-    buff: typing.Optional[Buff] = None
+from .. import shop
 
 
 class Resource:
@@ -61,13 +42,8 @@ class User:
 
 
 class Database:
-    def __init__(
-        self: typing.Self,
-        prisma: "_prisma.Prisma",
-        events: typing.Optional[typing.Sequence[Event]] = None,
-    ) -> None:
+    def __init__(self: typing.Self, prisma: "_prisma.Prisma") -> None:
         self.prisma = prisma
-        self.events = events
         self.shop = shop.shop
 
     async def find(self: typing.Self, id__: str) -> User:
