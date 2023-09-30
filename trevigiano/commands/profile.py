@@ -1,0 +1,42 @@
+from trevigiano.client import plugin
+
+from .constants import periods
+
+PLUGIN = plugin.Plugin()
+
+COMMAND = PLUGIN.command
+CONTEXT = PLUGIN.context
+
+
+@COMMAND.command(
+    PLUGIN,
+    name="профиль",
+    description="Профиль",
+    period=periods.PERIOD,
+)
+async def callback(context: "CONTEXT.Context") -> None:
+    EMBED = context.embed
+    EMOJI = context.emoji
+    HUMANIZE = context.humanize
+
+    CONTEXTUAL = await PLUGIN.model.database.find(str(context.user.id))
+
+    multiline = [
+        f"{EMOJI.Emoji.BERRY} Ягоды: `{HUMANIZE.humanize(CONTEXTUAL.partial.berry)}`",  # noqa: E501
+        f"{EMOJI.Emoji.FOX} Лисы: `{HUMANIZE.humanize(CONTEXTUAL.partial.fox)}`",  # noqa: E501
+        f"📊 Репутация: `{HUMANIZE.humanize(CONTEXTUAL.partial.reputation)}`",
+    ]
+
+    _ITEM = CONTEXTUAL.partial.item
+
+    if _ITEM:
+        ITEM = PLUGIN.model.database.shop.get(_ITEM)
+
+        multiline.extend([f"✨ Предмет: 🏷 Этикетка: `{ITEM.label}`"])
+
+    DESCRIPTION = "\n".join(multiline)
+
+    await context.respond(embed=EMBED.embed("default", description=DESCRIPTION))
+
+
+plugin = PLUGIN
