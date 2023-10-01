@@ -1,3 +1,3 @@
-from trevigiano.client.commands import cool_down
+from trevigiano import cool_down
 
 PERIOD = cool_down.Period(seconds=2, milliseconds=500)

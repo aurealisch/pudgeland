@@ -1,13 +1,13 @@
 import crescent
 
-from trevigiano.client import model
+from trevigiano import model
 
-from . import view_abc
-from .commands import (
+from . import (
     command,
     context,
     exceptions,
     option,
+    view_abc,
 )
 
 

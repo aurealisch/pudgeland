@@ -2,7 +2,7 @@ import typing
 
 import msgspec
 
-from .. import float_or_int
+from . import float_or_int
 
 
 class Sort(msgspec.Struct):

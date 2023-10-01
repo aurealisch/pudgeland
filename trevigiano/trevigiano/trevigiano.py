@@ -4,7 +4,7 @@ import crescent
 import hikari
 import miru
 
-from .client import model
+from . import model
 
 
 class Trevigiano:

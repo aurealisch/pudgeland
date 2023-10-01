@@ -4,7 +4,7 @@ import random
 import hikari
 import miru
 
-from trevigiano.client import plugin
+from trevigiano import plugin
 
 from .constants import groups, periods
 

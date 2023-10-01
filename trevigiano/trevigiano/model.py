@@ -2,7 +2,7 @@ import typing
 
 import hikari
 
-from ..modules import configuration, database
+from . import configuration, database
 
 
 class Model:

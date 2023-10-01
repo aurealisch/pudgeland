@@ -2,7 +2,7 @@ import random
 
 import hikari
 
-from trevigiano.client import plugin
+from trevigiano import plugin
 
 from .constants import groups, periods
 

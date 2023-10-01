@@ -2,7 +2,7 @@ import typing
 
 import prisma as _prisma
 
-from .. import shop
+from . import shop
 
 
 class Resource:

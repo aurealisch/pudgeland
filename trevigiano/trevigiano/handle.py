@@ -3,8 +3,7 @@ import typing
 
 import miru
 
-from trevigiano.client.commands import context
-from trevigiano.client.commands.utilities import embed
+from . import context, embed
 
 
 async def handle(
