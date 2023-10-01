@@ -2,7 +2,7 @@ import typing
 
 import hikari
 
-from . import configuration, database
+from trevigiano import configuration, database
 
 
 class Model:

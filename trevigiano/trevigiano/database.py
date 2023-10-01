@@ -1,8 +1,7 @@
 import typing
 
 import prisma as _prisma
-
-from . import shop
+from trevigiano import shop
 
 
 class Resource:

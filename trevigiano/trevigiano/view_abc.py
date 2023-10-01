@@ -4,7 +4,7 @@ import typing
 import miru
 import miru.abc
 
-from . import handle
+from trevigiano import handle
 
 
 class ViewAbc(miru.View, abc.ABC):

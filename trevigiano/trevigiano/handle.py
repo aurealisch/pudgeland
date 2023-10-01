@@ -3,7 +3,7 @@ import typing
 
 import miru
 
-from . import context, embed
+from trevigiano import context, embed
 
 
 async def handle(

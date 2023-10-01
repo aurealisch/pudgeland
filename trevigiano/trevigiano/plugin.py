@@ -1,11 +1,10 @@
 import crescent
 
-from trevigiano import model
-
-from . import (
+from trevigiano import (
     command,
     context,
     exceptions,
+    model,
     option,
     view_abc,
 )

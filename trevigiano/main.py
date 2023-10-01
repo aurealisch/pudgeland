@@ -1,7 +1,12 @@
 import env
 
 import prisma as _prisma
-from trevigiano import configuration, database, model, trevigiano
+from trevigiano import (
+    configuration,
+    database,
+    model,
+    trevigiano,
+)
 
 COMMANDS = [
     "profile",

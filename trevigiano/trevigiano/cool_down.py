@@ -4,9 +4,7 @@ import typing
 
 import crescent
 
-from trevigiano import float_or_int
-
-from . import context
+from trevigiano import context, float_or_int
 
 _KEY = typing.TypeVar("_KEY")
 

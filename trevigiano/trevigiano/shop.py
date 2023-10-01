@@ -1,7 +1,7 @@
 import dataclasses
 import typing
 
-from . import float_or_int
+from trevigiano import float_or_int
 
 
 @dataclasses.dataclass

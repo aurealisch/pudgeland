@@ -2,7 +2,7 @@ import typing
 
 import crescent
 
-from . import (
+from trevigiano import (
     context,
     cool_down,
     handle,
