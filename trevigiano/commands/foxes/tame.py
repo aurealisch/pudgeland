@@ -23,9 +23,11 @@ CONTEXT = PLUGIN.context
     group=groups.GROUP,
 )
 async def callback(context: "CONTEXT.Context") -> None:
+    DECORATE = context.decorate
     EMOJI = context.emoji
     EMBED = context.embed
     HUMANIZE = context.humanize
+    TRIM = context.trim
 
     TAME = PLUGIN.model.configuration.plugins.tame
 
@@ -54,12 +56,14 @@ async def callback(context: "CONTEXT.Context") -> None:
             await _context.respond(
                 embed=EMBED.embed(
                     "default",
-                    description=f"""\
-                        Вы скормили {EMOJI.Emoji.BERRY} **`{HUMANIZE.humanize(FED)}`** ягод
-                        и...
+                    description=TRIM.trim(
+                        f"""\
+                            Вы скормили {EMOJI.Emoji.BERRY} {DECORATE.decorate(HUMANIZE.humanize(FED))} ягод
+                            и...
 
-                        {EMOJI.Emoji.UNTAMED} Не получилось приручить лису...
-                    """,  # noqa: E501
+                            {EMOJI.Emoji.UNTAMED} Не получилось приручить лису...
+                        """  # noqa: E501
+                    ),
                 )
             )
 
@@ -72,12 +76,14 @@ async def callback(context: "CONTEXT.Context") -> None:
         await _context.respond(
             embed=EMBED.embed(
                 "default",
-                description=f"""\
-                    Вы скормили {EMOJI.Emoji.BERRY} **`{HUMANIZE.humanize(FED)}`** ягод
-                    и...
+                description=TRIM.trim(
+                    f"""\
+                        Вы скормили {EMOJI.Emoji.BERRY} {DECORATE.decorate(HUMANIZE.humanize(FED))} ягод
+                        и...
 
-                    {EMOJI.Emoji.TAMED} Получилось приручить лису!!!
-                """,  # noqa: E501
+                        {EMOJI.Emoji.TAMED} Получилось приручить лису!!!
+                    """  # noqa: E501
+                ),
             )
         )
 
@@ -93,7 +99,11 @@ async def callback(context: "CONTEXT.Context") -> None:
         FLAGS = hikari.MessageFlag.EPHEMERAL
 
         await _context.respond(
-            flags=FLAGS, embed=EMBED.embed("default", description="Отменено")
+            flags=FLAGS,
+            embed=EMBED.embed(
+                "default",
+                description="Отменено",
+            ),
         )
 
         _view_abc.stop()
@@ -126,9 +136,11 @@ async def callback(context: "CONTEXT.Context") -> None:
         components=COMPONENTS,
         embed=EMBED.embed(
             "default",
-            description=f"""\
-                Чтобы попробовать приручить лису, потребуется скормить {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
-            """,  # noqa: E501
+            description=TRIM.trim(
+                f"""\
+                    Чтобы попробовать приручить лису, потребуется скормить {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
+                """  # noqa: E501
+            ),
         ),
     )
 

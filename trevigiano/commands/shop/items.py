@@ -16,6 +16,7 @@ CONTEXT = PLUGIN.context
     group=groups.GROUP,
 )
 async def callback(context: "CONTEXT.Context") -> None:
+    DECORATE = context.decorate
     EMBED = context.embed
     EMOJI = context.emoji
     HUMANIZE = context.humanize
@@ -28,7 +29,7 @@ async def callback(context: "CONTEXT.Context") -> None:
                 "\n".join([
                     f"# {item.emoji} {item.label}",
                     f"> {item.description}",
-                    f"🏷 Цена: {EMOJI.Emoji.BERRY} Ягоды: **`{HUMANIZE.humanize(item.price)}`**",  # noqa: E501,
+                    f"🏷 Цена: {EMOJI.Emoji.BERRY} Ягоды: {DECORATE.decorate(HUMANIZE.humanize(item.price))}",  # noqa: E501,
                 ])
                 for _, item in PLUGIN.model.database.shop.items()
             ])

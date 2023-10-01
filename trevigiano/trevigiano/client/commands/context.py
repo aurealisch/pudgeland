@@ -1,9 +1,11 @@
 import crescent
 
-from .utilities import embed, emoji, humanize
+from .utilities import decorate, embed, emoji, humanize, trim
 
 
 class Context(crescent.Context):
-    emoji = emoji
+    decorate = decorate
     embed = embed
+    emoji = emoji
     humanize = humanize
+    trim = trim

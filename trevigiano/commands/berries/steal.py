@@ -31,6 +31,7 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
     EMOJI = context.emoji
     EMBED = context.embed
     HUMANIZE = context.humanize
+    TRIM = context.trim
 
     _CONTEXTUAL = str(context.user.id)
     _OPTIONAL = str(user.id)
@@ -54,14 +55,16 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
         await context.respond(
             embed=EMBED.embed(
                 "default",
-                description=f"""\
-                    Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
-                    и...
+                description=TRIM.trim(
+                    f"""\
+                        Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
+                        и...
 
-                    {EMOJI.Emoji.UNAVAILABLE} Не получилось...
+                        {EMOJI.Emoji.UNAVAILABLE} Не получилось...
 
-                    ```diff\n- {HUMANIZE.humanize(STEALING)} ягод```
-                """,  # noqa: E501
+                        ```diff\n- {HUMANIZE.humanize(STEALING)} ягод```
+                    """  # noqa: E501
+                ),
             )
         )
 
@@ -73,14 +76,16 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
     await context.respond(
         embed=EMBED.embed(
             "default",
-            description=f"""\
-                Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
-                и...
+            description=TRIM.trim(
+                f"""\
+                    Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
+                    и...
 
-                {EMOJI.Emoji.AVAILABLE} Получилось!!!
+                    {EMOJI.Emoji.AVAILABLE} Получилось!!!
 
-                ```diff\n+ {HUMANIZE.humanize(STEALING)} ягод```
-            """,  # noqa: E501
+                    ```diff\n+ {HUMANIZE.humanize(STEALING)} ягод```
+                """  # noqa: E501
+            ),
         )
     )
 

@@ -16,6 +16,7 @@ CONTEXT = PLUGIN.context
     group=groups.GROUP,
 )
 async def callback(context: "CONTEXT.Context") -> None:
+    DECORATE = context.decorate
     EMBED = context.embed
     EMOJI = context.emoji
     HUMANIZE = context.humanize
@@ -49,7 +50,7 @@ async def callback(context: "CONTEXT.Context") -> None:
             # fmt: off
             value="\n".join([
                 f"<@{USER.partial.id}>",
-                f"Лисы: **`{HUMANIZE.humanize(USER.partial.fox)}`**",
+                f"Лисы: {DECORATE.decorate(HUMANIZE.humanize(USER.partial.fox))}",
             ])
             # fmt: on
         )

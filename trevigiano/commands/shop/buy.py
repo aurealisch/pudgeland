@@ -23,9 +23,11 @@ async def callback(context: "CONTEXT.Context") -> None:
     DATABASE = PLUGIN.model.database
     SHOP = DATABASE.shop
 
+    DECORATE = context.decorate
     EMOJI = context.emoji
     EMBED = context.embed
     HUMANIZE = context.humanize
+    TRIM = context.trim
 
     async def text_select(
         _view_abc: VIEW_ABC.ViewAbc,
@@ -53,9 +55,11 @@ async def callback(context: "CONTEXT.Context") -> None:
             await _context.respond(
                 embed=EMBED.embed(
                     "default",
-                    description=f"""\
-                        Вы купили `{ITEM.label}` за {EMOJI.Emoji.BERRY} **`{HUMANIZE.humanize(PRICE)}`** ягод
-                    """,  # noqa: E501
+                    description=TRIM.trim(
+                        f"""\
+                            Вы купили `{ITEM.label}` за {EMOJI.Emoji.BERRY} {DECORATE.decorate(HUMANIZE.humanize(PRICE))} ягод
+                        """  # noqa: E501
+                    ),
                 )
             )
 
