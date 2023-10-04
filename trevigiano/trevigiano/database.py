@@ -1,68 +1,133 @@
+import dataclasses
 import typing
 
-import prisma as _prisma
-from trevigiano import shop
+import asyncpg
 
 
-class Resource:
-    def __init__(
-        self: typing.Self,
+@dataclasses.dataclass
+class User:
+    id: str
+    berry: int
+    fox: int
+    reputation: int
+
+class Database:
+    def __init__(self) -> None:
+        pass
+
+    async def connect(
+        self,
+        host: typing.Any,
+        port: typing.Any,
+        user: typing.Any,
+        password: typing.Any,
+        database: typing.Any,
+    ) -> None:
+        self._connection: asyncpg.Connection = await asyncpg.connect(
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            database=database,
+        )
+
+    async def close(self) -> None:
+        await self._connection.close()
+
+    async def createTableIfNotExists(self) -> None:
+        await self._connection.execute(
+            """
+                CREATE TABLE IF NOT EXISTS users (
+                    id         TEXT  PRIMARY KEY,
+                    berry      INTEGER NOT NULL DEFAULT 0,
+                    fox        INTEGER NOT NULL DEFAULT 0,
+                    reputation INTEGER NOT NULL DEFAULT 0
+                );
+            """
+        )
+
+    async def selectOrInsertUser(self, id__: int) -> User:
+        record = await self._connection.fetchrow(
+            """
+                SELECT users.id,
+                       users.berry,
+                       users.fox,
+                       users.reputation
+                  FROM users
+                 WHERE users.id = $1;
+            """,
+            id__,
+        )
+
+        if type(record) is not asyncpg.Record:
+            await self._connection.execute(
+                """
+                    INSERT INTO users (id)
+                    VALUES ($1);
+                """,
+                id__,
+            )
+
+            return await self.selectOrInsert(id__)
+
+        return User(**record)
+
+    async def selectLeaders(
+        self,
+        field: typing.Literal[
+            "berry",
+            "fox",
+            "reputation",
+        ],
+    ) -> list[User]:
+        records = await self._connection.fetch(
+            f"""
+                  SELECT "users"."id",
+                         "users"."berry",
+                         "users"."fox",
+                         "users"."reputation"
+                    FROM "users"
+                ORDER BY "users"."{field}" DESC
+                   LIMIT 6;
+            """
+        )
+
+        return list(map(lambda record: User(**record), records))
+
+    async def increase(
+        self,
+        id__: str,
         key: typing.Literal[
             "berry",
             "fox",
             "reputation",
         ],
-        partial: "_prisma.models.User",
+        value: int
     ) -> None:
-        self.key = key
-        self.partial = partial
-
-    async def add(self: typing.Self, value: int) -> None:
-        await self.partial.prisma().update(
-            {self.key: self.partial.dict().get(self.key) + value},
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
+        await self._connection.execute(
+            f"""
+                UPDATE "users"
+                   SET "{key}" = "{key}" + {value}
+                 WHERE "users"."id" = $1;
+            """,
+            id__,
         )
 
-    async def remove(self: typing.Self, value: int) -> None:
-        await self.partial.prisma().update(
-            {self.key: self.partial.dict().get(self.key) - value},
-            where=_prisma.types.UserWhereUniqueInput(id=self.partial.id),
+    async def decrease(
+        self,
+        id__: str,
+        key: typing.Literal[
+            "berry",
+            "fox",
+            "reputation",
+        ],
+        value: int
+    ) -> None:
+        await self._connection.execute(
+            f"""
+                UPDATE "users"
+                   SET "{key}" = "{key}" - {value}
+                 WHERE "users"."id" = $1;
+            """,
+            id__,
         )
-
-
-class User:
-    def __init__(self: typing.Self, partial: "_prisma.models.User") -> None:
-        self.partial = partial
-
-        self.berry = Resource("berry", partial=self.partial)
-        self.fox = Resource("fox", partial=self.partial)
-
-        self.reputation = Resource("reputation", partial=self.partial)
-
-
-class Database:
-    def __init__(self: typing.Self, prisma: "_prisma.Prisma") -> None:
-        self.prisma = prisma
-        self.shop = shop.shop
-
-    async def find(self: typing.Self, id__: str) -> User:
-        PARTIAL = await self.prisma.user.find_first(
-            where=_prisma.types.UserWhereInput(id=id__)
-        )
-
-        if PARTIAL is None:
-            PARTIAL = await self.prisma.user.create(
-                _prisma.types.UserCreateInput(id=id)
-            )
-
-        return User(partial=PARTIAL)
-
-    async def leaders(
-        self: typing.Self,
-        take: int,
-        user_keys: "_prisma.types.UserKeys",
-        sort_order: "_prisma.types.SortOrder",
-    ) -> typing.List[User]:
-        PARTIALS = await self.prisma.user.find_many(take, order={user_keys: sort_order})
-
-        return map(lambda PARTIAL: User(partial=PARTIAL), PARTIALS)

@@ -1,49 +1,40 @@
 import typing
 
-import msgspec
-
-from trevigiano import float_or_int
-
-
-class Sort(msgspec.Struct):
-    order: typing.Literal["asc", "desc"]
+import prisma as _prisma
+from trevigiano import types
 
 
-class Leaders(msgspec.Struct):
-    sort: Sort
+class Leaders(typing.TypedDict):
+    sortOrder: _prisma.types.SortOrder
     take: int
 
 
-class Range(msgspec.Struct):
-    start: "float_or_int.FloatOrInt"
-    stop: "float_or_int.FloatOrInt"
+class Range(typing.TypedDict):
+    start: types.FloatOrInt
+    stop: types.FloatOrInt
 
 
-class Collect(msgspec.Struct):
+class Collect(typing.TypedDict):
     berry: Range
     fox: Range
 
 
-class Steal(msgspec.Struct):
-    probability: "float_or_int.FloatOrInt"
-    fraction: "float_or_int.FloatOrInt"
+class Steal(typing.TypedDict):
+    probability: types.FloatOrInt
+    fraction: types.FloatOrInt
 
 
-class Tame(msgspec.Struct):
-    probability: "float_or_int.FloatOrInt"
-    price: "float_or_int.FloatOrInt"
+class Tame(typing.TypedDict):
+    probability: types.FloatOrInt
+    price: types.FloatOrInt
 
 
-class Plugins(msgspec.Struct):
+class Plugins(typing.TypedDict):
     collect: Collect
     steal: Steal
     tame: Tame
 
 
-class Configuration(msgspec.Struct):
+class Configuration(typing.TypedDict):
     leaders: Leaders
     plugins: Plugins
-
-
-def of(buf: typing.Union[bytes, str]) -> Configuration:
-    return msgspec.json.decode(buf, type=Configuration)

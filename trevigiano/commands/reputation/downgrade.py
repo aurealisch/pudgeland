@@ -6,15 +6,16 @@ from .constants import groups, periods
 
 PLUGIN = plugin.Plugin()
 
+COOLDOWN = PLUGIN.coolDown
 COMMAND = PLUGIN.command
 CONTEXT = PLUGIN.context
 OPTION = PLUGIN.option
 EXCEPTIONS = PLUGIN.exceptions
 
 
+@PLUGIN.include
 @COMMAND.command(
-    PLUGIN,
-    name="понизить",
+    "понизить",
     description="Понизить",
     period=periods.PERIOD,
     group=groups.GROUP,
@@ -26,7 +27,7 @@ EXCEPTIONS = PLUGIN.exceptions
     )],
     # fmt: on
 )
-async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
+async def callback(context: CONTEXT.Context, user: hikari.User) -> None:
     EMBED = context.embed
     EMOJI = context.emoji
 
@@ -36,7 +37,14 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
     if CONTEXTUAL == OPTIONAL:
         raise EXCEPTIONS.YouCantDoThatException
 
-    await PLUGIN.model.database.find(OPTIONAL).reputation.add(1)
+    _ = await PLUGIN.model.database.selectOrInsertUser(CONTEXTUAL)
+    _ = await PLUGIN.model.database.selectOrInsertUser(OPTIONAL)
+
+    await PLUGIN.model.database.decrease(
+        OPTIONAL,
+        key="reputation",
+        value=1,
+    )
 
     DESCRIPTION = f"{EMOJI.Emoji.DOWNGRADE} Вы понизили репутацию <@{OPTIONAL}>"
 

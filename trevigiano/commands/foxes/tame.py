@@ -10,47 +10,56 @@ from .constants import groups, periods
 
 PLUGIN = plugin.Plugin()
 
-VIEW_ABC = PLUGIN.view_abc
+COOLDOWN = PLUGIN.coolDown
+VIEW = PLUGIN.view
 COMMAND = PLUGIN.command
 CONTEXT = PLUGIN.context
 
 
+@PLUGIN.include
 @COMMAND.command(
-    PLUGIN,
-    name="приручить",
+    "приручить",
     description="Приручить",
     period=periods.PERIOD,
     group=groups.GROUP,
 )
-async def callback(context: "CONTEXT.Context") -> None:
+async def callback(context: CONTEXT.Context) -> None:
+    DATABASE = PLUGIN.model.database
+
     DECORATE = context.decorate
     EMOJI = context.emoji
     EMBED = context.embed
     HUMANIZE = context.humanize
     TRIM = context.trim
 
-    TAME = PLUGIN.model.configuration.plugins.tame
+    TAME = PLUGIN.model.configuration.get("plugins").get("tame")
 
-    CONTEXTUAL = await PLUGIN.model.database.find(str(context.user.id))
+    ID__ = str(context.user.id)
 
-    PRICE = TAME.price
-    PROBABILITY = TAME.probability
+    USER = await DATABASE.selectOrInsertUser(ID__)
 
-    FED = round((CONTEXTUAL.partial.fox + 1) * math.e * PRICE)
+    PRICE = TAME.get("price")
+    PROBABILITY = TAME.get("probability")
+
+    FED = round((USER.fox + 1) * math.e * PRICE)
 
     STYLE = hikari.ButtonStyle.SECONDARY
 
     async def ok(
-        _view_abc: VIEW_ABC.ViewAbc,
+        _view: VIEW.View,
         _button: "miru.Button",
         _context: "miru.Context",
     ) -> None:
         await _context.defer()
 
-        if CONTEXTUAL.partial.berry < FED:
+        if USER.berry < FED:
             raise PLUGIN.exceptions.NotEnoughBerriesException
 
-        await CONTEXTUAL.berry.remove(FED)
+        await DATABASE.decrease(
+            ID__,
+            key="berry",
+            value=FED,
+        )
 
         if random.choice(range(1, PROBABILITY)) != 1:
             await _context.respond(
@@ -67,11 +76,15 @@ async def callback(context: "CONTEXT.Context") -> None:
                 )
             )
 
-            _view_abc.stop()
+            _view.stop()
 
             return
 
-        await CONTEXTUAL.fox.add(1)
+        await DATABASE.increase(
+            ID__,
+            key="fox",
+            value=1,
+        )
 
         await _context.respond(
             embed=EMBED.embed(
@@ -87,10 +100,10 @@ async def callback(context: "CONTEXT.Context") -> None:
             )
         )
 
-        _view_abc.stop()
+        _view.stop()
 
     async def cancel(
-        _view_abc: VIEW_ABC.ViewAbc,
+        _view: VIEW.View,
         _button: "miru.Button",
         _context: "miru.Context",
     ) -> None:
@@ -106,10 +119,10 @@ async def callback(context: "CONTEXT.Context") -> None:
             ),
         )
 
-        _view_abc.stop()
+        _view.stop()
 
-    NAME = "ViewAbc"
-    BASES = (VIEW_ABC.ViewAbc,)
+    NAME = "View"
+    BASES = (VIEW.View,)
     DICT = {
         "ok": miru.button(
             label="ОК",

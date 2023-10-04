@@ -1,5 +1,4 @@
 import dataclasses
-import typing
 
 import crescent
 import hikari
@@ -7,16 +6,16 @@ import hikari
 
 @dataclasses.dataclass
 class Option:
-    type__: typing.Union[
-        type[str],
-        type[bool],
-        type[int],
-        type[float],
-        type["hikari.PartialChannel"],
-        type["hikari.Role"],
-        type["hikari.User"],
-        type["crescent.Mentionable"],
-        type["hikari.Attachment"],
-    ]
+    type__: (
+        type[str]
+        | type[bool]
+        | type[int]
+        | type[float]
+        | type[hikari.PartialChannel]
+        | type[hikari.Role]
+        | type[hikari.User]
+        | type[crescent.Mentionable]
+        | type[hikari.Attachment]
+    )
     name: str
     description: str

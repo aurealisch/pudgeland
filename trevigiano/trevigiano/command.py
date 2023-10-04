@@ -1,26 +1,30 @@
 import typing
 
 import crescent
+import crescent.internal
 
 from trevigiano import (
     context,
-    cool_down,
+    coolDown,
     handle,
     option,
-    plugin,
 )
 
 
 def command(
-    plugin: "plugin.Plugin",
     name: str,
     description: str,
-    period: "cool_down.Period",
-    group: typing.Optional["crescent.Group"] = None,
-    options: typing.Optional[typing.Sequence["option.Option"]] = None,
-) -> typing.Callable[[crescent.CommandCallbackT], None]:
-    def inner(command_callback_t: crescent.CommandCallbackT) -> None:
-        async def callback(self: typing.Self, context: "context.Context") -> None:
+    period: int,
+    group: crescent.Group | None = None,
+    options: typing.Sequence[option.Option] | None = None,
+) -> typing.Callable[
+    [crescent.CommandCallbackT],
+    crescent.internal.Includable[crescent.internal.AppCommandMeta],
+]:
+    def inner(
+        commandCallbackT: crescent.CommandCallbackT,
+    ) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
+        async def callback(self, context: context.Context) -> None:
             ARGUMENTS = (context,)
 
             if context.options:
@@ -30,7 +34,7 @@ def command(
             await context.defer()
 
             try:
-                await command_callback_t(*ARGUMENTS)
+                await commandCallbackT(*ARGUMENTS)
             except Exception as exception:
                 await handle.handle(exception, context=context)
 
@@ -52,9 +56,7 @@ def command(
             DICT,
         )
 
-        hook = crescent.hook(cool_down.cool_down(period))
-
-        includable = hook(
+        includable = crescent.hook(coolDown.coolDown(period))(
             crescent.command(
                 TYPE,
                 name=name,
@@ -65,6 +67,6 @@ def command(
         if group:
             includable = group.child(includable)
 
-        plugin.include(includable)
+        return includable
 
     return inner

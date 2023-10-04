@@ -4,28 +4,25 @@ from .constants import groups, periods
 
 PLUGIN = plugin.Plugin()
 
+COOLDOWN = PLUGIN.coolDown
 COMMAND = PLUGIN.command
 CONTEXT = PLUGIN.context
 
 
+@PLUGIN.include
 @COMMAND.command(
-    PLUGIN,
-    name="репутация",
+    "репутация",
     description="Репутация",
     period=periods.PERIOD,
     group=groups.GROUP,
 )
-async def callback(context: "CONTEXT.Context") -> None:
+async def callback(context: CONTEXT.Context) -> None:
     DECORATE = context.decorate
     EMBED = context.embed
     EMOJI = context.emoji
     HUMANIZE = context.humanize
 
-    USERS = await PLUGIN.model.database.leaders(
-        PLUGIN.model.configuration.leaders.take,
-        user_keys="reputation",
-        sort_order=PLUGIN.model.configuration.leaders.sort.order,
-    )
+    USERS = await PLUGIN.model.database.selectLeaders("reputation")
 
     _EMBED = EMBED.embed("default")
 
@@ -49,8 +46,8 @@ async def callback(context: "CONTEXT.Context") -> None:
             name=name,
             # fmt: off
             value="\n".join([
-                f"<@{USER.partial.id}>",
-                f"Репутация: {DECORATE.decorate(HUMANIZE.humanize(USER.partial.reputation))}",  # noqa: E501
+                f"<@{USER.id}>",
+                f"Репутация: {DECORATE.decorate(HUMANIZE.humanize(USER.reputation))}",  # noqa: E501
             ])
             # fmt: on
         )

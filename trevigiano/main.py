@@ -1,9 +1,9 @@
 import env
 
-import prisma as _prisma
 from trevigiano import (
     configuration,
     database,
+    environment,
     model,
     trevigiano,
 )
@@ -18,39 +18,36 @@ COMMANDS = [
     "leaders.reputation",
     "reputation.downgrade",
     "reputation.upgrade",
-    "shop.items",
-    "shop.buy",
 ]
 PLUGINS = [f"commands.{COMMAND}" for COMMAND in COMMANDS]
 
-PRISMA = _prisma.Prisma()
+DATABASE = database.Database()
 
-_prisma.register(PRISMA)
-
-DATABASE = database.Database(PRISMA)
-
-CONFIGURATION = configuration.of(
-    """\
-    {
-        "leaders": {
-            "sort": {
-                "order": "desc"
-            },
-            "take": 5
+CONFIGURATION: configuration.Configuration = {
+    "leaders": {"sortOrder": "desc", "take": 6},
+    "plugins": {
+        "collect": {
+            "berry": {"start": 100, "stop": 250},
+            "fox": {"start": 25, "stop": 100}
         },
-        "plugins": {
-            "collect": {
-                "berry": {"start": 25, "stop": 100},
-                "fox": {"start": 100, "stop": 250}
-            },
-            "steal": {"probability": 3, "fraction": 0.1},
-            "tame": {"probability": 5, "price": 200}
-        }
+        "steal": {"fraction": 0.1, "probability": 3},
+        "tame": {"price": 100, "probability": 5}
     }
-    """
+}
+
+ENVIRONMENT = environment.Environment(
+    env.get("HOST"),
+    port=env.get("PORT"),
+    user=env.get("USER"),
+    password=env.get("PASSWORD"),
+    database=env.get("DATABASE"),
 )
 
-MODEL = model.Model(CONFIGURATION, database=DATABASE)
+MODEL = model.Model(
+    CONFIGURATION,
+    database=DATABASE,
+    environment=ENVIRONMENT,
+)
 
 TOKEN = env.get("TOKEN")
 

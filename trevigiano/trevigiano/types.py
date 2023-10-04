@@ -1,0 +1,1 @@
+FloatOrInt = float | int

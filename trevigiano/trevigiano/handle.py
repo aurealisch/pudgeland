@@ -1,15 +1,11 @@
 import traceback
-import typing
 
 import miru
 
 from trevigiano import context, embed
 
 
-async def handle(
-    exception: Exception,
-    context: typing.Union["context.Context", "miru.Context"],
-) -> None:
+async def handle(exception: Exception, context: context.Context | miru.Context) -> None:
     VALUE = exception
     TB = exception.__traceback__
 

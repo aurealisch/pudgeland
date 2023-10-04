@@ -1,25 +1,29 @@
-import typing
-
 import hikari
 
-from trevigiano import configuration, database
+from trevigiano import configuration, database, environment
 
 
 class Model:
     def __init__(
-        self: typing.Self,
-        configuration: "configuration.Configuration",
-        database: "database.Database",
+        self,
+        configuration: configuration.Configuration,
+        database: database.Database,
+        environment: environment.Environment,
     ) -> None:
         self.configuration = configuration
         self.database = database
+        self.environment = environment
 
-    async def on_started_event(
-        self: typing.Self, _started_event: "hikari.StartedEvent"
-    ) -> None:
-        await self.database.prisma.connect()
+    async def onStartedEvent(self, _startedEvent: hikari.StartedEvent) -> None:
+        await self.database.connect(
+            self.environment.host,
+            port=self.environment.port,
+            user=self.environment.user,
+            password=self.environment.password,
+            database=self.environment.database,
+        )
 
-    async def on_stopped_event(
-        self: typing.Self, _stopped_event: "hikari.StoppedEvent"
-    ) -> None:
-        await self.database.prisma.disconnect()
+        await self.database.createTableIfNotExists()
+
+    async def onStoppedEvent(self, _stoppedEvent: hikari.StoppedEvent) -> None:
+        await self.database.close()

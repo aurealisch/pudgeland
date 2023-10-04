@@ -8,14 +8,15 @@ from .constants import groups, periods
 
 PLUGIN = plugin.Plugin()
 
+COOLDOWN = PLUGIN.coolDown
 COMMAND = PLUGIN.command
 CONTEXT = PLUGIN.context
 OPTION = PLUGIN.option
 
 
+@PLUGIN.include
 @COMMAND.command(
-    PLUGIN,
-    name="украсть",
+    "украсть",
     description="Украсть",
     period=periods.PERIOD,
     group=groups.GROUP,
@@ -27,7 +28,9 @@ OPTION = PLUGIN.option
     )],
     # fmt: on
 )
-async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
+async def callback(context: CONTEXT.Context, user: hikari.User) -> None:
+    DATABASE = PLUGIN.model.database
+
     EMOJI = context.emoji
     EMBED = context.embed
     HUMANIZE = context.humanize
@@ -36,21 +39,24 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
     _CONTEXTUAL = str(context.user.id)
     _OPTIONAL = str(user.id)
 
-    CONTEXTUAL = await PLUGIN.model.database.find(_CONTEXTUAL)
-    OPTIONAL = await PLUGIN.model.database.find(_OPTIONAL)
+    OPTIONAL = await DATABASE.selectOrInsertUser(_OPTIONAL)
 
-    STEAL = PLUGIN.model.configuration.plugins.steal
+    STEAL = PLUGIN.model.configuration.get("plugins").get("steal")
 
-    FRACTION = STEAL.fraction
-    PROBABILITY = STEAL.probability
+    FRACTION = STEAL.get("fraction")
+    PROBABILITY = STEAL.get("probability")
 
-    STEALING = round((OPTIONAL.partial.berry / 2) * FRACTION)
+    STEALING = round((OPTIONAL.berry / 2) * FRACTION)
 
     if STEALING < 1:
         raise Exception("Нечего красть")
 
     if random.choice(range(1, PROBABILITY)) != 1:
-        await CONTEXTUAL.berry.remove(STEALING)
+        await DATABASE.decrease(
+            _CONTEXTUAL,
+            key="berry",
+            value=STEALING,
+        )
 
         await context.respond(
             embed=EMBED.embed(
@@ -70,8 +76,16 @@ async def callback(context: "CONTEXT.Context", user: "hikari.User") -> None:
 
         return
 
-    await CONTEXTUAL.berry.add(STEALING)
-    await OPTIONAL.berry.remove(STEALING)
+    await DATABASE.increase(
+        _CONTEXTUAL,
+        key="berry",
+        value=STEALING,
+    )
+    await DATABASE.decrease(
+        _OPTIONAL,
+        key="berry",
+        value=STEALING,
+    )
 
     await context.respond(
         embed=EMBED.embed(
