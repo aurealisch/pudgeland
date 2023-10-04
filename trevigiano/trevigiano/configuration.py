@@ -1,12 +1,6 @@
 import typing
 
-import prisma as _prisma
 from trevigiano import types
-
-
-class Leaders(typing.TypedDict):
-    sortOrder: _prisma.types.SortOrder
-    take: int
 
 
 class Range(typing.TypedDict):
@@ -36,5 +30,4 @@ class Plugins(typing.TypedDict):
 
 
 class Configuration(typing.TypedDict):
-    leaders: Leaders
     plugins: Plugins

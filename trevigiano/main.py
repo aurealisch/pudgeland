@@ -24,7 +24,6 @@ PLUGINS = [f"commands.{COMMAND}" for COMMAND in COMMANDS]
 DATABASE = database.Database()
 
 CONFIGURATION: configuration.Configuration = {
-    "leaders": {"sortOrder": "desc", "take": 6},
     "plugins": {
         "collect": {
             "berry": {"start": 100, "stop": 250},

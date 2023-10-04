@@ -6,10 +6,6 @@
     "PYTHONUNBUFFERED": "1"
   },
   "phases": {
-    "build": {
-      "dependsOn": ["install"],
-      "cmds": ["prisma generate"]
-    },
     "install": {
       "dependsOn": ["setup"],
       "cmds": [
