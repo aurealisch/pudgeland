@@ -12,10 +12,7 @@ class User:
     reputation: int
 
 class Database:
-    def __init__(self) -> None:
-        pass
-
-    async def connect(
+    def __init__(
         self,
         host: typing.Any,
         port: typing.Any,
@@ -23,18 +20,31 @@ class Database:
         password: typing.Any,
         database: typing.Any,
     ) -> None:
+        self.__host = host
+        self.__port = port
+        self.__user = user
+        self.__password = password
+        self.__database = database
+
+    async def connect(self) -> None:
         self._connection: asyncpg.Connection = await asyncpg.connect(
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            database=database,
+            host=self.__host,
+            port=self.__port,
+            user=self.__user,
+            password=self.__password,
+            database=self.__database,
         )
 
     async def close(self) -> None:
         await self._connection.close()
 
+    async def reconnect(self) -> typing.Callable:
+        if self._connection.is_closed:
+            await self.connect()
+
     async def createTableIfNotExists(self) -> None:
+        await self.reconnect()
+
         await self._connection.execute(
             """
                 CREATE TABLE IF NOT EXISTS users (
@@ -47,6 +57,8 @@ class Database:
         )
 
     async def selectOrInsertUser(self, id__: int) -> User:
+        await self.reconnect()
+
         record = await self._connection.fetchrow(
             """
                 SELECT users.id,
@@ -80,6 +92,8 @@ class Database:
             "reputation",
         ],
     ) -> list[User]:
+        await self.reconnect()
+
         records = await self._connection.fetch(
             f"""
                   SELECT "users"."id",
@@ -104,6 +118,8 @@ class Database:
         ],
         value: int
     ) -> None:
+        await self.reconnect()
+
         await self._connection.execute(
             f"""
                 UPDATE "users"
@@ -123,6 +139,8 @@ class Database:
         ],
         value: int
     ) -> None:
+        await self.reconnect()
+
         await self._connection.execute(
             f"""
                 UPDATE "users"

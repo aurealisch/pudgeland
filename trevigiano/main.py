@@ -3,7 +3,6 @@ import env
 from trevigiano import (
     configuration,
     database,
-    environment,
     model,
     trevigiano,
 )
@@ -21,7 +20,13 @@ COMMANDS = [
 ]
 PLUGINS = [f"commands.{COMMAND}" for COMMAND in COMMANDS]
 
-DATABASE = database.Database()
+DATABASE = database.Database(
+    env.get("HOST"),
+    port=env.get("PORT"),
+    user=env.get("USER"),
+    password=env.get("PASSWORD"),
+    database=env.get("DATABASE"),
+)
 
 CONFIGURATION: configuration.Configuration = {
     "plugins": {
@@ -34,19 +39,7 @@ CONFIGURATION: configuration.Configuration = {
     }
 }
 
-ENVIRONMENT = environment.Environment(
-    env.get("HOST"),
-    port=env.get("PORT"),
-    user=env.get("USER"),
-    password=env.get("PASSWORD"),
-    database=env.get("DATABASE"),
-)
-
-MODEL = model.Model(
-    CONFIGURATION,
-    database=DATABASE,
-    environment=ENVIRONMENT,
-)
+MODEL = model.Model(CONFIGURATION, database=DATABASE)
 
 TOKEN = env.get("TOKEN")
 
