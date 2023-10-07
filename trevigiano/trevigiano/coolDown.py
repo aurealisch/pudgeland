@@ -74,4 +74,6 @@ def coolDown(
             )
         )
 
+        return crescent.HookResult(True)
+
     return inner
