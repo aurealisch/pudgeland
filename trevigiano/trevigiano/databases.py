@@ -52,11 +52,11 @@ class Database:
         await self.reconnect()
 
         query = """
-            CREATE TABLE IF NOT EXISTS 'users' (
-                'id'         TEXT  PRIMARY KEY,
-                'berry'      INTEGER NOT NULL DEFAULT 0,
-                'fox'        INTEGER NOT NULL DEFAULT 0,
-                'reputation' INTEGER NOT NULL DEFAULT 0
+            CREATE TABLE IF NOT EXISTS "users" (
+                "id"         TEXT  PRIMARY KEY,
+                "berry"      INTEGER NOT NULL DEFAULT 0,
+                "fox"        INTEGER NOT NULL DEFAULT 0,
+                "reputation" INTEGER NOT NULL DEFAULT 0
             );
         """
 
@@ -66,12 +66,12 @@ class Database:
         await self.reconnect()
 
         query = """
-            SELECT 'users'.'id',
-                   'users'.'berry',
-                   'users'.'fox',
-                   'users'.'reputation'
-              FROM 'users'
-             WHERE 'users'.'id' = $1;
+            SELECT "users"."id",
+                   "users"."berry",
+                   "users"."fox",
+                   "users"."reputation"
+              FROM "users"
+             WHERE "users"."id" = $1;
         """
 
         record = await self._connection.fetchrow(query, id_)
@@ -80,7 +80,7 @@ class Database:
             return User(**record)
 
         query = """
-            INSERT INTO users ('id')
+            INSERT INTO users ("id")
             VALUES ($1);
         """
 
@@ -92,12 +92,12 @@ class Database:
         await self.reconnect()
 
         query = f"""
-              SELECT 'users'.'id',
-                     'users'.'berry',
-                     'users'.'fox',
-                     'users'.'reputation'
-                FROM 'users'
-            ORDER BY 'users'.'{field}' DESC
+              SELECT "users"."id",
+                     "users"."berry",
+                     "users"."fox",
+                     "users"."reputation"
+                FROM "users"
+            ORDER BY "users"."{field}" DESC
                LIMIT 6;
         """
 
@@ -113,9 +113,9 @@ class Database:
         await self.reconnect()
 
         query = f"""
-            UPDATE 'users'
-               SET '{field}' = '{field}' + {value}
-             WHERE 'users'.'id' = $1;
+            UPDATE "users"
+               SET "{field}" = "{field}" + {value}
+             WHERE "users"."id" = $1;
         """
 
         await self._connection.execute(query, id_)
@@ -128,9 +128,9 @@ class Database:
         await self.reconnect()
 
         query = f"""
-            UPDATE 'users'
-               SET '{field}' = '{field}' - {value}
-             WHERE 'users'.'id' = $1;
+            UPDATE "users"
+               SET "{field}" = "{field}" - {value}
+             WHERE "users"."id" = $1;
         """
 
         await self._connection.execute(query, id_)
