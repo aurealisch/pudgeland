@@ -9,8 +9,7 @@ class Range(typing.TypedDict):
 
 
 class Collect(typing.TypedDict):
-    berry: Range
-    fox: Range
+    range: Range
 
 
 class Steal(typing.TypedDict):

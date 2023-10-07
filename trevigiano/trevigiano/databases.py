@@ -55,7 +55,7 @@ class Database:
             CREATE TABLE IF NOT EXISTS "users" (
                 "id"         TEXT  PRIMARY KEY,
                 "berry"      INTEGER NOT NULL DEFAULT 0,
-                "fox"        INTEGER NOT NULL DEFAULT 0,
+                "fox"        INTEGER NOT NULL DEFAULT 1,
                 "reputation" INTEGER NOT NULL DEFAULT 0
             );
         """

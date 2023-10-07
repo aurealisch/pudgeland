@@ -28,35 +28,20 @@ async def callback(context: contexts.Context) -> None:
 
     user = await database.upsert(id_)
 
+    range_ = plugin.model.configuration.get('plugins').get('collect').get('range')
+
     fox = user.fox
 
-    collect = plugin.model.configuration.get('plugins').get('collect')
-
-    total = 0
-
-    berrying = round(random.choice(range(
-        collect.get('berry').get('start'),
-        collect.get('berry').get('stop'),
+    collecting = round(fox * random.choice(range(
+        range_.get('start'),
+        range_.get('stop'),
     )))
 
-    total += berrying
-
-    description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(berrying))} ягод'  # noqa: E501
-
-    if fox:
-        foxying = round(fox * random.choice(range(
-            collect.get('fox').get('start'),
-            collect.get('fox').get('stop'),
-        )))
-
-        total += foxying
-
-        description += f'\n+ {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(foxying))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
-        description += f'\n\n{emoji.Emoji.TOTAL} Всего: {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(total))} ягод'  # noqa: E501
+    description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'
 
     await database.increase(id_,
                             field='berry',
-                            value=total,
+                            value=collecting,
                             )
 
     await context.respond(embed=embed.embed('default', description=description))

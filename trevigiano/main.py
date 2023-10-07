@@ -30,8 +30,10 @@ database = databases.Database(env.get('HOST'),
 configuration: configurations.Configuration = {
     'plugins': {
         'collect': {
-            'berry': {'start': 100, 'stop': 250},
-            'fox': {'start': 25, 'stop': 100}
+            'range': {
+                'start': 50,
+                'stop': 200,
+            },
         },
         'steal': {'fraction': 0.1, 'probability': 3},
         'tame': {'price': 100, 'probability': 5}
