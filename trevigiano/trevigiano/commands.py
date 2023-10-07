@@ -51,7 +51,7 @@ def command(
                     dict_,
                     )
 
-        includable = crescent.hook(cooldowns.coolDown(period))(
+        includable = crescent.hook(cooldowns.cooldown(period))(
             crescent.command(type_,
                              name=name,
                              description=description,
