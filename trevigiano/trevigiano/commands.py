@@ -4,10 +4,10 @@ import crescent
 import crescent.internal
 
 from trevigiano import (
-    context,
-    coolDown,
+    contexts,
+    cooldowns,
     handle,
-    option,
+    options,
     )
 
 
@@ -16,12 +16,12 @@ def command(
         description: str,
         period: int,
         group: crescent.Group | None = None,
-        options: typing.Sequence[option.Option] | None = None,) -> typing.Callable[
+        options: typing.Sequence[options.Option] | None = None,) -> typing.Callable[
             [crescent.CommandCallbackT],
             crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
     def inner(
             command_callback_t: crescent.CommandCallbackT) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
-        async def callback(self, context: context.Context) -> None:
+        async def callback(self, context: contexts.Context) -> None:
             arguments = (context,)
 
             if context.options:
@@ -51,7 +51,7 @@ def command(
                     dict_,
                     )
 
-        includable = crescent.hook(coolDown.coolDown(period))(
+        includable = crescent.hook(cooldowns.coolDown(period))(
             crescent.command(type_,
                              name=name,
                              description=description,

@@ -2,106 +2,90 @@ import random
 
 import hikari
 
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import groups, periods
 
-PLUGIN = plugin.Plugin()
+plugin = plugins.Plugin()
 
-COOLDOWN = PLUGIN.coolDown
-COMMAND = PLUGIN.command
-CONTEXT = PLUGIN.context
-OPTION = PLUGIN.option
+commands = plugin.commands
+contexts = plugin.contexts
+options = plugin.options
 
 
-@PLUGIN.include
-@COMMAND.command(
-    "украсть",
-    description="Украсть",
-    period=periods.PERIOD,
-    group=groups.GROUP,
-    # fmt: off
-    options=[OPTION.Option(
-        hikari.User,
-        name="пользователь",
-        description="Пользователь",
-    )],
-    # fmt: on
-)
-async def callback(context: CONTEXT.Context, user: hikari.User) -> None:
-    DATABASE = PLUGIN.model.database
+@plugin.include
+@commands.command('украсть',
+                  description='Украсть',
+                  period=periods.PERIOD,
+                  group=groups.GROUP,
+                  options=[options.Option(hikari.User,
+                                          name='пользователь',
+                                          description='Пользователь',
+                                          ),
+                          ],
+                  )
+async def callback(context: contexts.Context, user: hikari.User) -> None:
+    database = plugin.model.database
 
-    EMOJI = context.emoji
-    EMBED = context.embed
-    HUMANIZE = context.humanize
-    TRIM = context.trim
+    emoji = context.emoji
+    embed = context.embed
+    humanize = context.humanize
+    trim = context.trim
 
-    _CONTEXTUAL = str(context.user.id)
-    _OPTIONAL = str(user.id)
+    _contextual = str(context.user.id)
+    _optional = str(user.id)
 
-    OPTIONAL = await DATABASE.upsert(_OPTIONAL)
+    optional = await database.upsert(_optional)
 
-    STEAL = PLUGIN.model.configuration.get("plugins").get("steal")
+    steal = plugin.model.configuration.get('plugins').get('steal')
 
-    FRACTION = STEAL.get("fraction")
-    PROBABILITY = STEAL.get("probability")
+    fraction = steal.get('fraction')
+    probability = steal.get('probability')
 
-    STEALING = round((OPTIONAL.berry / 2) * FRACTION)
+    stealing = round((optional.berry / 2) * fraction)
 
-    if STEALING < 1:
-        raise Exception("Нечего красть")
+    if stealing < 1:
+        raise Exception('Нечего красть')
 
-    if random.choice(range(1, PROBABILITY)) != 1:
-        await DATABASE.decrease(
-            _CONTEXTUAL,
-            key="berry",
-            value=STEALING,
+    if random.choice(range(1, probability)) != 1:
+        await database.decrease(_contextual,
+                                field='berry',
+                                value=stealing,
+                                )
+
+        description = trim.trim(
+            f"""\
+                Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
+                и...
+
+                {emoji.Emoji.UNAVAILABLE} Не получилось...
+
+                ```diff\n- {humanize.humanize(stealing)} ягод```
+            """  # noqa: E501
         )
 
-        await context.respond(
-            embed=EMBED.embed(
-                "default",
-                description=TRIM.trim(
-                    f"""\
-                        Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
-                        и...
-
-                        {EMOJI.Emoji.UNAVAILABLE} Не получилось...
-
-                        ```diff\n- {HUMANIZE.humanize(STEALING)} ягод```
-                    """  # noqa: E501
-                ),
-            )
-        )
+        await context.respond(embed=embed.embed('default', description=description))
 
         return
 
-    await DATABASE.increase(
-        _CONTEXTUAL,
-        key="berry",
-        value=STEALING,
-    )
-    await DATABASE.decrease(
-        _OPTIONAL,
-        key="berry",
-        value=STEALING,
-    )
+    await database.increase(_contextual,
+                            field='berry',
+                            value=stealing,
+                            )
+    await database.decrease(_optional,
+                            field='berry',
+                            value=stealing,
+                            )
 
-    await context.respond(
-        embed=EMBED.embed(
-            "default",
-            description=TRIM.trim(
-                f"""\
-                    Вы попытались украсть {EMOJI.Emoji.BERRY} ягоды у <@{_OPTIONAL}>
-                    и...
+    description = trim.trim(
+        f"""\
+            Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
+            и...
 
-                    {EMOJI.Emoji.AVAILABLE} Получилось!!!
+            {emoji.Emoji.AVAILABLE} Получилось!!!
 
-                    ```diff\n+ {HUMANIZE.humanize(STEALING)} ягод```
-                """  # noqa: E501
-            ),
-        )
+            ```diff\n+ {humanize.humanize(stealing)} ягод```
+        """  # noqa: E501
     )
 
-
-plugin = PLUGIN
+    await context.respond(embed=embed.embed('default', description=description))

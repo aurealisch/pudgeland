@@ -4,10 +4,10 @@ import typing
 import crescent
 import hikari
 
-from trevigiano import context
+from trevigiano import contexts
 
 
-class CoolDown:
+class Cooldown:
     def __init__(self, period: int) -> None:
         self.period = period
 
@@ -45,15 +45,15 @@ class CoolDown:
         return None
 
 
-def coolDown(
-        period: int) -> typing.Callable[[context.Context], crescent.HookResult | None]:
-    coolDown = CoolDown(period)
+def cooldown(
+        period: int) -> typing.Callable[[contexts.Context], crescent.HookResult | None]:
+    cooldown = Cooldown(period)
 
-    async def inner(context: context.Context) -> crescent.HookResult | None:
+    async def inner(context: contexts.Context) -> crescent.HookResult | None:
         embed = context.embed
         trim = context.trim
 
-        remained = coolDown.remained(context.user.id)
+        remained = cooldown.remained(context.user.id)
 
         if remained is None:
             return None

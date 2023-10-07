@@ -1,13 +1,13 @@
 import hikari
 
-from trevigiano import configuration, database
+from trevigiano import configurations, databases
 
 
 class Model:
     def __init__(
             self,
-            configuration: configuration.Configuration,
-            database: database.Database) -> None:
+            configuration: configurations.Configuration,
+            database: databases.Database) -> None:
         self.configuration = configuration
         self.database = database
 

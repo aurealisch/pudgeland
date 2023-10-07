@@ -4,27 +4,25 @@ import random
 import hikari
 import miru
 
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import groups, periods
 
-plugin = plugin.Plugin()
+plugins = plugins.Plugin()
 
-cooldown = plugin.coolDown
-view = plugin.view
-command = plugin.command
-context = plugin.context
+commands = plugins.commands
+contexts = plugins.contexts
+views = plugins.views
 
 
-@plugin.include
-@command.command(
-    "приручить",
-    description="Приручить",
-    period=periods.PERIOD,
-    group=groups.GROUP,
-)
-async def callback(context: context.Context) -> None:
-    database = plugin.model.database
+@plugins.include
+@commands.command('приручить',
+                  description='Приручить',
+                  period=periods.PERIOD,
+                  group=groups.GROUP,
+                  )
+async def callback(context: contexts.Context) -> None:
+    database = plugins.model.database
 
     decorate = context.decorate
     emoji = context.emoji
@@ -32,7 +30,7 @@ async def callback(context: context.Context) -> None:
     humanize = context.humanize
     trim = context.trim
 
-    tame = plugin.model.configuration.get('plugins').get('tame')
+    tame = plugins.model.configuration.get('plugins').get('tame')
 
     id_ = str(context.user.id)
 
@@ -46,13 +44,13 @@ async def callback(context: context.Context) -> None:
     style = hikari.ButtonStyle.SECONDARY
 
     async def ok(
-            _view: view.View,
+            _view: views.View,
             _button: miru.Button,
             _context: miru.Context) -> None:
         await _context.defer()
 
         if user.berry < fed:
-            raise plugin.exceptions.NotEnoughBerriesException
+            raise plugins.exceptions.NotEnoughBerriesException
 
         await database.decrease(id_,
                                 field='berry',
@@ -94,7 +92,7 @@ async def callback(context: context.Context) -> None:
         _view.stop()
 
     async def cancel(
-            _view: view.View,
+            _view: views.View,
             _button: miru.Button,
             _context: miru.Context) -> None:
         await _context.defer()
@@ -106,7 +104,7 @@ async def callback(context: context.Context) -> None:
         _view.stop()
 
     name = 'View'
-    bases = (view.View,)
+    bases = (views.View,)
     dict_ = {
         'ok': miru.button(label='ОК',
                           style=style,

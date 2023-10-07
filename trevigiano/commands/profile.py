@@ -1,26 +1,25 @@
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import periods
 
-plugin = plugin.Plugin()
+plugins = plugins.Plugin()
 
-cooldown = plugin.coolDown
-command = plugin.command
-context = plugin.context
+commands = plugins.commands
+contexts = plugins.contexts
 
 
-@plugin.include
-@command.command('профиль',
+@plugins.include
+@commands.command('профиль',
                  description='Профиль',
                  period=periods.PERIOD,
                  )
-async def callback(context: context.Context) -> None:
+async def callback(context: contexts.Context) -> None:
     decorate = context.decorate
     embed = context.embed
     emoji = context.emoji
     humanize = context.humanize
 
-    user = await plugin.model.database.upsert(str(context.user.id))
+    user = await plugins.model.database.upsert(str(context.user.id))
 
     description = f"""
         {emoji.Emoji.BERRY} Ягоды: {decorate.decorate(humanize.humanize(user.berry))}
@@ -28,4 +27,4 @@ async def callback(context: context.Context) -> None:
         {emoji.Emoji.REPUTATION} Репутация: {decorate.decorate(humanize.humanize(user.reputation))}
     """
 
-    await context.respond(embed=embed.embed("default", description=description))
+    await context.respond(embed=embed.embed('default', description=description))

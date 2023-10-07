@@ -1,21 +1,20 @@
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import groups, periods
 
-plugin = plugin.Plugin()
+plugin = plugins.Plugin()
 
-cooldown = plugin.coolDown
-command = plugin.command
-context = plugin.context
+commands = plugins.commands
+contexts = plugins.contexts
 
 
 @plugin.include
-@command.command('лисы',
+@commands.command('лисы',
                  description='Лисы',
                  period=periods.PERIOD,
                  group=groups.GROUP,
                  )
-async def callback(context: context.Context) -> None:
+async def callback(context: contexts.Context) -> None:
     decorate = context.decorate
     embed = context.embed
     emoji = context.emoji

@@ -4,14 +4,14 @@ import crescent
 import hikari
 import miru
 
-from trevigiano import model
+from trevigiano import models
 
 
 class Trevigiano:
     def __init__(
             self,
             plugins: typing.Iterable[str],
-            model: model.Model,
+            model: models.Model,
             token: str) -> None:
         intents = hikari.Intents.ALL
 

@@ -2,10 +2,10 @@ import traceback
 
 import miru
 
-from trevigiano import context, embed
+from trevigiano import contexts, embed
 
 
-async def handle(exception: Exception, context: context.Context | miru.Context) -> None:
+async def handle(exception: Exception, context: contexts.Context | miru.Context) -> None:
     value = exception
     tb = exception.__traceback__
 

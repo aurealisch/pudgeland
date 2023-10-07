@@ -1,23 +1,22 @@
 import random
 
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import groups, periods
 
-plugin = plugin.Plugin()
+plugin = plugins.Plugin()
 
-cooldown = plugin.coolDown
-command = plugin.command
-context = plugin.context
+commands = plugin.command
+contexts = plugin.context
 
 
 @plugin.include
-@command.command('собрать',
+@commands.command('собрать',
                  description='Собрать',
                  period=periods.PERIOD,
                  group=groups.GROUP,
                  )
-async def callback(context: context.Context) -> None:
+async def callback(context: contexts.Context) -> None:
     database = plugin.model.database
 
     decorate = context.decorate

@@ -1,30 +1,29 @@
 import hikari
 
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import groups, periods
 
-plugin = plugin.Plugin()
+plugin = plugins.Plugin()
 
-cooldown = plugin.coolDown
-command = plugin.command
-context = plugin.context
-option = plugin.option
+commands = plugin.commands
+contexts = plugin.contexts
+options = plugin.options
 exceptions = plugin.exceptions
 
 
 @plugin.include
-@command.command('повысить',
+@commands.command('повысить',
                  description='Повысить',
                  period=periods.PERIOD,
                  group=groups.GROUP,
-                 options=[option.Option(hikari.User,
+                 options=[options.Option(hikari.User,
                                         name='пользователь',
                                         description='Пользователь',
                                         )
                          ],
                  )
-async def callback(context: context.Context, user: hikari.User) -> None:
+async def callback(context: contexts.Context, user: hikari.User) -> None:
     embed = context.embed
     emoji = context.emoji
 
@@ -42,6 +41,6 @@ async def callback(context: context.Context, user: hikari.User) -> None:
                                          value=1,
                                          )
 
-    DESCRIPTION = f'{emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
+    description = f'{emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
 
-    await context.respond(embed=embed.embed('default', description=DESCRIPTION))
+    await context.respond(embed=embed.embed('default', description=description))

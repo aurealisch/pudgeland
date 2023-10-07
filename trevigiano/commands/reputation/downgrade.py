@@ -1,30 +1,29 @@
 import hikari
 
-from trevigiano import plugin
+from trevigiano import plugins
 
 from .constants import groups, periods
 
-plugin = plugin.Plugin()
+plugin = plugins.Plugin()
 
-cooldown = plugin.coolDown
-command = plugin.command
-context = plugin.context
-option = plugin.option
+commands = plugin.commands
+contexts = plugin.contexts
+options = plugin.options
 exceptions = plugin.exceptions
 
 
 @plugin.include
-@command.command('понизить',
+@commands.command('понизить',
                  description='Понизить',
                  period=periods.PERIOD,
                  group=groups.GROUP,
-                 options=[option.Option(hikari.User,
+                 options=[options.Option(hikari.User,
                                         name='пользователь',
                                         description='Пользователь',
                                         )
                          ],
                  )
-async def callback(context: context.Context, user: hikari.User) -> None:
+async def callback(context: contexts.Context, user: hikari.User) -> None:
     embed = context.embed
     emoji = context.emoji
 

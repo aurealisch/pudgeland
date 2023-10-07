@@ -1,9 +1,9 @@
 import env
 
 from trevigiano import (
-    configuration,
-    database,
-    model,
+    configurations,
+    databases,
+    models,
     trevigiano,
     )
 
@@ -20,14 +20,14 @@ commands = [
     ]
 plugins = [f'commands.{command}' for command in commands]
 
-database = database.Database(env.get('HOST'),
-                             port=env.get('PORT'),
-                             user=env.get('USER'),
-                             password=env.get('PASSWORD'),
-                             database=env.get('DATABASE'),
-                             )
+database = databases.Database(env.get('HOST'),
+                              port=env.get('PORT'),
+                              user=env.get('USER'),
+                              password=env.get('PASSWORD'),
+                              database=env.get('DATABASE'),
+                              )
 
-configuration: configuration.Configuration = {
+configuration: configurations.Configuration = {
     'plugins': {
         'collect': {
             'berry': {'start': 100, 'stop': 250},
@@ -38,7 +38,7 @@ configuration: configuration.Configuration = {
     }
 }
 
-model = model.Model(configuration, database=database)
+model = models.Model(configuration, database=database)
 
 token = env.get('TOKEN')
 
