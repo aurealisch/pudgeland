@@ -8,63 +8,57 @@ from trevigiano import (
     coolDown,
     handle,
     option,
-)
+    )
 
 
 def command(
-    name: str,
-    description: str,
-    period: int,
-    group: crescent.Group | None = None,
-    options: typing.Sequence[option.Option] | None = None,
-) -> typing.Callable[
-    [crescent.CommandCallbackT],
-    crescent.internal.Includable[crescent.internal.AppCommandMeta],
-]:
+        name: str,
+        description: str,
+        period: int,
+        group: crescent.Group | None = None,
+        options: typing.Sequence[option.Option] | None = None,) -> typing.Callable[
+            [crescent.CommandCallbackT],
+            crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
     def inner(
-        commandCallbackT: crescent.CommandCallbackT,
-    ) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
+            command_callback_t: crescent.CommandCallbackT) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
         async def callback(self, context: context.Context) -> None:
-            ARGUMENTS = (context,)
+            arguments = (context,)
 
             if context.options:
-                for _, VALUE in context.options.items():
-                    ARGUMENTS += (VALUE,)
+                for _, value in context.options.items():
+                    arguments += (value,)
 
             await context.defer()
 
             try:
-                await commandCallbackT(*ARGUMENTS)
+                await command_callback_t(*arguments)
             except Exception as exception:
                 await handle.handle(exception, context=context)
 
-        NAME = "ClassCommandProto"
-        BASES = (crescent.ClassCommandProto,)
-        DICT = {"callback": callback}
+        name = 'ClassCommandProto'
+        bases = (crescent.ClassCommandProto,)
+        dict_ = {'callback': callback,}
 
-        if options:
-            for OPTION in options:
-                DICT[OPTION.name] = crescent.option(
-                    OPTION.type__,
-                    name=OPTION.name,
-                    description=OPTION.description,
-                )
+        if options is not None:
+            for option in options:
+                dict_[option.name] = crescent.option(option.type_,
+                                                     name=option.name,
+                                                     description=option.description,
+                                                     )
 
-        TYPE = type(
-            NAME,
-            BASES,
-            DICT,
-        )
+        type_ = type(name,
+                    bases,
+                    dict_,
+                    )
 
         includable = crescent.hook(coolDown.coolDown(period))(
-            crescent.command(
-                TYPE,
-                name=name,
-                description=description,
-            )
+            crescent.command(type_,
+                             name=name,
+                             description=description,
+                             )
         )
 
-        if group:
+        if group is not None:
             includable = group.child(includable)
 
         return includable

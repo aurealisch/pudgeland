@@ -4,51 +4,44 @@ from trevigiano import plugin
 
 from .constants import groups, periods
 
-PLUGIN = plugin.Plugin()
+plugin = plugin.Plugin()
 
-COOLDOWN = PLUGIN.coolDown
-COMMAND = PLUGIN.command
-CONTEXT = PLUGIN.context
-OPTION = PLUGIN.option
-EXCEPTIONS = PLUGIN.exceptions
-
-
-@PLUGIN.include
-@COMMAND.command(
-    "повысить",
-    description="Повысить",
-    period=periods.PERIOD,
-    group=groups.GROUP,
-    # fmt: off
-    options=[OPTION.Option(
-        hikari.User,
-        name="пользователь",
-        description="Пользователь",
-    )],
-    # fmt: on
-)
-async def callback(context: CONTEXT.Context, user: hikari.User) -> None:
-    EMBED = context.embed
-    EMOJI = context.emoji
-
-    CONTEXTUAL = str(context.user.id)
-    OPTIONAL = str(user.id)
-
-    if CONTEXTUAL == OPTIONAL:
-        raise EXCEPTIONS.YouCantDoThatException
-
-    _ = await PLUGIN.model.database.selectOrInsertUser(CONTEXTUAL)
-    _ = await PLUGIN.model.database.selectOrInsertUser(OPTIONAL)
-
-    await PLUGIN.model.database.increase(
-        OPTIONAL,
-        key="reputation",
-        value=1,
-    )
-
-    DESCRIPTION = f"{EMOJI.Emoji.UPGRADE} Вы повысили репутацию <@{OPTIONAL}>"
-
-    await context.respond(embed=EMBED.embed("default", description=DESCRIPTION))
+cooldown = plugin.coolDown
+command = plugin.command
+context = plugin.context
+option = plugin.option
+exceptions = plugin.exceptions
 
 
-plugin = PLUGIN
+@plugin.include
+@command.command('повысить',
+                 description='Повысить',
+                 period=periods.PERIOD,
+                 group=groups.GROUP,
+                 options=[option.Option(hikari.User,
+                                        name='пользователь',
+                                        description='Пользователь',
+                                        )
+                         ],
+                 )
+async def callback(context: context.Context, user: hikari.User) -> None:
+    embed = context.embed
+    emoji = context.emoji
+
+    contextual = str(context.user.id)
+    optional = str(user.id)
+
+    if contextual == optional:
+        raise exceptions.YouCantDoThatException
+
+    await plugin.model.database.upsert(contextual)
+    await plugin.model.database.upsert(optional)
+
+    await plugin.model.database.increase(optional,
+                                         field='reputation',
+                                         value=1,
+                                         )
+
+    DESCRIPTION = f'{emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
+
+    await context.respond(embed=embed.embed('default', description=DESCRIPTION))

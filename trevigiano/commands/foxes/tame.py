@@ -8,157 +8,131 @@ from trevigiano import plugin
 
 from .constants import groups, periods
 
-PLUGIN = plugin.Plugin()
+plugin = plugin.Plugin()
 
-COOLDOWN = PLUGIN.coolDown
-VIEW = PLUGIN.view
-COMMAND = PLUGIN.command
-CONTEXT = PLUGIN.context
+cooldown = plugin.coolDown
+view = plugin.view
+command = plugin.command
+context = plugin.context
 
 
-@PLUGIN.include
-@COMMAND.command(
+@plugin.include
+@command.command(
     "приручить",
     description="Приручить",
     period=periods.PERIOD,
     group=groups.GROUP,
 )
-async def callback(context: CONTEXT.Context) -> None:
-    DATABASE = PLUGIN.model.database
+async def callback(context: context.Context) -> None:
+    database = plugin.model.database
 
-    DECORATE = context.decorate
-    EMOJI = context.emoji
-    EMBED = context.embed
-    HUMANIZE = context.humanize
-    TRIM = context.trim
+    decorate = context.decorate
+    emoji = context.emoji
+    embed = context.embed
+    humanize = context.humanize
+    trim = context.trim
 
-    TAME = PLUGIN.model.configuration.get("plugins").get("tame")
+    tame = plugin.model.configuration.get('plugins').get('tame')
 
-    ID__ = str(context.user.id)
+    id_ = str(context.user.id)
 
-    USER = await DATABASE.selectOrInsertUser(ID__)
+    user = await database.upsert(id_)
 
-    PRICE = TAME.get("price")
-    PROBABILITY = TAME.get("probability")
+    price = tame.get('price')
+    probability = tame.get('probability')
 
-    FED = round((USER.fox + 1) * math.e * PRICE)
+    fed = round((user.fox + 1) * math.e * price)
 
-    STYLE = hikari.ButtonStyle.SECONDARY
+    style = hikari.ButtonStyle.SECONDARY
 
     async def ok(
-        _view: VIEW.View,
-        _button: "miru.Button",
-        _context: "miru.Context",
-    ) -> None:
+            _view: view.View,
+            _button: miru.Button,
+            _context: miru.Context) -> None:
         await _context.defer()
 
-        if USER.berry < FED:
-            raise PLUGIN.exceptions.NotEnoughBerriesException
+        if user.berry < fed:
+            raise plugin.exceptions.NotEnoughBerriesException
 
-        await DATABASE.decrease(
-            ID__,
-            key="berry",
-            value=FED,
-        )
+        await database.decrease(id_,
+                                field='berry',
+                                value=fed,
+                                )
 
-        if random.choice(range(1, PROBABILITY)) != 1:
-            await _context.respond(
-                embed=EMBED.embed(
-                    "default",
-                    description=TRIM.trim(
-                        f"""\
-                            Вы скормили {EMOJI.Emoji.BERRY} {DECORATE.decorate(HUMANIZE.humanize(FED))} ягод
-                            и...
+        if random.choice(range(1, probability)) != 1:
+            description = trim.trim(
+                f"""\
+                    Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
+                    и...
 
-                            {EMOJI.Emoji.UNTAMED} Не получилось приручить лису...
-                        """  # noqa: E501
-                    ),
-                )
+                    {emoji.Emoji.UNTAMED} Не получилось приручить лису...
+                """  # noqa: E501
             )
+
+            await _context.respond(embed=embed.embed('default', description=description))
 
             _view.stop()
 
             return
 
-        await DATABASE.increase(
-            ID__,
-            key="fox",
-            value=1,
+        await database.increase(id_,
+                                field='fox',
+                                value=1,
+                                )
+
+        description = trim.trim(
+            f"""\
+                Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
+                и...
+
+                {emoji.Emoji.TAMED} Получилось приручить лису!!!
+            """  # noqa: E501
         )
 
-        await _context.respond(
-            embed=EMBED.embed(
-                "default",
-                description=TRIM.trim(
-                    f"""\
-                        Вы скормили {EMOJI.Emoji.BERRY} {DECORATE.decorate(HUMANIZE.humanize(FED))} ягод
-                        и...
-
-                        {EMOJI.Emoji.TAMED} Получилось приручить лису!!!
-                    """  # noqa: E501
-                ),
-            )
-        )
+        await _context.respond(embed=embed.embed('default', description=description))
 
         _view.stop()
 
     async def cancel(
-        _view: VIEW.View,
-        _button: "miru.Button",
-        _context: "miru.Context",
-    ) -> None:
+            _view: view.View,
+            _button: miru.Button,
+            _context: miru.Context) -> None:
         await _context.defer()
 
-        FLAGS = hikari.MessageFlag.EPHEMERAL
+        flags = hikari.MessageFlag.EPHEMERAL
 
-        await _context.respond(
-            flags=FLAGS,
-            embed=EMBED.embed(
-                "default",
-                description="Отменено",
-            ),
-        )
+        await _context.respond(flags=flags, embed=embed.embed('default', description="Отменено"))
 
         _view.stop()
 
-    NAME = "View"
-    BASES = (VIEW.View,)
-    DICT = {
-        "ok": miru.button(
-            label="ОК",
-            style=STYLE,
-            emoji="✅",
-        )(ok),
-        "cancel": miru.button(
-            label="Отменить",
-            style=STYLE,
-            emoji="❌",
-        )(cancel),
+    name = 'View'
+    bases = (view.View,)
+    dict_ = {
+        'ok': miru.button(label='ОК',
+                          style=style,
+                          emoji='✅',
+                          )(ok),
+        'cancel': miru.button(label='Отменить',
+                              style=style,
+                              emoji='❌',
+                              )(cancel),
     }
 
-    TYPE = type(
-        NAME,
-        BASES,
-        DICT,
-    )()
+    type_ = type(name,
+                 bases,
+                 dict_,
+                 )()
 
-    COMPONENTS = TYPE
+    components = type_
 
-    MESSAGE = await context.respond(
-        ephemeral=True,
-        components=COMPONENTS,
-        embed=EMBED.embed(
-            "default",
-            description=TRIM.trim(
-                f"""\
-                    Чтобы попробовать приручить лису, потребуется скормить {EMOJI.Emoji.BERRY} `{HUMANIZE.humanize(FED)}` ягод
-                """  # noqa: E501
-            ),
-        ),
-    )
+    description = f'Чтобы попробовать приручить лису, потребуется скормить {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'
 
-    if MESSAGE is not None:
-        await COMPONENTS.start(MESSAGE)
+    embed = embed.embed('default', description=description)
 
+    message = await context.respond(ephemeral=True,
+                                    components=components,
+                                    embed=embed,
+                                    )
 
-plugin = PLUGIN
+    if message is not None:
+        await components.start(message)

@@ -8,7 +8,7 @@ from trevigiano import (
     model,
     option,
     view,
-)
+    )
 
 
 class Plugin(crescent.Plugin[None, model.Model]):

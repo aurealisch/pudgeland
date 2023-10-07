@@ -9,24 +9,23 @@ from trevigiano import model
 
 class Trevigiano:
     def __init__(
-        self,
-        plugins: typing.Iterable[str],
-        model: model.Model,
-        token: str,
-    ) -> None:
-        INTENTS = hikari.Intents.ALL
+            self,
+            plugins: typing.Iterable[str],
+            model: model.Model,
+            token: str) -> None:
+        intents = hikari.Intents.ALL
 
-        self.__gatewayBot = hikari.GatewayBot(token, intents=INTENTS)
+        self.__gateway_bot = hikari.GatewayBot(token, intents=intents)
 
-        self.__gatewayBot.listen(hikari.StartedEvent)(model.onStartedEvent)
-        self.__gatewayBot.listen(hikari.StoppedEvent)(model.onStoppedEvent)
+        self.__gateway_bot.listen(hikari.StartedEvent)(model.on_started_event)
+        self.__gateway_bot.listen(hikari.StoppedEvent)(model.on_stopped_event)
 
-        miru.install(self.__gatewayBot)
+        miru.install(self.__gateway_bot)
 
-        CLIENT = crescent.Client(self.__gatewayBot, model=model)
+        client = crescent.Client(self.__gateway_bot, model=model)
 
-        for PLUGIN in plugins:
-            CLIENT.plugins.load(PLUGIN)
+        for plugin in plugins:
+            client.plugins.load(plugin)
 
     def run(self) -> None:
-        self.__gatewayBot.run()
+        self.__gateway_bot.run()

@@ -1,2 +1,2 @@
 def decorate(number: str) -> str:
-    return f"**{number}**"
+    return f'**{number}**'

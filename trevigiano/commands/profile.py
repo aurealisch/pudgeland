@@ -2,36 +2,30 @@ from trevigiano import plugin
 
 from .constants import periods
 
-PLUGIN = plugin.Plugin()
+plugin = plugin.Plugin()
 
-COOLDOWN = PLUGIN.coolDown
-COMMAND = PLUGIN.command
-CONTEXT = PLUGIN.context
-
-
-@PLUGIN.include
-@COMMAND.command(
-    "профиль",
-    description="Профиль",
-    period=periods.PERIOD,
-)
-async def callback(context: CONTEXT.Context) -> None:
-    DECORATE = context.decorate
-    EMBED = context.embed
-    EMOJI = context.emoji
-    HUMANIZE = context.humanize
-
-    user = await PLUGIN.model.database.selectOrInsertUser(str(context.user.id))
-
-    multiline = [
-        f"{EMOJI.Emoji.BERRY} Ягоды: {DECORATE.decorate(HUMANIZE.humanize(user.berry))}",  # noqa: E501
-        f"{EMOJI.Emoji.FOX} Лисы: {DECORATE.decorate(HUMANIZE.humanize(user.fox))}",  # noqa: E501
-        f"{EMOJI.Emoji.REPUTATION} Репутация: {DECORATE.decorate(HUMANIZE.humanize(user.reputation))}",  # noqa: E501
-    ]
-
-    DESCRIPTION = "\n".join(multiline)
-
-    await context.respond(embed=EMBED.embed("default", description=DESCRIPTION))
+cooldown = plugin.coolDown
+command = plugin.command
+context = plugin.context
 
 
-plugin = PLUGIN
+@plugin.include
+@command.command('профиль',
+                 description='Профиль',
+                 period=periods.PERIOD,
+                 )
+async def callback(context: context.Context) -> None:
+    decorate = context.decorate
+    embed = context.embed
+    emoji = context.emoji
+    humanize = context.humanize
+
+    user = await plugin.model.database.upsert(str(context.user.id))
+
+    description = f"""
+        {emoji.Emoji.BERRY} Ягоды: {decorate.decorate(humanize.humanize(user.berry))}
+        {emoji.Emoji.FOX} Лисы: {decorate.decorate(humanize.humanize(user.fox))}
+        {emoji.Emoji.REPUTATION} Репутация: {decorate.decorate(humanize.humanize(user.reputation))}
+    """
+
+    await context.respond(embed=embed.embed("default", description=description))

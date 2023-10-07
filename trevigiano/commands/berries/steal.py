@@ -39,7 +39,7 @@ async def callback(context: CONTEXT.Context, user: hikari.User) -> None:
     _CONTEXTUAL = str(context.user.id)
     _OPTIONAL = str(user.id)
 
-    OPTIONAL = await DATABASE.selectOrInsertUser(_OPTIONAL)
+    OPTIONAL = await DATABASE.upsert(_OPTIONAL)
 
     STEAL = PLUGIN.model.configuration.get("plugins").get("steal")
 

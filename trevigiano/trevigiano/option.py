@@ -6,7 +6,7 @@ import hikari
 
 @dataclasses.dataclass
 class Option:
-    type__: (
+    type_: (
         type[str]
         | type[bool]
         | type[int]

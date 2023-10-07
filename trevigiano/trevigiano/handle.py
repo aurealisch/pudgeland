@@ -6,13 +6,12 @@ from trevigiano import context, embed
 
 
 async def handle(exception: Exception, context: context.Context | miru.Context) -> None:
-    VALUE = exception
-    TB = exception.__traceback__
+    value = exception
+    tb = exception.__traceback__
 
-    traceback.print_exception(
-        exception.__class__,
-        value=VALUE,
-        tb=TB,
-    )
+    traceback.print_exception(exception.__class__,
+                              value=value,
+                              tb=tb,
+                              )
 
-    await context.respond(embed=embed.embed("error", description=f"```{exception}```"))
+    await context.respond(embed=embed.embed('error', description=f'```{exception}```'))

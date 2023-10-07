@@ -11,68 +11,64 @@ class CoolDown:
     def __init__(self, period: int) -> None:
         self.period = period
 
-        self.startsAt: typing.Mapping[hikari.Snowflakeish, float] = {}
-        self.endsAt: typing.Mapping[hikari.Snowflakeish, float] = {}
+        self.starts_at: typing.Mapping[hikari.Snowflakeish, float] = {}
+        self.ends_at: typing.Mapping[hikari.Snowflakeish, float] = {}
 
     def remained(self, snowflakeish: hikari.Snowflakeish) -> float | None:
-        TIME = _time.time()
+        time = _time.time()
 
         # fmt: off
         if (
-            snowflakeish in self.startsAt
-            or snowflakeish in self.endsAt
+            snowflakeish in self.starts_at
+            or snowflakeish in self.ends_at
         ):
-            self.startsAt[snowflakeish] = TIME
+            self.starts_at[snowflakeish] = time
 
-            endsAt = self.endsAt[snowflakeish]
-            startsAt = self.startsAt[snowflakeish]
+            ends_at = self.ends_at[snowflakeish]
+            starts_at = self.starts_at[snowflakeish]
 
-            if endsAt <= startsAt:
-                del self.endsAt[snowflakeish]
-                del self.startsAt[snowflakeish]
+            if ends_at <= starts_at:
+                del self.ends_at[snowflakeish]
+                del self.starts_at[snowflakeish]
 
                 return None
 
             return (
-                self.endsAt[snowflakeish]
-                - self.startsAt[snowflakeish]
+                self.ends_at[snowflakeish]
+                - self.starts_at[snowflakeish]
             )
         # fmt: on
 
-        self.startsAt[snowflakeish] = TIME
-        self.endsAt[snowflakeish] = TIME + self.period
+        self.starts_at[snowflakeish] = time
+        self.ends_at[snowflakeish] = time + self.period
 
         return None
 
 
 def coolDown(
-    period: int,
-) -> typing.Callable[[context.Context], crescent.HookResult | None]:
+        period: int) -> typing.Callable[[context.Context], crescent.HookResult | None]:
     coolDown = CoolDown(period)
 
     async def inner(context: context.Context) -> crescent.HookResult | None:
-        EMBED = context.embed
-        TRIM = context.trim
+        embed = context.embed
+        trim = context.trim
 
         remained = coolDown.remained(context.user.id)
 
         if remained is None:
             return None
 
-        timestamp = f"<t:{round(remained + _time.time())}:R>"
+        timestamp = f'<t:{round(remained + _time.time())}:R>'
 
-        await context.respond(
-            embed=EMBED.embed(
-                "default",
-                description=TRIM.trim(
-                    f"""\
-                        Ты слишком часто используешь эту команду!
+        description = trim.trim(
+            f"""
+                Ты слишком часто используешь эту команду!
 
-                        Попробуйте еще раз {timestamp}
-                    """
-                ),
-            )
+                Попробуйте еще раз {timestamp}
+            """
         )
+
+        await context.respond(embed=embed.embed('default', description=description))
 
         return crescent.HookResult(True)
 

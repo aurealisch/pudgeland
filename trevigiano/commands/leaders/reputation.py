@@ -2,57 +2,50 @@ from trevigiano import plugin
 
 from .constants import groups, periods
 
-PLUGIN = plugin.Plugin()
+plugin = plugin.Plugin()
 
-COOLDOWN = PLUGIN.coolDown
-COMMAND = PLUGIN.command
-CONTEXT = PLUGIN.context
+cooldown = plugin.coolDown
+command = plugin.command
+context = plugin.context
 
 
-@PLUGIN.include
-@COMMAND.command(
-    "репутация",
-    description="Репутация",
-    period=periods.PERIOD,
-    group=groups.GROUP,
-)
-async def callback(context: CONTEXT.Context) -> None:
-    DECORATE = context.decorate
-    EMBED = context.embed
-    EMOJI = context.emoji
-    HUMANIZE = context.humanize
+@plugin.include
+@command.command('репутация',
+                 description='Репутация',
+                 period=periods.PERIOD,
+                 group=groups.GROUP,
+                 )
+async def callback(context: context.Context) -> None:
+    decorate = context.decorate
+    embed = context.embed
+    emoji = context.emoji
+    humanize = context.humanize
 
-    USERS = await PLUGIN.model.database.selectLeaders("reputation")
+    users = await plugin.model.database.selectLeaders('reputation')
 
-    _EMBED = EMBED.embed("default")
+    _embed = embed.embed('default')
 
-    EMOJIS = {
-        1: EMOJI.Emoji.FIRST_PLACE,
-        2: EMOJI.Emoji.SECOND_PLACE,
-        3: EMOJI.Emoji.THIRD_PLACE,
+    emojis = {
+        1: emoji.Emoji.FIRST_PLACE,
+        2: emoji.Emoji.SECOND_PLACE,
+        3: emoji.Emoji.THIRD_PLACE,
     }
 
-    for INDEX, USER in enumerate(USERS):
-        name = "\u0020"
+    for index, user in enumerate(users):
+        name = '\u0020'
 
-        POSITION = INDEX + 1
+        position = index + 1
 
-        if POSITION in EMOJIS:
-            name += EMOJIS[POSITION]
+        if position in emojis:
+            name += emojis[position]
 
-        name += f"#{POSITION}"
+        name += f'#{position}'
 
-        _EMBED.add_field(
-            name=name,
-            # fmt: off
-            value="\n".join([
-                f"<@{USER.id}>",
-                f"Репутация: {DECORATE.decorate(HUMANIZE.humanize(USER.reputation))}",  # noqa: E501
-            ])
-            # fmt: on
-        )
+        _embed.add_field(name=name,
+                         value='\n'.join([
+                             f'<@{user.id}>',
+                             f'Репутация: {decorate.decorate(humanize.humanize(user.reputation))}',  # noqa: E501
+                         ])
+                         )
 
-    await context.respond(embed=_EMBED)
-
-
-plugin = PLUGIN
+    await context.respond(embed=_embed)

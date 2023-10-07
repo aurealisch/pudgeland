@@ -6,7 +6,7 @@ from trevigiano import (
     emoji,
     humanize,
     trim,
-)
+    )
 
 
 class Context(crescent.Context):
