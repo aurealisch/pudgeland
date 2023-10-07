@@ -35,21 +35,21 @@ def command(
             except Exception as exception:
                 await handle.handle(exception, context=context)
 
-        name = 'ClassCommandProto'
-        bases = (crescent.ClassCommandProto,)
-        dict_ = {'callback': callback,}
+        _name = 'ClassCommandProto'
+        _bases = (crescent.ClassCommandProto,)
+        _dict_ = {'callback': callback,}
 
         if options is not None:
             for option in options:
-                dict_[option.name] = crescent.option(option.type_,
+                _dict_[option.name] = crescent.option(option.type_,
                                                      name=option.name,
                                                      description=option.description,
                                                      )
 
-        type_ = type(name,
-                    bases,
-                    dict_,
-                    )
+        type_ = type(_name,
+                     _bases,
+                     _dict_,
+                     )
 
         includable = crescent.hook(cooldowns.cooldown(period))(
             crescent.command(type_,

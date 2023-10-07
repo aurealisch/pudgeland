@@ -20,9 +20,7 @@ options = plugin.options
                   group=groups.GROUP,
                   options=[options.Option(hikari.User,
                                           name='пользователь',
-                                          description='Пользователь',
-                                          ),
-                          ],
+                                          description='Пользователь')],
                   )
 async def callback(context: contexts.Context, user: hikari.User) -> None:
     database = plugin.model.database

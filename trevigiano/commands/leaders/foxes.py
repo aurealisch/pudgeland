@@ -4,16 +4,16 @@ from .constants import groups, periods
 
 plugin = plugins.Plugin()
 
-commands = plugins.commands
-contexts = plugins.contexts
+commands = plugin.commands
+contexts = plugin.contexts
 
 
 @plugin.include
 @commands.command('лисы',
-                 description='Лисы',
-                 period=periods.PERIOD,
-                 group=groups.GROUP,
-                 )
+                  description='Лисы',
+                  period=periods.PERIOD,
+                  group=groups.GROUP,
+                  )
 async def callback(context: contexts.Context) -> None:
     decorate = context.decorate
     embed = context.embed

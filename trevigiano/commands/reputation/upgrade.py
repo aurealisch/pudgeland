@@ -14,15 +14,13 @@ exceptions = plugin.exceptions
 
 @plugin.include
 @commands.command('повысить',
-                 description='Повысить',
-                 period=periods.PERIOD,
-                 group=groups.GROUP,
-                 options=[options.Option(hikari.User,
-                                        name='пользователь',
-                                        description='Пользователь',
-                                        )
-                         ],
-                 )
+                  description='Повысить',
+                  period=periods.PERIOD,
+                  group=groups.GROUP,
+                  options=[options.Option(hikari.User,
+                                          name='пользователь',
+                                          description='Пользователь')],
+                  )
 async def callback(context: contexts.Context, user: hikari.User) -> None:
     embed = context.embed
     emoji = context.emoji

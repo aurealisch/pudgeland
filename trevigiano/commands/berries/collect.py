@@ -6,16 +6,16 @@ from .constants import groups, periods
 
 plugin = plugins.Plugin()
 
-commands = plugin.command
-contexts = plugin.context
+commands = plugin.commands
+contexts = plugin.contexts
 
 
 @plugin.include
 @commands.command('собрать',
-                 description='Собрать',
-                 period=periods.PERIOD,
-                 group=groups.GROUP,
-                 )
+                  description='Собрать',
+                  period=periods.PERIOD,
+                  group=groups.GROUP,
+                  )
 async def callback(context: contexts.Context) -> None:
     database = plugin.model.database
 

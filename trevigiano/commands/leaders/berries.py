@@ -10,10 +10,10 @@ contexts = plugin.contexts
 
 @plugin.include
 @commands.command('ягоды',
-                 description='Ягоды',
-                 period=periods.PERIOD,
-                 group=groups.GROUP,
-                 )
+                  description='Ягоды',
+                  period=periods.PERIOD,
+                  group=groups.GROUP,
+                  )
 async def callback(context: contexts.Context) -> None:
     decorate = context.decorate
     embed = context.embed

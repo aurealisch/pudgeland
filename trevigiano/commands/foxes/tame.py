@@ -8,21 +8,21 @@ from trevigiano import plugins
 
 from .constants import groups, periods
 
-plugins = plugins.Plugin()
+plugin = plugins.Plugin()
 
-commands = plugins.commands
-contexts = plugins.contexts
-views = plugins.views
+commands = plugin.commands
+contexts = plugin.contexts
+views = plugin.views
 
 
-@plugins.include
+@plugin.include
 @commands.command('приручить',
                   description='Приручить',
                   period=periods.PERIOD,
                   group=groups.GROUP,
                   )
 async def callback(context: contexts.Context) -> None:
-    database = plugins.model.database
+    database = plugin.model.database
 
     decorate = context.decorate
     emoji = context.emoji
@@ -30,7 +30,7 @@ async def callback(context: contexts.Context) -> None:
     humanize = context.humanize
     trim = context.trim
 
-    tame = plugins.model.configuration.get('plugins').get('tame')
+    tame = plugin.model.configuration.get('plugins').get('tame')
 
     id_ = str(context.user.id)
 
