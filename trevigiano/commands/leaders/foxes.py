@@ -25,9 +25,9 @@ async def callback(context: contexts.Context) -> None:
     _embed = embed.embed('default')
 
     emojis = {
-        1: emoji.Emoji.FIRST_PLACE,
-        2: emoji.Emoji.SECOND_PLACE,
-        3: emoji.Emoji.THIRD_PLACE,
+        1: emoji.Emoji.FIRST,
+        2: emoji.Emoji.SECOND,
+        3: emoji.Emoji.THIRD,
     }
 
     for index, user in enumerate(users):
