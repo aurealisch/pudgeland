@@ -1,5 +1,5 @@
-asyncpg==0.28.0
-hikari==2.0.0.dev121
-hikari-crescent==0.6.3
-hikari-miru==3.2.0
-parsenv==0.3.0
+asyncpg == 0.28.0
+hikari [speedups] == 2.0.0.dev121
+hikari-crescent == 0.6.3
+hikari-miru == 3.2.0
+parsenv == 0.3.0
