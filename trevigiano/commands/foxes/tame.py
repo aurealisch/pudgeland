@@ -125,11 +125,11 @@ async def callback(context: contexts.Context) -> None:
 
     description = f'Чтобы попробовать приручить лису, потребуется скормить {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'
 
-    embed = embed.embed('default', description=description)
+    _embed = embed.embed('default', description=description)
 
     message = await context.respond(ephemeral=True,
                                     components=components,
-                                    embed=embed,
+                                    embed=_embed,
                                     )
 
     if message is not None:
