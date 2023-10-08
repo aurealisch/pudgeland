@@ -14,16 +14,18 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('украсть',
-                  description='Украсть',
-                  period=periods.PERIOD,
-                  group=groups.GROUP,
-                  )
+@commands.command(
+    'украсть',
+    description='Украсть',
+    period=periods.PERIOD,
+    group=groups.GROUP,
+)
 class Command(commands.Command):
-    user = crescent.option(hikari.User,
-                           name='пользователь',
-                           description='Пользователь',
-                           )
+    user = crescent.option(
+        hikari.User,
+        name='пользователь',
+        description='Пользователь',
+    )
 
     async def call(self, context: contexts.Context) -> None:
         database = plugin.model.database
@@ -49,44 +51,45 @@ class Command(commands.Command):
             raise Exception('Нечего красть')
 
         if random.choice(range(1, probability)) != 1:
-            await database.decrease(_contextual,
-                                    field='berry',
-                                    value=stealing,
-                                    )
-
-            description = trim.trim(
-                f"""\
-                    Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
-                    и...
-
-                    {emoji.Emoji.UNAVAILABLE} Не получилось...
-
-                    ```diff\n- {humanize.humanize(stealing)} ягод```
-                """  # noqa: E501
+            await database.decrease(
+                _contextual,
+                field='berry',
+                value=stealing,
             )
 
-            await context.respond(embed=embed.embed('default', description=description))
-
-            return
-
-        await database.increase(_contextual,
-                                field='berry',
-                                value=stealing,
-                                )
-        await database.decrease(_optional,
-                                field='berry',
-                                value=stealing,
-                                )
-
-        description = trim.trim(
-            f"""\
+            description = trim.trim(f"""\
                 Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
                 и...
 
-                {emoji.Emoji.AVAILABLE} Получилось!!!
+                {emoji.Emoji.UNAVAILABLE} Не получилось...
 
-                ```diff\n+ {humanize.humanize(stealing)} ягод```
-            """  # noqa: E501
+                ```diff\n- {humanize.humanize(stealing)} ягод```
+            """)
+
+            await context.respond(
+                embed=embed.embed('default', description=description))
+
+            return
+
+        await database.increase(
+            _contextual,
+            field='berry',
+            value=stealing,
+        )
+        await database.decrease(
+            _optional,
+            field='berry',
+            value=stealing,
         )
 
-        await context.respond(embed=embed.embed('default', description=description))
+        description = trim.trim(f"""\
+            Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
+            и...
+
+            {emoji.Emoji.AVAILABLE} Получилось!!!
+
+            ```diff\n+ {humanize.humanize(stealing)} ягод```
+        """)
+
+        await context.respond(
+            embed=embed.embed('default', description=description))

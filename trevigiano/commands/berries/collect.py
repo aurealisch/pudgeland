@@ -1,6 +1,6 @@
 import random
 
-from trevigiano import contexts, plugins
+from trevigiano import plugins
 
 from .constants import groups, periods
 
@@ -11,12 +11,14 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('собрать',
-                  description='Собрать',
-                  period=periods.PERIOD,
-                  group=groups.GROUP,
-                  )
+@commands.command(
+    'собрать',
+    description='Собрать',
+    period=periods.PERIOD,
+    group=groups.GROUP,
+)
 class Command(commands.Command):
+
     async def call(self, context: contexts.Context) -> None:
         database = plugin.model.database
 
@@ -28,20 +30,25 @@ class Command(commands.Command):
 
         user = await database.upsert(id_)
 
-        range_ = plugin.model.configuration.get('plugins').get('collect').get('range')
+        range_ = plugin.model.configuration.get('plugins').get('collect').get(
+            'range')
 
         fox = user.fox
 
-        collecting = round(fox * random.choice(range(
-            range_.get('start'),
-            range_.get('stop'),
-        )))
+        collecting = round(
+            fox *
+            random.choice(range(
+                range_.get('start'),
+                range_.get('stop'),
+            )))
 
-        description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'
+        description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
 
-        await database.increase(id_,
-                                field='berry',
-                                value=collecting,
-                                )
+        await database.increase(
+            id_,
+            field='berry',
+            value=collecting,
+        )
 
-        await context.respond(embed=context.embed.embed('default', description=description))
+        await context.respond(
+            embed=context.embed.embed('default', description=description))

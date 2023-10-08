@@ -9,12 +9,14 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('репутация',
-                  description='Репутация',
-                  period=periods.PERIOD,
-                  group=groups.GROUP,
-                  )
+@commands.command(
+    'репутация',
+    description='Репутация',
+    period=periods.PERIOD,
+    group=groups.GROUP,
+)
 class Command(commands.Command):
+
     async def call(self, context: contexts.Context) -> None:
         emoji = context.emoji
 
@@ -38,11 +40,11 @@ class Command(commands.Command):
 
             name += f'#{position}'
 
-            _embed.add_field(name=name,
-                            value='\n'.join([
-                                f'<@{user.id}>',
-                                f'Репутация: {context.decorate.decorate(context.humanize.humanize(user.reputation))}',  # noqa: E501
-                            ])
-                            )
+            _embed.add_field(
+                name=name,
+                value='\n'.join([
+                    f'<@{user.id}>',
+                    f'Репутация: {context.decorate.decorate(context.humanize.humanize(user.reputation))}',  # noqa: E501
+                ]))
 
         await context.respond(embed=_embed)

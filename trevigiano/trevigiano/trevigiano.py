@@ -8,11 +8,9 @@ from trevigiano import models
 
 
 class Trevigiano:
-    def __init__(
-            self,
-            plugins: typing.Iterable[str],
-            model: models.Model,
-            token: str) -> None:
+
+    def __init__(self, plugins: typing.Iterable[str], model: models.Model,
+                 token: str) -> None:
         intents = hikari.Intents.ALL
 
         self.__gateway_bot = hikari.GatewayBot(token, intents=intents)

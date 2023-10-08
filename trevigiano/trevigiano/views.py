@@ -7,6 +7,7 @@ from trevigiano import handle
 
 
 class View(miru.View):
+
     @typing.final
     async def on_error(
             self,

@@ -20,13 +20,9 @@ Field = typing.Literal[
 
 
 class Database:
-    def __init__(
-            self,
-            host: typing.Any,
-            port: typing.Any,
-            user: typing.Any,
-            password: typing.Any,
-            database: typing.Any) -> None:
+
+    def __init__(self, host: typing.Any, port: typing.Any, user: typing.Any,
+                 password: typing.Any, database: typing.Any) -> None:
         self.__host = host
         self.__port = port
         self.__user = user
@@ -34,12 +30,13 @@ class Database:
         self.__database = database
 
     async def connect(self) -> None:
-        self._connection: asyncpg.Connection = await asyncpg.connect(host=self.__host,
-                                                                     port=self.__port,
-                                                                     user=self.__user,
-                                                                     password=self.__password,
-                                                                     database=self.__database,
-                                                                     )
+        self._connection: asyncpg.Connection = await asyncpg.connect(
+            host=self.__host,
+            port=self.__port,
+            user=self.__user,
+            password=self.__password,
+            database=self.__database,
+        )
 
     async def close(self) -> None:
         await self._connection.close()
@@ -105,11 +102,7 @@ class Database:
 
         return list(map(lambda record: User(**record), records))
 
-    async def increase(
-            self,
-            id_: str,
-            field: Field,
-            value: int) -> None:
+    async def increase(self, id_: str, field: Field, value: int) -> None:
         await self.reconnect()
 
         query = f"""
@@ -120,11 +113,7 @@ class Database:
 
         await self._connection.execute(query, id_)
 
-    async def decrease(
-            self,
-            id_: str,
-            field: Field,
-            value: int) -> None:
+    async def decrease(self, id_: str, field: Field, value: int) -> None:
         await self.reconnect()
 
         query = f"""

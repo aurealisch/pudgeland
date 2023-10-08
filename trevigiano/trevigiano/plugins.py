@@ -6,7 +6,7 @@ from trevigiano import (
     exceptions,
     models,
     views,
-    )
+)
 
 
 class Plugin(crescent.Plugin[None, models.Model]):

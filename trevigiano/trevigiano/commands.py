@@ -11,12 +11,11 @@ from trevigiano import (
     handle,
     trim,
     embed,
-    )
-
-crescent.ext.cooldowns.CooldownCallbackT
+)
 
 
 class Command:
+
     async def callback(self, context: contexts.Context) -> None:
         try:
             await self.call(context)
@@ -27,37 +26,43 @@ class Command:
         ...
 
 
-async def callback(context: crescent.Context, period: datetime.timedelta) -> crescent.HookResult | None:
+async def callback(context: crescent.Context,
+                   period: datetime.timedelta) -> crescent.HookResult | None:
     timestamp = f'<t:{round(period.total_seconds() + time.time())}:R>'
 
-    description = trim.trim(
-        f"""
-            Ты слишком часто используешь эту команду!
+    description = trim.trim(f"""
+        Ты слишком часто используешь эту команду!
 
-            Попробуйте еще раз {timestamp}
-        """
-    )
+        Попробуйте еще раз {timestamp}
+    """)
 
-    await context.respond(embed=embed.embed('default', description=description))
+    await context.respond(embed=embed.embed('default', description=description)
+                          )
 
     return crescent.HookResult(True)
 
 
 def command(
-        name: str,
-        description: str,
-        period: datetime.timedelta,
-        group: crescent.Group | None = None) -> typing.Callable[[Command], crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
-    def inner(command: Command) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
-        includable = crescent.hook(crescent.ext.cooldowns.cooldown(1,
-                                                                   period=period,
-                                                                   callback=callback,
-                                                                   ))(
-            crescent.command(command,
-                             name=name,
-                             description=description,
-                             )
-        )
+    name: str,
+    description: str,
+    period: datetime.timedelta,
+    group: crescent.Group | None = None
+) -> typing.Callable[
+    [Command], crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
+
+    def inner(
+        command: Command
+    ) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
+        includable = crescent.hook(
+            crescent.ext.cooldowns.cooldown(
+                1,
+                period=period,
+                callback=callback,
+            ))(crescent.command(
+                command,
+                name=name,
+                description=description,
+            ))
 
         if group is not None:
             includable = group.child(includable)

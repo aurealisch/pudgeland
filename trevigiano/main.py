@@ -5,7 +5,7 @@ from trevigiano import (
     databases,
     models,
     trevigiano,
-    )
+)
 
 commands = [
     'profile',
@@ -17,15 +17,16 @@ commands = [
     'leaders.reputation',
     'reputation.downgrade',
     'reputation.upgrade',
-    ]
+]
 plugins = [f'commands.{command}' for command in commands]
 
-database = databases.Database(env.get('HOST'),
-                              port=env.get('PORT'),
-                              user=env.get('USER'),
-                              password=env.get('PASSWORD'),
-                              database=env.get('DATABASE'),
-                              )
+database = databases.Database(
+    env.get('HOST'),
+    port=env.get('PORT'),
+    user=env.get('USER'),
+    password=env.get('PASSWORD'),
+    database=env.get('DATABASE'),
+)
 
 configuration: configurations.Configuration = {
     'plugins': {
@@ -35,16 +36,23 @@ configuration: configurations.Configuration = {
                 'stop': 200,
             },
         },
-        'steal': {'fraction': 0.1, 'probability': 3},
-        'tame': {'price': 100, 'probability': 5}
-    }
+        'steal': {
+            'fraction': 0.1,
+            'probability': 3,
+        },
+        'tame': {
+            'price': 100,
+            'probability': 5,
+        },
+    },
 }
 
 model = models.Model(configuration, database=database)
 
 token = env.get('TOKEN')
 
-trevigiano.Trevigiano(plugins,
-                      model=model,
-                      token=token,
-                      ).run()
+trevigiano.Trevigiano(
+    plugins,
+    model=model,
+    token=token,
+).run()

@@ -8,17 +8,17 @@ Color = typing.Literal[
     'success',
 ]
 
-COLORS: typing.Mapping[Color, hikari.Colorish] = {
+colors: typing.Mapping[Color, hikari.Colorish] = {
     'default': '#f0a43c',
     'error': '#ff4b4b',
     'success': '#77b35a',
 }
 
-def embed(
-        color: Color,
-        title: str | None = None,
-        description: str | None = None) -> hikari.Embed:
-    color = hikari.Color.of(COLORS.get(color))
+
+def embed(color: Color,
+          title: str | None = None,
+          description: str | None = None) -> hikari.Embed:
+    color = hikari.Color.of(colors.get(color))
 
     embed = hikari.Embed(
         title=title,

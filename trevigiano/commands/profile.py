@@ -9,11 +9,13 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('профиль',
-                  description='Профиль',
-                  period=periods.PERIOD,
-                  )
+@commands.command(
+    'профиль',
+    description='Профиль',
+    period=periods.PERIOD,
+)
 class Command(commands.Command):
+
     async def call(self, context: contexts.Context) -> None:
         decorate = context.decorate
         emoji = context.emoji
@@ -21,12 +23,11 @@ class Command(commands.Command):
 
         user = await plugin.model.database.upsert(str(context.user.id))
 
-        description = context.trim.trim(
-            f"""
-                {emoji.Emoji.BERRY} Ягоды: {decorate.decorate(humanize.humanize(user.berry))}
-                {emoji.Emoji.FOX} Лисы: {decorate.decorate(humanize.humanize(user.fox))}
-                {emoji.Emoji.REPUTATION} Репутация: {decorate.decorate(humanize.humanize(user.reputation))}
-            """
-        )
+        description = context.trim.trim(f"""
+            {emoji.Emoji.BERRY} Ягоды: {decorate.decorate(humanize.humanize(user.berry))}
+            {emoji.Emoji.FOX} Лисы: {decorate.decorate(humanize.humanize(user.fox))}
+            {emoji.Emoji.REPUTATION} Репутация: {decorate.decorate(humanize.humanize(user.reputation))}
+        """)  # noqa: E501
 
-        await context.respond(embed=context.embed.embed('default', description=description))
+        await context.respond(
+            embed=context.embed.embed('default', description=description))

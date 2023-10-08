@@ -13,16 +13,18 @@ exceptions = plugin.exceptions
 
 
 @plugin.include
-@commands.command('понизить',
-                  description='Понизить',
-                  period=periods.PERIOD,
-                  group=groups.GROUP,
-                  )
+@commands.command(
+    'понизить',
+    description='Понизить',
+    period=periods.PERIOD,
+    group=groups.GROUP,
+)
 class Command(commands.Command):
-    user = crescent.option(hikari.User,
-                           name='пользователь',
-                           description='Пользователь',
-                           )
+    user = crescent.option(
+        hikari.User,
+        name='пользователь',
+        description='Пользователь',
+    )
 
     async def call(self, context: contexts.Context) -> None:
         contextual = str(context.user.id)
@@ -34,11 +36,13 @@ class Command(commands.Command):
         await plugin.model.database.upsert(contextual)
         await plugin.model.database.upsert(optional)
 
-        await plugin.model.database.decrease(optional,
-                                            field='reputation',
-                                            value=1,
-                                            )
+        await plugin.model.database.decrease(
+            optional,
+            field='reputation',
+            value=1,
+        )
 
-        description = f'{context.emoji.Emoji.DOWNGRADE} Вы понизили репутацию <@{optional}>'
+        description = f'{context.emoji.Emoji.DOWNGRADE} Вы понизили репутацию <@{optional}>'  # noqa: E501
 
-        await context.respond(embed=context.embed.embed('default', description=description))
+        await context.respond(
+            embed=context.embed.embed('default', description=description))

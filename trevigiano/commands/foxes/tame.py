@@ -16,12 +16,14 @@ views = plugin.views
 
 
 @plugin.include
-@commands.command('приручить',
-                  description='Приручить',
-                  period=periods.PERIOD,
-                  group=groups.GROUP,
-                  )
+@commands.command(
+    'приручить',
+    description='Приручить',
+    period=periods.PERIOD,
+    group=groups.GROUP,
+)
 class Command(commands.Command):
+
     async def call(self, context: contexts.Context) -> None:
         database = plugin.model.database
 
@@ -44,94 +46,98 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        async def ok(
-                _view: views.View,
-                _button: miru.Button,
-                _context: miru.Context) -> None:
+        async def ok(_view: views.View, _button: miru.Button,
+                     _context: miru.Context) -> None:
             await _context.defer()
 
             if user.berry < fed:
                 raise plugins.exceptions.NotEnoughBerriesException
 
-            await database.decrease(id_,
-                                    field='berry',
-                                    value=fed,
-                                    )
+            await database.decrease(
+                id_,
+                field='berry',
+                value=fed,
+            )
 
             if random.choice(range(1, probability)) != 1:
-                description = trim.trim(
-                    f"""\
-                        Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
-                        и...
+                description = trim.trim(f"""\
+                    Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
+                    и...
 
-                        {emoji.Emoji.UNTAMED} Не получилось приручить лису...
-                    """  # noqa: E501
-                )
+                    {emoji.Emoji.UNTAMED} Не получилось приручить лису...
+                """)  # noqa: E501
 
-                await _context.respond(embed=embed.embed('default', description=description))
+                await _context.respond(
+                    embed=embed.embed('default', description=description))
 
                 _view.stop()
 
                 return
 
-            await database.increase(id_,
-                                    field='fox',
-                                    value=1,
-                                    )
-
-            description = trim.trim(
-                f"""\
-                    Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
-                    и...
-
-                    {emoji.Emoji.TAMED} Получилось приручить лису!!!
-                """  # noqa: E501
+            await database.increase(
+                id_,
+                field='fox',
+                value=1,
             )
 
-            await _context.respond(embed=embed.embed('default', description=description))
+            description = trim.trim(f"""\
+                Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
+                и...
+
+                {emoji.Emoji.TAMED} Получилось приручить лису!!!
+            """)  # noqa: E501
+
+            await _context.respond(
+                embed=embed.embed('default', description=description))
 
             _view.stop()
 
-        async def cancel(
-                _view: views.View,
-                _button: miru.Button,
-                _context: miru.Context) -> None:
+        async def cancel(_view: views.View, _button: miru.Button,
+                         _context: miru.Context) -> None:
             await _context.defer()
 
             flags = hikari.MessageFlag.EPHEMERAL
 
-            await _context.respond(flags=flags, embed=embed.embed('default', description="Отменено"))
+            await _context.respond(flags=flags,
+                                   embed=embed.embed('default',
+                                                     description='Отменено'))
 
             _view.stop()
 
         name = 'View'
-        bases = (views.View,)
+        bases = (views.View, )
         dict_ = {
-            'ok': miru.button(label='ОК',
-                            style=style,
-                            emoji='✅',
-                            )(ok),
-            'cancel': miru.button(label='Отменить',
-                                style=style,
-                                emoji='❌',
-                                )(cancel),
+            'ok':
+            miru.button(
+                label='ОК',
+                style=style,
+                emoji='✅',
+            )(ok),
+            'cancel':
+            miru.button(
+                label='Отменить',
+                style=style,
+                emoji='❌',
+            )(cancel),
         }
 
-        type_ = type(name,
-                    bases,
-                    dict_,
-                    )()
+        type_ = type(
+            name,
+            bases,
+            dict_,
+        )()
 
         components = type_
 
-        description = f'Чтобы попробовать приручить лису, потребуется скормить {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'
+        description = f'Чтобы попробовать приручить лису, потребуется скормить {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'  # noqa: E501
 
         _embed = embed.embed('default', description=description)
 
-        message = await context.respond(ephemeral=True,
-                                        components=components,
-                                        embed=_embed,
-                                        )
+        message = await context.respond(
+            ephemeral=True,
+            components=components,
+            embed=_embed,
+        )
 
         if message is not None:
             await components.start(message)
