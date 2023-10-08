@@ -1,6 +1,7 @@
 import random
 
 import hikari
+import crescent
 
 from trevigiano import plugins
 
@@ -10,7 +11,6 @@ plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
-options = plugin.options
 
 
 @plugin.include
@@ -18,35 +18,62 @@ options = plugin.options
                   description='Украсть',
                   period=periods.PERIOD,
                   group=groups.GROUP,
-                  options=[options.Option(hikari.User,
-                                          name='пользователь',
-                                          description='Пользователь')],
                   )
-async def callback(context: contexts.Context, user: hikari.User) -> None:
-    database = plugin.model.database
+class Command(commands.Command):
+    user = crescent.option(hikari.User,
+                           name='пользователь',
+                           description='Пользователь',
+                           )
 
-    emoji = context.emoji
-    embed = context.embed
-    humanize = context.humanize
-    trim = context.trim
+    async def call(self, context: contexts.Context) -> None:
+        database = plugin.model.database
 
-    _contextual = str(context.user.id)
-    _optional = str(user.id)
+        emoji = context.emoji
+        embed = context.embed
+        humanize = context.humanize
+        trim = context.trim
 
-    optional = await database.upsert(_optional)
+        _contextual = str(context.user.id)
+        _optional = str(self.user.id)
 
-    steal = plugin.model.configuration.get('plugins').get('steal')
+        optional = await database.upsert(_optional)
 
-    fraction = steal.get('fraction')
-    probability = steal.get('probability')
+        steal = plugin.model.configuration.get('plugins').get('steal')
 
-    stealing = round((optional.berry / 2) * fraction)
+        fraction = steal.get('fraction')
+        probability = steal.get('probability')
 
-    if stealing < 1:
-        raise Exception('Нечего красть')
+        stealing = round((optional.berry / 2) * fraction)
 
-    if random.choice(range(1, probability)) != 1:
-        await database.decrease(_contextual,
+        if stealing < 1:
+            raise Exception('Нечего красть')
+
+        if random.choice(range(1, probability)) != 1:
+            await database.decrease(_contextual,
+                                    field='berry',
+                                    value=stealing,
+                                    )
+
+            description = trim.trim(
+                f"""\
+                    Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
+                    и...
+
+                    {emoji.Emoji.UNAVAILABLE} Не получилось...
+
+                    ```diff\n- {humanize.humanize(stealing)} ягод```
+                """  # noqa: E501
+            )
+
+            await context.respond(embed=embed.embed('default', description=description))
+
+            return
+
+        await database.increase(_contextual,
+                                field='berry',
+                                value=stealing,
+                                )
+        await database.decrease(_optional,
                                 field='berry',
                                 value=stealing,
                                 )
@@ -56,34 +83,10 @@ async def callback(context: contexts.Context, user: hikari.User) -> None:
                 Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
                 и...
 
-                {emoji.Emoji.UNAVAILABLE} Не получилось...
+                {emoji.Emoji.AVAILABLE} Получилось!!!
 
-                ```diff\n- {humanize.humanize(stealing)} ягод```
+                ```diff\n+ {humanize.humanize(stealing)} ягод```
             """  # noqa: E501
         )
 
         await context.respond(embed=embed.embed('default', description=description))
-
-        return
-
-    await database.increase(_contextual,
-                            field='berry',
-                            value=stealing,
-                            )
-    await database.decrease(_optional,
-                            field='berry',
-                            value=stealing,
-                            )
-
-    description = trim.trim(
-        f"""\
-            Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
-            и...
-
-            {emoji.Emoji.AVAILABLE} Получилось!!!
-
-            ```diff\n+ {humanize.humanize(stealing)} ягод```
-        """  # noqa: E501
-    )
-
-    await context.respond(embed=embed.embed('default', description=description))

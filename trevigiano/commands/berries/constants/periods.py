@@ -1,1 +1,3 @@
-PERIOD = 5_400
+import datetime
+
+PERIOD = datetime.timedelta(hours=1, minutes=30)

@@ -1,58 +1,59 @@
 import typing
+import time
+import datetime
 
 import crescent
 import crescent.internal
+import crescent.ext.cooldowns
 
 from trevigiano import (
     contexts,
-    cooldowns,
     handle,
-    options,
+    trim,
+    embed,
     )
+
+crescent.ext.cooldowns.CooldownCallbackT
+
+
+class Command:
+    async def callback(self, context: contexts.Context) -> None:
+        try:
+            await self.call(context)
+        except Exception as exception:
+            await handle.handle(exception, context=context)
+
+    async def call(self, context: contexts.Context) -> None:
+        ...
+
+
+async def callback(context: crescent.Context, period: datetime.timedelta) -> crescent.HookResult | None:
+    timestamp = f'<t:{round(period.total_seconds() + time.time())}:R>'
+
+    description = trim.trim(
+        f"""
+            Ты слишком часто используешь эту команду!
+
+            Попробуйте еще раз {timestamp}
+        """
+    )
+
+    await context.respond(embed=embed.embed('default', description=description))
+
+    return crescent.HookResult(True)
 
 
 def command(
         name: str,
         description: str,
-        period: int,
-        group: crescent.Group | None = None,
-        options: typing.Sequence[options.Option] | None = None,) -> typing.Callable[
-            [crescent.CommandCallbackT],
-            crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
-    def inner(
-            command_callback_t: crescent.CommandCallbackT) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
-        async def callback(self, context: contexts.Context) -> None:
-            arguments = (context,)
-
-            if context.options:
-                for _, value in context.options.items():
-                    arguments += (value,)
-
-            await context.defer()
-
-            try:
-                await command_callback_t(*arguments)
-            except Exception as exception:
-                await handle.handle(exception, context=context)
-
-        _name = 'ClassCommandProto'
-        _bases = (crescent.ClassCommandProto,)
-        _dict_ = {'callback': callback,}
-
-        if options is not None:
-            for option in options:
-                _dict_[option.name] = crescent.option(option.type_,
-                                                     name=option.name,
-                                                     description=option.description,
-                                                     )
-
-        type_ = type(_name,
-                     _bases,
-                     _dict_,
-                     )
-
-        includable = crescent.hook(cooldowns.cooldown(period))(
-            crescent.command(type_,
+        period: datetime.timedelta,
+        group: crescent.Group | None = None) -> typing.Callable[[Command], crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
+    def inner(command: Command) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
+        includable = crescent.hook(crescent.ext.cooldowns.cooldown(1,
+                                                                   period=period,
+                                                                   callback=callback,
+                                                                   ))(
+            crescent.command(command,
                              name=name,
                              description=description,
                              )

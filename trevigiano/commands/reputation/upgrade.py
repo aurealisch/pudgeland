@@ -1,4 +1,5 @@
 import hikari
+import crescent
 
 from trevigiano import plugins
 
@@ -8,7 +9,6 @@ plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
-options = plugin.options
 exceptions = plugin.exceptions
 
 
@@ -17,25 +17,28 @@ exceptions = plugin.exceptions
                   description='Повысить',
                   period=periods.PERIOD,
                   group=groups.GROUP,
-                  options=[options.Option(hikari.User,
-                                          name='пользователь',
-                                          description='Пользователь')],
                   )
-async def callback(context: contexts.Context, user: hikari.User) -> None:
-    contextual = str(context.user.id)
-    optional = str(user.id)
+class Command(commands.Command):
+    user = crescent.option(hikari.User,
+                           name='пользователь',
+                           description='Пользователь',
+                           )
 
-    if contextual == optional:
-        raise exceptions.YouCantDoThatException
+    async def call(self, context: contexts.Context) -> None:
+        contextual = str(context.user.id)
+        optional = str(self.user.id)
 
-    await plugin.model.database.upsert(contextual)
-    await plugin.model.database.upsert(optional)
+        if contextual == optional:
+            raise exceptions.YouCantDoThatException
 
-    await plugin.model.database.increase(optional,
-                                         field='reputation',
-                                         value=1,
-                                         )
+        await plugin.model.database.upsert(contextual)
+        await plugin.model.database.upsert(optional)
 
-    description = f'{context.emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
+        await plugin.model.database.increase(optional,
+                                            field='reputation',
+                                            value=1,
+                                            )
 
-    await context.respond(embed=context.embed.embed('default', description=description))
+        description = f'{context.emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
+
+        await context.respond(embed=context.embed.embed('default', description=description))

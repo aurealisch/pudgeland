@@ -1,1 +1,3 @@
-PERIOD = 21_600
+import datetime
+
+PERIOD = datetime.timedelta(hours=6)

@@ -1,6 +1,6 @@
 import random
 
-from trevigiano import plugins
+from trevigiano import contexts, plugins
 
 from .constants import groups, periods
 
@@ -16,31 +16,32 @@ contexts = plugin.contexts
                   period=periods.PERIOD,
                   group=groups.GROUP,
                   )
-async def callback(context: contexts.Context) -> None:
-    database = plugin.model.database
+class Command(commands.Command):
+    async def call(self, context: contexts.Context) -> None:
+        database = plugin.model.database
 
-    decorate = context.decorate
-    emoji = context.emoji
-    humanize = context.humanize
+        decorate = context.decorate
+        emoji = context.emoji
+        humanize = context.humanize
 
-    id_ = str(context.user.id)
+        id_ = str(context.user.id)
 
-    user = await database.upsert(id_)
+        user = await database.upsert(id_)
 
-    range_ = plugin.model.configuration.get('plugins').get('collect').get('range')
+        range_ = plugin.model.configuration.get('plugins').get('collect').get('range')
 
-    fox = user.fox
+        fox = user.fox
 
-    collecting = round(fox * random.choice(range(
-        range_.get('start'),
-        range_.get('stop'),
-    )))
+        collecting = round(fox * random.choice(range(
+            range_.get('start'),
+            range_.get('stop'),
+        )))
 
-    description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'
+        description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'
 
-    await database.increase(id_,
-                            field='berry',
-                            value=collecting,
-                            )
+        await database.increase(id_,
+                                field='berry',
+                                value=collecting,
+                                )
 
-    await context.respond(embed=context.embed.embed('default', description=description))
+        await context.respond(embed=context.embed.embed('default', description=description))
