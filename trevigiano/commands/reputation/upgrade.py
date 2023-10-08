@@ -22,9 +22,6 @@ exceptions = plugin.exceptions
                                           description='Пользователь')],
                   )
 async def callback(context: contexts.Context, user: hikari.User) -> None:
-    embed = context.embed
-    emoji = context.emoji
-
     contextual = str(context.user.id)
     optional = str(user.id)
 
@@ -39,6 +36,6 @@ async def callback(context: contexts.Context, user: hikari.User) -> None:
                                          value=1,
                                          )
 
-    description = f'{emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
+    description = f'{context.emoji.Emoji.UPGRADE} Вы повысили репутацию <@{optional}>'
 
-    await context.respond(embed=embed.embed('default', description=description))
+    await context.respond(embed=context.embed.embed('default', description=description))

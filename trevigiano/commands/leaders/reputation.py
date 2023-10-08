@@ -15,14 +15,11 @@ contexts = plugin.contexts
                   group=groups.GROUP,
                   )
 async def callback(context: contexts.Context) -> None:
-    decorate = context.decorate
-    embed = context.embed
     emoji = context.emoji
-    humanize = context.humanize
 
     users = await plugin.model.database.selectLeaders('reputation')
 
-    _embed = embed.embed('default')
+    _embed = context.embed.embed('default')
 
     emojis = {
         1: emoji.Emoji.FIRST,
@@ -43,7 +40,7 @@ async def callback(context: contexts.Context) -> None:
         _embed.add_field(name=name,
                          value='\n'.join([
                              f'<@{user.id}>',
-                             f'Репутация: {decorate.decorate(humanize.humanize(user.reputation))}',  # noqa: E501
+                             f'Репутация: {context.decorate.decorate(context.humanize.humanize(user.reputation))}',  # noqa: E501
                          ])
                          )
 

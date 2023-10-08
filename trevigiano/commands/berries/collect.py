@@ -21,7 +21,6 @@ async def callback(context: contexts.Context) -> None:
 
     decorate = context.decorate
     emoji = context.emoji
-    embed = context.embed
     humanize = context.humanize
 
     id_ = str(context.user.id)
@@ -44,4 +43,4 @@ async def callback(context: contexts.Context) -> None:
                             value=collecting,
                             )
 
-    await context.respond(embed=embed.embed('default', description=description))
+    await context.respond(embed=context.embed.embed('default', description=description))
