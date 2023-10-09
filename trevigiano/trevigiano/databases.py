@@ -9,13 +9,12 @@ class User:
     id: str
     berry: int
     fox: int
-    reputation: int
 
 
 Field = typing.Literal[
+    'id',
     'berry',
-    'fox',
-    'reputation',
+    'fox'
 ]
 
 
@@ -52,8 +51,7 @@ class Database:
             CREATE TABLE IF NOT EXISTS "users" (
                 "id"         TEXT  PRIMARY KEY,
                 "berry"      INTEGER NOT NULL DEFAULT 0,
-                "fox"        INTEGER NOT NULL DEFAULT 1,
-                "reputation" INTEGER NOT NULL DEFAULT 0
+                "fox"        INTEGER NOT NULL DEFAULT 1
             );
         """
 
@@ -65,8 +63,7 @@ class Database:
         query = """
             SELECT "users"."id",
                    "users"."berry",
-                   "users"."fox",
-                   "users"."reputation"
+                   "users"."fox"
               FROM "users"
              WHERE "users"."id" = $1;
         """
@@ -91,8 +88,7 @@ class Database:
         query = f"""
               SELECT "users"."id",
                      "users"."berry",
-                     "users"."fox",
-                     "users"."reputation"
+                     "users"."fox"
                 FROM "users"
             ORDER BY "users"."{field}" DESC
                LIMIT 6;

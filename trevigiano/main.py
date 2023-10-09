@@ -13,10 +13,7 @@ commands = [
     'berries.steal',
     'foxes.tame',
     'leaders.berries',
-    'leaders.foxes',
-    'leaders.reputation',
-    'reputation.downgrade',
-    'reputation.upgrade',
+    'leaders.foxes'
 ]
 plugins = [f'commands.{command}' for command in commands]
 
