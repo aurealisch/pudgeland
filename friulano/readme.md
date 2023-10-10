@@ -5,7 +5,7 @@
 
 #### _Read this in [other translations](translations.md)._
 
-<kbd>[<img title="Русский язык" alt="Русский язык" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/ru.svg" width="22">](readme.ru.md)</kbd>
-<kbd>[<img title="Українська" alt="Українська" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/ua.svg" width="22">](readme.ua.md)</kbd>
+<kbd>[<img title="Русский язык" alt="Русский язык" src="https://github.com/hampusborgos/country-flags/blob/ba2cf4101bf029d2ada26da2f95121de74581a4d/png100px/ru.png" width="22">](readme.ru.md)</kbd>
+<kbd>[<img title="Українська" alt="Українська" src="https://github.com/hampusborgos/country-flags/blob/ba2cf4101bf029d2ada26da2f95121de74581a4d/png100px/ua.png" width="22">](readme.ua.md)</kbd>
 
 > 🧩 Minecraft PaperMC API plugin written in Kotlin.

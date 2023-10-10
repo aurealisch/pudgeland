@@ -1,10 +1,12 @@
 # pudgeland
 
+<a target="_blank" href="https://discord.com/invite/nx9THnHBY3">
+    <img src="https://invidget.switchblade.xyz/nx9THnHBY3">
+</a>
+
 <img src="https://github.com/aurealisch/pudgeland/blob/d4802a45d007c221169c0e043fb8009456c05938/avatar/avatar-autumn.png" align=right width="128" height="128">
 
 #### _Read this in [other translations](translations.md)._
 
-<kbd>[<img title="Русский язык" alt="Русский язык" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/ru.svg" width="22">](readme.ru.md)</kbd>
-<kbd>[<img title="Українська" alt="Українська" src="https://cdn.staticaly.com/gh/hjnilsson/country-flags/master/svg/ua.svg" width="22">](readme.ua.md)</kbd>
-
-🎃 _Pudgeland_ is a Discord gateway API bot written in Python with Hikari, Crescent and Miru
+<kbd>[<img title="Русский язык" alt="Русский язык" src="https://github.com/hampusborgos/country-flags/blob/ba2cf4101bf029d2ada26da2f95121de74581a4d/png100px/ru.png" width="22">](readme.ru.md)</kbd>
+<kbd>[<img title="Українська" alt="Українська" src="https://github.com/hampusborgos/country-flags/blob/ba2cf4101bf029d2ada26da2f95121de74581a4d/png100px/ua.png" width="22">](readme.ua.md)</kbd>
