@@ -3,7 +3,7 @@ import crescent
 from trevigiano import (
     commands,
     contexts,
-    exceptions,
+    errors,
     models,
 )
 
@@ -11,4 +11,4 @@ from trevigiano import (
 class Plugin(crescent.Plugin[None, models.Model]):
     commands = commands
     contexts = contexts
-    exceptions = exceptions
+    errors = errors

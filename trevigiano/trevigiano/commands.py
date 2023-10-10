@@ -20,7 +20,7 @@ class Command:
         try:
             await self.call(context)
         except Exception as exception:
-            await handle.handle(exception, context=context)
+            await handle.handle(context, exception=exception)
 
     async def call(self, context: contexts.Context) -> None:
         ...

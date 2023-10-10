@@ -11,6 +11,7 @@ plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
+errors = plugin.errors
 
 
 @plugin.include
@@ -48,7 +49,7 @@ class Command(commands.Command):
         stealing = round((optional.berry / 2) * fraction)
 
         if stealing < 1:
-            raise Exception('Нечего красть')
+            raise errors.Error('Нечего красть')
 
         if random.choice(range(1, probability)) != 1:
             await database.decrease(

@@ -12,6 +12,7 @@ plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
+errors = plugin.errors
 
 
 @plugin.include
@@ -51,43 +52,47 @@ class Command(commands.Command):
             style=style,
         )
         async def ok(messageContext: flare.MessageContext) -> None:
-            if user.berry < fed:
-                raise plugins.exceptions.NotEnoughBerriesException
+            try:
+                if user.berry < fed:
+                    raise errors.Error('Недостаточно ягод')
 
-            await database.decrease(
-                id_,
-                field='berry',
-                value=fed,
-            )
+                await database.decrease(
+                    id_,
+                    field='berry',
+                    value=fed,
+                )
 
-            if random.choice(range(1, probability)) != 1:
+                if random.choice(range(1, probability)) != 1:
+                    description = trim.trim(f"""\
+                        Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
+                        и...
+
+                        {emoji.Emoji.UNTAMED} Не получилось приручить лису...
+                    """)  # noqa: E501
+
+                    await messageContext.respond(
+                        embed=embed.embed('default', description=description))
+
+                    return
+
+                await database.increase(
+                    id_,
+                    field='fox',
+                    value=1,
+                )
+
                 description = trim.trim(f"""\
                     Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
                     и...
 
-                    {emoji.Emoji.UNTAMED} Не получилось приручить лису...
+                    {emoji.Emoji.TAMED} Получилось приручить лису!!!
                 """)  # noqa: E501
 
                 await messageContext.respond(
                     embed=embed.embed('default', description=description))
-
-                return
-
-            await database.increase(
-                id_,
-                field='fox',
-                value=1,
-            )
-
-            description = trim.trim(f"""\
-                Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
-                и...
-
-                {emoji.Emoji.TAMED} Получилось приручить лису!!!
-            """)  # noqa: E501
-
-            await messageContext.respond(
-                embed=embed.embed('default', description=description))
+            except Exception as exception:
+                await context.handle.handle(messageContext,
+                                            exception=exception)
 
         @flare.button(
             label='Отменить',
@@ -95,8 +100,6 @@ class Command(commands.Command):
             style=style,
         )
         async def cancel(messageContext: flare.MessageContext) -> None:
-            await messageContext.defer()
-
             flags = hikari.MessageFlag.EPHEMERAL
 
             await messageContext.respond(
