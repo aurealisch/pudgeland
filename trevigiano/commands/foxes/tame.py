@@ -2,7 +2,7 @@ import math
 import random
 
 import hikari
-import miru
+import flare
 
 from trevigiano import plugins
 
@@ -12,7 +12,6 @@ plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
-views = plugin.views
 
 
 @plugin.include
@@ -46,10 +45,12 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        async def ok(_view: views.View, _button: miru.Button,
-                     _context: miru.Context) -> None:
-            await _context.defer()
-
+        @flare.button(
+            label='ОК',
+            emoji=emoji.Emoji.AVAILABLE,
+            style=style,
+        )
+        async def ok(messageContext: flare.MessageContext) -> None:
             if user.berry < fed:
                 raise plugins.exceptions.NotEnoughBerriesException
 
@@ -67,10 +68,8 @@ class Command(commands.Command):
                     {emoji.Emoji.UNTAMED} Не получилось приручить лису...
                 """)  # noqa: E501
 
-                await _context.respond(
+                await messageContext.respond(
                     embed=embed.embed('default', description=description))
-
-                _view.stop()
 
                 return
 
@@ -87,57 +86,34 @@ class Command(commands.Command):
                 {emoji.Emoji.TAMED} Получилось приручить лису!!!
             """)  # noqa: E501
 
-            await _context.respond(
+            await messageContext.respond(
                 embed=embed.embed('default', description=description))
 
-            _view.stop()
-
-        async def cancel(_view: views.View, _button: miru.Button,
-                         _context: miru.Context) -> None:
-            await _context.defer()
+        @flare.button(
+            label='Отменить',
+            emoji=emoji.Emoji.UNAVAILABLE,
+            style=style,
+        )
+        async def cancel(messageContext: flare.MessageContext) -> None:
+            await messageContext.defer()
 
             flags = hikari.MessageFlag.EPHEMERAL
 
-            await _context.respond(flags=flags,
-                                   embed=embed.embed('default',
-                                                     description='Отменено'))
+            await messageContext.respond(
+                flags=flags,
+                embed=embed.embed('default', description='Отменено'))
 
-            _view.stop()
+        _ok = ok()
+        _cancel = cancel()
 
-        name = 'View'
-        bases = (views.View, )
-        dict_ = {
-            'ok':
-            miru.button(
-                label='ОК',
-                style=style,
-                emoji='✅',
-            )(ok),
-            'cancel':
-            miru.button(
-                label='Отменить',
-                style=style,
-                emoji='❌',
-            )(cancel),
-        }
-
-        type_ = type(
-            name,
-            bases,
-            dict_,
-        )()
-
-        components = type_
+        component = await flare.Row(_ok, _cancel)
 
         description = f'Чтобы попробовать приручить лису, потребуется скормить {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'  # noqa: E501
 
         _embed = embed.embed('default', description=description)
 
-        message = await context.respond(
+        await context.respond(
             ephemeral=True,
-            components=components,
+            component=component,
             embed=_embed,
         )
-
-        if message is not None:
-            await components.start(message)

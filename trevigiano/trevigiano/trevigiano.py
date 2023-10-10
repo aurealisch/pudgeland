@@ -1,8 +1,8 @@
 import typing
 
 import crescent
+import flare
 import hikari
-import miru
 
 from trevigiano import models
 
@@ -18,7 +18,7 @@ class Trevigiano:
         self.__gateway_bot.listen(hikari.StartedEvent)(model.on_started_event)
         self.__gateway_bot.listen(hikari.StoppedEvent)(model.on_stopped_event)
 
-        miru.install(self.__gateway_bot)
+        flare.install(self.__gateway_bot)
 
         client = crescent.Client(self.__gateway_bot, model=model)
 

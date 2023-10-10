@@ -1,12 +1,14 @@
 import traceback
 
-import miru
+import flare
 
 from trevigiano import contexts, embed
 
 
-async def handle(exception: Exception,
-                 context: contexts.Context | miru.Context) -> None:
+async def handle(
+        exception: Exception,
+        contextOrMessageContext: contexts.Context | flare.MessageContext
+) -> None:
     value = exception
     tb = exception.__traceback__
 
@@ -16,5 +18,5 @@ async def handle(exception: Exception,
         tb=tb,
     )
 
-    await context.respond(
+    await contextOrMessageContext.respond(
         embed=embed.embed('error', description=f'```{exception}```'))

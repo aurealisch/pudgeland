@@ -1,5 +1,5 @@
 asyncpg == 0.28.0
 hikari [speedups] == 2.0.0.dev121
 hikari-crescent [cooldowns] == 0.6.3
-hikari-miru == 3.2.0
+hikari-flare == 0.1.3
 parsenv == 0.3.0

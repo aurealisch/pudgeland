@@ -6,6 +6,5 @@ class Emoji(str):
     THIRD = '<:third:1157684793488719932>'
     TAMED = '<:tamed:1157716173157302332>'
     UNTAMED = '<:untamed:1157716170015781028>'
-    TOTAL = '<:total:1159073175309647933>'
     UNAVAILABLE = '<:unavailable:1153393415317368883>'
     AVAILABLE = '<:available:1154061905686708274>'
