@@ -1,5 +1,3 @@
-import decimal
-
 import env as environment
 
 from trevigiano import configurations, databases, models, trevigiano
@@ -20,17 +18,17 @@ configuration: configurations.Configuration = {
     'plugins': {
         'collect': {
             'range': {
-                'start': decimal.Decimal(50),
-                'stop': decimal.Decimal(200)
+                'start': 50,
+                'stop': 200
             }
         },
         'steal': {
-            'fraction': decimal.Decimal(0.1),
-            'probability': decimal.Decimal(3)
+            'fraction': 0.1,
+            'probability': 3
         },
         'tame': {
-            'price': decimal.Decimal(100),
-            'probability': decimal.Decimal(5)
+            'price': 100,
+            'probability': 5
         }
     }
 }

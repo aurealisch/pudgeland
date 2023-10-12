@@ -1,10 +1,9 @@
-import decimal
 import typing
 
 
 class Range(typing.TypedDict):
-    start: decimal.Decimal
-    stop: decimal.Decimal
+    start: float | int
+    stop: float | int
 
 
 class Collect(typing.TypedDict):
@@ -12,13 +11,13 @@ class Collect(typing.TypedDict):
 
 
 class Steal(typing.TypedDict):
-    probability: decimal.Decimal
-    fraction: decimal.Decimal
+    probability: float | int
+    fraction: float | int
 
 
 class Tame(typing.TypedDict):
-    probability: decimal.Decimal
-    price: decimal.Decimal
+    probability: float | int
+    price: float | int
 
 
 class Plugins(typing.TypedDict):
