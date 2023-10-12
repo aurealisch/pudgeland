@@ -6,12 +6,7 @@ import crescent
 import crescent.ext.cooldowns
 import crescent.internal
 
-from trevigiano import (
-    contexts,
-    embed,
-    handle,
-    trim,
-)
+from trevigiano import contexts, embed, handle, trim
 
 
 class Command:
@@ -55,14 +50,10 @@ def command(
     ) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
         includable = crescent.hook(
             crescent.ext.cooldowns.cooldown(
-                1,
-                period=period,
-                callback=callback,
-            ))(crescent.command(
-                command,
-                name=name,
-                description=description,
-            ))
+                1, period=period,
+                callback=callback))(crescent.command(command,
+                                                     name=name,
+                                                     description=description))
 
         if group is not None:
             includable = group.child(includable)

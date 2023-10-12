@@ -11,12 +11,10 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command(
-    'собрать',
-    description='Собрать',
-    period=periods.PERIOD,
-    group=groups.GROUP,
-)
+@commands.command('собрать',
+                  description='Собрать',
+                  period=periods.period,
+                  group=groups.group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -37,18 +35,11 @@ class Command(commands.Command):
 
         collecting = round(
             fox *
-            random.choice(range(
-                range_.get('start'),
-                range_.get('stop'),
-            )))
+            random.choice(range(range_.get('start'), range_.get('stop'))))
 
         description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
 
-        await database.increase(
-            id_,
-            field='berry',
-            value=collecting,
-        )
+        await database.increase(id_, field='berry', value=collecting)
 
         await context.respond(
             embed=context.embed.embed('default', description=description))

@@ -12,17 +12,11 @@ async def handle(contextOrMessageContext: typing.Union['contexts.Context',
     value = exception
     tb = exception.__traceback__
 
-    if (
-        isinstance(exception, errors.Error)
-        or issubclass(exception, errors.Error)
-    ):
+    if (isinstance(exception, errors.Error)
+            or issubclass(exception, errors.Error)):
         await contextOrMessageContext.respond(
             embed=embed.embed('error', description=f'```{exception}```'))
 
         return
 
-    traceback.print_exception(
-        exception.__class__,
-        value=value,
-        tb=tb,
-    )
+    traceback.print_exception(exception.__class__, value=value, tb=tb)

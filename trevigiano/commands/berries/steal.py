@@ -15,18 +15,14 @@ errors = plugin.errors
 
 
 @plugin.include
-@commands.command(
-    'украсть',
-    description='Украсть',
-    period=periods.PERIOD,
-    group=groups.GROUP,
-)
+@commands.command('украсть',
+                  description='Украсть',
+                  period=periods.period,
+                  group=groups.group)
 class Command(commands.Command):
-    user = crescent.option(
-        hikari.User,
-        name='пользователь',
-        description='Пользователь',
-    )
+    user = crescent.option(hikari.User,
+                           name='пользователь',
+                           description='Пользователь')
 
     async def call(self, context: contexts.Context) -> None:
         database = plugin.model.database
@@ -52,11 +48,7 @@ class Command(commands.Command):
             raise errors.Error('Нечего красть')
 
         if random.choice(range(1, probability)) != 1:
-            await database.decrease(
-                _contextual,
-                field='berry',
-                value=stealing,
-            )
+            await database.decrease(_contextual, field='berry', value=stealing)
 
             description = trim.trim(f"""\
                 Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
@@ -72,16 +64,8 @@ class Command(commands.Command):
 
             return
 
-        await database.increase(
-            _contextual,
-            field='berry',
-            value=stealing,
-        )
-        await database.decrease(
-            _optional,
-            field='berry',
-            value=stealing,
-        )
+        await database.increase(_contextual, field='berry', value=stealing)
+        await database.decrease(_optional, field='berry', value=stealing)
 
         description = trim.trim(f"""\
             Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>

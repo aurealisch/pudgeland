@@ -9,12 +9,10 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command(
-    'лисы',
-    description='Лисы',
-    period=periods.PERIOD,
-    group=groups.GROUP,
-)
+@commands.command('лисы',
+                  description='Лисы',
+                  period=periods.period,
+                  group=groups.group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -27,7 +25,7 @@ class Command(commands.Command):
         emojis = {
             1: emoji.Emoji.FIRST,
             2: emoji.Emoji.SECOND,
-            3: emoji.Emoji.THIRD,
+            3: emoji.Emoji.THIRD
         }
 
         for index, user in enumerate(users):
@@ -44,7 +42,7 @@ class Command(commands.Command):
                 name=name,
                 value='\n'.join([
                     f'<@{user.id}>',
-                    f'Лисы: {context.decorate.decorate(context.humanize.humanize(user.fox))}',  # noqa: E501
+                    f'Лисы: {context.decorate.decorate(context.humanize.humanize(user.fox))}'  # noqa: E501
                 ]))
 
         await context.respond(embed=_embed)

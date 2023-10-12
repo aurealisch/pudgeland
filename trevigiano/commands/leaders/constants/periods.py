@@ -1,3 +1,3 @@
 import datetime
 
-PERIOD = datetime.timedelta(seconds=5)
+period = datetime.timedelta(seconds=5)

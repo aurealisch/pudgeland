@@ -11,11 +11,7 @@ class User:
     fox: int
 
 
-Field = typing.Literal[
-    'id',
-    'berry',
-    'fox'
-]
+Field = typing.Literal['id', 'berry', 'fox']
 
 
 class Database:
@@ -34,8 +30,7 @@ class Database:
             port=self.__port,
             user=self.__user,
             password=self.__password,
-            database=self.__database,
-        )
+            database=self.__database)
 
     async def close(self) -> None:
         await self._connection.close()

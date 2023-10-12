@@ -1,11 +1,10 @@
+import decimal
 import typing
-
-from trevigiano import types
 
 
 class Range(typing.TypedDict):
-    start: types.FloatOrInt
-    stop: types.FloatOrInt
+    start: decimal.Decimal
+    stop: decimal.Decimal
 
 
 class Collect(typing.TypedDict):
@@ -13,13 +12,13 @@ class Collect(typing.TypedDict):
 
 
 class Steal(typing.TypedDict):
-    probability: types.FloatOrInt
-    fraction: types.FloatOrInt
+    probability: decimal.Decimal
+    fraction: decimal.Decimal
 
 
 class Tame(typing.TypedDict):
-    probability: types.FloatOrInt
-    price: types.FloatOrInt
+    probability: decimal.Decimal
+    price: decimal.Decimal
 
 
 class Plugins(typing.TypedDict):

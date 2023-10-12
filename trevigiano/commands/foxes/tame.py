@@ -16,12 +16,10 @@ errors = plugin.errors
 
 
 @plugin.include
-@commands.command(
-    'приручить',
-    description='Приручить',
-    period=periods.PERIOD,
-    group=groups.GROUP,
-)
+@commands.command('приручить',
+                  description='Приручить',
+                  period=periods.period,
+                  group=groups.group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -46,21 +44,13 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        @flare.button(
-            label='ОК',
-            emoji=emoji.Emoji.AVAILABLE,
-            style=style,
-        )
+        @flare.button(label='ОК', emoji=emoji.Emoji.AVAILABLE, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
             try:
                 if user.berry < fed:
                     raise errors.Error('Недостаточно ягод')
 
-                await database.decrease(
-                    id_,
-                    field='berry',
-                    value=fed,
-                )
+                await database.decrease(id_, field='berry', value=fed)
 
                 if random.choice(range(1, probability)) != 1:
                     description = trim.trim(f"""\
@@ -75,11 +65,7 @@ class Command(commands.Command):
 
                     return
 
-                await database.increase(
-                    id_,
-                    field='fox',
-                    value=1,
-                )
+                await database.increase(id_, field='fox', value=1)
 
                 description = trim.trim(f"""\
                     Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
@@ -94,11 +80,9 @@ class Command(commands.Command):
                 await context.handle.handle(messageContext,
                                             exception=exception)
 
-        @flare.button(
-            label='Отменить',
-            emoji=emoji.Emoji.UNAVAILABLE,
-            style=style,
-        )
+        @flare.button(label='Отменить',
+                      emoji=emoji.Emoji.UNAVAILABLE,
+                      style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
             flags = hikari.MessageFlag.EPHEMERAL
 
@@ -115,8 +99,6 @@ class Command(commands.Command):
 
         _embed = embed.embed('default', description=description)
 
-        await context.respond(
-            ephemeral=True,
-            component=component,
-            embed=_embed,
-        )
+        await context.respond(ephemeral=True,
+                              component=component,
+                              embed=_embed)

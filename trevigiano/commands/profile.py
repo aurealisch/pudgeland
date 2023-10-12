@@ -9,11 +9,7 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command(
-    'профиль',
-    description='Профиль',
-    period=periods.PERIOD,
-)
+@commands.command('профиль', description='Профиль', period=periods.period)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
