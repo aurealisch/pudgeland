@@ -8,6 +8,7 @@ let {
   _HOST,
   _PORT,
   _DATABASE,
+  PORT,
 } = process.env;
 
 let uri =
@@ -77,4 +78,4 @@ fastify.get("/leaders/:field", function handler(request, reply) {
   });
 });
 
-fastify.listen({ port: 3000 });
+fastify.listen({ port: PORT || 8080, host: "0.0.0.0" });
