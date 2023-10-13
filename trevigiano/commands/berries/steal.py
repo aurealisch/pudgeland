@@ -32,8 +32,8 @@ class Command(commands.Command):
         humanize = context.humanize
         trim = context.trim
 
-        _contextual = str(context.user.id)
-        _optional = str(self.user.id)
+        _contextual = context.user.id
+        _optional = self.user.id
 
         optional = await database.upsert(_optional)
 

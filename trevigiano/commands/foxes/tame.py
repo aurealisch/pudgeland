@@ -33,7 +33,7 @@ class Command(commands.Command):
 
         tame = plugin.model.configuration.get('plugins').get('tame')
 
-        id_ = str(context.user.id)
+        id_ = context.user.id
 
         user = await database.upsert(id_)
 

@@ -24,7 +24,7 @@ class Command(commands.Command):
         emoji = context.emoji
         humanize = context.humanize
 
-        id_ = str(context.user.id)
+        id_ = context.user.id
 
         user = await database.upsert(id_)
 

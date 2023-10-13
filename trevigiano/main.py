@@ -8,11 +8,7 @@ commands = [
 ]
 plugins = [f'commands.{command}' for command in commands]
 
-database = databases.Database(environment.get('HOST'),
-                              port=environment.get('PORT'),
-                              user=environment.get('USER'),
-                              password=environment.get('PASSWORD'),
-                              database=environment.get('DATABASE'))
+database = databases.Database(environment.get('URI'))
 
 configuration: configurations.Configuration = {
     'plugins': {
