@@ -16,19 +16,29 @@ Field = typing.Literal['id', 'berry', 'fox']
 
 class Database:
 
-    def __init__(self, uri: str) -> None:
-        self.__uri = uri
+    def __init__(self, authorization: str) -> None:
+        self.__authorization = authorization
+        self.__url = "https://panoramic-copper-production.up.railway.app"
+        self.__headers = {
+            "authorization": self.__authorization,
+        }
 
     async def upsert(self, id_: int) -> User:
-        return User(**requests.get(f"{self.__uri}/users/{id_}").json())
+        json = (requests.get(f"{self.__url}/users/{id_}",
+                             headers=self.__headers)).json()
+
+        return User(**json)
 
     async def selectLeaders(self, field: Field) -> list[User]:
-        return list(
-            map(lambda json: User(**json),
-                requests.get(f"{self.__uri}/leaders/{field}").json()))
+        json = (requests.get(f"{self.__url}/leaders/{field}",
+                             headers=self.__headers)).json()
+
+        return list(map(lambda json: User(**json), json))
 
     async def increase(self, id_: str, field: Field, by: int) -> None:
-        requests.get(f"{self.__uri}/users/{id_}/increment/{field}/{by}")
+        requests.get(f"{self.__url}/users/{id_}/increment/{field}/{by}",
+                     headers=self.__headers)
 
     async def decrease(self, id_: str, field: Field, by: int) -> None:
-        requests.get(f"{self.__uri}/users/{id_}/decrement/{field}/{by}")
+        requests.get(f"{self.__url}/users/{id_}/decrement/{field}/{by}",
+                     headers=self.__headers)
