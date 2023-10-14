@@ -6,7 +6,7 @@ import requests
 
 @dataclasses.dataclass
 class User:
-    id: int
+    id: int | None
     berry: int
     fox: int
 
