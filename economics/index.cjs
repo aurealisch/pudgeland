@@ -143,6 +143,13 @@ fastify.addHook("onRequest", async (request, reply) => {
   }
 });
 
+fastify.addHook("onReady", async () => {
+  await client.connect();
+});
+fastify.addHook("onClose", async () => {
+  await client.disconnect();
+});
+
 fastify.listen({
   host: HOST || fastifyHost,
   port: PORT || fastifyPort,
