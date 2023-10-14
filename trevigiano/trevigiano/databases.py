@@ -6,9 +6,10 @@ import requests
 
 @dataclasses.dataclass
 class User:
-    id: int | None
     berry: int
     fox: int
+
+    id: int | None
 
 
 Field = typing.Literal['id', 'berry', 'fox']
