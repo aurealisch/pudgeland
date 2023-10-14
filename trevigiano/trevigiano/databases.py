@@ -9,7 +9,7 @@ class User:
     berry: int
     fox: int
 
-    id: int | None
+    id: int | None = None
 
 
 Field = typing.Literal['id', 'berry', 'fox']
