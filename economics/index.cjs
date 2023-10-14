@@ -45,6 +45,7 @@ let client = redis.createClient({
   socket: {
     host: redisSocketHost,
     port: redisSocketPort,
+    connectTimeout: 50000,
   },
 });
 
