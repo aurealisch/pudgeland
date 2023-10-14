@@ -54,13 +54,13 @@ let fastify = require("fastify")({ logger: true });
 fastify.get("/users/:id", async (request, reply) => {
   let { id } = request.params;
 
-  let berry = Number(await client.get(`users:${id}:berry`));
-  let fox = Number(await client.get(`users:${id}:fox`));
+  let berry = await client.get(`users:${id}:berry`)
+  let fox = await client.get(`users:${id}:fox`)
 
-  if (berry != NaN && fox != NaN) {
+  if (berry != null && fox != null) {
     reply.send({
-      berry,
-      fox,
+      berry: Number(berry),
+      fox: Number(fox),
     });
 
     return;
@@ -98,8 +98,8 @@ fastify.get("/users/:id/increment/:field/:by", async (request, reply) => {
       let seconds = 300;
 
       // prettier-ignore
-      await client.setex(`users:${id}:berry`, seconds, String(affectedRow.berry));
-      await client.setex(`users:${id}:fox`, seconds, String(affectedRow.fox));
+      await client.setEx(`users:${id}:berry`, seconds, String(affectedRow.berry));
+      await client.setEx(`users:${id}:fox`, seconds, String(affectedRow.fox));
     });
   });
 });
@@ -114,8 +114,8 @@ fastify.get("/users/:id/decrement/:field/:by", async (request, reply) => {
       let seconds = 300;
 
       // prettier-ignore
-      await client.setex(`users:${id}:berry`, seconds, String(affectedRow.berry));
-      await client.setex(`users:${id}:fox`, seconds, String(affectedRow.fox));
+      await client.setEx(`users:${id}:berry`, seconds, String(affectedRow.berry));
+      await client.setEx(`users:${id}:fox`, seconds, String(affectedRow.fox));
     });
   });
 });
@@ -139,8 +139,8 @@ fastify.get("/leaders/:field", (request, reply) => {
 });
 
 fastify.addHook("onRequest", async (request, reply) => {
-  if (authorization != request.headers.authorization) {
-    reply.code(403);
+  if (authorization !== request.headers.authorization) {
+    reply.code(403).send();
   }
 });
 
