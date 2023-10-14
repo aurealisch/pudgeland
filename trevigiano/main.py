@@ -8,7 +8,7 @@ commands = [
 ]
 plugins = [f'commands.{command}' for command in commands]
 
-database = databases.Database(environment.get('authorization'))
+database = databases.Database(environment.get('AUTHORIZATION'))
 
 configuration: configurations.Configuration = {
     'plugins': {
@@ -31,6 +31,6 @@ configuration: configurations.Configuration = {
 
 model = models.Model(configuration, database=database)
 
-token = environment.get('token')
+token = environment.get('TOKEN')
 
 trevigiano.Trevigiano(plugins, model=model, token=token).run()
