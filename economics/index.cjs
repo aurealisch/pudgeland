@@ -129,6 +129,7 @@ fastify.get("/leaders/:field", (request, reply) => {
   }).then((users) => {
     users.map((user) => {
       return {
+        id: user.id,
         berry: user.berry,
         fox: user.fox,
       };
