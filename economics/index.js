@@ -47,6 +47,8 @@ const User = sequelize.define("user", {
   id: { type: DataTypes.STRING, primaryKey: true },
   berry: { type: DataTypes.INTEGER },
   fox: { type: DataTypes.INTEGER },
+  cash: { type: DataTypes.INTEGER },
+  bank: { type: DataTypes.INTEGER },
 });
 
 const client = createClient({
@@ -82,6 +84,8 @@ fastifyInstance.get("/users/", async (fastifyRequest, fastifyReply) => {
     defaults: {
       berry: 0,
       fox: 1,
+      cash: 0,
+      bank: 0,
     },
   }).then(async ([user]) => {
     const berry = user.berry;
