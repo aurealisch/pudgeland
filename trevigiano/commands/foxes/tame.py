@@ -23,7 +23,7 @@ errors = plugin.errors
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        database = plugin.model.database
+        economics = plugin.model.economics
 
         decorate = context.decorate
         emoji = context.emoji
@@ -35,7 +35,7 @@ class Command(commands.Command):
 
         id_ = context.user.id
 
-        user = await database.upsert(id_)
+        user = await economics.upsert(id_)
 
         price = tame.get('price')
         probability = tame.get('probability')
@@ -50,7 +50,7 @@ class Command(commands.Command):
                 if user.berry < fed:
                     raise errors.Error('Недостаточно ягод')
 
-                await database.decrement(id_, field='berry', by=fed)
+                await economics.decrement(id_, field='berry', by=fed)
 
                 if random.choice(range(1, probability)) != 1:
                     description = trim.trim(f"""\
@@ -65,7 +65,7 @@ class Command(commands.Command):
 
                     return
 
-                await database.increment(id_, field='fox', by=1)
+                await economics.increment(id_, field='fox', by=1)
 
                 description = trim.trim(f"""\
                     Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод

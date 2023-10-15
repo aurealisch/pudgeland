@@ -18,7 +18,7 @@ class Command(commands.Command):
     async def call(self, context: contexts.Context) -> None:
         emoji = context.emoji
 
-        users = await plugin.model.database.selectLeaders('fox')
+        users = await plugin.model.economics.selectLeaders('fox')
 
         _embed = context.embed.embed('default')
 

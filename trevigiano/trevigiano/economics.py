@@ -14,7 +14,7 @@ class User:
 Field = typing.Literal['id', 'berry', 'fox']
 
 
-class Database:
+class Economics:
 
     def __init__(self, authorization: str) -> None:
         self.__authorization = authorization

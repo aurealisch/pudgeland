@@ -18,7 +18,7 @@ contexts = plugin.contexts
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        database = plugin.model.database
+        economics = plugin.model.economics
 
         decorate = context.decorate
         emoji = context.emoji
@@ -26,7 +26,7 @@ class Command(commands.Command):
 
         id_ = context.user.id
 
-        user = await database.upsert(id_)
+        user = await economics.upsert(id_)
 
         range_ = plugin.model.configuration.get('plugins').get('collect').get(
             'range')
@@ -39,7 +39,7 @@ class Command(commands.Command):
 
         description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
 
-        await database.increment(id_, field='berry', by=collecting)
+        await economics.increment(id_, field='berry', by=collecting)
 
         await context.respond(
             embed=context.embed.embed('default', description=description))

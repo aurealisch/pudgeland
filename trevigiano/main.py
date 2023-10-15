@@ -1,6 +1,6 @@
 import env as environment
 
-from trevigiano import configurations, databases, models, trevigiano
+from trevigiano import configurations, economics, models, trevigiano
 
 commands = [
     'profile', 'berries.collect', 'berries.steal', 'foxes.tame',
@@ -8,7 +8,7 @@ commands = [
 ]
 plugins = [f'commands.{command}' for command in commands]
 
-database = databases.Database(environment.get('AUTHORIZATION'))
+economics = economics.Economics(environment.get('AUTHORIZATION'))
 
 configuration: configurations.Configuration = {
     'plugins': {
@@ -29,7 +29,7 @@ configuration: configurations.Configuration = {
     }
 }
 
-model = models.Model(configuration, database=database)
+model = models.Model(configuration, economics=economics)
 
 token = environment.get('TOKEN')
 

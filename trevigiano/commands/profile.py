@@ -17,7 +17,7 @@ class Command(commands.Command):
         emoji = context.emoji
         humanize = context.humanize
 
-        user = await plugin.model.database.upsert(context.user.id)
+        user = await plugin.model.economics.upsert(context.user.id)
 
         description = context.trim.trim(f"""
             {emoji.Emoji.BERRY} Ягоды: {decorate.decorate(humanize.humanize(user.berry))}

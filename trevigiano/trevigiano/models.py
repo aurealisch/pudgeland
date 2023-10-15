@@ -1,9 +1,9 @@
-from trevigiano import configurations, databases
+from trevigiano import configurations, economics
 
 
 class Model:
 
     def __init__(self, configuration: configurations.Configuration,
-                 database: databases.Database) -> None:
+                 economics: economics.Economics) -> None:
         self.configuration = configuration
-        self.database = database
+        self.economics = economics
