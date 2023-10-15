@@ -221,6 +221,6 @@ fastifyInstance.addHook("onReady", (done) => client.connect().then(done()));
 fastifyInstance.addHook("onClose", (done) => client.disconnect().then(done()));
 
 fastifyInstance.listen({
-  host: HOST | fastifyHost,
-  port: PORT | fastifyPort,
+  host: HOST || fastifyHost,
+  port: PORT || fastifyPort,
 });
