@@ -27,7 +27,7 @@ const {
 
 const fastifyInstance = fastify({ logger: true });
 
-const sequalize = new Sequelize({
+const sequelize = new Sequelize({
   dialect: "postgres",
 
   username: postgresUsername,
@@ -43,8 +43,8 @@ const sequalize = new Sequelize({
   },
 });
 
-const User = sequalize.define("user", {
-  id: { type: DataTypes.INTEGER, primaryKey: true },
+const User = sequelize.define("user", {
+  id: { type: DataTypes.STRING, primaryKey: true },
   berry: { type: DataTypes.INTEGER },
   fox: { type: DataTypes.INTEGER },
 });
