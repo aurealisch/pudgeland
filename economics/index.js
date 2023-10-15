@@ -81,7 +81,7 @@ fastifyInstance.get("/users/", async (fastifyRequest, fastifyReply) => {
     where: { id },
     defaults: {
       berry: 0,
-      fox: 0,
+      fox: 1,
     },
   }).then(async ([user]) => {
     const berry = user.berry;
