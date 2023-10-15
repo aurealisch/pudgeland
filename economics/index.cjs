@@ -54,8 +54,8 @@ let fastify = require("fastify")({ logger: true });
 fastify.get("/users/:id", async (request, reply) => {
   let { id } = request.params;
 
-  let berry = await client.get(`users:${id}:berry`)
-  let fox = await client.get(`users:${id}:fox`)
+  let berry = await client.get(`users:${id}:berry`);
+  let fox = await client.get(`users:${id}:fox`);
 
   if (berry != null && fox != null) {
     reply.send({
@@ -91,32 +91,44 @@ fastify.get("/users/:id", async (request, reply) => {
 fastify.get("/users/:id/increment/:field/:by", async (request, reply) => {
   let { id, field, by } = request.params;
 
-  User.increment({ field: by }, { where: { id } }).then(([affectedRows]) => {
-    affectedRows.forEach(async (affectedRow) => {
-      let id = affectedRow.id;
+  switch (field) {
+    // prettier-ignore
+    case "berry": [affectedRows] = await User.increment({ berry: by }, { where: { id } });
 
-      let seconds = 300;
+    // prettier-ignore
+    case "fox": [affectedRows] = await User.increment({ fox: by }, { where: { id } });
+  }
 
-      // prettier-ignore
-      await client.setEx(`users:${id}:berry`, seconds, String(affectedRow.berry));
-      await client.setEx(`users:${id}:fox`, seconds, String(affectedRow.fox));
-    });
+  affectedRows.forEach(async (affectedRow) => {
+    let id = affectedRow.id;
+
+    let seconds = 300;
+
+    // prettier-ignore
+    await client.setEx(`users:${id}:berry`, seconds, String(affectedRow.berry));
+    await client.setEx(`users:${id}:fox`, seconds, String(affectedRow.fox));
   });
 });
 
 fastify.get("/users/:id/decrement/:field/:by", async (request, reply) => {
   let { id, field, by } = request.params;
 
-  User.decrement({ field: by }, { where: { id } }).then(([affectedRows]) => {
-    affectedRows.forEach(async (affectedRow) => {
-      let id = affectedRow.id;
+  switch (field) {
+    // prettier-ignore
+    case "berry": [affectedRows] = await User.decrement({ berry: by }, { where: { id } });
 
-      let seconds = 300;
+    // prettier-ignore
+    case "fox": [affectedRows] = await User.decrement({ fox: by }, { where: { id } });
+  }
 
-      // prettier-ignore
-      await client.setEx(`users:${id}:berry`, seconds, String(affectedRow.berry));
-      await client.setEx(`users:${id}:fox`, seconds, String(affectedRow.fox));
-    });
+  affectedRows.forEach(async (affectedRow) => {
+    let id = affectedRow.id;
+
+    let seconds = 300;
+
+    // prettier-ignore
+    await client.setEx(`users:${id}:berry`, seconds, String(affectedRow.berry));
+    await client.setEx(`users:${id}:fox`, seconds, String(affectedRow.fox));
   });
 });
 
