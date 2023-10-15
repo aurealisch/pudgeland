@@ -64,8 +64,8 @@ class Command(commands.Command):
 
             return
 
-        await database.increase(_contextual, field='berry', value=stealing)
-        await database.decrease(_optional, field='berry', value=stealing)
+        await database.increment(_contextual, field='berry', by=stealing)
+        await database.decrement(_optional, field='berry', by=stealing)
 
         description = trim.trim(f"""\
             Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>

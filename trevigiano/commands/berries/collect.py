@@ -39,7 +39,7 @@ class Command(commands.Command):
 
         description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
 
-        await database.increase(id_, field='berry', value=collecting)
+        await database.increment(id_, field='berry', by=collecting)
 
         await context.respond(
             embed=context.embed.embed('default', description=description))

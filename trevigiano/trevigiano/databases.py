@@ -36,10 +36,10 @@ class Database:
 
         return list(map(lambda json: User(**json), json))
 
-    async def increase(self, id_: str, field: Field, by: int) -> None:
+    async def increment(self, id_: str, field: Field, by: int) -> None:
         requests.get(f"{self.__url}/users/{id_}/increment/{field}/{by}",
                      headers=self.__headers)
 
-    async def decrease(self, id_: str, field: Field, by: int) -> None:
+    async def decrement(self, id_: str, field: Field, by: int) -> None:
         requests.get(f"{self.__url}/users/{id_}/decrement/{field}/{by}",
                      headers=self.__headers)

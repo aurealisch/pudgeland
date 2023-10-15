@@ -50,7 +50,7 @@ class Command(commands.Command):
                 if user.berry < fed:
                     raise errors.Error('Недостаточно ягод')
 
-                await database.decrease(id_, field='berry', value=fed)
+                await database.decrement(id_, field='berry', by=fed)
 
                 if random.choice(range(1, probability)) != 1:
                     description = trim.trim(f"""\
@@ -65,7 +65,7 @@ class Command(commands.Command):
 
                     return
 
-                await database.increase(id_, field='fox', value=1)
+                await database.increment(id_, field='fox', by=1)
 
                 description = trim.trim(f"""\
                     Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
