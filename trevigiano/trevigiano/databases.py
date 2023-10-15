@@ -6,10 +6,9 @@ import requests
 
 @dataclasses.dataclass
 class User:
-    berry: int
-    fox: int
-
     id: int | None = None
+    berry: int | None = None
+    fox: int | None = None
 
 
 Field = typing.Literal['id', 'berry', 'fox']
@@ -25,21 +24,31 @@ class Database:
         }
 
     async def upsert(self, id_: int) -> User:
-        json = (requests.get(f"{self.__url}/users/{id_}",
-                             headers=self.__headers)).json()
+        json = (requests.get(f"{self.__url}/users/",
+                             headers=self.__headers,
+                             params={'id': id_})).json()
 
         return User(**json)
 
     async def selectLeaders(self, field: Field) -> list[User]:
-        json = (requests.get(f"{self.__url}/leaders/{field}",
-                             headers=self.__headers)).json()
+        json = (requests.get(f"{self.__url}/leaders/{field}/",
+                             headers=self.__headers,
+                             params={'field': field})).json()
 
         return list(map(lambda json: User(**json), json))
 
     async def increment(self, id_: str, field: Field, by: int) -> None:
-        requests.get(f"{self.__url}/users/{id_}/increment/{field}/{by}",
-                     headers=self.__headers)
+        requests.get(f"{self.__url}/users/{field}/increment/",
+                     headers=self.__headers,
+                     params={
+                         'id': id_,
+                         'by': by
+                     })
 
     async def decrement(self, id_: str, field: Field, by: int) -> None:
-        requests.get(f"{self.__url}/users/{id_}/decrement/{field}/{by}",
-                     headers=self.__headers)
+        requests.get(f"{self.__url}/users/{field}/decrement/",
+                     headers=self.__headers,
+                     params={
+                         'id': id_,
+                         'by': by
+                     })
