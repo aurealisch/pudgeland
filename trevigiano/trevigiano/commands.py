@@ -12,6 +12,8 @@ from trevigiano import contexts, embed, handle, trim
 class Command:
 
     async def callback(self, context: contexts.Context) -> None:
+        await context.defer()
+
         try:
             await self.call(context)
         except Exception as exception:
