@@ -25,6 +25,13 @@ class Command(commands.Command):
                            description='Пользователь')
 
     async def call(self, context: contexts.Context) -> None:
+        """Description
+        
+        Parameters
+        ----------
+        context : contexts.Context
+            Description
+        """
         economics = plugin.model.economics
 
         emoji = context.emoji

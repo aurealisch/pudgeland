@@ -6,9 +6,9 @@ import requests
 
 @dataclasses.dataclass
 class User:
-    id: int | None = None
-    berry: int | None = None
-    fox: int | None = None
+    id: typing.Optional[int] = None
+    berry: typing.Optional[int] = None
+    fox: typing.Optional[int] = None
 
 
 Field = typing.Literal['id', 'berry', 'fox']
@@ -17,6 +17,13 @@ Field = typing.Literal['id', 'berry', 'fox']
 class Economics:
 
     def __init__(self, authorization: str) -> None:
+        """Description
+
+        Parameters
+        ----------
+        authorization : str
+            Description
+        """
         self.__authorization = authorization
         self.__url = "https://panoramic-copper-production.up.railway.app"
         self.__headers = {
@@ -24,6 +31,18 @@ class Economics:
         }
 
     async def upsert(self, id_: int) -> User:
+        """Description
+        
+        Parameters
+        ----------
+        id_ : int
+            Description
+        
+        Returns
+        -------
+        User
+            Description
+        """
         json = (requests.get(f"{self.__url}/users/",
                              headers=self.__headers,
                              params={'id': id_})).json()
@@ -31,6 +50,18 @@ class Economics:
         return User(**json)
 
     async def selectLeaders(self, field: Field) -> list[User]:
+        """Description
+
+        Parameters
+        ----------
+        field : Field
+            Description
+        
+        Returns
+        -------
+        list[User]
+            Description
+        """
         json = (requests.get(f"{self.__url}/leaders/{field}/",
                              headers=self.__headers,
                              params={'field': field})).json()
@@ -38,6 +69,17 @@ class Economics:
         return list(map(lambda json: User(**json), json))
 
     async def increment(self, id_: str, field: Field, by: int) -> None:
+        """Description
+        
+        Parameters
+        ----------
+        id_ : str
+            Description
+        field : Field
+            Description
+        by : int
+            Description
+        """
         requests.get(f"{self.__url}/users/{field}/increment/",
                      headers=self.__headers,
                      params={
@@ -46,6 +88,17 @@ class Economics:
                      })
 
     async def decrement(self, id_: str, field: Field, by: int) -> None:
+        """Description
+        
+        Parameters
+        ----------
+        id_ : str
+            Description
+        field : Field
+            Description
+        by : int
+            Description
+        """
         requests.get(f"{self.__url}/users/{field}/decrement/",
                      headers=self.__headers,
                      params={

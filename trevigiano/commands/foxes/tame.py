@@ -23,6 +23,13 @@ errors = plugin.errors
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
+        """Description
+        
+        Parameters
+        ----------
+        context : contexts.Context
+            Description
+        """
         economics = plugin.model.economics
 
         decorate = context.decorate

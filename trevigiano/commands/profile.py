@@ -13,6 +13,13 @@ contexts = plugin.contexts
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
+        """Description
+        
+        Parameters
+        ----------
+        context : contexts.Context
+            Description
+        """
         decorate = context.decorate
         emoji = context.emoji
         humanize = context.humanize

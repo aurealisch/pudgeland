@@ -11,6 +11,17 @@ class Trevigiano:
 
     def __init__(self, plugins: typing.Iterable[str], model: models.Model,
                  token: str) -> None:
+        """Description
+
+        Parameters
+        ----------
+        plugins : typing.Iterable[str]
+            Description
+        model : models.Model
+            Description
+        token : str
+            Description
+        """
         intents = hikari.Intents.ALL
 
         self.__gateway_bot = hikari.GatewayBot(token, intents=intents)
@@ -23,4 +34,5 @@ class Trevigiano:
             client.plugins.load(plugin)
 
     def run(self) -> None:
+        """Description"""
         self.__gateway_bot.run()

@@ -9,11 +9,19 @@ from trevigiano import contexts, embed, errors
 async def handle(contextOrMessageContext: typing.Union['contexts.Context',
                                                        flare.MessageContext],
                  exception: Exception) -> None:
+    """Description
+
+    Parameters
+    ----------
+    contextOrMessageContext : contexts.Context | flare.MessageContext
+        Description
+    exception : Exception
+        Description
+    """
     value = exception
     tb = exception.__traceback__
 
-    if (isinstance(exception, errors.Error)
-            or issubclass(exception, errors.Error)):
+    if isinstance(exception, errors.Error):
         await contextOrMessageContext.respond(
             embed=embed.embed('error', description=f'```{exception}```'))
 

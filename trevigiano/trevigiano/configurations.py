@@ -2,8 +2,8 @@ import typing
 
 
 class Range(typing.TypedDict):
-    start: float | int
-    stop: float | int
+    start: typing.Union[float, int]
+    stop: typing.Union[float, int]
 
 
 class Collect(typing.TypedDict):
@@ -11,13 +11,13 @@ class Collect(typing.TypedDict):
 
 
 class Steal(typing.TypedDict):
-    probability: float | int
-    fraction: float | int
+    probability: typing.Union[float, int]
+    fraction: typing.Union[float, int]
 
 
 class Tame(typing.TypedDict):
-    probability: float | int
-    price: float | int
+    probability: typing.Union[float, int]
+    price: typing.Union[float, int]
 
 
 class Plugins(typing.TypedDict):

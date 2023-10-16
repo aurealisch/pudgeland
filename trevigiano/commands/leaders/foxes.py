@@ -16,6 +16,13 @@ contexts = plugin.contexts
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
+        """Description
+        
+        Parameters
+        ----------
+        context : contexts.Context
+            Description
+        """
         emoji = context.emoji
 
         users = await plugin.model.economics.selectLeaders('fox')
