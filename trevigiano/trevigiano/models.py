@@ -1,10 +1,10 @@
-from trevigiano import configurations, economics
+from trevigiano import configurations, databases
 
 
 class Model:
 
     def __init__(self, configuration: configurations.Configuration,
-                 economics: economics.Economics) -> None:
+                 database: databases.Database) -> None:
         """Description
 
         Parameters
@@ -15,4 +15,4 @@ class Model:
             Description
         """
         self.configuration = configuration
-        self.economics = economics
+        self.database = database

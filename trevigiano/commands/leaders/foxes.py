@@ -25,7 +25,7 @@ class Command(commands.Command):
         """
         emoji = context.emoji
 
-        users = await plugin.model.economics.selectLeaders('fox')
+        users = await plugin.model.database.selectLeaders('fox')
 
         _embed = context.embed.embed('default')
 

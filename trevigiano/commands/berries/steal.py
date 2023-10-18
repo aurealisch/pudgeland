@@ -32,7 +32,7 @@ class Command(commands.Command):
         context : contexts.Context
             Description
         """
-        economics = plugin.model.economics
+        database = plugin.model.database
 
         emoji = context.emoji
         embed = context.embed
@@ -42,7 +42,7 @@ class Command(commands.Command):
         _contextual = context.user.id
         _optional = self.user.id
 
-        optional = await economics.upsert(_optional)
+        optional = await database.upsert(_optional)
 
         steal = plugin.model.configuration.get('plugins').get('steal')
 
@@ -55,7 +55,7 @@ class Command(commands.Command):
             raise errors.Error('Нечего красть')
 
         if random.choice(range(1, probability)) != 1:
-            await economics.decrease(_contextual, field='berry', value=stealing)
+            await database.decrease(_contextual, field='berry', value=stealing)
 
             description = trim.trim(f"""\
                 Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>
@@ -71,8 +71,8 @@ class Command(commands.Command):
 
             return
 
-        await economics.increment(_contextual, field='berry', by=stealing)
-        await economics.decrement(_optional, field='berry', by=stealing)
+        await database.increment(_contextual, field='berry', by=stealing)
+        await database.decrement(_optional, field='berry', by=stealing)
 
         description = trim.trim(f"""\
             Вы попытались украсть {emoji.Emoji.BERRY} ягоды у <@{_optional}>

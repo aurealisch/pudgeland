@@ -14,7 +14,7 @@ class User:
 Field = typing.Literal['id', 'berry', 'fox']
 
 
-class Economics:
+class Database:
 
     def __init__(self, authorization: str) -> None:
         """Description
