@@ -16,8 +16,7 @@ class Steal(typing.TypedDict):
 
 
 class Tame(typing.TypedDict):
-    probability: typing.Union[float, int]
-    price: typing.Union[float, int]
+    multiplicateur: typing.Union[float, int]
 
 
 class Plugins(typing.TypedDict):

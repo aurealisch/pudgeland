@@ -40,9 +40,10 @@ class Command(commands.Command):
 
         fox = user.fox
 
-        collecting = round(
-            fox *
-            random.choice(range(range_.get('start'), range_.get('stop'))))
+        collecting = sum([
+            random.choice(range(range_.get('start'), range_.get('stop')))
+            for _ in range(fox)
+        ])
 
         description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
 

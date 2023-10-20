@@ -14,8 +14,8 @@ configuration: configurations.Configuration = {
     'plugins': {
         'collect': {
             'range': {
-                'start': 50,
-                'stop': 200
+                'start': 10,
+                'stop': 100
             }
         },
         'steal': {
@@ -23,8 +23,7 @@ configuration: configurations.Configuration = {
             'probability': 3
         },
         'tame': {
-            'price': 100,
-            'probability': 5
+            'multiplicateur': 50,
         }
     }
 }

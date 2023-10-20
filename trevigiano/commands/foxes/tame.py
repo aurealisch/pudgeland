@@ -1,8 +1,5 @@
-import math
-import random
-
-import hikari
 import flare
+import hikari
 
 from trevigiano import plugins
 
@@ -36,50 +33,30 @@ class Command(commands.Command):
         emoji = context.emoji
         embed = context.embed
         humanize = context.humanize
-        trim = context.trim
 
-        tame = plugin.model.configuration.get('plugins').get('tame')
+        multiplicateur = plugin.model.configuration.get('plugins').get(
+            'tame').get('multiplicateur')
 
         id_ = context.user.id
 
         user = await database.upsert(id_)
 
-        price = tame.get('price')
-        probability = tame.get('probability')
-
-        fed = round((user.fox + 1) * math.e * price)
+        fed = round((user.fox + 1) * multiplicateur)
 
         style = hikari.ButtonStyle.SECONDARY
 
         @flare.button(label='ОК', emoji=emoji.Emoji.AVAILABLE, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
+            await messageContext.defer()
+
             try:
                 if user.berry < fed:
                     raise errors.Error('Недостаточно ягод')
 
                 await database.decrement(id_, field='berry', by=fed)
-
-                if random.choice(range(1, probability)) != 1:
-                    description = trim.trim(f"""\
-                        Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
-                        и...
-
-                        {emoji.Emoji.UNTAMED} Не получилось приручить лису...
-                    """)  # noqa: E501
-
-                    await messageContext.respond(
-                        embed=embed.embed('default', description=description))
-
-                    return
-
                 await database.increment(id_, field='fox', by=1)
 
-                description = trim.trim(f"""\
-                    Вы скормили {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод
-                    и...
-
-                    {emoji.Emoji.TAMED} Получилось приручить лису!!!
-                """)  # noqa: E501
+                description = f'Вы приручили лису за {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'
 
                 await messageContext.respond(
                     embed=embed.embed('default', description=description))
@@ -92,6 +69,8 @@ class Command(commands.Command):
                       style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
             flags = hikari.MessageFlag.EPHEMERAL
+
+            await messageContext.defer(flags=flags)
 
             await messageContext.respond(
                 flags=flags,
