@@ -64,6 +64,8 @@ class Command(commands.Command):
                 await context.handle.handle(messageContext,
                                             exception=exception)
 
+            await message.delete()
+
         @flare.button(label='Отменить',
                       emoji=emoji.Emoji.UNAVAILABLE,
                       style=style)
@@ -76,6 +78,8 @@ class Command(commands.Command):
                 flags=flags,
                 embed=embed.embed('default', description='Отменено'))
 
+            await message.delete()
+
         _ok = ok()
         _cancel = cancel()
 
@@ -85,6 +89,6 @@ class Command(commands.Command):
 
         _embed = embed.embed('default', description=description)
 
-        await context.respond(ephemeral=True,
-                              component=component,
-                              embed=_embed)
+        message = await context.respond(ephemeral=True,
+                                        component=component,
+                                        embed=_embed)
