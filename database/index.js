@@ -41,7 +41,7 @@ const User = sequelize.define("user", {
   id: { type: DataTypes.STRING, primaryKey: true },
 
   berry: { type: DataTypes.INTEGER, defaultValue: 0 },
-  fox: { type: DataTypes.INTEGER, defaultValue: 0 },
+  fox: { type: DataTypes.INTEGER, defaultValue: 1 },
 
   coin: { type: DataTypes.INTEGER, defaultValue: 0 },
 
