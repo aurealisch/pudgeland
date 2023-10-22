@@ -71,6 +71,7 @@ class Command(commands.Command):
                     Description
                 """
                 await messageContext.defer()
+                await message.delete()
 
                 try:
                     id_ = messageContext.user.id
@@ -99,4 +100,4 @@ class Command(commands.Command):
         _embed = embed.embed(
             'default', description=f'```1 монета к {saleCoinsMultiplier} ягодам```')
 
-        await context.respond(component=component, embed=_embed)
+        message = await context.respond(component=component, embed=_embed)

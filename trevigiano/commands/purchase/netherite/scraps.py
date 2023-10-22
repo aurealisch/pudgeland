@@ -77,6 +77,7 @@ class Command(commands.Command):
                     Description
                 """
                 await messageContext.defer()
+                await message.delete()
 
                 try:
                     id_ = messageContext.user.id
@@ -112,4 +113,4 @@ class Command(commands.Command):
             f'```{purchaseNetheriteScrapsMultiplier} монет к 1 незеритовому лому```'
         )
 
-        await context.respond(component=component, embed=_embed)
+        message = await context.respond(component=component, embed=_embed)

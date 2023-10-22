@@ -40,7 +40,7 @@ class Command(commands.Command):
         humanize = context.humanize
 
         tameMultiplier = plugin.model.configuration.get('plugins').get(
-            'tameMultiplier')
+            'multipliers'.get('tame'))
 
         id_ = context.user.id
 
@@ -64,6 +64,7 @@ class Command(commands.Command):
                 Description
             """
             await messageContext.defer()
+            await message.delete()
 
             try:
                 if user.berry < berryQuantity:
@@ -94,12 +95,11 @@ class Command(commands.Command):
             flags = hikari.MessageFlag.EPHEMERAL
 
             await messageContext.defer(flags=flags)
+            await message.delete()
 
             await messageContext.respond(
                 flags=flags,
                 embed=embed.embed('default', description='Отменено'))
-
-            await message.delete()
 
         _ok = ok()
         _cancel = cancel()
