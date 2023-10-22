@@ -40,7 +40,7 @@ class Command(commands.Command):
         humanize = context.humanize
 
         tameMultiplier = plugin.model.configuration.get('plugins').get(
-            'multipliers'.get('tame'))
+            'multipliers').get('tame')
 
         id_ = context.user.id
 
