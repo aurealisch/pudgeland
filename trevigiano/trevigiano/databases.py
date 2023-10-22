@@ -51,7 +51,7 @@ class Database:
         """
         json = (requests.get(f"{self.__url}/users/",
                              headers=self.__headers,
-                             params={'id': id_})).json()
+                             params={'id': str(id_)})).json()
 
         return User(**json)
 
@@ -89,8 +89,8 @@ class Database:
         requests.get(f"{self.__url}/users/{field}/increment/",
                      headers=self.__headers,
                      params={
-                         'id': id_,
-                         'by': by
+                         'id': str(id_),
+                         'by': str(by)
                      })
 
     async def decrement(self, id_: str, field: Field, by: int) -> None:
@@ -108,6 +108,6 @@ class Database:
         requests.get(f"{self.__url}/users/{field}/decrement/",
                      headers=self.__headers,
                      params={
-                         'id': id_,
-                         'by': by
+                         'id': str(id_),
+                         'by': str(by)
                      })
