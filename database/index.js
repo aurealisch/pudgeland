@@ -67,80 +67,86 @@ fastifyInstance.get("/users/", (fastifyRequest, fastifyReply) => {
 
 fastifyInstance.get(
   "/users/berry/increment/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.increment({ berry: by }, { where: { id } })]);
+    await User.increment({ berry: by }, { where: { id } });
   }
 );
 fastifyInstance.get(
   "/users/berry/decrement/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.decrement({ berry: by }, { where: { id } })]);
+    await User.decrement({ berry: by }, { where: { id } });
   }
 );
 
-fastifyInstance.get("/users/fox/increment/", (fastifyRequest, fastifyReply) => {
-  const { id, by } = fastifyRequest.query;
+fastifyInstance.get(
+  "/users/fox/increment/",
+  async (fastifyRequest, fastifyReply) => {
+    const { id, by } = fastifyRequest.query;
 
-  Promise.all([User.increment({ fox: by }, { where: { id } })]);
-});
-fastifyInstance.get("/users/fox/decrement/", (fastifyRequest, fastifyReply) => {
-  const { id, by } = fastifyRequest.query;
+    await User.increment({ fox: by }, { where: { id } });
+  }
+);
+fastifyInstance.get(
+  "/users/fox/decrement/",
+  async (fastifyRequest, fastifyReply) => {
+    const { id, by } = fastifyRequest.query;
 
-  Promise.all([User.decrement({ fox: by }, { where: { id } })]);
-});
+    await User.decrement({ fox: by }, { where: { id } });
+  }
+);
 
 fastifyInstance.get(
   "/users/coin/increment/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.increment({ coin: by }, { where: { id } })]);
+    await User.increment({ coin: by }, { where: { id } });
   }
 );
 fastifyInstance.get(
   "/users/coin/decrement/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.decrement({ coin: by }, { where: { id } })]);
+    await User.decrement({ coin: by }, { where: { id } });
   }
 );
 
 fastifyInstance.get(
   "/users/diamond/increment/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.increment({ diamond: by }, { where: { id } })]);
+    await User.increment({ diamond: by }, { where: { id } });
   }
 );
 fastifyInstance.get(
   "/users/diamond/decrement/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.decrement({ diamond: by }, { where: { id } })]);
+    await User.decrement({ diamond: by }, { where: { id } });
   }
 );
 
 fastifyInstance.get(
   "/users/netheriteScrap/increment/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.increment({ netheriteScrap: by }, { where: { id } })]);
+    await User.increment({ netheriteScrap: by }, { where: { id } });
   }
 );
 fastifyInstance.get(
   "/users/netheriteScrap/decrement/",
-  (fastifyRequest, fastifyReply) => {
+  async (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    Promise.all([User.decrement({ netheriteScrap: by }, { where: { id } })]);
+    await User.decrement({ netheriteScrap: by }, { where: { id } });
   }
 );
 
@@ -229,7 +235,7 @@ fastifyInstance.get("/leaders/diamond/", (fastifyRequest, fastifyReply) => {
 
 fastifyInstance.addHook("onRequest", async (fastifyRequest, fastifyReply) => {
   if (headersAuthorization !== fastifyRequest.headers.authorization) {
-    return fastifyReply.code(403).send({ message: 'Forbidden' });
+    return fastifyReply.code(403).send({ message: "Forbidden" });
   }
 });
 
