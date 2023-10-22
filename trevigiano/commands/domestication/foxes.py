@@ -1,9 +1,10 @@
+import datetime
+
+import crescent
 import flare
 import hikari
 
 from trevigiano import plugins
-
-from .constants import groups, periods
 
 plugin = plugins.Plugin()
 
@@ -11,12 +12,16 @@ commands = plugin.commands
 contexts = plugin.contexts
 errors = plugin.errors
 
+period = datetime.timedelta(seconds=2, milliseconds=500)
+
+group = crescent.Group('приручение', description='Приручение')
+
 
 @plugin.include
-@commands.command('приручить',
-                  description='Приручить',
-                  period=periods.period,
-                  group=groups.group)
+@commands.command('лисы',
+                  description='Приручение лисы',
+                  period=period,
+                  group=group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -34,29 +39,40 @@ class Command(commands.Command):
         embed = context.embed
         humanize = context.humanize
 
-        multiplicateur = plugin.model.configuration.get('plugins').get(
-            'tame').get('multiplicateur')
+        tameMultiplier = plugin.model.configuration.get('plugins').get(
+            'tameMultiplier')
 
         id_ = context.user.id
 
         user = await database.upsert(id_)
 
-        fed = round((user.fox + 1) * multiplicateur)
+        berryQuantity = round((user.fox + 1) * tameMultiplier)
+
+        okEmoji = emoji.Emoji.ok
+        cancelEmoji = emoji.Emoji.cancel
+        berryEmoji = emoji.Emoji.berry
 
         style = hikari.ButtonStyle.SECONDARY
 
-        @flare.button(label='ОК', emoji=emoji.Emoji.AVAILABLE, style=style)
+        @flare.button(label='ОК', emoji=okEmoji, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
+            """Description
+
+            Parameters
+            ----------
+            messageContext : flare.MessageContext
+                Description
+            """
             await messageContext.defer()
 
             try:
-                if user.berry < fed:
+                if user.berry < berryQuantity:
                     raise errors.Error('Недостаточно ягод')
 
-                await database.decrement(id_, field='berry', by=fed)
-                await database.increment(id_, field='fox', by=1)
+                await database.increment(id_, 'fox', 1)
+                await database.decrement(id_, 'berry', berryQuantity)
 
-                description = f'Вы приручили лису за {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'
+                description = f'Вы приручили лису за {berryEmoji} {decorate.decorate(humanize.humanize(berryQuantity))} ягод'
 
                 await messageContext.respond(
                     embed=embed.embed('default', description=description))
@@ -66,10 +82,15 @@ class Command(commands.Command):
 
             await message.delete()
 
-        @flare.button(label='Отменить',
-                      emoji=emoji.Emoji.UNAVAILABLE,
-                      style=style)
+        @flare.button(label='Отменить', emoji=cancelEmoji, style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
+            """Description
+
+            Parameters
+            ----------
+            messageContext : flare.MessageContext
+                Description
+            """
             flags = hikari.MessageFlag.EPHEMERAL
 
             await messageContext.defer(flags=flags)
@@ -85,7 +106,7 @@ class Command(commands.Command):
 
         component = await flare.Row(_ok, _cancel)
 
-        description = f'Чтобы попробовать приручить лису, потребуется скормить {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(fed))} ягод'  # noqa: E501
+        description = f'Чтобы попробовать приручить лису, потребуется скормить {berryEmoji} {decorate.decorate(humanize.humanize(berryQuantity))} ягод'  # noqa: E501
 
         _embed = embed.embed('default', description=description)
 

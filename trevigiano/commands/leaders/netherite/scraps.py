@@ -1,18 +1,23 @@
+import crescent
+
 from trevigiano import plugins
 
-from .constants import groups, periods
+from ..constants import groups, periods
 
 plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
 
+subGroup = crescent.SubGroup('незеритовых', groups.group, 'Незеритовых')
+
 
 @plugin.include
-@commands.command('ягод',
-                  description='Лидеры ягод',
+@commands.command('ломов',
+                  description='Лидеры незеритовых ломов',
                   period=periods.period,
-                  group=groups.group)
+                  group=groups.group,
+                  subGroup=subGroup)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -25,9 +30,9 @@ class Command(commands.Command):
         """
         emoji = context.emoji
 
-        users = await plugin.model.database.selectLeaders('berry')
+        users = await plugin.model.database.selectLeaders('netheriteScrap')
 
-        _embed = context.embed.embed('default')
+        _embed = context.embed.embed('netheriteScraps')
 
         emojis = {
             1: emoji.Emoji.first,
@@ -49,7 +54,7 @@ class Command(commands.Command):
                 name=name,
                 value='\n'.join([
                     f'<@{user.id}>',
-                    f'Ягоды: {context.decorate.decorate(context.humanize.humanize(user.berry))}'  # noqa: E501
+                    f'Незеритовых ломов: {context.decorate.decorate(context.humanize.humanize(user.netheriteScrap))}'  # noqa: E501
                 ]))
 
         await context.respond(embed=_embed)

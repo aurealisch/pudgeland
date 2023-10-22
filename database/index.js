@@ -1,7 +1,6 @@
 import "dotenv/config";
 import fastify from "fastify";
 import { Sequelize, DataTypes } from "sequelize";
-import { createClient } from "redis";
 
 const {
   postgresUsername,
@@ -10,11 +9,6 @@ const {
   postgresPort,
 
   postgresDatabase,
-
-  redisUsername,
-  redisPassword,
-  redisSocketHost,
-  redisSocketPort,
 
   headersAuthorization,
 
@@ -45,147 +39,114 @@ const sequelize = new Sequelize({
 
 const User = sequelize.define("user", {
   id: { type: DataTypes.STRING, primaryKey: true },
-  berry: { type: DataTypes.INTEGER },
-  fox: { type: DataTypes.INTEGER },
-  cash: { type: DataTypes.INTEGER },
-  bank: { type: DataTypes.INTEGER },
+
+  berry: { type: DataTypes.INTEGER, defaultValue: 0 },
+  fox: { type: DataTypes.INTEGER, defaultValue: 0 },
+
+  coin: { type: DataTypes.INTEGER, defaultValue: 0 },
+
+  netheriteScrap: { type: DataTypes.INTEGER, defaultValue: 0 },
+  diamond: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
-
-const client = createClient({
-  username: redisUsername,
-  password: redisPassword,
-  socket: {
-    host: redisSocketHost,
-    port: redisSocketPort,
-
-    connectTimeout: 50_000,
-  },
-});
-
-const exSeconds = 300;
 
 fastifyInstance.get("/users/", async (fastifyRequest, fastifyReply) => {
   const { id } = fastifyRequest.query;
 
-  const berry = await client.get(`users:${id}:berry`);
-  const fox = await client.get(`users:${id}:fox`);
-
-  if ((berry !== null, fox !== null)) {
+  User.findOrCreate({ where: { id } }).then(([user]) => {
     fastifyReply.send({
-      berry: Number(berry),
-      fox: Number(fox),
-    });
+      berry: user.berry,
+      fox: user.fox,
 
-    return;
-  }
+      coin: user.coin,
 
-  await User.findOrCreate({
-    where: { id },
-    defaults: {
-      berry: 0,
-      fox: 1,
-      cash: 0,
-      bank: 0,
-    },
-  }).then(async ([user]) => {
-    const berry = user.berry;
-    const fox = user.fox;
-
-    await client.setEx(`users:${id}:berry`, exSeconds, String(berry));
-    await client.setEx(`users:${id}:fox`, exSeconds, String(fox));
-
-    fastifyReply.send({
-      berry,
-      fox,
+      netheriteScrap: user.netheriteScrap,
+      diamond: user.diamond,
     });
   });
 });
 
 fastifyInstance.get(
   "/users/berry/increment/",
-  async (fastifyRequest, fastifyReply) => {
+  (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    await User.increment({ berry: by }, { where: { id } }).then(
-      ([[affectedRows], affectedCount]) => {
-        affectedRows.forEach((affectedRow) => {
-          const id = affectedRow.id;
-
-          Promise.all([
-            // prettier-ignore
-            client.setEx(`users:${id}:berry`, exSeconds, String(affectedRow.berry)),
-            client.setEx(`users:${id}:fox`, exSeconds, String(affectedRow.fox)),
-          ]);
-        });
-      }
-    );
+    Promise.all([User.increment({ berry: by }, { where: { id } })]);
   }
 );
 fastifyInstance.get(
   "/users/berry/decrement/",
-  async (fastifyRequest, fastifyReply) => {
+  (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    await User.decrement({ berry: by }, { where: { id } }).then(
-      ([[affectedRows], affectedCount]) => {
-        affectedRows.forEach((affectedRow) => {
-          const id = affectedRow.id;
+    Promise.all([User.decrement({ berry: by }, { where: { id } })]);
+  }
+);
 
-          Promise.all([
-            // prettier-ignore
-            client.setEx(`users:${id}:berry`, exSeconds, String(affectedRow.berry)),
-            client.setEx(`users:${id}:fox`, exSeconds, String(affectedRow.fox)),
-          ]);
-        });
-      }
-    );
+fastifyInstance.get("/users/fox/increment/", (fastifyRequest, fastifyReply) => {
+  const { id, by } = fastifyRequest.query;
+
+  Promise.all([User.increment({ fox: by }, { where: { id } })]);
+});
+fastifyInstance.get("/users/fox/decrement/", (fastifyRequest, fastifyReply) => {
+  const { id, by } = fastifyRequest.query;
+
+  Promise.all([User.decrement({ fox: by }, { where: { id } })]);
+});
+
+fastifyInstance.get(
+  "/users/coin/increment/",
+  (fastifyRequest, fastifyReply) => {
+    const { id, by } = fastifyRequest.query;
+
+    Promise.all([User.increment({ coin: by }, { where: { id } })]);
+  }
+);
+fastifyInstance.get(
+  "/users/coin/decrement/",
+  (fastifyRequest, fastifyReply) => {
+    const { id, by } = fastifyRequest.query;
+
+    Promise.all([User.decrement({ coin: by }, { where: { id } })]);
   }
 );
 
 fastifyInstance.get(
-  "/users/fox/increment/",
-  async (fastifyRequest, fastifyReply) => {
+  "/users/diamond/increment/",
+  (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    await User.increment({ fox: by }, { where: { id } }).then(
-      ([[affectedRows], affectedCount]) => {
-        affectedRows.forEach((affectedRow) => {
-          const id = affectedRow.id;
-
-          Promise.all([
-            // prettier-ignore
-            client.setEx(`users:${id}:berry`, exSeconds, String(affectedRow.berry)),
-            client.setEx(`users:${id}:fox`, exSeconds, String(affectedRow.fox)),
-          ]);
-        });
-      }
-    );
+    Promise.all([User.increment({ diamond: by }, { where: { id } })]);
   }
 );
 fastifyInstance.get(
-  "/users/fox/decrement/",
-  async (fastifyRequest, fastifyReply) => {
+  "/users/diamond/decrement/",
+  (fastifyRequest, fastifyReply) => {
     const { id, by } = fastifyRequest.query;
 
-    await User.decrement({ fox: by }, { where: { id } }).then(
-      ([[affectedRows], affectedCount]) => {
-        affectedRows.forEach((affectedRow) => {
-          const id = affectedRow.id;
+    Promise.all([User.decrement({ diamond: by }, { where: { id } })]);
+  }
+);
 
-          Promise.all([
-            // prettier-ignore
-            client.setEx(`users:${id}:berry`, exSeconds, String(affectedRow.berry)),
-            client.setEx(`users:${id}:fox`, exSeconds, String(affectedRow.fox)),
-          ]);
-        });
-      }
-    );
+fastifyInstance.get(
+  "/users/netheriteScrap/increment/",
+  (fastifyRequest, fastifyReply) => {
+    const { id, by } = fastifyRequest.query;
+
+    Promise.all([User.increment({ netheriteScrap: by }, { where: { id } })]);
+  }
+);
+fastifyInstance.get(
+  "/users/netheriteScrap/decrement/",
+  (fastifyRequest, fastifyReply) => {
+    const { id, by } = fastifyRequest.query;
+
+    Promise.all([User.decrement({ netheriteScrap: by }, { where: { id } })]);
   }
 );
 
 fastifyInstance.get("/leaders/berry/", (fastifyRequest, fastifyReply) => {
   User.findAll({
-    limit: 6,
+    limit: 3,
     order: [["berry", "DESC"]],
   }).then((users) => {
     fastifyReply.send(
@@ -201,7 +162,7 @@ fastifyInstance.get("/leaders/berry/", (fastifyRequest, fastifyReply) => {
 
 fastifyInstance.get("/leaders/fox/", (fastifyRequest, fastifyReply) => {
   User.findAll({
-    limit: 6,
+    limit: 3,
     order: [["fox", "DESC"]],
   }).then((users) => {
     fastifyReply.send(
@@ -215,14 +176,62 @@ fastifyInstance.get("/leaders/fox/", (fastifyRequest, fastifyReply) => {
   });
 });
 
+fastifyInstance.get("/leaders/coin/", (fastifyRequest, fastifyReply) => {
+  User.findAll({
+    limit: 3,
+    order: [["coin", "DESC"]],
+  }).then((users) => {
+    fastifyReply.send(
+      users.map((user) => {
+        return {
+          id: user.id,
+          coin: user.coin,
+        };
+      })
+    );
+  });
+});
+
+fastifyInstance.get(
+  "/leaders/netheriteScrap/",
+  (fastifyRequest, fastifyReply) => {
+    User.findAll({
+      limit: 3,
+      order: [["netheriteScrap", "DESC"]],
+    }).then((users) => {
+      fastifyReply.send(
+        users.map((user) => {
+          return {
+            id: user.id,
+            netheriteScrap: user.netheriteScrap,
+          };
+        })
+      );
+    });
+  }
+);
+
+fastifyInstance.get("/leaders/diamond/", (fastifyRequest, fastifyReply) => {
+  User.findAll({
+    limit: 3,
+    order: [["diamond", "DESC"]],
+  }).then((users) => {
+    fastifyReply.send(
+      users.map((user) => {
+        return {
+          id: user.id,
+          diamond: user.diamond,
+        };
+      })
+    );
+  });
+});
+
 fastifyInstance.addHook("onRequest", async (fastifyRequest, fastifyReply) => {
   if (headersAuthorization !== fastifyRequest.headers.authorization) {
     fastifyReply.code(403).send();
   }
 });
-
-fastifyInstance.addHook("onReady", (done) => client.connect().then(done()));
-fastifyInstance.addHook("onClose", (done) => client.disconnect().then(done()));
 
 fastifyInstance.listen({
   host: HOST || fastifyHost,

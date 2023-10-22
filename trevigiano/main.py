@@ -3,8 +3,20 @@ import env as environment
 from trevigiano import configurations, databases, models, trevigiano
 
 commands = [
-    'profile', 'berries.collect', 'berries.steal', 'foxes.tame',
-    'leaders.berries', 'leaders.foxes'
+    'profile',
+    'domestication.foxes',
+    'collecting.berries',
+    'leaders.berries',
+    'leaders.foxes',
+    'leaders.coins',
+    'leaders.diamonds',
+    'leaders.netherite.scraps',
+    'purchase.coins',
+    'purchase.diamonds',
+    'purchase.netherite.scraps',
+    'sale.coins',
+    'sale.diamonds',
+    'sale.netherite.scraps',
 ]
 plugins = [f'commands.{command}' for command in commands]
 
@@ -18,12 +30,15 @@ configuration: configurations.Configuration = {
                 'stop': 100
             }
         },
-        'steal': {
-            'fraction': 0.1,
-            'probability': 3
-        },
-        'tame': {
-            'multiplicateur': 50,
+        'multipliers': {
+            'purchase': {
+                'coins': 500,
+                'diamonds': 4,
+                'netherite': {
+                    'scraps': 8
+                }
+            },
+            'tame': 50
         }
     }
 }

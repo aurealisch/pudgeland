@@ -9,8 +9,8 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('ягод',
-                  description='Лидеры ягод',
+@commands.command('монет',
+                  description='Лидеры монет',
                   period=periods.period,
                   group=groups.group)
 class Command(commands.Command):
@@ -25,7 +25,7 @@ class Command(commands.Command):
         """
         emoji = context.emoji
 
-        users = await plugin.model.database.selectLeaders('berry')
+        users = await plugin.model.database.selectLeaders('coin')
 
         _embed = context.embed.embed('default')
 
@@ -49,7 +49,7 @@ class Command(commands.Command):
                 name=name,
                 value='\n'.join([
                     f'<@{user.id}>',
-                    f'Ягоды: {context.decorate.decorate(context.humanize.humanize(user.berry))}'  # noqa: E501
+                    f'Монеты: {context.decorate.decorate(context.humanize.humanize(user.coin))}'  # noqa: E501
                 ]))
 
         await context.respond(embed=_embed)

@@ -2,12 +2,22 @@ import typing
 
 import hikari
 
-Color = typing.Literal['default', 'error', 'success']
+Color = typing.Literal[
+    'default',
+    'error',
+    'success',
+
+    'diamonds',
+    'netheriteScraps',
+]
 
 colors: typing.Mapping[Color, hikari.Colorish] = {
     'default': '#f0a43c',
     'error': '#ff4b4b',
-    'success': '#77b35a'
+    'success': '#77b35a',
+
+    'diamonds': '#b3fcee',
+    'netheriteScraps': '#441c14',
 }
 
 

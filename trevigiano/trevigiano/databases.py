@@ -7,11 +7,17 @@ import requests
 @dataclasses.dataclass
 class User:
     id: typing.Optional[int] = None
+
     berry: typing.Optional[int] = None
     fox: typing.Optional[int] = None
 
+    coin: typing.Optional[int] = None
 
-Field = typing.Literal['id', 'berry', 'fox']
+    netheriteScrap: typing.Optional[int] = None
+    diamond: typing.Optional[int] = None
+
+
+Field = typing.Literal['berry', 'fox', 'coin', 'netheriteScrap', 'diamond']
 
 
 class Database:

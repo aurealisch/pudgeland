@@ -1,20 +1,22 @@
+import datetime
 import random
 
-from trevigiano import plugins
+import crescent
 
-from .constants import groups, periods
+from trevigiano import plugins
 
 plugin = plugins.Plugin()
 
 commands = plugin.commands
 contexts = plugin.contexts
 
+period = datetime.timedelta(hours=1, minutes=30)
+
+group = crescent.Group('сбор', description='Сбор')
+
 
 @plugin.include
-@commands.command('собрать',
-                  description='Собрать',
-                  period=periods.period,
-                  group=groups.group)
+@commands.command('ягод', description='Сбор ягод', period=period, group=group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -38,16 +40,19 @@ class Command(commands.Command):
         range_ = plugin.model.configuration.get('plugins').get('collect').get(
             'range')
 
-        fox = user.fox
+        berryEmoji = emoji.Emoji.berry
+        foxEmoji = emoji.Emoji.fox
 
-        collecting = sum([
+        foxQuantity = user.fox
+
+        berryQuantity = sum([
             random.choice(range(range_.get('start'), range_.get('stop')))
-            for _ in range(fox)
+            for _ in range(foxQuantity)
         ])
 
-        description = f'Вы собрали {emoji.Emoji.BERRY} {decorate.decorate(humanize.humanize(collecting))} ягод от {emoji.Emoji.FOX} {decorate.decorate(humanize.humanize(fox))} лис'  # noqa: E501
+        description = f'Вы собрали {berryEmoji} {decorate.decorate(humanize.humanize(berryQuantity))} ягод от {foxEmoji} {decorate.decorate(humanize.humanize(foxQuantity))} лис'  # noqa: E501
 
-        await database.increment(id_, field='berry', by=collecting)
+        await database.increment(id_, 'berry', berryQuantity)
 
         await context.respond(
             embed=context.embed.embed('default', description=description))

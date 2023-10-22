@@ -71,7 +71,8 @@ def command(
     name: str,
     description: str,
     period: datetime.timedelta,
-    group: typing.Optional[crescent.Group] = None
+    group: typing.Optional[crescent.Group] = None,
+    subGroup: typing.Optional[crescent.SubGroup] = None
 ) -> typing.Callable[
     [Command], crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
     """Description
@@ -85,6 +86,9 @@ def command(
     period : datetime.timedelta
         Description
     group : typing.Optional[crescent.Group]
+        Defaults to `None`
+        Description
+    subGroup : typing.Optional[crescent.SubGroup]
         Defaults to `None`
         Description
 
@@ -118,6 +122,9 @@ def command(
 
         if group is not None:
             includable = group.child(includable)
+
+        if subGroup is not None:
+            includable = subGroup.child(includable)
 
         return includable
 

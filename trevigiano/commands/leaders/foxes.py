@@ -9,8 +9,8 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('лисы',
-                  description='Лисы',
+@commands.command('лис',
+                  description='Лидеры лис',
                   period=periods.period,
                   group=groups.group)
 class Command(commands.Command):
@@ -30,9 +30,9 @@ class Command(commands.Command):
         _embed = context.embed.embed('default')
 
         emojis = {
-            1: emoji.Emoji.FIRST,
-            2: emoji.Emoji.SECOND,
-            3: emoji.Emoji.THIRD
+            1: emoji.Emoji.first,
+            2: emoji.Emoji.second,
+            3: emoji.Emoji.third
         }
 
         for index, user in enumerate(users):

@@ -10,19 +10,26 @@ class Collect(typing.TypedDict):
     range: Range
 
 
-class Steal(typing.TypedDict):
-    probability: typing.Union[float, int]
-    fraction: typing.Union[float, int]
+class Netherite(typing.TypedDict):
+    scraps: typing.Union[float, int]
 
 
-class Tame(typing.TypedDict):
-    multiplicateur: typing.Union[float, int]
+class Purchase(typing.TypedDict):
+    coins: typing.Union[float, int]
+    diamonds: typing.Union[float, int]
+
+    netherite: Netherite
+
+
+class Multipliers(typing.TypedDict):
+    tame: typing.Union[float, int]
+
+    purchase: Purchase
 
 
 class Plugins(typing.TypedDict):
     collect: Collect
-    steal: Steal
-    tame: Tame
+    multipliers: Multipliers
 
 
 class Configuration(typing.TypedDict):
