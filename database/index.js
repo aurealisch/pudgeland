@@ -49,11 +49,11 @@ const User = sequelize.define("user", {
   diamond: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
-fastifyInstance.get("/users/", async (fastifyRequest, fastifyReply) => {
+fastifyInstance.get("/users/", (fastifyRequest, fastifyReply) => {
   const { id } = fastifyRequest.query;
 
   User.findOrCreate({ where: { id } }).then(([user]) => {
-    fastifyReply.send({
+    return fastifyReply.send({
       berry: user.berry,
       fox: user.fox,
 
@@ -149,7 +149,7 @@ fastifyInstance.get("/leaders/berry/", (fastifyRequest, fastifyReply) => {
     limit: 3,
     order: [["berry", "DESC"]],
   }).then((users) => {
-    fastifyReply.send(
+    return fastifyReply.send(
       users.map((user) => {
         return {
           id: user.id,
@@ -165,7 +165,7 @@ fastifyInstance.get("/leaders/fox/", (fastifyRequest, fastifyReply) => {
     limit: 3,
     order: [["fox", "DESC"]],
   }).then((users) => {
-    fastifyReply.send(
+    return fastifyReply.send(
       users.map((user) => {
         return {
           id: user.id,
@@ -181,7 +181,7 @@ fastifyInstance.get("/leaders/coin/", (fastifyRequest, fastifyReply) => {
     limit: 3,
     order: [["coin", "DESC"]],
   }).then((users) => {
-    fastifyReply.send(
+    return fastifyReply.send(
       users.map((user) => {
         return {
           id: user.id,
@@ -199,7 +199,7 @@ fastifyInstance.get(
       limit: 3,
       order: [["netheriteScrap", "DESC"]],
     }).then((users) => {
-      fastifyReply.send(
+      return fastifyReply.send(
         users.map((user) => {
           return {
             id: user.id,
@@ -216,7 +216,7 @@ fastifyInstance.get("/leaders/diamond/", (fastifyRequest, fastifyReply) => {
     limit: 3,
     order: [["diamond", "DESC"]],
   }).then((users) => {
-    fastifyReply.send(
+    return fastifyReply.send(
       users.map((user) => {
         return {
           id: user.id,
@@ -229,7 +229,7 @@ fastifyInstance.get("/leaders/diamond/", (fastifyRequest, fastifyReply) => {
 
 fastifyInstance.addHook("onRequest", async (fastifyRequest, fastifyReply) => {
   if (headersAuthorization !== fastifyRequest.headers.authorization) {
-    fastifyReply.code(403).send();
+    return fastifyReply.code(403).send({ message: 'Forbidden' });
   }
 });
 
