@@ -26,8 +26,8 @@ configuration: configurations.Configuration = {
     'plugins': {
         'collect': {
             'range': {
-                'start': 10,
-                'stop': 100
+                'start': 25,
+                'stop': 125
             }
         },
         'multipliers': {
@@ -38,7 +38,7 @@ configuration: configurations.Configuration = {
                     'scraps': 8
                 }
             },
-            'tame': 75
+            'tame': 50
         }
     }
 }
