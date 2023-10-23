@@ -27,29 +27,18 @@ class Command(commands.Command):
 
         users = await plugin.model.database.selectLeaders('diamond')
 
-        _embed = context.embed.embed('diamonds')
-
         emojis = {
             1: emoji.Emoji.first,
             2: emoji.Emoji.second,
             3: emoji.Emoji.third
         }
 
-        for index, user in enumerate(users):
-            name = '\u0020'
+        title = f'{emoji.Emoji.diamond} Лидеры алмазов'
 
-            position = index + 1
+        description = '\n'.join([
+            f'{emojis[position]} **#{position}** <@{user.id}> {context.decorate.decorate(context.humanize.humanize(user.diamond))}'
+            for position, user in enumerate(users, start=1)
+        ])
 
-            if position in emojis:
-                name += emojis[position]
-
-            name += f'#{position}'
-
-            _embed.add_field(
-                name=name,
-                value='\n'.join([
-                    f'<@{user.id}>',
-                    f'Алмазы: {context.decorate.decorate(context.humanize.humanize(user.diamond))}'  # noqa: E501
-                ]))
-
-        await context.respond(embed=_embed)
+        await context.respond(embed=context.embed.embed(
+            'diamonds', title=title, description=description))

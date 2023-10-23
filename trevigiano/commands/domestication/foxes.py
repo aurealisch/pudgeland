@@ -34,7 +34,6 @@ class Command(commands.Command):
         """
         database = plugin.model.database
 
-        decorate = context.decorate
         emoji = context.emoji
         embed = context.embed
         humanize = context.humanize
@@ -50,9 +49,11 @@ class Command(commands.Command):
 
         okEmoji = emoji.Emoji.ok
         cancelEmoji = emoji.Emoji.cancel
-        berryEmoji = emoji.Emoji.berry
+        foxEmoji = emoji.Emoji.fox
 
         style = hikari.ButtonStyle.SECONDARY
+
+        title = f'{foxEmoji} Приручение лисы'
 
         @flare.button(label='ОК', emoji=okEmoji, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
@@ -73,15 +74,13 @@ class Command(commands.Command):
                 await database.increment(id_, 'fox', 1)
                 await database.decrement(id_, 'berry', berryQuantity)
 
-                description = f'Вы приручили лису за {berryEmoji} {decorate.decorate(humanize.humanize(berryQuantity))} ягод'
+                description = f'```+1 лиса (Всего: {humanize.humanize(user.fox + 1)})\n-{humanize.humanize(berryQuantity)} ягод (Всего: {humanize.humanize(user.berry - berryQuantity)})```'
 
-                await messageContext.respond(
-                    embed=embed.embed('default', description=description))
+                await messageContext.respond(embed=embed.embed(
+                    'foxes', title=title, description=description))
             except Exception as exception:
                 await context.handle.handle(messageContext,
                                             exception=exception)
-
-            await message.delete()
 
         @flare.button(label='Отменить', emoji=cancelEmoji, style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
@@ -97,18 +96,20 @@ class Command(commands.Command):
             await messageContext.defer(flags=flags)
             await message.delete()
 
-            await messageContext.respond(
-                flags=flags,
-                embed=embed.embed('default', description='Отменено'))
+            await messageContext.respond(flags=flags,
+                                         embed=embed.embed(
+                                             'foxes',
+                                             title=title,
+                                             description='Отменено'))
 
         _ok = ok()
         _cancel = cancel()
 
         component = await flare.Row(_ok, _cancel)
 
-        description = f'Чтобы попробовать приручить лису, потребуется скормить {berryEmoji} {decorate.decorate(humanize.humanize(berryQuantity))} ягод'  # noqa: E501
+        description = f'```Стоимость: {humanize.humanize(berryQuantity)} ягод```'
 
-        _embed = embed.embed('default', description=description)
+        _embed = embed.embed('foxes', title=title, description=description)
 
         message = await context.respond(ephemeral=True,
                                         component=component,

@@ -51,6 +51,8 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
+        title = f'{diamondEmoji} Продажа алмазов'
+
         def sale(diamondQuantity: DiamondQuantity) -> None:
             """Description
 
@@ -86,19 +88,20 @@ class Command(commands.Command):
 
                     description = f'Вы продали {diamondEmoji} `{decorate.decorate(humanize.humanize(diamondQuantity))}` алмазов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет'
 
-                    await messageContext.respond(
-                        embed=embed.embed('diamonds', description=description))
+                    await messageContext.respond(embed=embed.embed(
+                        'diamonds', title=title, description=description))
                 except Exception as exception:
                     await handle.handle(messageContext, exception=exception)
 
             return callback
 
         component = await flare.Row(*(flare.button(
-            label=f'{coinQuantity} монет', style=style, emoji=diamondEmoji)(
-                sale(coinQuantity))() for coinQuantity in diamondQuantities))
+            label=f'{coinQuantity} алмаз', style=style)(sale(coinQuantity))()
+                                      for coinQuantity in diamondQuantities))
 
         _embed = embed.embed(
             'diamonds',
+            title=title,
             description=f'```1 алмаз к {saleDiamondsMultiplier} монетам```')
 
         message = await context.respond(component=component, embed=_embed)

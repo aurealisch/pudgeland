@@ -6,7 +6,7 @@ class Emoji(str):
     berry = '<:berry:1146730658845171742>'
     fox = '<:fox:1146730676259921972>'
 
-    coin = '<:coin:1160624041904848937>'
+    coin = ':coin:'
 
     diamond = '<:diamond:1147867834114904156>'
 
@@ -16,5 +16,7 @@ class Emoji(str):
 
     ok = '<:available:1154061905686708274>'
     cancel = '<:unavailable:1153393415317368883>'
+
+    profile = ':bust_in_silhouette:'
 
     netherite = Netherite

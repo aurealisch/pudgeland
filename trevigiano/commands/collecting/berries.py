@@ -29,7 +29,6 @@ class Command(commands.Command):
         """
         database = plugin.model.database
 
-        decorate = context.decorate
         emoji = context.emoji
         humanize = context.humanize
 
@@ -41,7 +40,6 @@ class Command(commands.Command):
             'range')
 
         berryEmoji = emoji.Emoji.berry
-        foxEmoji = emoji.Emoji.fox
 
         foxQuantity = user.fox
 
@@ -50,9 +48,10 @@ class Command(commands.Command):
             for _ in range(foxQuantity)
         ])
 
-        description = f'Вы собрали {berryEmoji} {decorate.decorate(humanize.humanize(berryQuantity))} ягод от {foxEmoji} {decorate.decorate(humanize.humanize(foxQuantity))} лис'  # noqa: E501
+        title = f'{berryEmoji} Сбор ягод'
+        description = f'```+{humanize.humanize(berryQuantity)} ягод (Всего: {user.berry + berryQuantity})```'  # noqa: E501
 
         await database.increment(id_, 'berry', berryQuantity)
 
-        await context.respond(
-            embed=context.embed.embed('default', description=description))
+        await context.respond(embed=context.embed.embed(
+            'berries', title=title, description=description))

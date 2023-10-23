@@ -43,13 +43,15 @@ class Command(commands.Command):
 
         coinQuantities: typing.Sequence[CoinQuantity] = [1, 3, 5]
 
-        purchaseCoinsMultiplier = configuration.get('plugins').get('multipliers').get(
-            'purchase').get('coins')
+        purchaseCoinsMultiplier = configuration.get('plugins').get(
+            'multipliers').get('purchase').get('coins')
 
         coinEmoji = emoji.Emoji.coin
         berryEmoji = emoji.Emoji.berry
 
         style = hikari.ButtonStyle.SECONDARY
+
+        title = f'{coinEmoji} Продажа монет'
 
         def purchase(coinQuantity: CoinQuantity) -> None:
             """Description
@@ -86,18 +88,20 @@ class Command(commands.Command):
 
                     description = f'Вы купили {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет за {berryEmoji} `{decorate.decorate(humanize.humanize(berryQuantity))}` ягод'
 
-                    await messageContext.respond(
-                        embed=embed.embed('default', description=description))
+                    await messageContext.respond(embed=embed.embed(
+                        'coins', title=title, description=description))
                 except Exception as exception:
                     await handle.handle(messageContext, exception=exception)
 
             return callback
 
-        component = await flare.Row(*(flare.button(
-            label=f'{coinQuantity} монет', style=style, emoji=coinEmoji)(purchase(
-                coinQuantity))() for coinQuantity in coinQuantities))
+        component = await flare.Row(
+            *(flare.button(label=f'{coinQuantity} монет', style=style)(
+                purchase(coinQuantity))() for coinQuantity in coinQuantities))
 
         _embed = embed.embed(
-            'default', description=f'```{purchaseCoinsMultiplier} ягод к 1 монете```')
+            'coins',
+            title=title,
+            description=f'```{purchaseCoinsMultiplier} ягод к 1 монете```')
 
         message = await context.respond(component=component, embed=_embed)

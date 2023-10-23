@@ -57,6 +57,8 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
+        title = f'{netheriteScrapEmoji} Продажа незеритовых ломов'
+
         def purchase(netheriteScrapQuantity: NetheriteScrapQuantity) -> None:
             """Description
 
@@ -93,8 +95,10 @@ class Command(commands.Command):
 
                     description = f'Вы купили {netheriteScrapEmoji} `{decorate.decorate(humanize.humanize(netheriteScrapQuantity))}` незеритовых ломов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет'
 
-                    await messageContext.respond(embed=embed.embed(
-                        'netheriteScraps', description=description))
+                    await messageContext.respond(
+                        embed=embed.embed('netheriteScraps',
+                                          title=title,
+                                          description=description))
                 except Exception as exception:
                     await handle.handle(messageContext, exception=exception)
 
@@ -102,13 +106,12 @@ class Command(commands.Command):
 
         component = await flare.Row(
             *(flare.button(label=f'{netheriteScrapQuantity} незеритовых ломов',
-                           style=style,
-                           emoji=netheriteScrapEmoji)(purchase(
-                               netheriteScrapQuantity))()
+                           style=style)(purchase(netheriteScrapQuantity))()
               for netheriteScrapQuantity in netheriteScrapQuantities))
 
         _embed = embed.embed(
             'netheriteScraps',
+            title=title,
             description=
             f'```{purchaseNetheriteScrapsMultiplier} монет к 1 незеритовому лому```'
         )
