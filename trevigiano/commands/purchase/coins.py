@@ -51,7 +51,7 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f'{coinEmoji} Продажа монет'
+        title = f'{coinEmoji} Покупка монет'
 
         def purchase(coinQuantity: CoinQuantity) -> None:
             """Description

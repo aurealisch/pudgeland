@@ -57,7 +57,7 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f'{netheriteScrapEmoji} Продажа незеритовых ломов'
+        title = f'{netheriteScrapEmoji} Покупка незеритовых ломов'
 
         def purchase(netheriteScrapQuantity: NetheriteScrapQuantity) -> None:
             """Description
