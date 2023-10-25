@@ -38,7 +38,7 @@ configuration: configurations.Configuration = {
                     'scraps': 8
                 }
             },
-            'tame': 200
+            'tame': 125
         }
     }
 }
