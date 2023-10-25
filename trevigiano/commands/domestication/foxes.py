@@ -45,7 +45,7 @@ class Command(commands.Command):
 
         user = await database.upsert(id_)
 
-        berryQuantity = round((user.fox + 1) * tameMultiplier)
+        berryQuantity = round(user.fox * tameMultiplier)
 
         okEmoji = emoji.Emoji.ok
         cancelEmoji = emoji.Emoji.cancel
