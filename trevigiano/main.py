@@ -32,13 +32,13 @@ configuration: configurations.Configuration = {
         },
         'multipliers': {
             'purchase': {
-                'coins': 500,
+                'coins': 125,
                 'diamonds': 4,
                 'netherite': {
                     'scraps': 8
                 }
             },
-            'tame': 150
+            'tame': 250
         }
     }
 }
