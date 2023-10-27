@@ -14,19 +14,19 @@ errors = plugin.errors
 
 period = datetime.timedelta(seconds=2, milliseconds=500)
 
-group = crescent.Group('приручение', description='Приручение')
+group = crescent.Group("приручение", description="Приручение")
 
 
 @plugin.include
-@commands.command('лисы',
-                  description='Приручение лисы',
+@commands.command("лисы",
+                  description="Приручение лисы",
                   period=period,
                   group=group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -38,8 +38,8 @@ class Command(commands.Command):
         embed = context.embed
         humanize = context.humanize
 
-        tameMultiplier = plugin.model.configuration.get('plugins').get(
-            'multipliers').get('tame')
+        tameMultiplier = (plugin.model.configuration.get("plugins").get(
+            "multipliers").get("tame"))
 
         id_ = context.user.id
 
@@ -53,9 +53,9 @@ class Command(commands.Command):
 
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f'{foxEmoji} Приручение лисы'
+        title = f"{foxEmoji} Приручение лисы"
 
-        @flare.button(label='ОК', emoji=okEmoji, style=style)
+        @flare.button(label="ОК", emoji=okEmoji, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
             """Description
 
@@ -69,20 +69,20 @@ class Command(commands.Command):
 
             try:
                 if user.berry < berryQuantity:
-                    raise errors.Error('Недостаточно ягод')
+                    raise errors.Error("Недостаточно ягод")
 
-                await database.increment(id_, 'fox', 1)
-                await database.decrement(id_, 'berry', berryQuantity)
+                await database.increment(id_, "fox", 1)
+                await database.decrement(id_, "berry", berryQuantity)
 
-                description = f'```+1 лиса (Всего: {humanize.humanize(user.fox + 1)})\n-{humanize.humanize(berryQuantity)} ягод (Всего: {humanize.humanize(user.berry - berryQuantity)})```'
+                description = f"```+1 лиса (Всего: {humanize.humanize(user.fox + 1)})\n-{humanize.humanize(berryQuantity)} ягод (Всего: {humanize.humanize(user.berry - berryQuantity)})```"
 
                 await messageContext.respond(embed=embed.embed(
-                    'foxes', title=title, description=description))
+                    "foxes", title=title, description=description))
             except Exception as exception:
                 await context.handle.handle(messageContext,
                                             exception=exception)
 
-        @flare.button(label='Отменить', emoji=cancelEmoji, style=style)
+        @flare.button(label="Отменить", emoji=cancelEmoji, style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
             """Description
 
@@ -98,18 +98,18 @@ class Command(commands.Command):
 
             await messageContext.respond(flags=flags,
                                          embed=embed.embed(
-                                             'foxes',
+                                             "foxes",
                                              title=title,
-                                             description='Отменено'))
+                                             description="Отменено"))
 
         _ok = ok()
         _cancel = cancel()
 
         component = await flare.Row(_ok, _cancel)
 
-        description = f'```Стоимость: {humanize.humanize(berryQuantity)} ягод```'
+        description = f"```Стоимость: {humanize.humanize(berryQuantity)} ягод```"
 
-        _embed = embed.embed('foxes', title=title, description=description)
+        _embed = embed.embed("foxes", title=title, description=description)
 
         message = await context.respond(ephemeral=True,
                                         component=component,

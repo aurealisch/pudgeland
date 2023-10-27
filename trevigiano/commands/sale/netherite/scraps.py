@@ -14,20 +14,22 @@ commands = plugin.commands
 contexts = plugin.contexts
 errors = plugin.errors
 
-subGroup = crescent.SubGroup('незеритовых', groups.group, 'Незеритовых')
+subGroup = crescent.SubGroup("незеритовых", groups.group, "Незеритовых")
 
 
 @plugin.include
-@commands.command('ломов',
-                  description='Продажа незеритовых ломов',
-                  period=periods.period,
-                  group=groups.group,
-                  subGroup=subGroup)
+@commands.command(
+    "ломов",
+    description="Продажа незеритовых ломов",
+    period=periods.period,
+    group=groups.group,
+    subGroup=subGroup,
+)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -49,15 +51,15 @@ class Command(commands.Command):
             1, 3, 5
         ]
 
-        saleNetheriteScrapsMultiplier = (configuration.get('plugins').get(
-            'multipliers').get('purchase').get('netherite').get('scraps')) // 2
+        saleNetheriteScrapsMultiplier = (configuration.get("plugins").get(
+            "multipliers").get("purchase").get("netherite").get("scraps")) // 2
 
         coinEmoji = emoji.Emoji.coin
         netheriteScrapEmoji = emoji.Emoji.netherite.scrap
 
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f'{netheriteScrapEmoji} Продажа незеритовых ломов'
+        title = f"{netheriteScrapEmoji} Продажа незеритовых ломов"
 
         def sale(netheriteScrapQuantity: NetheriteScrapQuantity) -> None:
             """Description
@@ -67,7 +69,6 @@ class Command(commands.Command):
             netheriteScrapQuantity : NetheriteScrapQuantity
                 Description
             """
-
             coinQuantity = netheriteScrapQuantity * saleNetheriteScrapsMultiplier
 
             async def callback(messageContext: flare.MessageContext) -> None:
@@ -87,16 +88,16 @@ class Command(commands.Command):
                     user = await database.upsert(id_)
 
                     if user.netheriteScrap < netheriteScrapQuantity:
-                        raise errors.Error('Недостаточно незеритовых ломов')
+                        raise errors.Error("Недостаточно незеритовых ломов")
 
-                    await database.increment(id_, 'coin', coinQuantity)
-                    await database.decrement(id_, 'netheriteScrap',
+                    await database.increment(id_, "coin", coinQuantity)
+                    await database.decrement(id_, "netheriteScrap",
                                              netheriteScrapQuantity)
 
-                    description = f'Вы продали {netheriteScrapEmoji} `{decorate.decorate(humanize.humanize(netheriteScrapQuantity))}` незеритовых ломов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет'
+                    description = f"Вы продали {netheriteScrapEmoji} `{decorate.decorate(humanize.humanize(netheriteScrapQuantity))}` незеритовых ломов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет"
 
                     await messageContext.respond(
-                        embed=embed.embed('netheriteScraps',
+                        embed=embed.embed("netheriteScraps",
                                           title=title,
                                           description=description))
                 except Exception as exception:
@@ -105,15 +106,15 @@ class Command(commands.Command):
             return callback
 
         component = await flare.Row(
-            *(flare.button(label=f'{netheriteScrapQuantity} незеритовых ломов',
+            *(flare.button(label=f"{netheriteScrapQuantity} незеритовых ломов",
                            style=style)(sale(netheriteScrapQuantity))()
               for netheriteScrapQuantity in netheriteScrapQuantities))
 
         _embed = embed.embed(
-            'netheriteScraps',
+            "netheriteScraps",
             title=title,
             description=
-            f'```1 незеритовый лом к {saleNetheriteScrapsMultiplier} монетам```'
+            f"```1 незеритовый лом к {saleNetheriteScrapsMultiplier} монетам```"
         )
 
         message = await context.respond(component=component, embed=_embed)

@@ -9,15 +9,15 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command('алмазов',
-                  description='Лидеры алмазов',
+@commands.command("алмазов",
+                  description="Лидеры алмазов",
                   period=periods.period,
                   group=groups.group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -25,7 +25,7 @@ class Command(commands.Command):
         """
         emoji = context.emoji
 
-        users = await plugin.model.database.selectLeaders('diamond')
+        users = await plugin.model.database.selectLeaders("diamond")
 
         emojis = {
             1: emoji.Emoji.first,
@@ -33,12 +33,12 @@ class Command(commands.Command):
             3: emoji.Emoji.third
         }
 
-        title = f'{emoji.Emoji.diamond} Лидеры алмазов'
+        title = f"{emoji.Emoji.diamond} Лидеры алмазов"
 
-        description = '\n'.join([
-            f'{emojis[position]} **#{position}** <@{user.id}> {context.decorate.decorate(context.humanize.humanize(user.diamond))}'
+        description = "\n".join([
+            f"{emojis[position]} **#{position}** <@{user.id}> {context.decorate.decorate(context.humanize.humanize(user.diamond))}"
             for position, user in enumerate(users, start=1)
         ])
 
         await context.respond(embed=context.embed.embed(
-            'diamonds', title=title, description=description))
+            "diamonds", title=title, description=description))

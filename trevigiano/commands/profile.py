@@ -11,12 +11,12 @@ period = datetime.timedelta(seconds=2, milliseconds=500)
 
 
 @plugin.include
-@commands.command('профиль', description='Профиль', period=period)
+@commands.command("профиль", description="Профиль", period=period)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -36,7 +36,7 @@ class Command(commands.Command):
         netheriteScrap = user.netheriteScrap
         diamond = user.diamond
 
-        title = f'{emoji.Emoji.profile} Профиль'
+        title = f"{emoji.Emoji.profile} Профиль"
         # fmt: off
         description = "\n".join([
             f"{emoji.Emoji.berry} Ягоды: {decorate.decorate(humanize.humanize(berry))}" if berry != 0 else '\u0020',
@@ -50,4 +50,4 @@ class Command(commands.Command):
         # fmt: on
 
         await context.respond(embed=context.embed.embed(
-            'profile', title=title, description=description))
+            "profile", title=title, description=description))

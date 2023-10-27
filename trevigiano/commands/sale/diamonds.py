@@ -15,15 +15,15 @@ errors = plugin.errors
 
 
 @plugin.include
-@commands.command('алмазов',
-                  description='Продажа алмазов',
+@commands.command("алмазов",
+                  description="Продажа алмазов",
                   period=periods.period,
                   group=groups.group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -43,15 +43,15 @@ class Command(commands.Command):
 
         diamondQuantities: typing.Sequence[DiamondQuantity] = [1, 3, 5]
 
-        saleDiamondsMultiplier = (configuration.get('plugins').get(
-            'multipliers').get('purchase').get('diamonds')) // 2
+        saleDiamondsMultiplier = (configuration.get("plugins").get(
+            "multipliers").get("purchase").get("diamonds")) // 2
 
         coinEmoji = emoji.Emoji.coin
         diamondEmoji = emoji.Emoji.diamond
 
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f'{diamondEmoji} Продажа алмазов'
+        title = f"{diamondEmoji} Продажа алмазов"
 
         def sale(diamondQuantity: DiamondQuantity) -> None:
             """Description
@@ -61,7 +61,6 @@ class Command(commands.Command):
             diamondQuantity : DiamondQuantity
                 Description
             """
-
             coinQuantity = diamondQuantity * saleDiamondsMultiplier
 
             async def callback(messageContext: flare.MessageContext) -> None:
@@ -81,27 +80,27 @@ class Command(commands.Command):
                     user = await database.upsert(id_)
 
                     if user.diamond < diamondQuantity:
-                        raise errors.Error('Недостаточно алмазов')
+                        raise errors.Error("Недостаточно алмазов")
 
-                    await database.increment(id_, 'coin', coinQuantity)
-                    await database.decrement(id_, 'diamond', diamondQuantity)
+                    await database.increment(id_, "coin", coinQuantity)
+                    await database.decrement(id_, "diamond", diamondQuantity)
 
-                    description = f'Вы продали {diamondEmoji} `{decorate.decorate(humanize.humanize(diamondQuantity))}` алмазов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет'
+                    description = f"Вы продали {diamondEmoji} `{decorate.decorate(humanize.humanize(diamondQuantity))}` алмазов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет"
 
                     await messageContext.respond(embed=embed.embed(
-                        'diamonds', title=title, description=description))
+                        "diamonds", title=title, description=description))
                 except Exception as exception:
                     await handle.handle(messageContext, exception=exception)
 
             return callback
 
         component = await flare.Row(*(flare.button(
-            label=f'{coinQuantity} алмаз', style=style)(sale(coinQuantity))()
+            label=f"{coinQuantity} алмаз", style=style)(sale(coinQuantity))()
                                       for coinQuantity in diamondQuantities))
 
         _embed = embed.embed(
-            'diamonds',
+            "diamonds",
             title=title,
-            description=f'```1 алмаз к {saleDiamondsMultiplier} монетам```')
+            description=f"```1 алмаз к {saleDiamondsMultiplier} монетам```")
 
         message = await context.respond(component=component, embed=_embed)

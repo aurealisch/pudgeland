@@ -5,10 +5,10 @@ def humanize(number: int) -> str:
     ----------
     number : int
         Description
-    
+
     Returns
     -------
     str
         Description
     """
-    return f'{number:,}'.replace(',', '\u0020')
+    return f"{number:,}".replace(",", "\u0020")

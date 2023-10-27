@@ -6,9 +6,11 @@ import flare
 from trevigiano import contexts, embed, errors
 
 
-async def handle(contextOrMessageContext: typing.Union['contexts.Context',
-                                                       flare.MessageContext],
-                 exception: Exception) -> None:
+async def handle(
+    contextOrMessageContext: typing.Union["contexts.Context",
+                                          flare.MessageContext],
+    exception: Exception,
+) -> None:
     """Description
 
     Parameters
@@ -23,7 +25,7 @@ async def handle(contextOrMessageContext: typing.Union['contexts.Context',
 
     if isinstance(exception, errors.Error):
         await contextOrMessageContext.respond(
-            embed=embed.embed('error', description=f'```{exception}```'))
+            embed=embed.embed("error", description=f"```{exception}```"))
 
         return
 

@@ -28,7 +28,7 @@ class Command:
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -53,7 +53,7 @@ async def callback(context: crescent.Context,
     crescent.HookResult | None
         Description
     """
-    timestamp = f'<t:{round(period.total_seconds() + time.time())}:R>'
+    timestamp = f"<t:{round(period.total_seconds() + time.time())}:R>"
 
     description = trim.trim(f"""
         Ты слишком часто используешь эту команду!
@@ -61,7 +61,7 @@ async def callback(context: crescent.Context,
         Попробуйте еще раз {timestamp}
     """)
 
-    await context.respond(embed=embed.embed('default', description=description)
+    await context.respond(embed=embed.embed("default", description=description)
                           )
 
     return crescent.HookResult(True)
@@ -72,7 +72,7 @@ def command(
     description: str,
     period: datetime.timedelta,
     group: typing.Optional[crescent.Group] = None,
-    subGroup: typing.Optional[crescent.SubGroup] = None
+    subGroup: typing.Optional[crescent.SubGroup] = None,
 ) -> typing.Callable[
     [Command], crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
     """Description
@@ -99,7 +99,7 @@ def command(
     """  # noqa: E501
 
     def inner(
-        command: Command
+        command: Command,
     ) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
         """Description
 

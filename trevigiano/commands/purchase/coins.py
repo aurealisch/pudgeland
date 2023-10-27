@@ -15,15 +15,15 @@ errors = plugin.errors
 
 
 @plugin.include
-@commands.command('монет',
-                  description='Покупка монет',
+@commands.command("монет",
+                  description="Покупка монет",
                   period=periods.period,
                   group=groups.group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
         """Description
-        
+
         Parameters
         ----------
         context : contexts.Context
@@ -43,15 +43,15 @@ class Command(commands.Command):
 
         coinQuantities: typing.Sequence[CoinQuantity] = [1, 3, 5]
 
-        purchaseCoinsMultiplier = configuration.get('plugins').get(
-            'multipliers').get('purchase').get('coins')
+        purchaseCoinsMultiplier = (configuration.get("plugins").get(
+            "multipliers").get("purchase").get("coins"))
 
         coinEmoji = emoji.Emoji.coin
         berryEmoji = emoji.Emoji.berry
 
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f'{coinEmoji} Покупка монет'
+        title = f"{coinEmoji} Покупка монет"
 
         def purchase(coinQuantity: CoinQuantity) -> None:
             """Description
@@ -61,7 +61,6 @@ class Command(commands.Command):
             coinQuantity : CoinQuantity
                 Description
             """
-
             berryQuantity = coinQuantity * purchaseCoinsMultiplier
 
             async def callback(messageContext: flare.MessageContext) -> None:
@@ -81,27 +80,27 @@ class Command(commands.Command):
                     user = await database.upsert(id_)
 
                     if user.berry < berryQuantity:
-                        raise errors.Error('Недостаточно ягод')
+                        raise errors.Error("Недостаточно ягод")
 
-                    await database.increment(id_, 'coin', coinQuantity)
-                    await database.decrement(id_, 'berry', berryQuantity)
+                    await database.increment(id_, "coin", coinQuantity)
+                    await database.decrement(id_, "berry", berryQuantity)
 
-                    description = f'Вы купили {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет за {berryEmoji} `{decorate.decorate(humanize.humanize(berryQuantity))}` ягод'
+                    description = f"Вы купили {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет за {berryEmoji} `{decorate.decorate(humanize.humanize(berryQuantity))}` ягод"
 
                     await messageContext.respond(embed=embed.embed(
-                        'coins', title=title, description=description))
+                        "coins", title=title, description=description))
                 except Exception as exception:
                     await handle.handle(messageContext, exception=exception)
 
             return callback
 
         component = await flare.Row(
-            *(flare.button(label=f'{coinQuantity} монет', style=style)(
+            *(flare.button(label=f"{coinQuantity} монет", style=style)(
                 purchase(coinQuantity))() for coinQuantity in coinQuantities))
 
         _embed = embed.embed(
-            'coins',
+            "coins",
             title=title,
-            description=f'```{purchaseCoinsMultiplier} ягод к 1 монете```')
+            description=f"```{purchaseCoinsMultiplier} ягод к 1 монете```")
 
         message = await context.respond(component=component, embed=_embed)
