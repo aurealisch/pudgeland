@@ -1,5 +1,3 @@
-import typing
-
 import flare
 import hikari
 
@@ -29,7 +27,6 @@ class Command(commands.Command):
         context : contexts.Context
             Description
         """
-
         database = plugin.model.database
         configuration = plugin.model.configuration
 
@@ -38,70 +35,61 @@ class Command(commands.Command):
         handle = context.handle
         humanize = context.humanize
 
-        CoinQuantity = typing.Literal[1, 3, 5]
-
-        coinQuantities: typing.Sequence[CoinQuantity] = [1, 3, 5]
-
         purchaseCoinsMultiplier = (configuration.get("plugins").get(
             "multipliers").get("purchase").get("coins"))
 
-        coinEmoji = emoji.Emoji.coin
+        title = f"{emoji.Emoji.coin} Покупка монет"
 
-        style = hikari.ButtonStyle.SECONDARY
-
-        title = f"{coinEmoji} Покупка монет"
-
-        def purchase(coinQuantity: CoinQuantity) -> None:
+        async def purchaseCoins(messageContext: flare.MessageContext,
+                                coinQuantity: int) -> None:
             """Description
 
             Parameters
             ----------
-            coinQuantity : CoinQuantity
+            messageContext : flare.MessageContext
+                Description
+            coinQuantity : int
                 Description
             """
+            await messageContext.defer()
+            await message.delete()
+
             berryQuantity = coinQuantity * purchaseCoinsMultiplier
 
-            async def callback(messageContext: flare.MessageContext) -> None:
-                """Description
+            try:
+                id_ = messageContext.user.id
 
-                Parameters
-                ----------
-                messageContext : flare.MessageContext
-                    Description
-                """
-                await messageContext.defer()
-                await message.delete()
+                user = await database.upsert(id_)
 
-                try:
-                    id_ = messageContext.user.id
+                if user.berry < berryQuantity:
+                    raise errors.Error("Недостаточно ягод")
 
-                    user = await database.upsert(id_)
+                await database.increment(id_, "coin", coinQuantity)
+                await database.decrement(id_, "berry", berryQuantity)
 
-                    if user.berry < berryQuantity:
-                        raise errors.Error("Недостаточно ягод")
+                description = "```" + "\n".join([
+                    f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
+                    f"-{humanize.humanize(berryQuantity)} ягоды (Всего: {user.berry - berryQuantity})"
+                ]) + "```"
 
-                    await database.increment(id_, "coin", coinQuantity)
-                    await database.decrement(id_, "berry", berryQuantity)
+                await messageContext.respond(embed=embed.embed(
+                    "coins", title=title, description=description))
+            except Exception as exception:
+                await handle.handle(messageContext, exception=exception)
 
-                    description = "\n".join([
-                        f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
-                        f"-{humanize.humanize(berryQuantity)} ягоды (Всего: {user.berry - berryQuantity})"
-                    ])
+        style = hikari.ButtonStyle.SECONDARY
 
-                    await messageContext.respond(embed=embed.embed(
-                        "coins", title=title, description=description))
-                except Exception as exception:
-                    await handle.handle(messageContext, exception=exception)
+        # fmt: off
+        components = await flare.Row(
+            flare.button(label="4 монет", style=style)(purchaseCoins)(4),
+            flare.button(label="6 монет", style=style)(purchaseCoins)(6),
+            flare.button(label="8 монет", style=style)(purchaseCoins)(8))
+        # fmt: on
 
-            return callback
-
-        component = await flare.Row(
-            *(flare.button(label=f"{coinQuantity} монет", style=style)(
-                purchase(coinQuantity))() for coinQuantity in coinQuantities))
-
-        _embed = embed.embed(
-            "coins",
-            title=title,
-            description=f"```{purchaseCoinsMultiplier} ягод к 1 монете```")
-
-        message = await context.respond(component=component, embed=_embed)
+        message = await context.respond(
+            components=components,
+            embed=embed.embed(
+                "coins",
+                title=title,
+                description=f"```{purchaseCoinsMultiplier} ягод к 1 монете```")
+        )

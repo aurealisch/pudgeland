@@ -1,5 +1,3 @@
-import typing
-
 import flare
 import hikari
 
@@ -29,7 +27,6 @@ class Command(commands.Command):
         context : contexts.Context
             Description
         """
-
         database = plugin.model.database
         configuration = plugin.model.configuration
 
@@ -38,70 +35,61 @@ class Command(commands.Command):
         handle = context.handle
         humanize = context.humanize
 
-        DiamondQuantity = typing.Literal[1, 3, 5]
-
-        diamondQuantities: typing.Sequence[DiamondQuantity] = [1, 3, 5]
-
         saleDiamondsMultiplier = (configuration.get("plugins").get(
             "multipliers").get("purchase").get("diamonds")) // 2
 
-        diamondEmoji = emoji.Emoji.diamond
+        title = f"{emoji.Emoji.diamond} Продажа алмазов"
 
-        style = hikari.ButtonStyle.SECONDARY
-
-        title = f"{diamondEmoji} Продажа алмазов"
-
-        def sale(diamondQuantity: DiamondQuantity) -> None:
+        async def saleDiamonds(messageContext: flare.MessageContext,
+                               diamondQuantity: int) -> None:
             """Description
 
             Parameters
             ----------
-            diamondQuantity : DiamondQuantity
+            messageContext : flare.MessageContext
+                Description
+            diamondQuantity : int
                 Description
             """
+            await messageContext.defer()
+            await message.delete()
+
             coinQuantity = diamondQuantity * saleDiamondsMultiplier
 
-            async def callback(messageContext: flare.MessageContext) -> None:
-                """Description
+            try:
+                id_ = messageContext.user.id
 
-                Parameters
-                ----------
-                messageContext : flare.MessageContext
-                    Description
-                """
-                await messageContext.defer()
-                await message.delete()
+                user = await database.upsert(id_)
 
-                try:
-                    id_ = messageContext.user.id
+                if user.diamond < diamondQuantity:
+                    raise errors.Error("Недостаточно алмазов")
 
-                    user = await database.upsert(id_)
+                await database.increment(id_, "coin", coinQuantity)
+                await database.decrement(id_, "diamond", diamondQuantity)
 
-                    if user.diamond < diamondQuantity:
-                        raise errors.Error("Недостаточно алмазов")
+                description = "```" + "\n".join([
+                    f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
+                    f"-{humanize.humanize(diamondQuantity)} алмазы (Всего: {user.diamond - diamondQuantity})"
+                ]) + "```"
 
-                    await database.increment(id_, "coin", coinQuantity)
-                    await database.decrement(id_, "diamond", diamondQuantity)
+                await messageContext.respond(embed=embed.embed(
+                    "diamonds", title=title, description=description))
+            except Exception as exception:
+                await handle.handle(messageContext, exception=exception)
 
-                    description = "\n".join([
-                        f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
-                        f"-{humanize.humanize(diamondQuantity)} алмазы (Всего: {user.diamond - diamondQuantity})"
-                    ])
+        style = hikari.ButtonStyle.SECONDARY
 
-                    await messageContext.respond(embed=embed.embed(
-                        "diamonds", title=title, description=description))
-                except Exception as exception:
-                    await handle.handle(messageContext, exception=exception)
+        # fmt: off
+        components = await flare.Row(
+            flare.button(label="4 алмазов", style=style)(saleDiamonds)(4),
+            flare.button(label="6 алмазов", style=style)(saleDiamonds)(6),
+            flare.button(label="8 алмазов", style=style)(saleDiamonds)(8))
+        # fmt: on
 
-            return callback
-
-        component = await flare.Row(*(flare.button(
-            label=f"{coinQuantity} алмаз", style=style)(sale(coinQuantity))()
-                                      for coinQuantity in diamondQuantities))
-
-        _embed = embed.embed(
-            "diamonds",
-            title=title,
-            description=f"```1 алмаз к {saleDiamondsMultiplier} монетам```")
-
-        message = await context.respond(component=component, embed=_embed)
+        message = await context.respond(
+            components=components,
+            embed=embed.embed(
+                "diamonds",
+                title=title,
+                description=f"```1 алмаз к {saleDiamondsMultiplier} монетам```"
+            ))
