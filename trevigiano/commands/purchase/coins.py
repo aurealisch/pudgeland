@@ -36,7 +36,6 @@ class Command(commands.Command):
         emoji = context.emoji
         embed = context.embed
         handle = context.handle
-        decorate = context.decorate
         humanize = context.humanize
 
         CoinQuantity = typing.Literal[1, 3, 5]
@@ -47,7 +46,6 @@ class Command(commands.Command):
             "multipliers").get("purchase").get("coins"))
 
         coinEmoji = emoji.Emoji.coin
-        berryEmoji = emoji.Emoji.berry
 
         style = hikari.ButtonStyle.SECONDARY
 
@@ -85,7 +83,10 @@ class Command(commands.Command):
                     await database.increment(id_, "coin", coinQuantity)
                     await database.decrement(id_, "berry", berryQuantity)
 
-                    description = f"Вы купили {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет за {berryEmoji} `{decorate.decorate(humanize.humanize(berryQuantity))}` ягод"
+                    description = "\n".join([
+                        f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
+                        f"-{humanize.humanize(berryQuantity)} ягоды (Всего: {user.berry - berryQuantity})"
+                    ])
 
                     await messageContext.respond(embed=embed.embed(
                         "coins", title=title, description=description))

@@ -42,7 +42,6 @@ class Command(commands.Command):
         emoji = context.emoji
         embed = context.embed
         handle = context.handle
-        decorate = context.decorate
         humanize = context.humanize
 
         NetheriteScrapQuantity = typing.Literal[1, 3, 5]
@@ -54,7 +53,6 @@ class Command(commands.Command):
         purchaseNetheriteScrapsMultiplier = (configuration.get("plugins").get(
             "multipliers").get("purchase").get("netherite").get("scraps"))
 
-        coinEmoji = emoji.Emoji.coin
         netheriteScrapEmoji = emoji.Emoji.netherite.scrap
 
         style = hikari.ButtonStyle.SECONDARY
@@ -94,7 +92,10 @@ class Command(commands.Command):
                                              netheriteScrapQuantity)
                     await database.decrement(id_, "coin", coinQuantity)
 
-                    description = f"Вы купили {netheriteScrapEmoji} `{decorate.decorate(humanize.humanize(netheriteScrapQuantity))}` незеритовых ломов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет"
+                    description = "\n".join([
+                        f"+{humanize.humanize(netheriteScrapQuantity)} незеритовых ломов (Всего: {user.netheriteScrap + netheriteScrapQuantity})",
+                        f"-{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin - coinQuantity})"
+                    ])
 
                     await messageContext.respond(
                         embed=embed.embed("netheriteScraps",

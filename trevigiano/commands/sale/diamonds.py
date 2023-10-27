@@ -36,7 +36,6 @@ class Command(commands.Command):
         emoji = context.emoji
         embed = context.embed
         handle = context.handle
-        decorate = context.decorate
         humanize = context.humanize
 
         DiamondQuantity = typing.Literal[1, 3, 5]
@@ -46,7 +45,6 @@ class Command(commands.Command):
         saleDiamondsMultiplier = (configuration.get("plugins").get(
             "multipliers").get("purchase").get("diamonds")) // 2
 
-        coinEmoji = emoji.Emoji.coin
         diamondEmoji = emoji.Emoji.diamond
 
         style = hikari.ButtonStyle.SECONDARY
@@ -85,7 +83,10 @@ class Command(commands.Command):
                     await database.increment(id_, "coin", coinQuantity)
                     await database.decrement(id_, "diamond", diamondQuantity)
 
-                    description = f"Вы продали {diamondEmoji} `{decorate.decorate(humanize.humanize(diamondQuantity))}` алмазов за {coinEmoji} `{decorate.decorate(humanize.humanize(coinQuantity))}` монет"
+                    description = "\n".join([
+                        f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
+                        f"-{humanize.humanize(diamondQuantity)} алмазы (Всего: {user.diamond - diamondQuantity})"
+                    ])
 
                     await messageContext.respond(embed=embed.embed(
                         "diamonds", title=title, description=description))
