@@ -12,13 +12,7 @@ from trevigiano import contexts, embed, handle, trim
 class Command:
 
     async def callback(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         await context.defer()
 
         try:
@@ -27,32 +21,13 @@ class Command:
             await handle.handle(context, exception=exception)
 
     async def call(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         ...
 
 
 async def callback(context: crescent.Context,
                    period: datetime.timedelta) -> crescent.HookResult | None:
-    """Description
-
-    Parameters
-    ----------
-    context : crescent.Context
-        Description
-    period : datetime.timedelta
-        Description
-
-    Returns
-    -------
-    crescent.HookResult | None
-        Description
-    """
+    """Description"""
     timestamp = f"<t:{round(period.total_seconds() + time.time())}:R>"
 
     description = trim.trim(f"""
@@ -75,44 +50,12 @@ def command(
     subGroup: typing.Optional[crescent.SubGroup] = None,
 ) -> typing.Callable[
     [Command], crescent.internal.Includable[crescent.internal.AppCommandMeta]]:
-    """Description
-
-    Parameters
-    ----------
-    name : str
-        Description
-    description : str
-        Description
-    period : datetime.timedelta
-        Description
-    group : typing.Optional[crescent.Group]
-        Defaults to `None`
-        Description
-    subGroup : typing.Optional[crescent.SubGroup]
-        Defaults to `None`
-        Description
-
-    Returns
-    -------
-    typing.Callable[[Command], crecsent.internal.Includable[crescent.internal.AppCommandMeta]]
-        Description
-    """  # noqa: E501
+    """Description"""
 
     def inner(
         command: Command,
     ) -> crescent.internal.Includable[crescent.internal.AppCommandMeta]:
-        """Description
-
-        Parameters
-        ----------
-        command : Command
-            Description
-
-        Returns
-        -------
-        crescent.internal.Includable[crescent.internal.AppCommandMeta]
-            Description
-        """
+        """Description"""
         includable = crescent.hook(
             crescent.ext.cooldowns.cooldown(
                 1, period=period,

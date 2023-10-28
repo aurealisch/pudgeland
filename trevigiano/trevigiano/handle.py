@@ -11,15 +11,7 @@ async def handle(
                                           flare.MessageContext],
     exception: Exception,
 ) -> None:
-    """Description
-
-    Parameters
-    ----------
-    contextOrMessageContext : contexts.Context | flare.MessageContext
-        Description
-    exception : Exception
-        Description
-    """
+    """Description"""
     value = exception
     tb = exception.__traceback__
 

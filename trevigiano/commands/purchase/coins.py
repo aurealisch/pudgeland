@@ -20,13 +20,7 @@ errors = plugin.errors
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         database = plugin.model.database
         configuration = plugin.model.configuration
 
@@ -42,30 +36,22 @@ class Command(commands.Command):
 
         async def purchaseCoins(messageContext: flare.MessageContext,
                                 coinQuantity: int) -> None:
-            """Description
-
-            Parameters
-            ----------
-            messageContext : flare.MessageContext
-                Description
-            coinQuantity : int
-                Description
-            """
+            """Description"""
             await messageContext.defer()
             await message.delete()
 
             berryQuantity = coinQuantity * purchaseCoinsMultiplier
 
             try:
-                id_ = messageContext.user.id
+                identifier = str(messageContext.user.id)
 
-                user = await database.upsert(id_)
+                user = await database.upsert(identifier)
 
                 if user.berry < berryQuantity:
                     raise errors.Error("Недостаточно ягод")
 
-                await database.increment(id_, "coin", coinQuantity)
-                await database.decrement(id_, "berry", berryQuantity)
+                await database.increment(identifier, "coin", coinQuantity)
+                await database.decrement(identifier, "berry", berryQuantity)
 
                 description = "```" + "\n".join([
                     f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
@@ -80,14 +66,14 @@ class Command(commands.Command):
         style = hikari.ButtonStyle.SECONDARY
 
         # fmt: off
-        components = await flare.Row(
+        component = await flare.Row(
             flare.button(label="4 монет", style=style)(purchaseCoins)(4),
             flare.button(label="6 монет", style=style)(purchaseCoins)(6),
             flare.button(label="8 монет", style=style)(purchaseCoins)(8))
         # fmt: on
 
         message = await context.respond(
-            components=components,
+            component=component,
             embed=embed.embed(
                 "coins",
                 title=title,

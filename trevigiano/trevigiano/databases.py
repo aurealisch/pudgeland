@@ -1,12 +1,12 @@
 import dataclasses
 import typing
 
-import requests
+import asyncpg
 
 
 @dataclasses.dataclass
 class User:
-    id: typing.Optional[int] = None
+    id: typing.Optional[str] = None
     berry: typing.Optional[int] = None
     fox: typing.Optional[int] = None
     coin: typing.Optional[int] = None
@@ -14,95 +14,106 @@ class User:
     diamond: typing.Optional[int] = None
 
 
-Field = typing.Literal["berry", "fox", "coin", "netheriteScrap", "diamond"]
+Identifier = str
+Column = typing.Literal["berry", "fox", "coin", "netheriteScrap", "diamond"]
+Value = int
 
 
 class Database:
 
-    def __init__(self, authorization: str) -> None:
-        """Description
+    def __init__(self, host: typing.Any, port: typing.Any, user: typing.Any,
+                 password: typing.Any, database: typing.Any) -> None:
+        """Description"""
+        self.__host = host
+        self.__port = port
+        self.__user = user
+        self.__password = password
+        self.__database = database
 
-        Parameters
-        ----------
-        authorization : str
-            Description
+    async def connect(self) -> None:
+        """Description"""
+        self._connection: asyncpg.Connection = await asyncpg.connect(
+            host=self.__host,
+            port=self.__port,
+            user=self.__user,
+            password=self.__password,
+            database=self.__database)
+
+    async def close(self) -> None:
+        """Description"""
+        await self._connection.close()
+
+    async def reconnect(self) -> None:
+        """Description"""
+        if self._connection.is_closed:
+            await self.connect()
+
+    async def upsert(self, identifier: Identifier) -> User:
+        """Description"""
+        await self.reconnect()
+
+        query = """
+            SELECT "users"."berry",
+                   "users"."fox",
+                   "users"."coin",
+                   "users"."netheriteScrap",
+                   "users"."diamond"
+              FROM "users"
+             WHERE "users"."id" = $1;
         """
-        self.__authorization = authorization
-        self.__url = "https://panoramic-copper-production.up.railway.app"
-        self.__headers = {"authorization": self.__authorization}
 
-    async def upsert(self, id_: int) -> User:
-        """Description
+        record = await self._connection.fetchrow(query, identifier)
 
-        Parameters
-        ----------
-        id_ : int
-            Description
+        if isinstance(record, asyncpg.Record):
+            return User(**record)
 
-        Returns
-        -------
-        User
-            Description
+        query = """
+            INSERT INTO users ("id")
+            VALUES ($1);
         """
-        json = (requests.get(f"{self.__url}/users/",
-                             headers=self.__headers,
-                             params={"id": str(id_)})).json()
 
-        return User(**json)
+        await self._connection.execute(query, identifier)
 
-    async def selectLeaders(self, field: Field) -> list[User]:
-        """Description
+        return await self.upsert(identifier)
 
-        Parameters
-        ----------
-        field : Field
-            Description
+    async def selectLeaders(self, column: Column) -> typing.List[User]:
+        """Description"""
+        await self.reconnect()
 
-        Returns
-        -------
-        list[User]
-            Description
+        query = f"""
+              SELECT "users"."id",
+                     "users"."{column}"
+                FROM "users"
+            ORDER BY "users"."{column}" DESC
+               LIMIT 3;
         """
-        json = (requests.get(f"{self.__url}/leaders/{field}/",
-                             headers=self.__headers,
-                             params={"field": field})).json()
 
-        return list(map(lambda json: User(**json), json))
+        records = await self._connection.fetch(query)
 
-    async def increment(self, id_: str, field: Field, by: int) -> None:
-        """Description
+        return list(map(lambda record: User(**record), records))
 
-        Parameters
-        ----------
-        id_ : str
-            Description
-        field : Field
-            Description
-        by : int
-            Description
+    async def increment(self, identifier: Identifier, column: Column,
+                        value: Value) -> None:
+        """Description"""
+        await self.reconnect()
+
+        query = f"""
+            UPDATE "users"
+               SET "{column}" = "{column}" + {value}
+             WHERE "users"."id" = $1;
         """
-        requests.get(f"{self.__url}/users/{field}/increment/",
-                     headers=self.__headers,
-                     params={
-                         "id": str(id_),
-                         "by": str(by)
-                     })
 
-    async def decrement(self, id_: str, field: Field, by: int) -> None:
-        """Description
+        await self._connection.execute(query, identifier)
 
-        Parameters
-        ----------
-        id_ : str
-            Description
-        field : Field
-            Description
-        by : int
-            Description
+    async def decrement(self, identifier: Identifier, column: Column,
+                        value: Value) -> None:
+        """Description"""
+        await self.reconnect()
+
+        query = f"""
+            UPDATE "users"
+               SET "{column}" = "{column}" - {value}
+             WHERE "users"."id" = $1;
         """
-        requests.get(f"{self.__url}/users/{field}/decrement/",
-                     headers=self.__headers,
-                     params={
-                         "id": str(id_),
-                         "by": str(by)
-                     })
+
+        await self._connection.execute(query, identifier)

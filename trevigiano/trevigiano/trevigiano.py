@@ -11,20 +11,13 @@ class Trevigiano:
 
     def __init__(self, plugins: typing.Iterable[str], model: models.Model,
                  token: str) -> None:
-        """Description
-
-        Parameters
-        ----------
-        plugins : typing.Iterable[str]
-            Description
-        model : models.Model
-            Description
-        token : str
-            Description
-        """
+        """Description"""
         intents = hikari.Intents.ALL
 
         self.__gateway_bot = hikari.GatewayBot(token, intents=intents)
+
+        self.__gateway_bot.listen(hikari.StartedEvent)(model.onStartedEvent)
+        self.__gateway_bot.listen(hikari.StoppedEvent)(model.onStoppedEvent)
 
         flare.install(self.__gateway_bot)
 

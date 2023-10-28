@@ -20,21 +20,15 @@ group = crescent.Group("сбор", description="Сбор")
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         database = plugin.model.database
 
         emoji = context.emoji
         humanize = context.humanize
 
-        id_ = context.user.id
+        identifier = str(context.user.id)
 
-        user = await database.upsert(id_)
+        user = await database.upsert(identifier)
 
         range_ = plugin.model.configuration.get("plugins").get("collect").get(
             "range")
@@ -51,7 +45,7 @@ class Command(commands.Command):
         title = f"{berryEmoji} Сбор ягод"
         description = f"```+{humanize.humanize(berryQuantity)} ягод (Всего: {user.berry + berryQuantity})```"  # noqa: E501
 
-        await database.increment(id_, "berry", berryQuantity)
+        await database.increment(identifier, "berry", berryQuantity)
 
         await context.respond(embed=context.embed.embed(
             "berries", title=title, description=description))

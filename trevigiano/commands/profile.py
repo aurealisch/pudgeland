@@ -15,18 +15,12 @@ period = datetime.timedelta(seconds=2, milliseconds=500)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         decorate = context.decorate
         emoji = context.emoji
         humanize = context.humanize
 
-        user = await plugin.model.database.upsert(context.user.id)
+        user = await plugin.model.database.upsert(str(context.user.id))
 
         berry = user.berry
         fox = user.fox

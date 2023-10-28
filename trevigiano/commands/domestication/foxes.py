@@ -25,13 +25,7 @@ group = crescent.Group("приручение", description="Приручение
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         database = plugin.model.database
 
         emoji = context.emoji
@@ -41,9 +35,9 @@ class Command(commands.Command):
         tameMultiplier = (plugin.model.configuration.get("plugins").get(
             "multipliers").get("tame"))
 
-        id_ = context.user.id
+        identifier = str(context.user.id)
 
-        user = await database.upsert(id_)
+        user = await database.upsert(identifier)
 
         berryQuantity = round(user.fox * tameMultiplier)
 
@@ -57,13 +51,7 @@ class Command(commands.Command):
 
         @flare.button(label="ОК", emoji=okEmoji, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
-            """Description
-
-            Parameters
-            ----------
-            messageContext : flare.MessageContext
-                Description
-            """
+            """Description"""
             await messageContext.defer()
             await message.delete()
 
@@ -71,8 +59,8 @@ class Command(commands.Command):
                 if user.berry < berryQuantity:
                     raise errors.Error("Недостаточно ягод")
 
-                await database.increment(id_, "fox", 1)
-                await database.decrement(id_, "berry", berryQuantity)
+                await database.increment(identifier, "fox", 1)
+                await database.decrement(identifier, "berry", berryQuantity)
 
                 description = f"```+1 лиса (Всего: {humanize.humanize(user.fox + 1)})\n-{humanize.humanize(berryQuantity)} ягод (Всего: {humanize.humanize(user.berry - berryQuantity)})```"
 
@@ -84,13 +72,7 @@ class Command(commands.Command):
 
         @flare.button(label="Отменить", emoji=cancelEmoji, style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
-            """Description
-
-            Parameters
-            ----------
-            messageContext : flare.MessageContext
-                Description
-            """
+            """Description"""
             flags = hikari.MessageFlag.EPHEMERAL
 
             await messageContext.defer(flags=flags)

@@ -32,24 +32,7 @@ def embed(
     title: typing.Optional[str] = None,
     description: typing.Optional[str] = None,
 ) -> hikari.Embed:
-    """Description
-
-    Parameters
-    ----------
-    color : Color
-        Description
-    title : typing.Optional[str]
-        Defaults to `None`
-        Description
-    description : typing.Optional[str]
-        Defaults to `None`
-        Description
-
-    Returns
-    -------
-    hikari.Embed
-        Description
-    """
+    """Description"""
     color = hikari.Color.of(colors.get(color))
 
     embed = hikari.Embed(title=title, description=description, color=color)

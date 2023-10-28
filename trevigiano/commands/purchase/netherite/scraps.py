@@ -24,13 +24,7 @@ subGroup = crescent.SubGroup("незеритовых", groups.group, "Незер
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
-        """Description
-
-        Parameters
-        ----------
-        context : contexts.Context
-            Description
-        """
+        """Description"""
         database = plugin.model.database
         configuration = plugin.model.configuration
 
@@ -46,31 +40,23 @@ class Command(commands.Command):
 
         async def purchaseNetheriteScraps(messageContext: flare.MessageContext,
                                           netheriteScrapQuantity: int) -> None:
-            """Description
-
-            Parameters
-            ----------
-            messageContext : flare.MessageContext
-                Description
-            netheriteScrapQuantity : int
-                Description
-            """
+            """Description"""
             await messageContext.defer()
             await message.delete()
 
             coinQuantity = netheriteScrapQuantity * purchaseNetheriteScrapsMultiplier
 
             try:
-                id_ = messageContext.user.id
+                identifier = str(messageContext.user.id)
 
-                user = await database.upsert(id_)
+                user = await database.upsert(identifier)
 
                 if user.coin < coinQuantity:
                     raise errors.Error("Недостаточно монет")
 
-                await database.increment(id_, "netheriteScrap",
+                await database.increment(identifier, "netheriteScrap",
                                          netheriteScrapQuantity)
-                await database.decrement(id_, "coin", coinQuantity)
+                await database.decrement(identifier, "coin", coinQuantity)
 
                 description = "```" + "\n".join([
                     f"+{humanize.humanize(netheriteScrapQuantity)} незеритовых ломов (Всего: {user.netheriteScrap + netheriteScrapQuantity})",
@@ -85,14 +71,14 @@ class Command(commands.Command):
         style = hikari.ButtonStyle.SECONDARY
 
         # fmt: off
-        components = await flare.Row(
+        component = await flare.Row(
             flare.button(label="4 незеритовых ломов", style=style)(purchaseNetheriteScraps)(4),
             flare.button(label="6 незеритовых ломов", style=style)(purchaseNetheriteScraps)(6),
             flare.button(label="8 незеритовых ломов", style=style)(purchaseNetheriteScraps)(8))
         # fmt: on
 
         message = await context.respond(
-            components=components,
+            component=component,
             embed=embed.embed(
                 "netheriteScraps",
                 title=title,

@@ -2,48 +2,15 @@ import typing
 
 
 def bold(text: typing.Text) -> typing.Text:
-    """Description
-
-    Parameters
-    ----------
-    Text : typing.Text
-        Description
-
-    Returns
-    -------
-    typing.Text
-        Description
-    """
+    """Description"""
     return f"**{text}**"
 
 
 def highlighted(text: typing.Text) -> typing.Text:
-    """Description
-
-    Parameters
-    ----------
-    Text : typing.Text
-        Description
-
-    Returns
-    -------
-    typing.Text
-        Description
-    """
+    """Description"""
     return f"`{text}`"
 
 
 def decorate(text: typing.Text) -> typing.Text:
-    """Description
-
-    Parameters
-    ----------
-    Text : typing.Text
-        Description
-
-    Returns
-    -------
-    typing.Text
-        Description
-    """
+    """Description"""
     return bold(highlighted(text))
