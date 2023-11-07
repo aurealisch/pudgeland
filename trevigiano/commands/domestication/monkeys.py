@@ -18,8 +18,8 @@ group = crescent.Group("приручение", description="Приручение
 
 
 @plugin.include
-@commands.command("лисы",
-                  description="Приручение лисы",
+@commands.command("обезьяны",
+                  description="Приручение обезьяны",
                   period=period,
                   group=group)
 class Command(commands.Command):
@@ -41,15 +41,11 @@ class Command(commands.Command):
 
         berryQuantity = round(user.fox * tameMultiplier)
 
-        okEmoji = emoji.Emoji.ok
-        cancelEmoji = emoji.Emoji.cancel
-        foxEmoji = emoji.Emoji.fox
-
         style = hikari.ButtonStyle.SECONDARY
 
-        title = f"{foxEmoji} Приручение лисы"
+        title = f"{emoji.Emoji.monkey} Приручение обезьяны"
 
-        @flare.button(label="ОК", emoji=okEmoji, style=style)
+        @flare.button(label="ОК", emoji=emoji.Emoji.ok, style=style)
         async def ok(messageContext: flare.MessageContext) -> None:
             """Description"""
             await messageContext.defer()
@@ -62,15 +58,18 @@ class Command(commands.Command):
                 await database.increment(identifier, "fox", 1)
                 await database.decrement(identifier, "berry", berryQuantity)
 
-                description = f"```+1 лиса (Всего: {humanize.humanize(user.fox + 1)})\n-{humanize.humanize(berryQuantity)} ягод (Всего: {humanize.humanize(user.berry - berryQuantity)})```"
+                description = "```" + "\n".join([
+                    f"+1 обезьяна (Всего: {humanize.humanize(user.fox + 1)})",
+                    f"-{humanize.humanize(berryQuantity)} бананов (Всего: {humanize.humanize(user.berry - berryQuantity)})",
+                ]) + "```"
 
                 await messageContext.respond(embed=embed.embed(
-                    "foxes", title=title, description=description))
+                    "monkeys", title=title, description=description))
             except Exception as exception:
                 await context.handle.handle(messageContext,
                                             exception=exception)
 
-        @flare.button(label="Отменить", emoji=cancelEmoji, style=style)
+        @flare.button(label="Отменить", emoji=emoji.Emoji.cancel, style=style)
         async def cancel(messageContext: flare.MessageContext) -> None:
             """Description"""
             flags = hikari.MessageFlag.EPHEMERAL
@@ -80,7 +79,7 @@ class Command(commands.Command):
 
             await messageContext.respond(flags=flags,
                                          embed=embed.embed(
-                                             "foxes",
+                                             "monkeys",
                                              title=title,
                                              description="Отменено"))
 
@@ -89,9 +88,9 @@ class Command(commands.Command):
 
         component = await flare.Row(_ok, _cancel)
 
-        description = f"```Стоимость: {humanize.humanize(berryQuantity)} ягод```"
+        description = f"```Стоимость: {humanize.humanize(berryQuantity)} бананов```"
 
-        _embed = embed.embed("foxes", title=title, description=description)
+        _embed = embed.embed("monkeys", title=title, description=description)
 
         message = await context.respond(ephemeral=True,
                                         component=component,

@@ -48,14 +48,14 @@ class Command(commands.Command):
                 user = await database.upsert(identifier)
 
                 if user.berry < berryQuantity:
-                    raise errors.Error("Недостаточно ягод")
+                    raise errors.Error("Недостаточно бананов")
 
                 await database.increment(identifier, "coin", coinQuantity)
                 await database.decrement(identifier, "berry", berryQuantity)
 
                 description = "```" + "\n".join([
                     f"+{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin + coinQuantity})",
-                    f"-{humanize.humanize(berryQuantity)} ягоды (Всего: {user.berry - berryQuantity})"
+                    f"-{humanize.humanize(berryQuantity)} бананы (Всего: {user.berry - berryQuantity})"
                 ]) + "```"
 
                 await messageContext.respond(embed=embed.embed(
@@ -77,5 +77,5 @@ class Command(commands.Command):
             embed=embed.embed(
                 "coins",
                 title=title,
-                description=f"```{purchaseCoinsMultiplier} ягод к 1 монете```")
+                description=f"```{purchaseCoinsMultiplier} бананов к 1 монете```")
         )

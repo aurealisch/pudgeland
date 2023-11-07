@@ -1,9 +1,10 @@
 import crescent
 
-from trevigiano import decorate, embed, emoji, handle, humanize, trim
+from trevigiano import character, decorate, embed, emoji, handle, humanize, trim
 
 
 class Context(crescent.Context):
+    character = character
     decorate = decorate
     embed = embed
     emoji = emoji

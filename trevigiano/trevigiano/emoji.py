@@ -3,8 +3,8 @@ class Netherite(str):
 
 
 class Emoji(str):
-    berry = "<:berry:1146730658845171742>"
-    fox = "<:fox:1146730676259921972>"
+    banana = ":banana:"
+    monkey = ":monkey:"
     coin = "<:coin:1167478859474685982>"
     diamond = "<:diamond:1147867834114904156>"
     first = "<:first:1157684768075419681>"
@@ -13,4 +13,4 @@ class Emoji(str):
     ok = "<:available:1154061905686708274>"
     cancel = "<:unavailable:1153393415317368883>"
     profile = "<:profile:1166736007027245086>"
-    netherite = Netherite
+    Netherite = Netherite

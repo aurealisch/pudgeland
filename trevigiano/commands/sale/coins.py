@@ -54,7 +54,7 @@ class Command(commands.Command):
                 await database.decrement(identifier, "coin", coinQuantity)
 
                 description = "```" + "\n".join([
-                    f"+{humanize.humanize(berryQuantity)} ягоды (Всего: {user.berry + berryQuantity})",
+                    f"+{humanize.humanize(berryQuantity)} бананы (Всего: {user.berry + berryQuantity})",
                     f"-{humanize.humanize(coinQuantity)} монеты (Всего: {user.coin - coinQuantity})"
                 ]) + "```"
 
@@ -77,4 +77,4 @@ class Command(commands.Command):
             embed=embed.embed(
                 "coins",
                 title=title,
-                description=f"```1 монета к {saleCoinsMultiplier} ягодам```"))
+                description=f"```1 монета к {saleCoinsMultiplier} бананам```"))

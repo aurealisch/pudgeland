@@ -16,7 +16,10 @@ group = crescent.Group("сбор", description="Сбор")
 
 
 @plugin.include
-@commands.command("ягод", description="Сбор ягод", period=period, group=group)
+@commands.command("бананов",
+                  description="Сбор бананов",
+                  period=period,
+                  group=group)
 class Command(commands.Command):
 
     async def call(self, context: contexts.Context) -> None:
@@ -33,8 +36,6 @@ class Command(commands.Command):
         range_ = plugin.model.configuration.get("plugins").get("collect").get(
             "range")
 
-        berryEmoji = emoji.Emoji.berry
-
         foxQuantity = user.fox
 
         berryQuantity = sum([
@@ -42,10 +43,10 @@ class Command(commands.Command):
             for _ in range(foxQuantity)
         ])
 
-        title = f"{berryEmoji} Сбор ягод"
-        description = f"```+{humanize.humanize(berryQuantity)} ягод (Всего: {user.berry + berryQuantity})```"  # noqa: E501
+        title = f"{emoji.Emoji.banana} Сбор бананов"
+        description = f"```+{humanize.humanize(berryQuantity)} бананов (Всего: {user.berry + berryQuantity})```"  # noqa: E501
 
         await database.increment(identifier, "berry", berryQuantity)
 
         await context.respond(embed=context.embed.embed(
-            "berries", title=title, description=description))
+            "bananas", title=title, description=description))

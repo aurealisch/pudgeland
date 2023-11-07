@@ -3,11 +3,20 @@ import env as environment
 from trevigiano import configurations, databases, models, trevigiano
 
 commands = [
-    "profile", "domestication.foxes", "collecting.berries", "leaders.berries",
-    "leaders.foxes", "leaders.coins", "leaders.diamonds",
-    "leaders.netherite.scraps", "purchase.coins", "purchase.diamonds",
-    "purchase.netherite.scraps", "sale.coins", "sale.diamonds",
-    "sale.netherite.scraps"
+    "profile",
+    "domestication.monkeys",
+    "collecting.bananas",
+    "leaders.bananas",
+    "leaders.monkeys",
+    "leaders.coins",
+    "leaders.diamonds",
+    "leaders.netherite.scraps",
+    "purchase.coins",
+    "purchase.diamonds",
+    "purchase.netherite.scraps",
+    "sale.coins",
+    "sale.diamonds",
+    "sale.netherite.scraps",
 ]
 plugins = [f"commands.{command}" for command in commands]
 

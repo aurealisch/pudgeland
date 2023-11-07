@@ -9,8 +9,8 @@ contexts = plugin.contexts
 
 
 @plugin.include
-@commands.command("лис",
-                  description="Лидеры лис",
+@commands.command("бананов",
+                  description="Лидеры бананов",
                   period=periods.period,
                   group=groups.group)
 class Command(commands.Command):
@@ -19,7 +19,7 @@ class Command(commands.Command):
         """Description"""
         emoji = context.emoji
 
-        users = await plugin.model.database.selectLeaders("fox")
+        users = await plugin.model.database.selectLeaders("berry")
 
         emojis = {
             1: emoji.Emoji.first,
@@ -27,12 +27,12 @@ class Command(commands.Command):
             3: emoji.Emoji.third
         }
 
-        title = f"{emoji.Emoji.fox} Лидеры лис"
+        title = f"{emoji.Emoji.banana} Лидеры бананов"
 
         description = "\n".join([
-            f"{emojis[position]} **#{position}** <@{user.id}> {context.decorate.decorate(context.humanize.humanize(user.fox))}"
+            f"{emojis[position]} **#{position}** <@{user.id}> {context.decorate.decorate(context.humanize.humanize(user.berry))}"
             for position, user in enumerate(users, start=1)
         ])
 
         await context.respond(embed=context.embed.embed(
-            "foxes", title=title, description=description))
+            "bananas", title=title, description=description))
