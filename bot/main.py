@@ -3,20 +3,11 @@ import env as environment
 from bot import bot, configurations, databases, models
 
 commands = [
-    "profile",
-    "domestication.monkeys",
-    "collecting.bananas",
-    "leaders.bananas",
-    "leaders.monkeys",
-    "leaders.coins",
-    "leaders.diamonds",
-    "leaders.netherite.scraps",
-    "purchase.coins",
-    "purchase.diamonds",
-    "purchase.netherite.scraps",
-    "sale.coins",
-    "sale.diamonds",
-    "sale.netherite.scraps",
+    "profile", "domestication.monkeys", "collecting.bananas",
+    "leaders.bananas", "leaders.monkeys", "leaders.coins", "leaders.diamonds",
+    "leaders.netherite.scraps", "purchase.coins", "purchase.diamonds",
+    "purchase.netherite.scraps", "sale.coins", "sale.diamonds",
+    "sale.netherite.scraps"
 ]
 plugins = [f"commands.{command}" for command in commands]
 

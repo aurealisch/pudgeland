@@ -13,4 +13,7 @@ class Emoji(str):
     ok = "<:available:1154061905686708274>"
     cancel = "<:unavailable:1153393415317368883>"
     profile = "<:profile:1166736007027245086>"
+    applications = "<:applications:1172164615132676116>"
+    accept = ok
+    reject = cancel
     Netherite = Netherite

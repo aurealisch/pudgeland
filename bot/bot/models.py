@@ -11,7 +11,7 @@ class Model:
         self.configuration = configuration
         self.database = database
 
-    async def onStartedEvent(self, _: hikari.StartedEvent) -> None:
+    async def onStartedEvent(self, startedEvent: hikari.StartedEvent) -> None:
         """Description"""
         await self.database.connect()
 
