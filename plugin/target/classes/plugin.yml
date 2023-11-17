@@ -1,0 +1,4 @@
+name: plugin
+version: '1.0-SNAPSHOT'
+main: me.aurealisch.plugin.Plugin
+api-version: '1.19'
