@@ -1,35 +1,35 @@
 import typing
 
+from bot import types
+
 
 class Range(typing.TypedDict):
-    start: typing.Union[float, int]
-    stop: typing.Union[float, int]
+    start: types.Start
+    stop: types.Stop
 
 
 class Collect(typing.TypedDict):
-    range: Range
+    rng: Range
 
 
 class Netherite(typing.TypedDict):
-    scraps: typing.Union[float, int]
+    scraps: types.Scraps
 
 
 class Purchase(typing.TypedDict):
-    coins: typing.Union[float, int]
-    diamonds: typing.Union[float, int]
-
+    coins: types.Coins
+    diamonds: types.Diamonds
     netherite: Netherite
 
 
-class Multipliers(typing.TypedDict):
-    tame: typing.Union[float, int]
-
+class Ratio(typing.TypedDict):
+    tame: types.Tame
     purchase: Purchase
 
 
 class Plugins(typing.TypedDict):
     collect: Collect
-    multipliers: Multipliers
+    ratio: Ratio
 
 
 class Configuration(typing.TypedDict):

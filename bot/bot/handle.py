@@ -1,24 +1,17 @@
 import traceback
-import typing
 
-import flare
+import crescent
 
-from bot import contexts, embed, errors
+from bot import embed, err
 
 
-async def handle(
-    contextOrMessageContext: typing.Union["contexts.Context",
-                                          flare.MessageContext],
-    exception: Exception,
-) -> None:
-    """Description"""
-    value = exception
+async def handle(ctx: crescent.Context, exception: Exception) -> None:
+    val = exception
     tb = exception.__traceback__
 
-    if isinstance(exception, errors.Error):
-        await contextOrMessageContext.respond(
-            embed=embed.embed("error", description=f"```{exception}```"))
+    if isinstance(exception, err.Error):
+        await ctx.respond(embed=embed.embed("err", desc=f"```{exception}```"))
 
         return
 
-    traceback.print_exception(exception.__class__, value=value, tb=tb)
+    traceback.print_exception(exception.__class__, value=val, tb=tb)

@@ -1,31 +1,26 @@
-import typing
-
 import crescent
 import flare
 import hikari
 
-from bot import models
+from bot import models, types
 
 
 class Bot:
 
-    def __init__(self, plugins: typing.Iterable[str], model: models.Model,
-                 token: str) -> None:
-        """Description"""
-        intents = hikari.Intents.ALL
+    def __init__(self, plugins: types.Plugins, model: models.Model,
+                 token: types.Token) -> None:
+        INTENTS = hikari.Intents.ALL
 
-        self.__gateway_bot = hikari.GatewayBot(token, intents=intents)
+        gatewayBot = hikari.GatewayBot(token, intents=INTENTS)
 
-        self.__gateway_bot.listen(hikari.StartedEvent)(model.onStartedEvent)
-        self.__gateway_bot.listen(hikari.StoppedEvent)(model.onStoppedEvent)
+        gatewayBot.listen(hikari.StartedEvent)(model.onStartedE)
+        gatewayBot.listen(hikari.StoppedEvent)(model.onStoppedE)
 
-        flare.install(self.__gateway_bot)
+        flare.install(gatewayBot)
 
-        client = crescent.Client(self.__gateway_bot, model=model)
+        client = crescent.Client(gatewayBot, model=model)
 
         for plugin in plugins:
-            client.plugins.load(plugin)
+            client.plugins.load(f"bot.plugin.{plugin}")
 
-    def run(self) -> None:
-        """Description"""
-        self.__gateway_bot.run()
+        self.run = gatewayBot.run

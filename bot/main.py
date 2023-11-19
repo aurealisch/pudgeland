@@ -1,31 +1,32 @@
-import env as environment
+import env
 
-from bot import bot, configurations, databases, models
+from bot import bot, models
+from bot import config as _config
+from bot import db as _db
 
-commands = [
+plugins = [
     "profile", "domestication.monkeys", "collecting.bananas",
     "leaders.bananas", "leaders.monkeys", "leaders.coins", "leaders.diamonds",
     "leaders.netherite.scraps", "purchase.coins", "purchase.diamonds",
     "purchase.netherite.scraps", "sale.coins", "sale.diamonds",
     "sale.netherite.scraps"
 ]
-plugins = [f"commands.{command}" for command in commands]
 
-database = databases.Database(environment.get("HOST"),
-                              port=environment.get("PORT"),
-                              user=environment.get("USER"),
-                              password=environment.get("PASSWORD"),
-                              database=environment.get("DATABASE"))
+db = _db.Database(env.get("HOST"),
+                  port=env.get("PORT"),
+                  user=env.get("USER"),
+                  password=env.get("PASSWORD"),
+                  db=env.get("DB"))
 
-configuration: configurations.Configuration = {
+config: _config.Configuration = {
     "plugins": {
         "collect": {
-            "range": {
+            "rng": {
                 "start": 5,
                 "stop": 50
             }
         },
-        "multipliers": {
+        "ratio": {
             "purchase": {
                 "coins": 125,
                 "diamonds": 4,
@@ -38,8 +39,8 @@ configuration: configurations.Configuration = {
     }
 }
 
-model = models.Model(configuration, database=database)
+model = models.Model(config, db=db)
 
-token = environment.get("TOKEN")
+token = env.get("TOKEN")
 
 bot.Bot(plugins, model=model, token=token).run()
