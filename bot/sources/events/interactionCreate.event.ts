@@ -5,7 +5,6 @@ export function interactionCreate(interaction: Interaction) {
 
   interaction.client.commands.forEach(async (command) => {
     if (command.name != interaction.commandName) return;
-
     await command.run(interaction);
   });
 }

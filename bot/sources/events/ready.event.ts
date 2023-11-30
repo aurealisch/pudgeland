@@ -20,7 +20,7 @@ export function ready(client: Client) {
     });
   });
 
-  let { applicationId, guildId } = client;
+  let { applicationId, guildId } = client.configuration;
 
   let body = client.commands.map((command) => {
     return new SlashCommandBuilder()

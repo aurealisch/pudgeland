@@ -1,7 +1,7 @@
 import { Client } from "discord.js";
 import { ready } from "./events/ready.event.js";
-import { configuration } from "../configuration.js";
 import { pino } from "pino";
+import "dotenv/config";
 
 let client = new Client({
   intents: [
@@ -30,9 +30,13 @@ client.customEmoji = {
   netherite: "<:netherite:1165365535119249559>",
   profile: "<:profile:1166736007027245086>",
 };
-client.applicationId = configuration.applicationId;
-client.guildId = configuration.guildId;
+client.configuration = {
+  applicationId: "1151189706038579290",
+  guildId: "1010816890513395803",
+  collectingMin: 5,
+  collectingMax: 50,
+};
 
 client.once("ready", ready);
 
-client.login(configuration.token);
+client.login(process.env.TOKEN);

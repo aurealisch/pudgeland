@@ -2,6 +2,7 @@ import { Command } from "./command.js";
 import { Database } from "../modules/database.ts";
 import { CustomEmoji } from "./customEmoji.js";
 import { Logger } from "pino";
+import { Configuration } from "./configuration.js";
 
 declare module "discord.js" {
   export interface Client {
@@ -9,7 +10,6 @@ declare module "discord.js" {
     logger: Logger;
     database: Database;
     customEmoji: CustomEmoji;
-    applicationId: string;
-    guildId: string;
+    configuration: Configuration;
   }
 }

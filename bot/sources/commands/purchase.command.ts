@@ -5,7 +5,7 @@ export let command: Command = {
   description: "Покупка",
   run: (interaction) => {
     interaction.reply({
-      content: "Hello, World!",
+      content: "покупка",
     });
   },
 };

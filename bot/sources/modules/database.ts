@@ -14,4 +14,14 @@ export class Database {
       data: { id },
     });
   }
+
+  public async updateUser({
+    id,
+    ...data
+  }: { id: string } & Partial<User>): Promise<User> {
+    return await this.prismaClient.user.update({
+      data,
+      where: { id },
+    });
+  }
 }

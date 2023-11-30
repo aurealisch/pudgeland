@@ -6,10 +6,11 @@ export interface Options {
   description: string;
 }
 
-type Color = "profile";
+type Color = "profile" | "collecting";
 
 let colors: Record<Color, `#${string}`> = {
   profile: "#24649c",
+  collecting: "#f9e9b1",
 };
 
 export function createEmbed(options: Options) {
