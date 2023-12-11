@@ -1,14 +1,16 @@
+import typing
+
 import crescent
 import flare
 import hikari
 
-from bot import models, types
+from bot import models
 
 
 class Bot:
-
-    def __init__(self, plugins: types.Plugins, model: models.Model,
-                 token: types.Token) -> None:
+    def __init__(
+        self, cmds: typing.Sequence[str], model: models.Model, token: str
+    ) -> None:
         INTENTS = hikari.Intents.ALL
 
         gatewayBot = hikari.GatewayBot(token, intents=INTENTS)
@@ -20,7 +22,7 @@ class Bot:
 
         client = crescent.Client(gatewayBot, model=model)
 
-        for plugin in plugins:
-            client.plugins.load(f"bot.plugin.{plugin}")
+        for cmd in cmds:
+            client.plugins.load(f"bot.cmds.{cmd}")
 
         self.run = gatewayBot.run

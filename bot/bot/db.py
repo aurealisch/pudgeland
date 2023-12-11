@@ -8,18 +8,23 @@ from bot import types
 
 @dataclasses.dataclass
 class User:
-    id: types.Id = None
-    berry: types.Berry = None
-    fox: types.Fox = None
-    coin: types.Coin = None
-    netheriteScrap: types.NetheriteScrap = None
-    diamond: types.Diamond = None
+    id: str = None
+    banana: int = None
+    monkey: int = None
+    coin: int = None
+    diamond: int = None
+    netherite: int = None
 
 
 class Database:
-
-    def __init__(self, host: typing.Any, port: typing.Any, user: typing.Any,
-                 password: typing.Any, db: typing.Any) -> None:
+    def __init__(
+        self,
+        host: typing.Any,
+        port: typing.Any,
+        user: typing.Any,
+        password: typing.Any,
+        db: typing.Any,
+    ) -> None:
         self.__host = host
         self.__port = port
         self.__user = user
@@ -32,7 +37,21 @@ class Database:
             port=self.__port,
             user=self.__user,
             password=self.__password,
-            database=self.__db)
+            database=self.__db,
+        )
+
+        await self._conn.execute(
+            """
+                CREATE TABLE IF NOT EXISTS "users" (
+                    "id" TEXT PRIMARY KEY,
+                    "banana" INTEGER DEFAULT 0,
+                    "monkey" INTEGER DEFAULT 1,
+                    "coin" INTEGER DEFAULT 0,
+                    "diamond" INTEGER DEFAULT 0,
+                    "netherite" INTEGER DEFAULT 0
+                );
+            """
+        )
 
     async def close(self) -> None:
         await self._conn.close()
@@ -41,19 +60,21 @@ class Database:
         if self._conn.is_closed:
             await self.connect()
 
-    async def upsert(self, id_: types.Identifier) -> User:
+    async def upsert(self, id_: str) -> User:
         await self.reconnect()
 
         rec = await self._conn.fetchrow(
             """
-                SELECT "users"."berry",
-                       "users"."fox",
+                SELECT "users"."banana",
+                       "users"."monkey",
                        "users"."coin",
-                       "users"."netheriteScrap",
-                       "users"."diamond"
+                       "users"."diamond",
+                       "users"."netherite"
                   FROM "users"
                  WHERE "users"."id" = $1;
-            """, id_)
+            """,
+            id_,
+        )
 
         if isinstance(rec, asyncpg.Record):
             return User(**rec)
@@ -62,25 +83,28 @@ class Database:
             """
                 INSERT INTO users ("id")
                 VALUES ($1);
-            """, id_)
+            """,
+            id_,
+        )
 
         return await self.upsert(id_)
 
     async def sel(self, col: types.Column) -> typing.List[User]:
         await self.reconnect()
 
-        records = await self._conn.fetch(f"""
+        records = await self._conn.fetch(
+            f"""
               SELECT "users"."id",
                      "users"."{col}"
                 FROM "users"
             ORDER BY "users"."{col}" DESC
                LIMIT 3;
-        """)
+        """
+        )
 
         return list(map(lambda rec: User(**rec), records))
 
-    async def inc(self, id_: types.Identifier, col: types.Column,
-                  val: types.Value) -> None:
+    async def inc(self, id_: str, col: types.Column, val: int) -> None:
         await self.reconnect()
 
         await self._conn.execute(
@@ -88,10 +112,11 @@ class Database:
                 UPDATE "users"
                    SET "{col}" = "{col}" + {val}
                  WHERE "users"."id" = $1;
-            """, id_)
+            """,
+            id_,
+        )
 
-    async def dec(self, id_: types.Identifier, col: types.Column,
-                  val: types.Value) -> None:
+    async def dec(self, id_: str, col: types.Column, val: int) -> None:
         await self.reconnect()
 
         await self._conn.execute(
@@ -99,4 +124,6 @@ class Database:
                 UPDATE "users"
                    SET "{col}" = "{col}" - {val}
                  WHERE "users"."id" = $1;
-            """, id_)
+            """,
+            id_,
+        )

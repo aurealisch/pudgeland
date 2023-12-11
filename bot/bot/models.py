@@ -5,9 +5,7 @@ from bot import db as _db
 
 
 class Model:
-
-    def __init__(self, config: _config.Configuration,
-                 db: _db.Database) -> None:
+    def __init__(self, config: _config.Configuration, db: _db.Database) -> None:
         self.config = config
         self.db = db
 
