@@ -34,7 +34,7 @@ class Command(cmd.Command):
         )
 
         desc = code.code(
-            f"+{humanize.humanize(bananaQuantity)} бананов (Всего: {user.banana + bananaQuantity})"
+            f"+{humanize.humanize(bananaQuantity)} бананов (Всего: {humanize.humanize(user.banana + bananaQuantity)})"
         )
 
         await db.inc(id_, "banana", bananaQuantity)

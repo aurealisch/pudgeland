@@ -21,7 +21,7 @@ colors: typing.Mapping[Color, hikari.Colorish] = {
     "applications": "#bb7f53",
     "banana": "#f9e9b1",
     "coin": "#fbcd7a",
-    "default": "#87ceeb",
+    "default": "#04bcd4",
     "diamond": "#b3fcee",
     "err": "#ff4b4b",
     "monkey": "#cf8d5d",
