@@ -5,23 +5,7 @@ from bot.modules.database import Database
 from bot.modules.model import Model
 
 Bot(
-    [
-        "leaders.banana",
-        "leaders.monkey",
-        "leaders.coin",
-        "leaders.diamond",
-        "leaders.netherite",
-        "purchase.coin",
-        "purchase.diamond",
-        "purchase.netherite",
-        "sale.coin",
-        "sale.diamond",
-        "sale.netherite",
-        "collecting",
-        "domestication",
-        "profile",
-    ],
-    model=Model(
+    Model(
         {
             "collecting_range_start": 1,
             "collecting_range_stop": 5,
