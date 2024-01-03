@@ -18,7 +18,7 @@ class Bot:
 
         client = crescent_Client(gateway_bot, model=model)
 
-        for cmd in [
+        for command in [
             "leaders.banana",
             "leaders.monkey",
             "leaders.coin",
@@ -34,6 +34,6 @@ class Bot:
             "domestication",
             "profile",
         ]:
-            client.plugins.load(f"bot.cmds.{cmd}")
+            client.plugins.load(f"bot.commands.{command}")
 
         self.run = gateway_bot.run
