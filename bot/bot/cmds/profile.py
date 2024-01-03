@@ -1,30 +1,33 @@
-import datetime
+from crescent import Context as crescent_Context
 
-import crescent
+from bot.modules.plugin import Plugin
+from bot.utils import command
+from bot.utils.decorate import decorate as d
+from bot.utils.embed import embed
+from bot.utils.emoji import Emoji
+from bot.utils.humanize import humanize as h
 
-from bot import cmd, embed, emoji, plugins
-from bot import decorate as d
-from bot import humanize as h
-
-plugin = plugins.Plugin()
-
-period = datetime.timedelta(seconds=2, milliseconds=500)
+plugin = Plugin()
 
 
 @plugin.include
-@cmd.cmd("профиль", desc="Профиль", period=period)
-class Command(cmd.Command):
-    async def cb(self, ctx: crescent.Context) -> None:
-        user = await plugin.model.db.upsert(str(ctx.user.id))
+@command.command("профиль", description="Профиль")
+class Command(command.Command):
+    async def run(self, ctx: crescent_Context) -> None:
+        user = await plugin.model.database.fetch_or_insert_user_by_id(str(ctx.user.id))
 
-        desc = "\n".join(
-            [
-                f"{emoji.Emoji.BANANA} Бананы: {d.decorate(h.humanize(user.banana))}",
-                f"{emoji.Emoji.MONKEY} Обезьяны: {d.decorate(h.humanize(user.monkey))}",
-                f"{emoji.Emoji.COIN} Монеты: {d.decorate(h.humanize(user.coin))}",
-                f"{emoji.Emoji.DIAMOND} Алмазы: {d.decorate(h.humanize(user.diamond))}",
-                f"{emoji.Emoji.NETHERITE} Незерит: {d.decorate(h.humanize(user.netherite))}",
-            ]
+        await ctx.respond(
+            embeds=embed(
+                "profile",
+                title="profile",
+                description="\n".join(
+                    [
+                        f"{Emoji.banana} Бананы: {d(h(user.banana))}",
+                        f"{Emoji.monkey} Обезьяны: {d(h(user.monkey))}",
+                        f"{Emoji.coin} Монеты: {d(h(user.coin))}",
+                        f"{Emoji.diamond} Алмазы: {d(h(user.diamond))}",
+                        f"{Emoji.netherite} Незерит: {d(h(user.netherite))}",
+                    ]
+                ),
+            )
         )
-
-        await ctx.respond(embeds=embed.embed("profile", title="profile", desc=desc))

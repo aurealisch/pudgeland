@@ -1,79 +1,98 @@
-import datetime
-
-import crescent
 import flare
 import hikari
+from crescent import Context as crescent_Context
 
-from bot import cmd, code, embed, emoji, err, handle, humanize, plugins
+from bot.modules.error import Error
+from bot.modules.plugin import Plugin
+from bot.utils import command
+from bot.utils.decorate import decorate as d
+from bot.utils.embed import embed
+from bot.utils.emoji import Emoji
+from bot.utils.handle import handle
+from bot.utils.humanize import humanize as h
 
-plugin = plugins.Plugin()
-
-period = datetime.timedelta(seconds=2, milliseconds=500)
+plugin = Plugin()
 
 
 @plugin.include
-@cmd.cmd("приручение", desc="Приручение", period=period)
-class Command(cmd.Command):
-    async def cb(self, ctx: crescent.Context) -> None:
-        db = plugin.model.db
-        config = plugin.model.config
+@command.command("приручение", description="Приручение")
+class Command(command.Command):
+    async def run(self, context: crescent_Context) -> None:
+        database = plugin.model.database
 
-        ratio = config.get("domesticationRatio")
+        id_ = str(context.user.id)
 
-        id_ = str(ctx.user.id)
+        user = await database.fetch_or_insert_user_by_id(id_)
+        user_banana = user.banana
+        user_monkey = user.monkey
 
-        user = await db.upsert(id_)
-
-        bananaQuantity = round(user.monkey * ratio)
+        banana_quantity = round(
+            user_monkey * plugin.model.configuration["domestication_ratio"]
+        )
 
         style = hikari.ButtonStyle.SECONDARY
 
-        @flare.button(label="ОК", emoji=emoji.Emoji.OK, style=style)
-        async def ok(msgCtx: flare.MessageContext) -> None:
-            await msgCtx.defer()
-            await msg.delete()
+        @flare.button(
+            label="ОК",
+            emoji=Emoji.confirmation_ok,
+            style=style,
+        )
+        async def on_confirmation_ok(message_context: flare.MessageContext) -> None:
+            await message_context.defer()
+            await message.delete()
 
             try:
-                if user.banana < bananaQuantity:
-                    raise err.Error("Недостаточно бананов")
+                if user_banana < banana_quantity:
+                    raise Error("Недостаточно бананов")
 
-                await db.inc(id_, "monkey", 1)
-                await db.dec(id_, "banana", bananaQuantity)
+                await database.increase_user_column_value_by_id(id_, "monkey", 1)
+                await database.decrease_user_column_value_by_id(
+                    id_, "banana", banana_quantity
+                )
 
-                desc = code.code(
-                    "\n".join(
-                        [
-                            f"+1 обезьяна (Всего: {humanize.humanize(user.monkey + 1)})",
-                            f"-{humanize.humanize(bananaQuantity)} бананов (Всего: {humanize.humanize(user.banana - bananaQuantity)})",
-                        ]
+                await message_context.respond(
+                    embeds=embed(
+                        "monkey",
+                        title="domestication",
+                        description="\n".join(
+                            [
+                                f"+{d(1)} {Emoji.monkey} (Всего: {d(h(user_monkey + 1))})",
+                                f"-{h(banana_quantity)} {Emoji.banana} (Всего: {d(h(user_banana - banana_quantity))})",
+                            ]
+                        ),
                     )
                 )
-
-                await msgCtx.respond(
-                    embeds=embed.embed("monkey", title="domestication", desc=desc)
-                )
             except Exception as exception:
-                await handle.handle(msgCtx, exception=exception)
+                await handle(message_context, exception=exception)
 
-        @flare.button(label="Отменить", emoji=emoji.Emoji.CANCEL, style=style)
-        async def cancel(msgCtx: flare.MessageContext) -> None:
+        @flare.button(
+            label="Отменить",
+            emoji=Emoji.confirmation_cancel,
+            style=style,
+        )
+        async def on_confirmation_cancel(message_context: flare.MessageContext) -> None:
             flags = hikari.MessageFlag.EPHEMERAL
 
-            await msgCtx.defer(flags=flags)
-            await msg.delete()
-
-            desc = "Отменено"
-
-            await msgCtx.respond(
-                flags=flags, embeds=embed.embed("monkey", title="domestication", desc=desc)
+            await message_context.defer(flags=flags)
+            await message.delete()
+            await message_context.respond(
+                flags=flags,
+                embeds=embed(
+                    "monkey",
+                    title="domestication",
+                    description="Отменено",
+                ),
             )
 
-        comp = await flare.Row(ok(), cancel())
-
-        desc = code.code(f"Стоимость: {humanize.humanize(bananaQuantity)} бананов")
-
-        msg = await ctx.respond(
+        message = await context.respond(
             ephemeral=True,
-            component=comp,
-            embeds=embed.embed("monkey", title="domestication", desc=desc),
+            component=await flare.Row(
+                on_confirmation_ok(),
+                on_confirmation_cancel(),
+            ),
+            embeds=embed(
+                "monkey",
+                title="domestication",
+                description=f"Стоимость: {d(h(banana_quantity))} {Emoji.banana}",
+            ),
         )

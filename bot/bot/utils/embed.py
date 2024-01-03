@@ -9,7 +9,7 @@ Color = typing.Literal[
     "coin",
     "default",
     "diamond",
-    "err",
+    "error",
     "monkey",
     "netherite",
     "profile",
@@ -70,9 +70,9 @@ titles: typing.Mapping[Title, str] = {
 def embed(
     color: Color,
     title: Title,
-    desc: typing.Optional[str] = None,
+    description: typing.Optional[str] = None,
 ) -> typing.Sequence[hikari.Embed]:
     return [
         hikari.Embed(color=hikari.Color.of(colors[color])).set_image(titles[title]),
-        hikari.Embed(description=desc, color=hikari.Color.of(colors["default"])),
+        hikari.Embed(description=description, color=hikari.Color.of(colors["default"])),
     ]

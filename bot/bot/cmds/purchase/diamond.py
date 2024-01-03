@@ -1,71 +1,77 @@
-import crescent
 import flare
 import hikari
+from crescent import Context as crescent_Context
 
-from bot import cmd, code, embed, emoji, err, handle, plugins
-from bot import decorate as d
-from bot import humanize as h
+from bot.modules.error import Error
+from bot.modules.plugin import Plugin
+from bot.utils import command
+from bot.utils.decorate import decorate as d
+from bot.utils.embed import embed
+from bot.utils.emoji import Emoji
+from bot.utils.handle import handle
+from bot.utils.humanize import humanize as h
 
-from .const import groups, periods
+from .const import groups
 
-plugin = plugins.Plugin()
+plugin = Plugin()
 
 
 @plugin.include
-@cmd.cmd("алмазов", desc="Покупка алмазов", period=periods.period, group=groups.group)
-class Command(cmd.Command):
-    async def cb(self, ctx: crescent.Context) -> None:
-        db = plugin.model.db
-        config = plugin.model.config
+@command.command("алмазов", description="Покупка алмазов", group=groups.group)
+class Command(command.Command):
+    async def run(self, context: crescent_Context) -> None:
+        database = plugin.model.database
 
-        ratio = config.get("purchaseDiamond")
+        ratio = plugin.model.configuration["purchase_diamond_ratio"]
 
-        async def purchaseDiamonds(
-            msgCtx: flare.MessageContext, diamondQuantity: int
+        async def purchase_diamonds(
+            message_context: flare.MessageContext, diamond_quantity: int
         ) -> None:
-            await msgCtx.defer()
-            await msg.delete()
+            await message_context.defer()
+            await message.delete()
 
-            coinQuantity = diamondQuantity * ratio
+            coin_quantity = diamond_quantity * ratio
 
             try:
-                id_ = str(msgCtx.user.id)
+                id_ = str(message_context.user.id)
 
-                user = await db.upsert(id_)
+                user = await database.fetch_or_insert_user_by_id(id_)
+                user_coin = user.coin
 
-                if user.coin < coinQuantity:
-                    raise err.Error("Недостаточно монет")
+                if user_coin < coin_quantity:
+                    raise Error("Недостаточно монет")
 
-                await db.inc(id_, "diamond", diamondQuantity)
-                await db.dec(id_, "coin", coinQuantity)
+                # fmt: off
+                await database.increase_user_column_value_by_id(id_, "diamond", diamond_quantity)
+                await database.decrease_user_column_value_by_id(id_, "coin", coin_quantity)
+                # fmt: on
 
-                desc = code.code(
-                    "\n".join(
-                        [
-                            f"+{h.humanize(diamondQuantity)} алмазы (Всего: {h.humanize(user.diamond + diamondQuantity)})",
-                            f"-{h.humanize(coinQuantity)} монеты (Всего: {h.humanize(user.coin - coinQuantity)})",
-                        ]
+                await message_context.respond(
+                    embeds=embed(
+                        "diamond",
+                        title="purchase-diamond",
+                        description="\n".join(
+                            [
+                                f"+{d(h(diamond_quantity))} {Emoji.diamond} (Всего: {d(h(user.diamond + diamond_quantity))})",
+                                f"-{d(h(coin_quantity))} {Emoji.coin} (Всего: {d(h(user_coin - coin_quantity))})",
+                            ]
+                        ),
                     )
                 )
-
-                await msgCtx.respond(
-                    embeds=embed.embed("diamond", title="purchase-diamond", desc=desc)
-                )
             except Exception as exception:
-                await handle.handle(msgCtx, exception=exception)
+                await handle(message_context, exception=exception)
 
         style = hikari.ButtonStyle.SECONDARY
 
-        # fmt: off
-        comp = await flare.Row(
-            flare.button(emoji=emoji.Emoji.FOUR, style=style)(purchaseDiamonds)(4),
-            flare.button(emoji=emoji.Emoji.SIX, style=style)(purchaseDiamonds)(6),
-            flare.button(emoji=emoji.Emoji.EIGHT, style=style)(purchaseDiamonds)(8))
-        # fmt: on
-
-        desc = f"{d.decorate(h.humanize(ratio))} {emoji.Emoji.COIN} монет к {d.decorate(1)} {emoji.Emoji.DIAMOND} алмазу"
-
-        msg = await ctx.respond(
-            component=comp,
-            embeds=embed.embed("diamond", title="purchase-diamond", desc=desc),
+        message = await context.respond(
+            component=await flare.Row(
+                flare.button(emoji=Emoji.four, style=style)(purchase_diamonds)(4),
+                flare.button(emoji=Emoji.six, style=style)(purchase_diamonds)(6),
+                flare.button(emoji=Emoji.eight, style=style)(purchase_diamonds)(8),
+            ),
+            embeds=embed(
+                "diamond",
+                title="purchase-diamond",
+                description=f"{d(h(ratio))} {Emoji.coin} = {d(1)} {Emoji.diamond}",
+            ),
         )

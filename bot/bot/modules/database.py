@@ -1,12 +1,12 @@
-import dataclasses
 import typing
+from dataclasses import dataclass as dataclasses_dataclass
 
 import asyncpg
 
-from bot import types
+Column = typing.Literal["banana", "monkey", "coin", "netherite", "diamond"]
 
 
-@dataclasses.dataclass
+@dataclasses_dataclass
 class User:
     id: str = None
     banana: int = None
@@ -23,24 +23,24 @@ class Database:
         port: typing.Any,
         user: typing.Any,
         password: typing.Any,
-        db: typing.Any,
+        database: typing.Any,
     ) -> None:
         self.__host = host
         self.__port = port
         self.__user = user
         self.__password = password
-        self.__db = db
+        self.__database = database
 
     async def connect(self) -> None:
-        self._conn: asyncpg.Connection = await asyncpg.connect(
+        self._connection: asyncpg.Connection = await asyncpg.connect(
             host=self.__host,
             port=self.__port,
             user=self.__user,
             password=self.__password,
-            database=self.__db,
+            database=self.__database,
         )
 
-        await self._conn.execute(
+        await self._connection.execute(
             """
                 CREATE TABLE IF NOT EXISTS "users" (
                     "id" TEXT PRIMARY KEY,
@@ -54,16 +54,16 @@ class Database:
         )
 
     async def close(self) -> None:
-        await self._conn.close()
+        await self._connection.close()
 
     async def reconnect(self) -> None:
-        if self._conn.is_closed:
+        if self._connection.is_closed:
             await self.connect()
 
-    async def upsert(self, id_: str) -> User:
+    async def fetch_or_insert_user_by_id(self, id_: str) -> User:
         await self.reconnect()
 
-        rec = await self._conn.fetchrow(
+        record = await self._connection.fetchrow(
             """
                 SELECT "users"."banana",
                        "users"."monkey",
@@ -76,10 +76,10 @@ class Database:
             id_,
         )
 
-        if isinstance(rec, asyncpg.Record):
-            return User(**rec)
+        if isinstance(record, asyncpg.Record):
+            return User(**record)
 
-        await self._conn.execute(
+        await self._connection.execute(
             """
                 INSERT INTO users ("id")
                 VALUES ($1);
@@ -87,42 +87,46 @@ class Database:
             id_,
         )
 
-        return await self.upsert(id_)
+        return await self.fetch_or_insert_user_by_id(id_)
 
-    async def sel(self, col: types.Column) -> typing.List[User]:
+    async def select_descending_users_by_column(self, column: Column) -> list[User]:
         await self.reconnect()
 
-        records = await self._conn.fetch(
+        records = await self._connection.fetch(
             f"""
               SELECT "users"."id",
-                     "users"."{col}"
+                     "users"."{column}"
                 FROM "users"
-            ORDER BY "users"."{col}" DESC
+            ORDER BY "users"."{column}" DESC
                LIMIT 3;
         """
         )
 
         return list(map(lambda rec: User(**rec), records))
 
-    async def inc(self, id_: str, col: types.Column, val: int) -> None:
+    async def increase_user_column_value_by_id(
+        self, id_: str, column: Column, value: int
+    ) -> None:
         await self.reconnect()
 
-        await self._conn.execute(
+        await self._connection.execute(
             f"""
                 UPDATE "users"
-                   SET "{col}" = "{col}" + {val}
+                   SET "{column}" = "{column}" + {value}
                  WHERE "users"."id" = $1;
             """,
             id_,
         )
 
-    async def dec(self, id_: str, col: types.Column, val: int) -> None:
+    async def decrease_user_column_value_by_id(
+        self, id_: str, column: Column, value: int
+    ) -> None:
         await self.reconnect()
 
-        await self._conn.execute(
+        await self._connection.execute(
             f"""
                 UPDATE "users"
-                   SET "{col}" = "{col}" - {val}
+                   SET "{column}" = "{column}" - {value}
                  WHERE "users"."id" = $1;
             """,
             id_,

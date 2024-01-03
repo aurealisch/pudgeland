@@ -1,42 +1,46 @@
-import datetime
-import random
+from random import choice as random_choice
 
-import crescent
+from crescent import Context as crescent_Context
 
-from bot import cmd, code, embed, humanize, plugins
+from bot.modules.plugin import Plugin
+from bot.utils import command
+from bot.utils.decorate import decorate as d
+from bot.utils.embed import embed
+from bot.utils.emoji import Emoji
+from bot.utils.humanize import humanize as h
 
-plugin = plugins.Plugin()
-
-period = datetime.timedelta(hours=1, minutes=30)
+plugin = Plugin()
 
 
 @plugin.include
-@cmd.cmd("сбор", desc="Сбор", period=period)
-class Command(cmd.Command):
-    async def cb(self, ctx: crescent.Context) -> None:
-        db = plugin.model.db
-        config = plugin.model.config
+@command.command("сбор", description="Сбор")
+class Command(command.Command):
+    async def run(self, context: crescent_Context) -> None:
+        database = plugin.model.database
+        configuration = plugin.model.configuration
 
-        id_ = str(ctx.user.id)
+        id_ = str(context.user.id)
 
-        user = await db.upsert(id_)
+        user = await database.fetch_or_insert_user_by_id(id_)
 
-        bananaQuantity = sum(
+        banana_quantity = sum(
             [
-                random.choice(
+                random_choice(
                     range(
-                        config.get("collectingRngStart"),
-                        config.get("collectingRngStop"),
+                        configuration["collecting_range_start"],
+                        configuration["collecting_range_stop"],
                     )
                 )
                 for _ in range(user.monkey)
             ]
         )
 
-        desc = code.code(
-            f"+{humanize.humanize(bananaQuantity)} бананов (Всего: {humanize.humanize(user.banana + bananaQuantity)})"
+        await database.increase_user_column_value_by_id(id_, "banana", banana_quantity)
+
+        await context.respond(
+            embeds=embed(
+                "banana",
+                title="collecting",
+                description=f"+{d(h(banana_quantity))} {Emoji.banana} (Всего: {d(h(user.banana + banana_quantity))})",
+            )
         )
-
-        await db.inc(id_, "banana", bananaQuantity)
-
-        await ctx.respond(embeds=embed.embed("banana", title="collecting", desc=desc))

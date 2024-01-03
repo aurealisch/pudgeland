@@ -1,3 +1,3 @@
-import crescent
+from crescent import Group as crescent_Group
 
-group = crescent.Group("лидеры", description="Лидеры")
+group = crescent_Group("лидеры", description="Лидеры")

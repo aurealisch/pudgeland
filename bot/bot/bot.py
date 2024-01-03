@@ -1,28 +1,39 @@
-import typing
-
-import crescent
-import flare
 import hikari
+from crescent import Client as crescent_Client
+from flare import install as flare_install
 
-from bot import models
+from bot.modules.model import Model
 
 
 class Bot:
-    def __init__(
-        self, cmds: typing.Sequence[str], model: models.Model, token: str
-    ) -> None:
-        INTENTS = hikari.Intents.ALL
+    def __init__(self, model: Model, token: str) -> None:
+        intents = hikari.Intents.ALL
 
-        gatewayBot = hikari.GatewayBot(token, intents=INTENTS)
+        gateway_bot = hikari.GatewayBot(token, intents=intents)
 
-        gatewayBot.listen(hikari.StartedEvent)(model.onStartedE)
-        gatewayBot.listen(hikari.StoppedEvent)(model.onStoppedE)
+        gateway_bot.listen(hikari.StartedEvent)(model.on_started_event)
+        gateway_bot.listen(hikari.StoppedEvent)(model.on_stopped_event)
 
-        flare.install(gatewayBot)
+        flare_install(gateway_bot)
 
-        client = crescent.Client(gatewayBot, model=model)
+        client = crescent_Client(gateway_bot, model=model)
 
-        for cmd in cmds:
+        for cmd in [
+            "leaders.banana",
+            "leaders.monkey",
+            "leaders.coin",
+            "leaders.diamond",
+            "leaders.netherite",
+            "purchase.coin",
+            "purchase.diamond",
+            "purchase.netherite",
+            "sale.coin",
+            "sale.diamond",
+            "sale.netherite",
+            "collecting",
+            "domestication",
+            "profile",
+        ]:
             client.plugins.load(f"bot.cmds.{cmd}")
 
-        self.run = gatewayBot.run
+        self.run = gateway_bot.run
