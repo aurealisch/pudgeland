@@ -4,20 +4,20 @@ from crescent import Context as crescent_Context
 
 from bot.modules.error import Error
 from bot.modules.plugin import Plugin
-from bot.utils import command
-from bot.utils.decorate import decorate as d
-from bot.utils.embed import embed
-from bot.utils.emoji import Emoji
-from bot.utils.handle import handle
-from bot.utils.humanize import humanize as h
+from bot.utilities import command
+from bot.utilities.decorate import decorate as d
+from bot.utilities.embed import embed
+from bot.utilities.emoji import Emoji
+from bot.utilities.handle import handle
+from bot.utilities.humanize import humanize as h
 
-from .const import groups
+from .constants.groups import group
 
 plugin = Plugin()
 
 
 @plugin.include
-@command.command("монет", description="Покупка монет", group=groups.group)
+@command.command("монет", description="Покупка монет", group=group)
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
         database = plugin.model.database

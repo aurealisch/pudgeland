@@ -7,8 +7,8 @@ import crescent
 from crescent import internal as crescent_internal
 from crescent.ext.cooldowns import cooldown as crescent_cooldown
 
-from bot.utils.embed import embed
-from bot.utils.handle import handle
+from bot.utilities.embed import embed
+from bot.utilities.handle import handle
 
 
 class Command:
