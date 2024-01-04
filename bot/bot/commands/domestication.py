@@ -2,7 +2,7 @@ import flare
 import hikari
 from crescent import Context as crescent_Context
 
-from bot.modules.error import Error
+from bot.modules.error import NotEnoughBananaError
 from bot.modules.plugin import Plugin
 from bot.utilities import command
 from bot.utilities.decorate import decorate as d
@@ -43,7 +43,7 @@ class Command(command.Command):
 
             try:
                 if user_banana < banana_quantity:
-                    raise Error("Недостаточно бананов")
+                    raise NotEnoughBananaError
 
                 await database.increase_user_column_value_by_id(id_, "monkey", 1)
                 await database.decrease_user_column_value_by_id(
