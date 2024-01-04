@@ -7,7 +7,6 @@ from bot.modules.plugin import Plugin
 from bot.utilities import command
 from bot.utilities.decorate import decorate as d
 from bot.utilities.embed import embed
-from bot.utilities.emoji import Emoji
 from bot.utilities.handle import handle
 from bot.utilities.humanize import humanize as h
 
@@ -19,6 +18,7 @@ plugin = Plugin()
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
         database = plugin.model.database
+        emoji = plugin.model.emoji
 
         id_ = str(context.user.id)
 
@@ -34,7 +34,7 @@ class Command(command.Command):
 
         @flare.button(
             label="ОК",
-            emoji=Emoji.confirmation_ok,
+            emoji=emoji.confirmation_ok,
             style=style,
         )
         async def on_confirmation_ok(message_context: flare.MessageContext) -> None:
@@ -56,8 +56,8 @@ class Command(command.Command):
                         title="domestication",
                         description="\n".join(
                             [
-                                f"+{d(1)} {Emoji.monkey} (Всего: {d(h(user_monkey + 1))})",
-                                f"-{h(banana_quantity)} {Emoji.banana} (Всего: {d(h(user_banana - banana_quantity))})",
+                                f"+{d(1)} {emoji.monkey} (Всего: {d(h(user_monkey + 1))})",
+                                f"-{h(banana_quantity)} {emoji.banana} (Всего: {d(h(user_banana - banana_quantity))})",
                             ]
                         ),
                     )
@@ -67,7 +67,7 @@ class Command(command.Command):
 
         @flare.button(
             label="Отменить",
-            emoji=Emoji.confirmation_cancel,
+            emoji=emoji.confirmation_cancel,
             style=style,
         )
         async def on_confirmation_cancel(message_context: flare.MessageContext) -> None:
@@ -93,6 +93,6 @@ class Command(command.Command):
             embeds=embed(
                 "monkey",
                 title="domestication",
-                description=f"Стоимость: {d(h(banana_quantity))} {Emoji.banana}",
+                description=f"Стоимость: {d(h(banana_quantity))} {emoji.banana}",
             ),
         )

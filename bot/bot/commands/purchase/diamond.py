@@ -2,18 +2,19 @@ import flare
 import hikari
 from crescent import Context as crescent_Context
 
-from bot.modules.error import Error
+from bot.modules.error import NotEnoughCoinError
 from bot.modules.plugin import Plugin
 from bot.utilities import command
-from bot.utilities.decorate import decorate as d
+from bot.utilities.decorate import decorate
 from bot.utilities.embed import embed
-from bot.utilities.emoji import Emoji
 from bot.utilities.handle import handle
-from bot.utilities.humanize import humanize as h
+from bot.utilities.humanize import humanize
 
 from ._groups import group
 
 plugin = Plugin()
+
+_ = lambda integer: decorate(humanize(integer))  # noqa: E731
 
 
 @plugin.include
@@ -21,6 +22,7 @@ plugin = Plugin()
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
         database = plugin.model.database
+        emoji = plugin.model.emoji
 
         ratio = plugin.model.configuration.purchase_diamond_ratio
 
@@ -39,7 +41,7 @@ class Command(command.Command):
                 user_coin = user.coin
 
                 if user_coin < coin_quantity:
-                    raise Error("Недостаточно монет")
+                    raise NotEnoughCoinError
 
                 # fmt: off
                 await database.increase_user_column_value_by_id(id_, "diamond", diamond_quantity)
@@ -52,8 +54,8 @@ class Command(command.Command):
                         title="purchase-diamond",
                         description="\n".join(
                             [
-                                f"+{d(h(diamond_quantity))} {Emoji.diamond} (Всего: {d(h(user.diamond + diamond_quantity))})",
-                                f"-{d(h(coin_quantity))} {Emoji.coin} (Всего: {d(h(user_coin - coin_quantity))})",
+                                f"+{_(diamond_quantity)} {emoji.diamond} (Всего: {_(user.diamond + diamond_quantity)})",
+                                f"-{_(coin_quantity)} {emoji.coin} (Всего: {_(user_coin - coin_quantity)})",
                             ]
                         ),
                     )
@@ -65,13 +67,13 @@ class Command(command.Command):
 
         message = await context.respond(
             component=await flare.Row(
-                flare.button(emoji=Emoji.four, style=style)(purchase_diamonds)(4),
-                flare.button(emoji=Emoji.six, style=style)(purchase_diamonds)(6),
-                flare.button(emoji=Emoji.eight, style=style)(purchase_diamonds)(8),
+                flare.button(emoji=emoji.four, style=style)(purchase_diamonds)(4),
+                flare.button(emoji=emoji.six, style=style)(purchase_diamonds)(6),
+                flare.button(emoji=emoji.eight, style=style)(purchase_diamonds)(8),
             ),
             embeds=embed(
                 "diamond",
                 title="purchase-diamond",
-                description=f"{d(h(ratio))} {Emoji.coin} = {d(1)} {Emoji.diamond}",
+                description=f"{_(ratio)} {emoji.coin} = {decorate(1)} {emoji.diamond}",
             ),
         )

@@ -6,7 +6,6 @@ from bot.modules.plugin import Plugin
 from bot.utilities import command
 from bot.utilities.decorate import decorate as d
 from bot.utilities.embed import embed
-from bot.utilities.emoji import Emoji
 from bot.utilities.humanize import humanize as h
 
 plugin = Plugin()
@@ -18,6 +17,7 @@ class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
         database = plugin.model.database
         configuration = plugin.model.configuration
+        emoji_banana = plugin.model.emoji.banana
 
         id_ = str(context.user.id)
 
@@ -41,6 +41,6 @@ class Command(command.Command):
             embeds=embed(
                 "banana",
                 title="collecting",
-                description=f"+{d(h(banana_quantity))} {Emoji.banana} (Всего: {d(h(user.banana + banana_quantity))})",
+                description=f"+{d(h(banana_quantity))} {emoji_banana} (Всего: {d(h(user.banana + banana_quantity))})",
             )
         )

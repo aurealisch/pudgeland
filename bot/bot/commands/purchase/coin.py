@@ -5,15 +5,16 @@ from crescent import Context as crescent_Context
 from bot.modules.error import Error
 from bot.modules.plugin import Plugin
 from bot.utilities import command
-from bot.utilities.decorate import decorate as d
+from bot.utilities.decorate import decorate
 from bot.utilities.embed import embed
-from bot.utilities.emoji import Emoji
 from bot.utilities.handle import handle
-from bot.utilities.humanize import humanize as h
+from bot.utilities.humanize import humanize
 
 from ._groups import group
 
 plugin = Plugin()
+
+_ = lambda integer: decorate(humanize(integer))  # noqa: E731
 
 
 @plugin.include
@@ -21,6 +22,7 @@ plugin = Plugin()
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
         database = plugin.model.database
+        emoji = plugin.model.emoji
 
         ratio = plugin.model.configuration.purchase_coin_ratio
 
@@ -52,8 +54,8 @@ class Command(command.Command):
                         title="purchase-coin",
                         description="\n".join(
                             [
-                                f"+{d(h(coin_quantity))} {Emoji.coin} (Всего: {d(h(user.coin + coin_quantity))})",
-                                f"-{d(h(banana_quantity))} {Emoji.banana} (Всего: {d(h(user_banana - banana_quantity))})",
+                                f"+{_(coin_quantity)} {emoji.coin} (Всего: {_(user.coin + coin_quantity)})",
+                                f"-{_(banana_quantity)} {emoji.banana} (Всего: {_(user_banana - banana_quantity)})",
                             ]
                         ),
                     )
@@ -65,13 +67,13 @@ class Command(command.Command):
 
         message = await context.respond(
             component=await flare.Row(
-                flare.button(emoji=Emoji.four, style=style)(purchase_coins)(4),
-                flare.button(emoji=Emoji.six, style=style)(purchase_coins)(6),
-                flare.button(emoji=Emoji.eight, style=style)(purchase_coins)(8),
+                flare.button(emoji=emoji.four, style=style)(purchase_coins)(4),
+                flare.button(emoji=emoji.six, style=style)(purchase_coins)(6),
+                flare.button(emoji=emoji.eight, style=style)(purchase_coins)(8),
             ),
             embeds=embed(
                 "coin",
                 title="purchase-coin",
-                description=f"{d(h(ratio))} {Emoji.banana} бананов к {d(1)} {Emoji.coin} монете",
+                description=f"{_(ratio)} {emoji.banana} бананов к {decorate(1)} {emoji.coin} монете",
             ),
         )
