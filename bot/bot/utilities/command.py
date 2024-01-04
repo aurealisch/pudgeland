@@ -30,7 +30,7 @@ async def callback(
     await context.respond(
         embed=embed(
             "default",
-            desc=textwrap_dedent(
+            description=textwrap_dedent(
                 f"""
                     Ты слишком часто используешь эту команду!
 
