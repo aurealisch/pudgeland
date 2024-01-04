@@ -15,9 +15,11 @@ plugin = Plugin()
 @command.command("сбор", description="Сбор")
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
-        database = plugin.model.database
-        configuration = plugin.model.configuration
-        emoji_banana = plugin.model.emoji.banana
+        model = plugin.model
+
+        database = model.database
+        configuration = model.configuration
+        emoji_banana = model.emoji.banana
 
         id_ = str(context.user.id)
 

@@ -17,8 +17,11 @@ plugin = Plugin()
 @command.command("приручение", description="Приручение")
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
-        database = plugin.model.database
-        emoji = plugin.model.emoji
+        model = plugin.model
+
+        configuration = model.configuration
+        database = model.database
+        emoji = model.emoji
 
         id_ = str(context.user.id)
 
@@ -27,16 +30,13 @@ class Command(command.Command):
         user_monkey = user.monkey
 
         banana_quantity = round(
-            user_monkey * plugin.model.configuration.domestication_ratio
+            configuration.domestication_base_cost
+            * configuration.domestication_multiplier**user_monkey
         )
 
         style = hikari.ButtonStyle.SECONDARY
 
-        @flare.button(
-            label="ОК",
-            emoji=emoji.confirmation_ok,
-            style=style,
-        )
+        @flare.button(label="ОК", emoji=emoji.confirmation_ok, style=style)
         async def on_confirmation_ok(message_context: flare.MessageContext) -> None:
             await message_context.defer()
             await message.delete()
@@ -65,11 +65,7 @@ class Command(command.Command):
             except Exception as exception:
                 await handle_exception(message_context, exception=exception)
 
-        @flare.button(
-            label="Отменить",
-            emoji=emoji.confirmation_cancel,
-            style=style,
-        )
+        @flare.button(label="Отменить", emoji=emoji.confirmation_cancel, style=style)
         async def on_confirmation_cancel(message_context: flare.MessageContext) -> None:
             flags = hikari.MessageFlag.EPHEMERAL
 
@@ -77,19 +73,12 @@ class Command(command.Command):
             await message.delete()
             await message_context.respond(
                 flags=flags,
-                embeds=embed(
-                    "monkey",
-                    title="domestication",
-                    description="Отменено",
-                ),
+                embeds=embed("monkey", title="domestication", description="Отменено"),
             )
 
         message = await context.respond(
             ephemeral=True,
-            component=await flare.Row(
-                on_confirmation_ok(),
-                on_confirmation_cancel(),
-            ),
+            component=await flare.Row(on_confirmation_ok(), on_confirmation_cancel()),
             embeds=embed(
                 "monkey",
                 title="domestication",

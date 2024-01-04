@@ -24,7 +24,7 @@ class Command(command.Command):
         database = plugin.model.database
         emoji = plugin.model.emoji
 
-        ratio = plugin.model.configuration.purchase_netherite_ratio // 2
+        multiplier = plugin.model.configuration.purchase_netherite_multiplier // 2
 
         async def sale_netherite(
             message_context: flare.MessageContext, netherite_quantity: int
@@ -32,7 +32,7 @@ class Command(command.Command):
             await message_context.defer()
             await message.delete()
 
-            coin_quantity = netherite_quantity * ratio
+            coin_quantity = netherite_quantity * multiplier
 
             try:
                 id_ = str(message_context.user.id)
@@ -74,6 +74,6 @@ class Command(command.Command):
             embeds=embed(
                 "netherite",
                 title="sale-netherite",
-                description=f"{decorate(1)} {emoji.netherite} = {_(ratio)} {emoji.coin}",
+                description=f"{decorate(1)} {emoji.netherite} = {_(multiplier)} {emoji.coin}",
             ),
         )

@@ -24,7 +24,7 @@ class Command(command.Command):
         database = plugin.model.database
         emoji = plugin.model.emoji
 
-        ratio = plugin.model.configuration.purchase_coin_ratio // 2
+        multiplier = plugin.model.configuration.purchase_coin_multiplier // 2
 
         async def sale_coins(
             message_context: flare.MessageContext, coin_quantity: int
@@ -32,7 +32,7 @@ class Command(command.Command):
             await message_context.defer()
             await message.delete()
 
-            banana_quantity = coin_quantity * ratio
+            banana_quantity = coin_quantity * multiplier
 
             try:
                 id_ = str(message_context.user.id)
@@ -74,6 +74,6 @@ class Command(command.Command):
             embeds=embed(
                 "coin",
                 title="sale-coin",
-                description=f"{decorate(1)} {emoji.coin} = {_(ratio)} {emoji.banana}",
+                description=f"{decorate(1)} {emoji.coin} = {_(multiplier)} {emoji.banana}",
             ),
         )

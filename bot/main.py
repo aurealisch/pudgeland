@@ -11,10 +11,11 @@ Bot(
         Configuration(
             1,
             collecting_range_stop=5,
-            domestication_ratio=500,
-            purchase_coin_ratio=250,
-            purchase_diamond_ratio=4,
-            purchase_netherite_ratio=8,
+            domestication_base_cost=500,
+            domestication_multiplier=1.15,
+            purchase_coin_multiplier=250,
+            purchase_diamond_multiplier=4,
+            purchase_netherite_multiplier=8,
         ),
         database=Database(
             env_get("HOST"),

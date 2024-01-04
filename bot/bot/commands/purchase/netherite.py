@@ -21,10 +21,12 @@ _ = lambda integer: decorate(humanize(integer))  # noqa: E731
 @command.command("незерита", description="Покупка незерита", group=group)
 class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
-        database = plugin.model.database
-        emoji = plugin.model.emoji
+        model = plugin.model
 
-        ratio = plugin.model.configuration.purchase_netherite_ratio
+        database = model.database
+        emoji = model.emoji
+
+        multiplier = model.configuration.purchase_netherite_multiplier
 
         async def purchase_netherite(
             message_context: flare.MessageContext, netherite_quantity: int
@@ -32,7 +34,7 @@ class Command(command.Command):
             await message_context.defer()
             await message.delete()
 
-            coin_quantity = netherite_quantity * ratio
+            coin_quantity = netherite_quantity * multiplier
 
             try:
                 id_ = str(message_context.user.id)
@@ -74,6 +76,6 @@ class Command(command.Command):
             embeds=embed(
                 "netherite",
                 title="purchase-netherite",
-                description=f"{_(ratio)} {emoji.coin} = {decorate(1)} {emoji.netherite}",
+                description=f"{_(multiplier)} {emoji.coin} = {decorate(1)} {emoji.netherite}",
             ),
         )
