@@ -1,7 +1,8 @@
-from typing import TypedDict as typing_TypedDict
+from dataclasses import dataclass as dataclasses_dataclass
 
 
-class Configuration(typing_TypedDict):
+@dataclasses_dataclass
+class Configuration:
     collecting_range_start: int
     collecting_range_stop: int
     domestication_ratio: int

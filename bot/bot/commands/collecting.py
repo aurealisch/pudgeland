@@ -27,8 +27,8 @@ class Command(command.Command):
             [
                 random_choice(
                     range(
-                        configuration["collecting_range_start"],
-                        configuration["collecting_range_stop"],
+                        configuration.collecting_range_start,
+                        configuration.collecting_range_stop,
                     )
                 )
                 for _ in range(user.monkey)

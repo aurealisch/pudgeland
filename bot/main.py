@@ -1,19 +1,20 @@
 from env import get as env_get
 
 from bot.bot import Bot
+from bot.modules.configuration import Configuration
 from bot.modules.database import Database
 from bot.modules.model import Model
 
 Bot(
     Model(
-        {
-            "collecting_range_start": 1,
-            "collecting_range_stop": 5,
-            "domestication_ratio": 275,
-            "purchase_coin": 125,
-            "purchase_diamond": 4,
-            "purchase_netherite": 8,
-        },
+        Configuration(
+            1,
+            collecting_range_stop=5,
+            domestication_ratio=500,
+            purchase_coin_ratio=250,
+            purchase_diamond_ratio=4,
+            purchase_netherite_ratio=8,
+        ),
         database=Database(
             env_get("HOST"),
             port=env_get("PORT"),

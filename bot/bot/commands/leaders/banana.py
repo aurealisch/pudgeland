@@ -7,7 +7,7 @@ from bot.utilities.embed import embed
 from bot.utilities.emoji import Emoji
 from bot.utilities.humanize import humanize as h
 
-from .constants.groups import group
+from ._groups import group
 
 plugin = Plugin()
 

@@ -27,7 +27,7 @@ class Command(command.Command):
         user_monkey = user.monkey
 
         banana_quantity = round(
-            user_monkey * plugin.model.configuration["domestication_ratio"]
+            user_monkey * plugin.model.configuration.domestication_ratio
         )
 
         style = hikari.ButtonStyle.SECONDARY

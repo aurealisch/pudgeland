@@ -11,7 +11,7 @@ from bot.utilities.emoji import Emoji
 from bot.utilities.handle import handle
 from bot.utilities.humanize import humanize as h
 
-from .constants.groups import group
+from ._groups import group
 
 plugin = Plugin()
 
@@ -22,7 +22,7 @@ class Command(command.Command):
     async def run(self, context: crescent_Context) -> None:
         database = plugin.model.database
 
-        ratio = plugin.model.configuration["purchase_coin_ratio"]
+        ratio = plugin.model.configuration.purchase_coin_ratio
 
         async def purchase_coins(
             message_context: flare.MessageContext, coin_quantity: int
