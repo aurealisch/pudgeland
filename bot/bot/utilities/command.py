@@ -8,7 +8,7 @@ from crescent import internal as crescent_internal
 from crescent.ext.cooldowns import cooldown as crescent_cooldown
 
 from bot.utilities.embed import embed
-from bot.utilities.handle import handle
+from bot.utilities.handle_exception import handle_exception
 
 
 class Command:
@@ -18,7 +18,7 @@ class Command:
         try:
             await self.run(context)
         except Exception as exception:
-            await handle(context, exception=exception)
+            await handle_exception(context, exception=exception)
 
     async def run(self, context: crescent.Context) -> None:
         ...
@@ -28,8 +28,9 @@ async def callback(
     context: crescent.Context, timedelta: datetime_timedelta
 ) -> crescent.HookResult | None:
     await context.respond(
-        embed=embed(
-            "default",
+        embeds=embed(
+            "cooldown",
+            title="cooldown",
             description=textwrap_dedent(
                 f"""
                     Ты слишком часто используешь эту команду!
@@ -56,15 +57,14 @@ def command(
     ) -> crescent_internal.Includable[crescent_internal.AppCommandMeta]:
         includable = crescent.hook(
             crescent_cooldown(
-                1, period=datetime_timedelta(seconds=10), callback=callback
+                1, period=datetime_timedelta(seconds=30), callback=callback
             )
         )(crescent.command(command, name=name, description=description))
 
-        if group is not None:
-            includable = group.child(includable)
-
-        if sub_group is not None:
-            includable = sub_group.child(includable)
+        includable = group.child(includable) if group is not None else includable
+        includable = (
+            sub_group.child(includable) if sub_group is not None else includable
+        )
 
         return includable
 

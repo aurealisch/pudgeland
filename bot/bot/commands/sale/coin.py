@@ -7,7 +7,7 @@ from bot.modules.plugin import Plugin
 from bot.utilities import command
 from bot.utilities.decorate import decorate
 from bot.utilities.embed import embed
-from bot.utilities.handle import handle
+from bot.utilities.handle_exception import handle_exception
 from bot.utilities.humanize import humanize
 
 from ._groups import group
@@ -61,7 +61,7 @@ class Command(command.Command):
                     )
                 )
             except Exception as exception:
-                await handle(message_context, exception=exception)
+                await handle_exception(message_context, exception=exception)
 
         style = hikari.ButtonStyle.SECONDARY
 

@@ -7,7 +7,7 @@ from bot.modules.plugin import Plugin
 from bot.utilities import command
 from bot.utilities.decorate import decorate as d
 from bot.utilities.embed import embed
-from bot.utilities.handle import handle
+from bot.utilities.handle_exception import handle_exception
 from bot.utilities.humanize import humanize as h
 
 plugin = Plugin()
@@ -63,7 +63,7 @@ class Command(command.Command):
                     )
                 )
             except Exception as exception:
-                await handle(message_context, exception=exception)
+                await handle_exception(message_context, exception=exception)
 
         @flare.button(
             label="Отменить",

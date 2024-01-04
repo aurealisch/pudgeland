@@ -3,36 +3,30 @@ import typing
 import hikari
 
 Color = typing.Literal[
-    "accept",
-    "applications",
-    "banana",
-    "coin",
-    "default",
-    "diamond",
     "error",
+    "cooldown",
+    "banana",
     "monkey",
+    "coin",
+    "diamond",
     "netherite",
     "profile",
-    "reject",
-    "success",
 ]
 
 colors: typing.Mapping[Color, hikari.Colorish] = {
-    "applications": "#bb7f53",
+    "error": "#ff4b4b",
+    "cooldown": "#000000",
     "banana": "#f9e9b1",
-    "coin": "#fbcd7a",
-    "default": "#04bcd4",
-    "diamond": "#b3fcee",
-    "err": "#ff4b4b",
     "monkey": "#cf8d5d",
+    "coin": "#fbcd7a",
+    "diamond": "#b3fcee",
     "netherite": "#441c14",
     "profile": "#24649c",
-    "success": "#77b35a",
 }
-colors["accept"] = colors["success"]
-colors["reject"] = colors["err"]
 
 Title = typing.Literal[
+    "error",
+    "cooldown",
     "leaders-banana",
     "leaders-coin",
     "leaders-diamond",
@@ -50,6 +44,8 @@ Title = typing.Literal[
 ]
 
 titles: typing.Mapping[Title, str] = {
+    "error": "https://i.ibb.co/8B7wzBV/image.png",
+    "cooldown": "https://i.ibb.co/sjdMw6P/image.png",
     "leaders-banana": "https://i.ibb.co/cXcD7yT/image.png",
     "leaders-coin": "https://i.ibb.co/d2FDvqk/image.png",
     "leaders-diamond": "https://i.ibb.co/7JdB6xK/image.png",
@@ -68,11 +64,9 @@ titles: typing.Mapping[Title, str] = {
 
 
 def embed(
-    color: Color,
-    title: Title,
-    description: typing.Optional[str] = None,
+    color: Color, title: Title, description: typing.Optional[str] = None
 ) -> typing.Sequence[hikari.Embed]:
     return [
         hikari.Embed(color=hikari.Color.of(colors[color])).set_image(titles[title]),
-        hikari.Embed(description=description, color=hikari.Color.of(colors["default"])),
+        hikari.Embed(description=description, color=hikari.Color.of("#04bcd4")),
     ]

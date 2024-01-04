@@ -6,9 +6,11 @@ from bot.modules.error import Error
 from bot.utilities.embed import embed
 
 
-async def handle(ctx: crescent_Context, exception: Exception) -> None:
+async def handle_exception(context: crescent_Context, exception: Exception) -> None:
     if isinstance(exception, Error):
-        await ctx.respond(embed=embed("error", desc=f"```{exception}```"))
+        await context.respond(
+            embeds=embed("error", title="error", description=f"```{exception}```")
+        )
 
         return
 
