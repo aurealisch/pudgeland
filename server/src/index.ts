@@ -26,5 +26,6 @@ socialNetworks.forEach((socialNetwork) => {
 });
 
 server.listen({
+  host: "0.0.0.0",
   port: 10_000,
 });

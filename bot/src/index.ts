@@ -19,5 +19,6 @@ fastify({
     reply.code(200).send("Hello, World!");
   })
   .listen({
+    host: "0.0.0.0",
     port: 10_000,
   });
