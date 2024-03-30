@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "start:watch": "bun --watch run src/index.ts"
+  },
+  "dependencies": {
+    "fastify": "^4.26.2",
+    "pino-pretty": "^11.0.0"
+  }
+}
