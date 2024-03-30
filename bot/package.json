@@ -18,6 +18,8 @@
     "@sapphire/decorators": "^6.1.0",
     "@sapphire/framework": "^5.0.10",
     "@sapphire/utilities": "^3.15.3",
+    "dedent": "^1.5.1",
+    "dedented": "^1.0.0",
     "discord.js": "^14.14.1",
     "fastify": "^4.26.2",
     "pino-pretty": "^11.0.0"
