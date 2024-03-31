@@ -23,6 +23,12 @@ export default class extends SapphireClient {
         Partials.Reaction,
         Partials.User,
       ],
+      api: {
+        listenOptions: {
+          host: "0.0.0.0",
+          port: 10_000,
+        },
+      },
     });
   }
 
