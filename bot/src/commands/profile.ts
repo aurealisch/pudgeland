@@ -1,17 +1,15 @@
 import { ApplyOptions } from "@sapphire/decorators";
-import { Command } from "@sapphire/framework";
+import { Command, container } from "@sapphire/framework";
 import { dedent } from "dedented";
 
 @ApplyOptions<Command.Options>({
   name: "профиль",
 })
-export class ProfileCommand extends Command {
+export default class extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction
   ) {
-    const user = await interaction.client.database.findUniqueUserOrCreate(
-      interaction.user.id
-    );
+    const user = await container.db.findUniqueUserOrCreate(interaction.user.id);
 
     await interaction.reply({
       content: dedent`

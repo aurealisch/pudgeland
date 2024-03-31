@@ -23,6 +23,11 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "@configurations/*": ["./src/configurations/*"],
+      "@models/*": ["./src/models/*"],
+      "@services/*": ["./src/services/*"]
+    }
   }
 }

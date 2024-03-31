@@ -1,16 +1,13 @@
+import type { Action } from "@models/Action";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
-import type { Message } from "discord.js";
-import QuestListener, { type Execution } from "../services/QuestListener.js";
+import QuestMessageReactionListener from "@services/QuestMessageReactionListener";
 
 @ApplyOptions<Listener.Options>({
   event: Events.MessageReactionRemove,
 })
-export class MessageReactionRemoveListener extends QuestListener {
-  override async execute(_: Message): Promise<Execution> {
-    return {
-      action: "decrement",
-      key: "messageReactions",
-    };
+export default class extends QuestMessageReactionListener {
+  public override getAction(): Action {
+    return "decrement";
   }
 }

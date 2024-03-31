@@ -4,8 +4,12 @@ import { isNullish } from "@sapphire/utilities";
 export default class Database {
   constructor(private prisma: PrismaClient) {}
 
-  public async connect() {
-    await this.prisma.$connect();
+  public async connect(): Promise<void> {
+    return await this.prisma.$connect();
+  }
+
+  public async disconnect(): Promise<void> {
+    return await this.prisma.$disconnect();
   }
 
   public async findUniqueUser(id: string): Promise<User | null> {

@@ -1,47 +1,67 @@
+import type Quest from "@models/Quest";
+import { container } from "@sapphire/framework";
 import { isNullish } from "@sapphire/utilities";
-import { Message } from "discord.js";
-import type Quest from "../models/Quest.js";
+import { Guild, GuildMember, User } from "discord.js";
 
 export default class QuestManager {
-  constructor(
-    private options: {
-      quests: Array<Quest>;
-      onInvoke: (options: { message: Message; quest: Quest }) => Promise<any>;
-    }
-  ) {}
+  #quests: Array<Quest>;
+  #onQuestComplete: (options: {
+    member: GuildMember;
+    quest: Quest;
+  }) => Promise<void>;
 
-  async invoke(message: Message) {
-    const {
-      member,
-      guild,
-      client: { database },
-    } = message;
+  public constructor(opts: {
+    quests: Array<Quest>;
+    onQuestComplete: (options: {
+      member: GuildMember;
+      quest: Quest;
+    }) => Promise<void>;
+  }) {
+    this.#quests = opts.quests;
+    this.#onQuestComplete = opts.onQuestComplete;
+  }
 
-    if (isNullish(member)) return;
-    if (isNullish(guild)) return;
+  public async invoke(opts: { member: GuildMember; guild: Guild }) {
+    const db = container.db;
+    const member = opts.member;
 
-    const authorId = message.author.id;
-    const user = await database.findUniqueUserOrCreate(authorId);
+    const memberId = member.id;
+    const user = await db.findUniqueUserOrCreate(memberId);
 
-    this.options.quests.forEach(async (quest) => {
+    this.#quests.forEach(async (quest) => {
       if (member.roles.cache.has(quest.roleId)) return;
 
-      if (user[quest.taskType] >= quest.taskRequiredValue) {
-        const role = await guild.roles.cache.get(quest.roleId);
+      if (user[quest.taskType] < quest.taskRequiredValue) return;
 
-        if (isNullish(role)) return;
+      const role = await opts.guild.roles.cache.get(quest.roleId);
 
-        await this.options.onInvoke({
-          message,
-          quest,
-        });
-        await member.roles.add(role);
-        await database.increment({
-          id: authorId,
-          key: "coins",
-          value: quest.reward.coins,
-        });
-      }
+      if (isNullish(role)) return;
+
+      await this.#onQuestComplete({
+        quest,
+        member,
+      });
+      await member.roles.add(role);
+      await db.increment({
+        id: memberId,
+        key: "coins",
+        value: quest.reward.coins,
+      });
+    });
+  }
+
+  public async invokeReaction(user: User) {
+    const guild = container.client.guilds.cache.get(container.guildId);
+
+    if (isNullish(guild)) return;
+
+    const member = guild.members.cache.get(user.id);
+
+    if (isNullish(member)) return;
+
+    this.invoke({
+      guild,
+      member,
     });
   }
 }

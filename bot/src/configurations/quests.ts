@@ -1,4 +1,4 @@
-import type Quest from "../models/Quest.js";
+import type Quest from "@models/Quest";
 
 const quests: Array<Quest> = [
   {
@@ -52,6 +52,14 @@ const quests: Array<Quest> = [
   {
     roleId: "1221881476300144650",
     taskType: "whenServer",
+    taskRequiredValue: 30,
+    reward: {
+      coins: 5,
+    },
+  },
+  {
+    roleId: "1221444196661985331",
+    taskType: "mediaOrMemes",
     taskRequiredValue: 30,
     reward: {
       coins: 5,
