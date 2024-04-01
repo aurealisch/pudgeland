@@ -5,7 +5,7 @@ type UnknownUser = Exclude<keyof User, "id">;
 export default interface Quest {
   roleId: string;
   taskType: UnknownUser;
-  taskRequiredValue: number;
+  taskRequiredVal: number;
   reward: {
     coins: number;
   };

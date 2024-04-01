@@ -25,9 +25,10 @@
     "noPropertyAccessFromIndexSignature": false,
     "experimentalDecorators": true,
     "paths": {
-      "@configurations/*": ["./src/configurations/*"],
+      "@configs/*": ["./src/configs/*"],
       "@models/*": ["./src/models/*"],
-      "@services/*": ["./src/services/*"]
+      "@svcs/*": ["./src/svcs/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }

@@ -1,7 +1,7 @@
 import type { Action } from "@models/Action";
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener } from "@sapphire/framework";
-import QuestMessageReactionListener from "@services/QuestMessageReactionListener";
+import QuestMessageReactionListener from "@svcs/QuestMessageReactionListener";
 
 @ApplyOptions<Listener.Options>({
   event: Events.MessageReactionAdd,

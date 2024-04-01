@@ -1,10 +1,11 @@
-import quests from "@configurations/quests";
+import quests from "@configs/quests";
 import type Quest from "@models/Quest";
 import { PrismaClient } from "@prisma/client";
 import { SapphireClient, container } from "@sapphire/framework";
 import { isNullish } from "@sapphire/utilities";
-import Database from "@services/Database";
-import QuestManager from "@services/QuestManager";
+import Database from "@svcs/Database";
+import QuestManager from "@svcs/QuestManager";
+import CreateEmbed from "@utils/CreateEmbed";
 import { GatewayIntentBits, GuildMember, Partials } from "discord.js";
 
 export default class extends SapphireClient {
@@ -26,7 +27,7 @@ export default class extends SapphireClient {
       api: {
         listenOptions: {
           host: "0.0.0.0",
-          port: 10_000,
+          port: 9_353,
         },
       },
     });
@@ -53,7 +54,12 @@ export default class extends SapphireClient {
         if (!channel.isTextBased()) return;
 
         await channel.send({
-          content: `🎉 <@${opts.member.id}> выполнил задание <@&${opts.quest.roleId}>`,
+          embeds: [
+            CreateEmbed({
+              description: `🎉 <@${opts.member.id}> выполнил квест <@&${opts.quest.roleId}>`,
+              title: "Поздравляю",
+            }),
+          ],
         });
       },
     });

@@ -15,11 +15,11 @@ export default class QuestMessageReactionListener extends Listener {
 
     if (user.bot) return;
 
-    await container.questMng.invokeReaction(user);
-
     await container.db[action]({
       id: user.id,
       key: "messageReactions",
     });
+
+    await container.questMng.invokeReaction(user);
   }
 }

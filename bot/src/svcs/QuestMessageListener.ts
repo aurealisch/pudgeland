@@ -12,7 +12,7 @@ export default class extends Listener {
   async execute(message: Message): Promise<
     | {
         key: keyof User;
-        value?: number;
+        val?: number;
       }
     | undefined
   > {
@@ -28,13 +28,13 @@ export default class extends Listener {
 
       return {
         key: "mediaOrMemes",
-        value: attachmentsSize,
+        val: attachmentsSize,
       };
     }
 
     const content = message.content.toLowerCase();
 
-    const keywords: Array<{
+    const kwds: Array<{
       include: string;
       key: keyof User;
     }> = [
@@ -43,10 +43,10 @@ export default class extends Listener {
       { include: "1.1", key: "firstRule" },
     ];
 
-    for (const keyword of keywords) {
-      if (content.includes(keyword.include)) {
+    for (const kwd of kwds) {
+      if (content.includes(kwd.include)) {
         return {
-          key: keyword.key,
+          key: kwd.key,
         };
       }
     }
@@ -65,9 +65,15 @@ export default class extends Listener {
 
     if (author.bot) return;
 
-    const execution = await this.execute(message);
+    const exe = await this.execute(message);
 
-    if (isNullish(execution)) return;
+    if (isNullish(exe)) return;
+
+    await container.db[action]({
+      id: message.author.id,
+      key: exe.key,
+      val: exe.val,
+    });
 
     if (isNullish(member)) return;
     if (isNullish(guild)) return;
@@ -75,12 +81,6 @@ export default class extends Listener {
     await container.questMng.invoke({
       member,
       guild,
-    });
-
-    await container.db[action]({
-      id: message.author.id,
-      key: execution.key,
-      value: execution.value,
     });
   }
 }
