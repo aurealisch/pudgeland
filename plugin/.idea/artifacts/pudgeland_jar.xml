@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="pudgeland:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/pudgeland_jar</output-path>
+    <root id="archive" name="pudgeland.jar">
+      <element id="module-output" name="pudgeland" />
+    </root>
+  </artifact>
+</component>

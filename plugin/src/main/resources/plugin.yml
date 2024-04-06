@@ -1,0 +1,4 @@
+name: pudgeland
+version: '${project.version}'
+main: me.aurealisch.pudgeland.Pudgeland
+api-version: '1.20'
