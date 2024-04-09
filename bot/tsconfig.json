@@ -24,12 +24,11 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
     "experimentalDecorators": true,
-    "baseUrl": "./",
     "paths": {
-      "@configurations/*": ["src/configurations/*"],
-      "@models/*": ["src/models/*"],
-      "@modules/*": ["src/modules/*"],
-      "@utilities/*": ["src/utilities/*"]
+      "@configurations/*": ["./sources/configurations/*"],
+      "@models/*": ["./sources/models/*"],
+      "@modules/*": ["./sources/modules/*"],
+      "@utilities/*": ["./sources/utilities/*"]
     }
   }
 }
