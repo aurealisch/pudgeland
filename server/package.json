@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "module": "src/index.ts",
+  "module": "sources/main.ts",
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest"
@@ -9,8 +9,8 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "start": "bun run src/index.ts",
-    "start:watch": "bun --watch run src/index.ts"
+    "start": "bun run sources/main.ts",
+    "start:watch": "bun --watch run sources/main.ts"
   },
   "dependencies": {
     "fastify": "^4.26.2",
