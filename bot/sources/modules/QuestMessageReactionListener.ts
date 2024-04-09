@@ -4,11 +4,11 @@ import { isNullish } from "@sapphire/utilities";
 import type { MessageReaction, User } from "discord.js";
 
 export default class QuestMessageReactionListener extends Listener {
-  public getAction(): Action | undefined {
+  getAction(): Action | undefined {
     return;
   }
 
-  public async run(reaction: MessageReaction, user: User) {
+  async run(reaction: MessageReaction, user: User) {
     const action = this.getAction();
 
     if (isNullish(action)) return;

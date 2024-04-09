@@ -4,15 +4,15 @@ import { isNullish } from "@sapphire/utilities";
 export default class Database {
   constructor(private prisma: PrismaClient) {}
 
-  public async connect(): Promise<void> {
+  async connect(): Promise<void> {
     return await this.prisma.$connect();
   }
 
-  public async disconnect(): Promise<void> {
+  async disconnect(): Promise<void> {
     return await this.prisma.$disconnect();
   }
 
-  public async findUniqueUser(id: string): Promise<User | null> {
+  async findUniqueUser(id: string): Promise<User | null> {
     return await this.prisma.user.findUnique({
       where: {
         id,
@@ -20,7 +20,7 @@ export default class Database {
     });
   }
 
-  public async createUser(id: string): Promise<User> {
+  async createUser(id: string): Promise<User> {
     return await this.prisma.user.create({
       data: {
         id,
@@ -28,7 +28,7 @@ export default class Database {
     });
   }
 
-  public async findUniqueUserOrCreate(id: string): Promise<User> {
+  async findUniqueUserOrCreate(id: string): Promise<User> {
     const user = await this.findUniqueUser(id);
 
     if (isNullish(user)) {
@@ -38,7 +38,7 @@ export default class Database {
     return user;
   }
 
-  public async increment(opts: {
+  async increment(opts: {
     id: string;
     key: keyof User;
     val?: number;
@@ -55,7 +55,7 @@ export default class Database {
     });
   }
 
-  public async decrement(opts: {
+  async decrement(opts: {
     id: string;
     key: keyof User;
     val?: number;

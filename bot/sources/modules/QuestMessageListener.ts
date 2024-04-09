@@ -5,7 +5,7 @@ import { isNullish } from "@sapphire/utilities";
 import type { Message } from "discord.js";
 
 export default class extends Listener {
-  public getAction(): Action | undefined {
+  getAction(): Action | undefined {
     return;
   }
 
@@ -56,7 +56,7 @@ export default class extends Listener {
     };
   }
 
-  public async run(message: Message) {
+  async run(message: Message) {
     const action = this.getAction();
 
     if (isNullish(action)) return;

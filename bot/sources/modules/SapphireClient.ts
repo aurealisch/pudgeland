@@ -1,15 +1,15 @@
-import quests from "@configs/quests";
+import quests from "@configurations/quests";
 import type Quest from "@models/Quest";
+import Database from "@modules/Database";
+import QuestManager from "@modules/QuestManager";
 import { PrismaClient } from "@prisma/client";
 import { SapphireClient, container } from "@sapphire/framework";
 import { isNullish } from "@sapphire/utilities";
-import Database from "@svcs/Database";
-import QuestManager from "@svcs/QuestManager";
-import CreateEmbed from "@utils/CreateEmbed";
+import CreateEmbed from "@utilities/CreateEmbed";
 import { GatewayIntentBits, GuildMember, Partials } from "discord.js";
 
 export default class extends SapphireClient {
-  public constructor() {
+  constructor() {
     super({
       intents: [
         GatewayIntentBits.Guilds,
@@ -33,7 +33,7 @@ export default class extends SapphireClient {
     });
   }
 
-  public override async login(token?: string | undefined) {
+  override async login(token?: string | undefined) {
     container.db = new Database(new PrismaClient());
 
     await container.db.connect();
@@ -67,7 +67,7 @@ export default class extends SapphireClient {
     return super.login(token);
   }
 
-  public override async destroy() {
+  override async destroy() {
     await container.db.disconnect();
 
     return super.destroy();

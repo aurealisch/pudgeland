@@ -10,7 +10,7 @@ export default class QuestManager {
     quest: Quest;
   }) => Promise<void>;
 
-  public constructor(opts: {
+  constructor(opts: {
     quests: Array<Quest>;
     onQuestComplete: (options: {
       member: GuildMember;
@@ -21,7 +21,7 @@ export default class QuestManager {
     this.#onQuestComplete = opts.onQuestComplete;
   }
 
-  public async invoke(opts: { member: GuildMember; guild: Guild }) {
+  async invoke(opts: { member: GuildMember; guild: Guild }) {
     const db = container.db;
     const member = opts.member;
 
@@ -50,7 +50,7 @@ export default class QuestManager {
     });
   }
 
-  public async invokeReaction(user: User) {
+  async invokeReaction(user: User) {
     const guild = container.client.guilds.cache.get(container.guildId);
 
     if (isNullish(guild)) return;

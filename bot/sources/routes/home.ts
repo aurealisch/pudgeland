@@ -1,9 +1,9 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import {
-    Route,
-    methods,
-    type ApiRequest,
-    type ApiResponse,
+  Route,
+  methods,
+  type ApiRequest,
+  type ApiResponse,
 } from "@sapphire/plugin-api";
 
 @ApplyOptions<Route.Options>({
