@@ -27,7 +27,7 @@ export default class extends SapphireClient {
       api: {
         listenOptions: {
           host: "0.0.0.0",
-          port: 9_353,
+          port: process.env.PORT || 3000,
         },
       },
     });
@@ -64,6 +64,8 @@ export default class extends SapphireClient {
       },
     });
 
+    container.webSocket = new WebSocket(process.env.ADDRESS);
+
     return super.login(token);
   }
 
@@ -81,5 +83,6 @@ declare module "@sapphire/pieces" {
     mediaChannelId: string;
     memesChannelId: string;
     guildId: string;
+    webSocket: WebSocket;
   }
 }

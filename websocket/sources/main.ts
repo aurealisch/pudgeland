@@ -10,7 +10,7 @@ async function onSendMessage(opts: Options) {
 
   const response = await fetch<{
     status: string;
-  }>(`https://pudgeland.onrender.com/confirm?id=${data.userId}`);
+  }>(`${process.env.ADDRESS}/confirm?id=${data.userId}`);
 
   opts.ws.subscribe("action");
 
@@ -31,7 +31,7 @@ async function onConfirmationAccepted(opts: Options) {
 
   const response = await fetch<{
     status: string;
-  }>(`https://pudgeland.onrender.com/link?id=${data.userId}`);
+  }>(`${process.env.ADDRESS}/link?id=${data.userId}`);
 
   switch (Number(response.status)) {
     case Status.Ok: {
@@ -53,6 +53,7 @@ const codes: Record<Code, (opts: Options) => Promise<void>> = {
 };
 
 Bun.serve({
+  port: process.env.PORT || 3000,
   fetch(request, server) {},
   websocket: {
     async message(ws, message) {

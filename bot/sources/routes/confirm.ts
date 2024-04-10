@@ -7,21 +7,25 @@ import {
   type ApiResponse,
 } from "@sapphire/plugin-api";
 import { isNullish } from "@sapphire/utilities";
+import ComposeButtons from "@utilities/ComposeButtons";
 
 @ApplyOptions<Route.Options>({
-  route: "/link",
+  route: "/confirm",
 })
 export default class extends Route {
   public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
-    const userId = _request.query["userId"] as string;
-
-    const user = await container.client.users.fetch(userId);
+    const user = await container.client.users.fetch(
+      _request.query["userId"] as string
+    );
 
     if (isNullish(user)) return;
 
-    await container.db.setMinecraftDisplayName({
-      id: userId,
-      val: _request.query["minecraftDisplayName"] as string,
+    await user.send({
+      content: "Hello, World!",
+      components: ComposeButtons([
+        { customId: "confirmation-accepted", emoji: "✅", label: "Принять" },
+        { customId: "confirmation-rejected", emoji: "❌", label: "Отказать" },
+      ]),
     });
 
     return response.json({

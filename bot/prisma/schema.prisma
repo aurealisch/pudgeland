@@ -14,12 +14,13 @@ datasource db {
 }
 
 model User {
-    id               String @id @map("_id")
-    coins            Int    @default(0)
-    messages         Int    @default(0)
-    messageReactions Int    @default(0)
-    whenServer       Int    @default(0)
-    ggServerDied     Int    @default(0)
-    firstRule        Int    @default(0)
-    mediaOrMemes     Int    @default(0)
+    id                   String  @id @map("_id")
+    coins                Int     @default(0)
+    messages             Int     @default(0)
+    messageReactions     Int     @default(0)
+    whenServer           Int     @default(0)
+    ggServerDied         Int     @default(0)
+    firstRule            Int     @default(0)
+    mediaOrMemes         Int     @default(0)
+    minecraftDisplayName String?
 }

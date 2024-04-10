@@ -71,4 +71,15 @@ export default class Database {
       },
     });
   }
+
+  async setMinecraftDisplayName(opts: { id: string; val: string }) {
+    await this.prisma.user.update({
+      where: {
+        id: opts.id,
+      },
+      data: {
+        minecraftDisplayName: opts.val,
+      },
+    });
+  }
 }
