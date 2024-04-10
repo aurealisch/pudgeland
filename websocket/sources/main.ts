@@ -53,7 +53,7 @@ const codes: Record<Code, (opts: Options) => Promise<void>> = {
 };
 
 Bun.serve({
-  port: process.env.PORT || 3000,
+  hostname: "0.0.0.0",
   fetch(request, server) {},
   websocket: {
     async message(ws, message) {
