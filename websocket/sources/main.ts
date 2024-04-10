@@ -52,9 +52,11 @@ const codes: Record<Code, (opts: Options) => Promise<void>> = {
   [Code.ConfirmationRejected]: onConfirmationRejected,
 };
 
-Bun.serve({
+const server = Bun.serve({
   hostname: "0.0.0.0",
-  fetch(request, server) {},
+  fetch(request, server) {
+    return new Response("Hello, World!");
+  },
   websocket: {
     async message(ws, message) {
       const request: Request = JSON.parse(message as string);
