@@ -10,7 +10,7 @@ import { isNullish } from "@sapphire/utilities";
 import ComposeButtons from "@utilities/ComposeButtons";
 
 @ApplyOptions<Route.Options>({
-  route: "/confirm",
+  route: "/sendConfirmation",
 })
 export default class extends Route {
   public async [methods.GET](_request: ApiRequest, response: ApiResponse) {
@@ -24,7 +24,7 @@ export default class extends Route {
       content: "Hello, World!",
       components: ComposeButtons([
         { customId: "confirmation-accepted", emoji: "✅", label: "Принять" },
-        { customId: "confirmation-rejected", emoji: "❌", label: "Отказать" },
+        { customId: "confirmation-canceled", emoji: "❌", label: "Отменить" },
       ]),
     });
 

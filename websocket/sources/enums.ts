@@ -1,18 +1,9 @@
 export enum Code {
-  SendMessage,
+  SendConfirmation,
   ConfirmationAccepted,
-  ConfirmationRejected,
-}
-
-export enum Action {
-  Ready,
+  ConfirmationCanceled,
 }
 
 export enum Status {
   Ok,
-}
-
-export enum Confirmation {
-  Accepted,
-  Rejected,
 }

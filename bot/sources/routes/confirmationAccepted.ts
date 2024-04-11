@@ -9,7 +9,7 @@ import {
 import { isNullish } from "@sapphire/utilities";
 
 @ApplyOptions<Route.Options>({
-  route: "/link",
+  route: "/confirmationAccepted",
 })
 export default class extends Route {
   public async [methods.GET](_request: ApiRequest, response: ApiResponse) {

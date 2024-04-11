@@ -1,6 +1,7 @@
 declare module "bun" {
   interface Env {
     PORT: number;
-    ADDRESS: string;
+    API_URL: string;
+    REDIS_URL: string;
   }
 }

@@ -6,7 +6,7 @@ export interface Request {
   data?: any;
 }
 
-export interface Options {
+export interface Options<Data = undefined> {
   ws: ServerWebSocket<unknown>;
-  data?: any | undefined;
+  data: Data;
 }

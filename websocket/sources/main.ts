@@ -1,60 +1,76 @@
-import { Action, Code, Confirmation, Status } from "@/enums";
+import { Code, Status } from "@/enums";
 import type { Options, Request } from "@/interfaces";
 import { fetch } from "@sapphire/fetch";
-import { isNullish } from "@sapphire/utilities";
+import { createClient } from "redis";
 
-async function onSendMessage(opts: Options) {
-  const data: { userId: string } | undefined = opts.data;
+const client = await createClient({
+  url: process.env.REDIS_URL,
+});
 
-  if (isNullish(data)) return;
+await client.connect();
+
+interface Data {
+  userId: string;
+}
+
+async function onSendConfirmation(
+  opts: Options<Data & { minecraftDisplayName: string }>
+) {
+  const data = opts.data;
+  const userId = data.userId;
+
+  await client.set(userId, data.minecraftDisplayName);
 
   const response = await fetch<{
     status: string;
-  }>(`${process.env.ADDRESS}/confirm?id=${data.userId}`);
-
-  opts.ws.subscribe("action");
+  }>(`${process.env.API_URL}/sendConfirmation?id=${userId}`);
 
   switch (Number(response.status)) {
     case Status.Ok: {
       opts.ws.subscribe("confirmation");
-      opts.ws.publish("action", String(Action.Ready));
     }
   }
-
-  opts.ws.unsubscribe("action");
 }
 
-async function onConfirmationAccepted(opts: Options) {
-  const data: { userId: string } | undefined = opts.data;
+async function onConfirmationAccepted(opts: Options<Data>) {
+  const userId = opts.data.userId;
 
-  if (isNullish(data)) return;
+  const minecraftDisplayName = await client.get(userId);
 
   const response = await fetch<{
     status: string;
-  }>(`${process.env.ADDRESS}/link?id=${data.userId}`);
+  }>(
+    `${process.env.API_URL}/confirmationAccepted?id=${userId}?minecraftDisplayName=${minecraftDisplayName}`
+  );
 
   switch (Number(response.status)) {
     case Status.Ok: {
-      opts.ws.publish("confirmation", String(Confirmation.Accepted));
+      opts.ws.publish("confirmation", String(Code.ConfirmationAccepted));
       opts.ws.unsubscribe("confirmation");
     }
   }
 }
 
-async function onConfirmationRejected(opts: Options) {
-  opts.ws.publish("confirmation", String(Confirmation.Rejected));
+async function onConfirmationCanceled(opts: Options<Data>) {
+  await client.del(opts.data.userId);
+
+  opts.ws.publish("confirmation", String(Code.ConfirmationCanceled));
   opts.ws.unsubscribe("confirmation");
 }
 
-const codes: Record<Code, (opts: Options) => Promise<void>> = {
-  [Code.SendMessage]: onSendMessage,
+const codes: Record<Code, (opts: Options<any>) => Promise<void>> = {
+  [Code.SendConfirmation]: onSendConfirmation,
   [Code.ConfirmationAccepted]: onConfirmationAccepted,
-  [Code.ConfirmationRejected]: onConfirmationRejected,
+  [Code.ConfirmationCanceled]: onConfirmationCanceled,
 };
 
-const server = Bun.serve({
+Bun.serve({
   hostname: "0.0.0.0",
   fetch(request, server) {
+    if (server.upgrade(request)) {
+      return undefined;
+    }
+
     return new Response("Hello, World!");
   },
   websocket: {
