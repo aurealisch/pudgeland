@@ -1,5 +1,5 @@
 name: pudgeland
-version: '${project.version}'
+version: '1.0-SNAPSHOT'
 main: me.aurealisch.pudgeland.Pudgeland
 api-version: '1.19'
 commands:
