@@ -5,21 +5,28 @@ import me.aurealisch.pudgeland.commandExecutors.DisconnectCommandExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
 public final class Pudgeland extends JavaPlugin {
+    Logger logger;
+    WebSocketClientEndpoint webSocketClientEndpoint;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getLogger().info("Hello, World!");
+        this.logger = getLogger();
+        this.webSocketClientEndpoint = new WebSocketClientEndpoint(this);
 
-        Objects.requireNonNull(getCommand("connect")).setExecutor(new ConnectCommandExecutor());
-        Objects.requireNonNull(getCommand("disconnect")).setExecutor(new DisconnectCommandExecutor());
+        logger.info("Hello, World!");
+
+        Objects.requireNonNull(getCommand("connect")).setExecutor(new ConnectCommandExecutor(this));
+        Objects.requireNonNull(getCommand("disconnect")).setExecutor(new DisconnectCommandExecutor(this));
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        getLogger().info("Goodbye, World!");
+        logger.info("Goodbye, World!");
     }
 }
