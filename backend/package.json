@@ -1,0 +1,25 @@
+{
+  "name": "@pudgeland/backend",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "bun src/main.ts",
+    "start:watch": "bun --watch src/main.ts"
+  },
+  "keywords": [],
+  "author": "aurealisch <aurealisch@gmail.com>",
+  "license": "UNLICENSED",
+  "module": "src/main.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "fastify": "^4.26.2",
+    "pino-pretty": "^11.0.0"
+  }
+}

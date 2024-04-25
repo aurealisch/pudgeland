@@ -4,8 +4,8 @@ import { isNullish } from "@sapphire/utilities";
 import { Guild, GuildMember, User } from "discord.js";
 
 export default class QuestManager {
-  #quests: Array<Quest>;
-  #onQuestComplete: (options: {
+  quests: Array<Quest>;
+  onQuestComplete: (options: {
     member: GuildMember;
     quest: Quest;
   }) => Promise<void>;
@@ -17,8 +17,8 @@ export default class QuestManager {
       quest: Quest;
     }) => Promise<void>;
   }) {
-    this.#quests = opts.quests;
-    this.#onQuestComplete = opts.onQuestComplete;
+    this.quests = opts.quests;
+    this.onQuestComplete = opts.onQuestComplete;
   }
 
   async invoke(opts: { member: GuildMember; guild: Guild }) {
@@ -26,9 +26,9 @@ export default class QuestManager {
     const member = opts.member;
 
     const memberId = member.id;
-    const user = await db.findUniqueUserOrCreate(memberId);
+    const user = await db.getUser(memberId);
 
-    this.#quests.forEach(async (quest) => {
+    this.quests.forEach(async (quest) => {
       if (member.roles.cache.has(quest.roleId)) return;
 
       if (user[quest.taskType] < quest.taskRequiredVal) return;
@@ -37,15 +37,16 @@ export default class QuestManager {
 
       if (isNullish(role)) return;
 
-      await this.#onQuestComplete({
+      await this.onQuestComplete({
         quest,
         member,
       });
       await member.roles.add(role);
-      await db.increment({
+      await db.updateUser({
+        action: "increment",
         id: memberId,
         key: "coins",
-        val: quest.reward.coins,
+        value: quest.reward.coins,
       });
     });
   }

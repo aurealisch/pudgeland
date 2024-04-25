@@ -1,7 +1,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Command, container } from "@sapphire/framework";
 import { isNullish } from "@sapphire/utilities";
-import CreateEmbed from "@utilities/CreateEmbed";
+import embed from "@utilities/embed";
 import { dedent } from "dedented";
 
 @ApplyOptions<Command.Options>({
@@ -11,7 +11,7 @@ export default class extends Command {
   public override async chatInputRun(
     interaction: Command.ChatInputCommandInteraction
   ) {
-    const user = await container.db.findUniqueUserOrCreate(interaction.user.id);
+    const user = await container.db.getUser(interaction.user.id);
 
     let description = dedent`
       :coin: Монеты: **\`${user.coins}\`**
@@ -31,7 +31,7 @@ export default class extends Command {
 
     await interaction.reply({
       embeds: [
-        CreateEmbed({
+        embed({
           description,
           title: "Профиль",
         }),

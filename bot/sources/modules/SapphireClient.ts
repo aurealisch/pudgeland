@@ -5,7 +5,7 @@ import QuestManager from "@modules/QuestManager";
 import { PrismaClient } from "@prisma/client";
 import { SapphireClient, container } from "@sapphire/framework";
 import { isNullish } from "@sapphire/utilities";
-import CreateEmbed from "@utilities/CreateEmbed";
+import CreateEmbed from "@utilities/embed";
 import { GatewayIntentBits, GuildMember, Partials } from "discord.js";
 
 export default class extends SapphireClient {

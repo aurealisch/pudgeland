@@ -1,84 +1,66 @@
 import { PrismaClient, type User } from "@prisma/client";
 import { isNullish } from "@sapphire/utilities";
+import log from "@utilities/log";
 
 export default class Database {
   constructor(private prisma: PrismaClient) {}
 
+  @log("Connecting to database")
   async connect(): Promise<void> {
-    return await this.prisma.$connect();
+    await this.prisma.$connect();
   }
 
+  @log("Disconnecting to database")
   async disconnect(): Promise<void> {
-    return await this.prisma.$disconnect();
+    await this.prisma.$disconnect();
   }
 
-  async findUniqueUser(id: string): Promise<User | null> {
-    return await this.prisma.user.findUnique({
+  @log("Getting user")
+  async getUser(id: string): Promise<User> {
+    const user = await this.prisma.user.findUnique({
       where: {
         id,
       },
     });
-  }
-
-  async createUser(id: string): Promise<User> {
-    return await this.prisma.user.create({
-      data: {
-        id,
-      },
-    });
-  }
-
-  async findUniqueUserOrCreate(id: string): Promise<User> {
-    const user = await this.findUniqueUser(id);
 
     if (isNullish(user)) {
-      return await this.createUser(id);
+      return await this.prisma.user.create({
+        data: {
+          id,
+        },
+      });
     }
 
     return user;
   }
 
-  async increment(opts: {
+  @log("Updating user")
+  async updateUser(options: {
+    action: "increment" | "decrement";
     id: string;
     key: keyof User;
-    val?: number;
-  }): Promise<void> {
+    value?: number;
+  }) {
     await this.prisma.user.update({
       where: {
-        id: opts.id,
+        id: options.id,
       },
       data: {
-        [opts.key]: {
-          increment: opts.val || 1,
+        [options.key]: {
+          [options.action]: options.value || 1,
         },
       },
     });
   }
 
-  async decrement(opts: {
-    id: string;
-    key: keyof User;
-    val?: number;
-  }): Promise<void> {
+  @log("Setting minecraft display name")
+  async setMinecraftDisplayName(options: { id: string; value: string }) {
     await this.prisma.user.update({
       where: {
-        id: opts.id,
+        id: options.id,
       },
       data: {
-        [opts.key]: {
-          decrement: opts.val || 1,
-        },
-      },
-    });
-  }
-
-  async setMinecraftDisplayName(opts: { id: string; val: string }) {
-    await this.prisma.user.update({
-      where: {
-        id: opts.id,
-      },
-      data: {
-        minecraftDisplayName: opts.val,
+        minecraftDisplayName: options.value,
       },
     });
   }

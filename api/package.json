@@ -1,0 +1,34 @@
+{
+  "name": "@pudgeland/api",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "bun src/main.ts",
+    "start:watch": "bun --watch src/main.ts",
+    "build": "bun build.ts"
+  },
+  "keywords": [],
+  "author": "aurealisch <aurealisch@gmail.com>",
+  "license": "UNLICENSED",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.13.0",
+    "@trpc/server": "^11.0.0-rc.354",
+    "bun-plugin-dts": "^0.2.3",
+    "prisma": "^5.13.0",
+    "zod": "^3.23.4"
+  },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ]
+}
